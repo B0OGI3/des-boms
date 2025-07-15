@@ -23,5 +23,18 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
     "@eslint/eslintrc": "^3"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B0OGI3/DES-BOMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/B0OGI3/DES-BOMS/issues"
+  },
+  "homepage": "https://github.com/B0OGI3/DES-BOMS#readme"
 }
