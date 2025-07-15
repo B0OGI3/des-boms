@@ -13,7 +13,7 @@ services:
     networks: [desnet]
 
   app:
-    build:
+    build: .
     restart: unless-stopped
     env_file: .env.production
     ports:
@@ -26,5 +26,5 @@ services:
 volumes:
   db_data:
 
-networkss:
+networks:
   desnet:
