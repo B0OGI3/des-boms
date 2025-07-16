@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
-        const customers = await prisma.Customer.findMany({ orderBy: { name: 'asc' } });
+        const customers = await prisma.customer.findMany({ orderBy: { name: 'asc' } });
         return res.status(200).json(customers);
     }
 
@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!name || !email) return res.status(400).json({ error: 'Name and email are required' });
 
-        const newCustomer = await prisma.Customer.create({
+        const newCustomer = await prisma.customer.create({
             data: { name, contact, email, phone, billingAddress, shippingAddress },
         })
 
