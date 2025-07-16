@@ -131,7 +131,9 @@ exports.Prisma.CustomerScalarFieldEnum = {
   shippingAddress: 'shippingAddress',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  relationStart: 'relationStart',
+  relationStatus: 'relationStatus'
 };
 
 exports.Prisma.AssetScalarFieldEnum = {
@@ -167,6 +169,15 @@ exports.Prisma.AssetHistoryScalarFieldEnum = {
   timestamp: 'timestamp'
 };
 
+exports.Prisma.BatchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -181,6 +192,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.RelationStatus = exports.$Enums.RelationStatus = {
+  ACTIVE: 'ACTIVE',
+  STRATEGIC: 'STRATEGIC',
+  ONBOARDING: 'ONBOARDING',
+  RETIRED: 'RETIRED'
+};
+
 exports.AssetStatus = exports.$Enums.AssetStatus = {
   AVAILABLE: 'AVAILABLE',
   ASSIGNED: 'ASSIGNED',
@@ -189,12 +207,19 @@ exports.AssetStatus = exports.$Enums.AssetStatus = {
   RETIRED: 'RETIRED'
 };
 
+exports.BatchStatus = exports.$Enums.BatchStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   Customer: 'Customer',
   Asset: 'Asset',
   Category: 'Category',
   Location: 'Location',
-  AssetHistory: 'AssetHistory'
+  AssetHistory: 'AssetHistory',
+  Batch: 'Batch'
 };
 
 /**

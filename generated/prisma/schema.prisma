@@ -1,74 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Prisma Client Configuration
+// Generates TypeScript client in custom directory for better organization
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
+// Database Configuration
+// PostgreSQL database connection
 datasource db {
   provider = "postgresql"
-  url      = env("postgresql://desadmin:DES6040@localhost:5432/boms")
+  url      = env("DATABASE_URL")
 }
 
+// Customer Model
+// Represents business customers who rent/use assets
 model Customer {
-  id              String         @id @default(cuid())
-  name            String
-  contact         String?
-  email           String?        @unique
-  phone           String?
-  company         String?
-  billingAddress  String?
-  shippingAddress String?
-  notes           String?
-  assets          Asset[]
-  history         AssetHistory[] @relation("CustomerHistory")
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id              String  @id @default(cuid())
+  name            String // Customer or company name
+  contact         String? // Primary contact person name
+  email           String? @unique // Primary email for communications
+  phone           String? // Primary phone number
+  company         String? // Company name if different from contact name
+  billingAddress  String? // Address for billing purposes
+  shippingAddress String? // Address for asset delivery/pickup
+  notes           String? // Additional notes about the customer
+
+  // Relations
+  assets  Asset[] // Assets currently assigned to this customer
+  history AssetHistory[] @relation("CustomerHistory") // Historical asset assignments
+
+  // Timestamps
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  relationStart  DateTime       @default(now()) // When business relationship started
+  relationStatus RelationStatus @default(ONBOARDING) // Current relationship status
 }
 
+// Asset Model  
+// Represents physical items/equipment managed by the system
 model Asset {
-  id          String         @id @default(cuid())
-  name        String
-  category    Category       @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  serial      String?        @unique
-  location    Location?      @relation(fields: [locationId], references: [id])
-  locationId  String?
-  customer    Customer?      @relation(fields: [customerId], references: [id])
-  customerId  String?
-  status      AssetStatus    @default(AVAILABLE)
-  description String?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  history     AssetHistory[]
+  id          String      @id @default(cuid())
+  name        String // Asset name/identifier
+  category    Category    @relation(fields: [categoryId], references: [id])
+  categoryId  String // Category classification
+  serial      String?     @unique // Serial number or unique identifier
+  location    Location?   @relation(fields: [locationId], references: [id])
+  locationId  String? // Current physical location
+  customer    Customer?   @relation(fields: [customerId], references: [id])
+  customerId  String? // Currently assigned customer (if any)
+  status      AssetStatus @default(AVAILABLE) // Current operational status
+  description String? // Detailed description of the asset
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  history AssetHistory[] // Complete history of asset movements/assignments
 }
 
+// Category Model
+// Classification system for assets (e.g., "Computers", "Furniture", "Vehicles")
 model Category {
   id     String  @id @default(cuid())
-  name   String  @unique
-  assets Asset[]
+  name   String  @unique // Category name
+  assets Asset[] // Assets in this category
 }
 
+// Location Model
+// Physical locations where assets can be stored or deployed
 model Location {
   id      String  @id @default(cuid())
-  name    String  @unique
-  address String?
-  assets  Asset[]
+  name    String  @unique // Location name (e.g., "Warehouse A", "Customer Site")
+  address String? // Physical address of the location
+  assets  Asset[] // Assets currently at this location
 }
 
+// Asset History Model
+// Tracks all movements and status changes of assets over time
 model AssetHistory {
   id         String    @id @default(cuid())
   asset      Asset     @relation(fields: [assetId], references: [id])
-  assetId    String
-  action     String // e.g. "Assigned to Customer", "Returned", etc.
-  details    String?
+  assetId    String // Asset this history entry relates to
+  action     String // Description of action taken (e.g., "Assigned to Customer", "Returned")
+  details    String? // Additional details about the action
   customer   Customer? @relation("CustomerHistory", fields: [customerId], references: [id])
-  customerId String?
-  timestamp  DateTime  @default(now())
+  customerId String? // Customer involved in this action (if applicable)
+  timestamp  DateTime  @default(now()) // When this action occurred
 }
 
+// Batch Model
+// Groups of assets for batch operations (future feature)
+model Batch {
+  id          String      @id @default(cuid())
+  name        String // Batch identifier/name
+  description String? // Description of the batch purpose
+  status      BatchStatus @default(ACTIVE) // Current batch status
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// Enums - Define possible values for status fields
+
+// Asset operational status
 enum AssetStatus {
-  AVAILABLE
-  ASSIGNED
-  MAINTENANCE
-  LOST
-  RETIRED
+  AVAILABLE // Ready for assignment
+  ASSIGNED // Currently assigned to a customer
+  MAINTENANCE // Under maintenance/repair
+  LOST // Asset is missing/lost
+  RETIRED // Asset is no longer in service
+}
+
+// Customer relationship status
+enum RelationStatus {
+  ACTIVE // Active ongoing relationship
+  STRATEGIC // Strategic/high-value customer
+  ONBOARDING // New customer being onboarded
+  RETIRED // Relationship has ended
+}
+
+// Batch processing status
+enum BatchStatus {
+  ACTIVE // Batch is currently active
+  COMPLETED // Batch processing completed
+  CANCELLED // Batch was cancelled
 }

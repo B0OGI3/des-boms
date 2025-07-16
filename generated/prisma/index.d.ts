@@ -38,6 +38,11 @@ export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
  * 
  */
 export type AssetHistory = $Result.DefaultSelection<Prisma.$AssetHistoryPayload>
+/**
+ * Model Batch
+ * 
+ */
+export type Batch = $Result.DefaultSelection<Prisma.$BatchPayload>
 
 /**
  * Enums
@@ -53,11 +58,38 @@ export namespace $Enums {
 
 export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
 
+
+export const RelationStatus: {
+  ACTIVE: 'ACTIVE',
+  STRATEGIC: 'STRATEGIC',
+  ONBOARDING: 'ONBOARDING',
+  RETIRED: 'RETIRED'
+};
+
+export type RelationStatus = (typeof RelationStatus)[keyof typeof RelationStatus]
+
+
+export const BatchStatus: {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
+
 }
 
 export type AssetStatus = $Enums.AssetStatus
 
 export const AssetStatus: typeof $Enums.AssetStatus
+
+export type RelationStatus = $Enums.RelationStatus
+
+export const RelationStatus: typeof $Enums.RelationStatus
+
+export type BatchStatus = $Enums.BatchStatus
+
+export const BatchStatus: typeof $Enums.BatchStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -233,6 +265,16 @@ export class PrismaClient<
     * ```
     */
   get assetHistory(): Prisma.AssetHistoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.batch`: Exposes CRUD operations for the **Batch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Batches
+    * const batches = await prisma.batch.findMany()
+    * ```
+    */
+  get batch(): Prisma.BatchDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -677,7 +719,8 @@ export namespace Prisma {
     Asset: 'Asset',
     Category: 'Category',
     Location: 'Location',
-    AssetHistory: 'AssetHistory'
+    AssetHistory: 'AssetHistory',
+    Batch: 'Batch'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -696,7 +739,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "customer" | "asset" | "category" | "location" | "assetHistory"
+      modelProps: "customer" | "asset" | "category" | "location" | "assetHistory" | "batch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1070,6 +1113,80 @@ export namespace Prisma {
           }
         }
       }
+      Batch: {
+        payload: Prisma.$BatchPayload<ExtArgs>
+        fields: Prisma.BatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          findFirst: {
+            args: Prisma.BatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          findMany: {
+            args: Prisma.BatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>[]
+          }
+          create: {
+            args: Prisma.BatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          createMany: {
+            args: Prisma.BatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>[]
+          }
+          delete: {
+            args: Prisma.BatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          update: {
+            args: Prisma.BatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.BatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BatchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>[]
+          }
+          upsert: {
+            args: Prisma.BatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          aggregate: {
+            args: Prisma.BatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBatch>
+          }
+          groupBy: {
+            args: Prisma.BatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BatchCountArgs<ExtArgs>
+            result: $Utils.Optional<BatchCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1159,6 +1276,7 @@ export namespace Prisma {
     category?: CategoryOmit
     location?: LocationOmit
     assetHistory?: AssetHistoryOmit
+    batch?: BatchOmit
   }
 
   /* Types for Logging */
@@ -1407,6 +1525,8 @@ export namespace Prisma {
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    relationStart: Date | null
+    relationStatus: $Enums.RelationStatus | null
   }
 
   export type CustomerMaxAggregateOutputType = {
@@ -1421,6 +1541,8 @@ export namespace Prisma {
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    relationStart: Date | null
+    relationStatus: $Enums.RelationStatus | null
   }
 
   export type CustomerCountAggregateOutputType = {
@@ -1435,6 +1557,8 @@ export namespace Prisma {
     notes: number
     createdAt: number
     updatedAt: number
+    relationStart: number
+    relationStatus: number
     _all: number
   }
 
@@ -1451,6 +1575,8 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    relationStart?: true
+    relationStatus?: true
   }
 
   export type CustomerMaxAggregateInputType = {
@@ -1465,6 +1591,8 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    relationStart?: true
+    relationStatus?: true
   }
 
   export type CustomerCountAggregateInputType = {
@@ -1479,6 +1607,8 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    relationStart?: true
+    relationStatus?: true
     _all?: true
   }
 
@@ -1566,6 +1696,8 @@ export namespace Prisma {
     notes: string | null
     createdAt: Date
     updatedAt: Date
+    relationStart: Date
+    relationStatus: $Enums.RelationStatus
     _count: CustomerCountAggregateOutputType | null
     _min: CustomerMinAggregateOutputType | null
     _max: CustomerMaxAggregateOutputType | null
@@ -1597,6 +1729,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    relationStart?: boolean
+    relationStatus?: boolean
     assets?: boolean | Customer$assetsArgs<ExtArgs>
     history?: boolean | Customer$historyArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
@@ -1614,6 +1748,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    relationStart?: boolean
+    relationStatus?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1628,6 +1764,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    relationStart?: boolean
+    relationStatus?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectScalar = {
@@ -1642,9 +1780,11 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    relationStart?: boolean
+    relationStatus?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "email" | "phone" | "company" | "billingAddress" | "shippingAddress" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "email" | "phone" | "company" | "billingAddress" | "shippingAddress" | "notes" | "createdAt" | "updatedAt" | "relationStart" | "relationStatus", ExtArgs["result"]["customer"]>
   export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assets?: boolean | Customer$assetsArgs<ExtArgs>
     history?: boolean | Customer$historyArgs<ExtArgs>
@@ -1671,6 +1811,8 @@ export namespace Prisma {
       notes: string | null
       createdAt: Date
       updatedAt: Date
+      relationStart: Date
+      relationStatus: $Enums.RelationStatus
     }, ExtArgs["result"]["customer"]>
     composites: {}
   }
@@ -2107,6 +2249,8 @@ export namespace Prisma {
     readonly notes: FieldRef<"Customer", 'String'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
+    readonly relationStart: FieldRef<"Customer", 'DateTime'>
+    readonly relationStatus: FieldRef<"Customer", 'RelationStatus'>
   }
     
 
@@ -6942,6 +7086,1014 @@ export namespace Prisma {
 
 
   /**
+   * Model Batch
+   */
+
+  export type AggregateBatch = {
+    _count: BatchCountAggregateOutputType | null
+    _min: BatchMinAggregateOutputType | null
+    _max: BatchMaxAggregateOutputType | null
+  }
+
+  export type BatchMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    status: $Enums.BatchStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BatchMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    status: $Enums.BatchStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BatchCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BatchMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BatchMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BatchCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Batch to aggregate.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Batches
+    **/
+    _count?: true | BatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BatchMaxAggregateInputType
+  }
+
+  export type GetBatchAggregateType<T extends BatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBatch[P]>
+      : GetScalarType<T[P], AggregateBatch[P]>
+  }
+
+
+
+
+  export type BatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchWhereInput
+    orderBy?: BatchOrderByWithAggregationInput | BatchOrderByWithAggregationInput[]
+    by: BatchScalarFieldEnum[] | BatchScalarFieldEnum
+    having?: BatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BatchCountAggregateInputType | true
+    _min?: BatchMinAggregateInputType
+    _max?: BatchMaxAggregateInputType
+  }
+
+  export type BatchGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    status: $Enums.BatchStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: BatchCountAggregateOutputType | null
+    _min: BatchMinAggregateOutputType | null
+    _max: BatchMaxAggregateOutputType | null
+  }
+
+  type GetBatchGroupByPayload<T extends BatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BatchGroupByOutputType[P]>
+            : GetScalarType<T[P], BatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["batch"]>
+
+  export type BatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["batch"]>
+
+  export type BatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["batch"]>
+
+  export type BatchSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+
+  export type $BatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Batch"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      status: $Enums.BatchStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["batch"]>
+    composites: {}
+  }
+
+  type BatchGetPayload<S extends boolean | null | undefined | BatchDefaultArgs> = $Result.GetResult<Prisma.$BatchPayload, S>
+
+  type BatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BatchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BatchCountAggregateInputType | true
+    }
+
+  export interface BatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Batch'], meta: { name: 'Batch' } }
+    /**
+     * Find zero or one Batch that matches the filter.
+     * @param {BatchFindUniqueArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BatchFindUniqueArgs>(args: SelectSubset<T, BatchFindUniqueArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Batch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BatchFindUniqueOrThrowArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BatchFindUniqueOrThrowArgs>(args: SelectSubset<T, BatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Batch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindFirstArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BatchFindFirstArgs>(args?: SelectSubset<T, BatchFindFirstArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Batch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindFirstOrThrowArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BatchFindFirstOrThrowArgs>(args?: SelectSubset<T, BatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Batches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Batches
+     * const batches = await prisma.batch.findMany()
+     * 
+     * // Get first 10 Batches
+     * const batches = await prisma.batch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const batchWithIdOnly = await prisma.batch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BatchFindManyArgs>(args?: SelectSubset<T, BatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Batch.
+     * @param {BatchCreateArgs} args - Arguments to create a Batch.
+     * @example
+     * // Create one Batch
+     * const Batch = await prisma.batch.create({
+     *   data: {
+     *     // ... data to create a Batch
+     *   }
+     * })
+     * 
+     */
+    create<T extends BatchCreateArgs>(args: SelectSubset<T, BatchCreateArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Batches.
+     * @param {BatchCreateManyArgs} args - Arguments to create many Batches.
+     * @example
+     * // Create many Batches
+     * const batch = await prisma.batch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BatchCreateManyArgs>(args?: SelectSubset<T, BatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Batches and returns the data saved in the database.
+     * @param {BatchCreateManyAndReturnArgs} args - Arguments to create many Batches.
+     * @example
+     * // Create many Batches
+     * const batch = await prisma.batch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Batches and only return the `id`
+     * const batchWithIdOnly = await prisma.batch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BatchCreateManyAndReturnArgs>(args?: SelectSubset<T, BatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Batch.
+     * @param {BatchDeleteArgs} args - Arguments to delete one Batch.
+     * @example
+     * // Delete one Batch
+     * const Batch = await prisma.batch.delete({
+     *   where: {
+     *     // ... filter to delete one Batch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BatchDeleteArgs>(args: SelectSubset<T, BatchDeleteArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Batch.
+     * @param {BatchUpdateArgs} args - Arguments to update one Batch.
+     * @example
+     * // Update one Batch
+     * const batch = await prisma.batch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BatchUpdateArgs>(args: SelectSubset<T, BatchUpdateArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Batches.
+     * @param {BatchDeleteManyArgs} args - Arguments to filter Batches to delete.
+     * @example
+     * // Delete a few Batches
+     * const { count } = await prisma.batch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BatchDeleteManyArgs>(args?: SelectSubset<T, BatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Batches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Batches
+     * const batch = await prisma.batch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BatchUpdateManyArgs>(args: SelectSubset<T, BatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Batches and returns the data updated in the database.
+     * @param {BatchUpdateManyAndReturnArgs} args - Arguments to update many Batches.
+     * @example
+     * // Update many Batches
+     * const batch = await prisma.batch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Batches and only return the `id`
+     * const batchWithIdOnly = await prisma.batch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BatchUpdateManyAndReturnArgs>(args: SelectSubset<T, BatchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Batch.
+     * @param {BatchUpsertArgs} args - Arguments to update or create a Batch.
+     * @example
+     * // Update or create a Batch
+     * const batch = await prisma.batch.upsert({
+     *   create: {
+     *     // ... data to create a Batch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Batch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BatchUpsertArgs>(args: SelectSubset<T, BatchUpsertArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Batches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCountArgs} args - Arguments to filter Batches to count.
+     * @example
+     * // Count the number of Batches
+     * const count = await prisma.batch.count({
+     *   where: {
+     *     // ... the filter for the Batches we want to count
+     *   }
+     * })
+    **/
+    count<T extends BatchCountArgs>(
+      args?: Subset<T, BatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Batch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BatchAggregateArgs>(args: Subset<T, BatchAggregateArgs>): Prisma.PrismaPromise<GetBatchAggregateType<T>>
+
+    /**
+     * Group by Batch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BatchGroupByArgs['orderBy'] }
+        : { orderBy?: BatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Batch model
+   */
+  readonly fields: BatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Batch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Batch model
+   */
+  interface BatchFieldRefs {
+    readonly id: FieldRef<"Batch", 'String'>
+    readonly name: FieldRef<"Batch", 'String'>
+    readonly description: FieldRef<"Batch", 'String'>
+    readonly status: FieldRef<"Batch", 'BatchStatus'>
+    readonly createdAt: FieldRef<"Batch", 'DateTime'>
+    readonly updatedAt: FieldRef<"Batch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Batch findUnique
+   */
+  export type BatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch findUniqueOrThrow
+   */
+  export type BatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch findFirst
+   */
+  export type BatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Batches.
+     */
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch findFirstOrThrow
+   */
+  export type BatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Batches.
+     */
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch findMany
+   */
+  export type BatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter, which Batches to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch create
+   */
+  export type BatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Batch.
+     */
+    data: XOR<BatchCreateInput, BatchUncheckedCreateInput>
+  }
+
+  /**
+   * Batch createMany
+   */
+  export type BatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Batches.
+     */
+    data: BatchCreateManyInput | BatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Batch createManyAndReturn
+   */
+  export type BatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * The data used to create many Batches.
+     */
+    data: BatchCreateManyInput | BatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Batch update
+   */
+  export type BatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Batch.
+     */
+    data: XOR<BatchUpdateInput, BatchUncheckedUpdateInput>
+    /**
+     * Choose, which Batch to update.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch updateMany
+   */
+  export type BatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Batches.
+     */
+    data: XOR<BatchUpdateManyMutationInput, BatchUncheckedUpdateManyInput>
+    /**
+     * Filter which Batches to update
+     */
+    where?: BatchWhereInput
+    /**
+     * Limit how many Batches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Batch updateManyAndReturn
+   */
+  export type BatchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * The data used to update Batches.
+     */
+    data: XOR<BatchUpdateManyMutationInput, BatchUncheckedUpdateManyInput>
+    /**
+     * Filter which Batches to update
+     */
+    where?: BatchWhereInput
+    /**
+     * Limit how many Batches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Batch upsert
+   */
+  export type BatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Batch to update in case it exists.
+     */
+    where: BatchWhereUniqueInput
+    /**
+     * In case the Batch found by the `where` argument doesn't exist, create a new Batch with this data.
+     */
+    create: XOR<BatchCreateInput, BatchUncheckedCreateInput>
+    /**
+     * In case the Batch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BatchUpdateInput, BatchUncheckedUpdateInput>
+  }
+
+  /**
+   * Batch delete
+   */
+  export type BatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Filter which Batch to delete.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch deleteMany
+   */
+  export type BatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Batches to delete
+     */
+    where?: BatchWhereInput
+    /**
+     * Limit how many Batches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Batch without action
+   */
+  export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6966,7 +8118,9 @@ export namespace Prisma {
     shippingAddress: 'shippingAddress',
     notes: 'notes',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    relationStart: 'relationStart',
+    relationStatus: 'relationStatus'
   };
 
   export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
@@ -7015,6 +8169,18 @@ export namespace Prisma {
   };
 
   export type AssetHistoryScalarFieldEnum = (typeof AssetHistoryScalarFieldEnum)[keyof typeof AssetHistoryScalarFieldEnum]
+
+
+  export const BatchScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7075,6 +8241,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'RelationStatus'
+   */
+  export type EnumRelationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RelationStatus[]'
+   */
+  export type ListEnumRelationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'AssetStatus'
    */
   export type EnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus'>
@@ -7085,6 +8265,20 @@ export namespace Prisma {
    * Reference to a field of type 'AssetStatus[]'
    */
   export type ListEnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchStatus'
+   */
+  export type EnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchStatus[]'
+   */
+  export type ListEnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus[]'>
     
 
 
@@ -7120,6 +8314,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
+    relationStart?: DateTimeFilter<"Customer"> | Date | string
+    relationStatus?: EnumRelationStatusFilter<"Customer"> | $Enums.RelationStatus
     assets?: AssetListRelationFilter
     history?: AssetHistoryListRelationFilter
   }
@@ -7136,6 +8332,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    relationStart?: SortOrder
+    relationStatus?: SortOrder
     assets?: AssetOrderByRelationAggregateInput
     history?: AssetHistoryOrderByRelationAggregateInput
   }
@@ -7155,6 +8353,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
+    relationStart?: DateTimeFilter<"Customer"> | Date | string
+    relationStatus?: EnumRelationStatusFilter<"Customer"> | $Enums.RelationStatus
     assets?: AssetListRelationFilter
     history?: AssetHistoryListRelationFilter
   }, "id" | "email">
@@ -7171,6 +8371,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    relationStart?: SortOrder
+    relationStatus?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
     _max?: CustomerMaxOrderByAggregateInput
     _min?: CustomerMinOrderByAggregateInput
@@ -7191,6 +8393,8 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
+    relationStart?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
+    relationStatus?: EnumRelationStatusWithAggregatesFilter<"Customer"> | $Enums.RelationStatus
   }
 
   export type AssetWhereInput = {
@@ -7430,6 +8634,63 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"AssetHistory"> | Date | string
   }
 
+  export type BatchWhereInput = {
+    AND?: BatchWhereInput | BatchWhereInput[]
+    OR?: BatchWhereInput[]
+    NOT?: BatchWhereInput | BatchWhereInput[]
+    id?: StringFilter<"Batch"> | string
+    name?: StringFilter<"Batch"> | string
+    description?: StringNullableFilter<"Batch"> | string | null
+    status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    createdAt?: DateTimeFilter<"Batch"> | Date | string
+    updatedAt?: DateTimeFilter<"Batch"> | Date | string
+  }
+
+  export type BatchOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BatchWhereInput | BatchWhereInput[]
+    OR?: BatchWhereInput[]
+    NOT?: BatchWhereInput | BatchWhereInput[]
+    name?: StringFilter<"Batch"> | string
+    description?: StringNullableFilter<"Batch"> | string | null
+    status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    createdAt?: DateTimeFilter<"Batch"> | Date | string
+    updatedAt?: DateTimeFilter<"Batch"> | Date | string
+  }, "id">
+
+  export type BatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BatchCountOrderByAggregateInput
+    _max?: BatchMaxOrderByAggregateInput
+    _min?: BatchMinOrderByAggregateInput
+  }
+
+  export type BatchScalarWhereWithAggregatesInput = {
+    AND?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
+    OR?: BatchScalarWhereWithAggregatesInput[]
+    NOT?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Batch"> | string
+    name?: StringWithAggregatesFilter<"Batch"> | string
+    description?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    status?: EnumBatchStatusWithAggregatesFilter<"Batch"> | $Enums.BatchStatus
+    createdAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+  }
+
   export type CustomerCreateInput = {
     id?: string
     name: string
@@ -7442,6 +8703,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     assets?: AssetCreateNestedManyWithoutCustomerInput
     history?: AssetHistoryCreateNestedManyWithoutCustomerInput
   }
@@ -7458,6 +8721,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     assets?: AssetUncheckedCreateNestedManyWithoutCustomerInput
     history?: AssetHistoryUncheckedCreateNestedManyWithoutCustomerInput
   }
@@ -7474,6 +8739,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     assets?: AssetUpdateManyWithoutCustomerNestedInput
     history?: AssetHistoryUpdateManyWithoutCustomerNestedInput
   }
@@ -7490,6 +8757,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     assets?: AssetUncheckedUpdateManyWithoutCustomerNestedInput
     history?: AssetHistoryUncheckedUpdateManyWithoutCustomerNestedInput
   }
@@ -7506,6 +8775,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
   }
 
   export type CustomerUpdateManyMutationInput = {
@@ -7520,6 +8791,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
   }
 
   export type CustomerUncheckedUpdateManyInput = {
@@ -7534,6 +8807,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
   }
 
   export type AssetCreateInput = {
@@ -7774,6 +9049,69 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BatchCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.BatchStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BatchUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.BatchStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.BatchStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -7815,6 +9153,13 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type EnumRelationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationStatusFilter<$PrismaModel> | $Enums.RelationStatus
+  }
+
   export type AssetListRelationFilter = {
     every?: AssetWhereInput
     some?: AssetWhereInput
@@ -7852,6 +9197,8 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    relationStart?: SortOrder
+    relationStatus?: SortOrder
   }
 
   export type CustomerMaxOrderByAggregateInput = {
@@ -7866,6 +9213,8 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    relationStart?: SortOrder
+    relationStatus?: SortOrder
   }
 
   export type CustomerMinOrderByAggregateInput = {
@@ -7880,6 +9229,8 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    relationStart?: SortOrder
+    relationStatus?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7930,6 +9281,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumRelationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationStatusFilter<$PrismaModel>
+    _max?: NestedEnumRelationStatusFilter<$PrismaModel>
   }
 
   export type EnumAssetStatusFilter<$PrismaModel = never> = {
@@ -8068,6 +9429,50 @@ export namespace Prisma {
     timestamp?: SortOrder
   }
 
+  export type EnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type BatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
   export type AssetCreateNestedManyWithoutCustomerInput = {
     create?: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput> | AssetCreateWithoutCustomerInput[] | AssetUncheckedCreateWithoutCustomerInput[]
     connectOrCreate?: AssetCreateOrConnectWithoutCustomerInput | AssetCreateOrConnectWithoutCustomerInput[]
@@ -8106,6 +9511,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type EnumRelationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RelationStatus
   }
 
   export type AssetUpdateManyWithoutCustomerNestedInput = {
@@ -8370,6 +9779,10 @@ export namespace Prisma {
     update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutHistoryInput, CustomerUpdateWithoutHistoryInput>, CustomerUncheckedUpdateWithoutHistoryInput>
   }
 
+  export type EnumBatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BatchStatus
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8407,6 +9820,13 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedEnumRelationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationStatusFilter<$PrismaModel> | $Enums.RelationStatus
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -8479,6 +9899,16 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationStatusFilter<$PrismaModel>
+    _max?: NestedEnumRelationStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumAssetStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
     in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
@@ -8494,6 +9924,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAssetStatusFilter<$PrismaModel>
     _max?: NestedEnumAssetStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
   export type AssetCreateWithoutCustomerInput = {
@@ -8662,6 +10109,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     history?: AssetHistoryCreateNestedManyWithoutCustomerInput
   }
 
@@ -8677,6 +10126,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     history?: AssetHistoryUncheckedCreateNestedManyWithoutCustomerInput
   }
 
@@ -8778,6 +10229,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     history?: AssetHistoryUpdateManyWithoutCustomerNestedInput
   }
 
@@ -8793,6 +10246,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     history?: AssetHistoryUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
@@ -8959,6 +10414,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     assets?: AssetCreateNestedManyWithoutCustomerInput
   }
 
@@ -8974,6 +10431,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    relationStart?: Date | string
+    relationStatus?: $Enums.RelationStatus
     assets?: AssetUncheckedCreateNestedManyWithoutCustomerInput
   }
 
@@ -9042,6 +10501,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     assets?: AssetUpdateManyWithoutCustomerNestedInput
   }
 
@@ -9057,6 +10518,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     assets?: AssetUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
