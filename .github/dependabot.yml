@@ -1,0 +1,51 @@
+# Dependabot configuration for DES-BOMS
+# Automatically checks for dependency updates and creates pull requests
+
+version: 2
+updates:
+  # Enable version updates for pnpm
+  - package-ecosystem: "npm"
+    # Look for `package.json` and `pnpm-lock.yaml` files in the root directory
+    directory: "/"
+    # Check the npm registry for updates every day (weekdays)
+    schedule:
+      interval: "daily"
+    # Group all minor and patch updates together
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+    # Limit the number of open pull requests
+    open-pull-requests-limit: 5
+    # Add reviewers for dependency updates
+    reviewers:
+      - "B0OGI3"
+    # Prefix commit messages and PR titles
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for `Dockerfile` in the root directory
+    directory: "/"
+    # Check for updates once a week (Monday)
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    # Add reviewers for Docker updates
+    reviewers:
+      - "B0OGI3"
+    # Limit the number of open pull requests
+    open-pull-requests-limit: 2
+    # Prefix commit messages and PR titles
+    commit-message:
+      prefix: "docker"
+      include: "scope"
