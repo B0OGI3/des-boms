@@ -1,5 +1,5 @@
 # Use a stable Node.js version
-FROM node:20-alpine
+FROM node:24-alpine
 
 # Install necessary packages for native binaries
 RUN apk add --no-cache libc6-compat
