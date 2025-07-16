@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,19 +16,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "baseUrl": ".",
-
-    // ✅ CRITICAL for Next.js + React 17+ JSX Transform
-    "jsx": "react-jsx",
-
+    "jsx": "preserve",
     "incremental": true,
-
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/lib/*": ["lib/*"]
+      "@/lib/*": [
+        "lib/*"
+      ]
     }
   },
   "include": [
@@ -33,5 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

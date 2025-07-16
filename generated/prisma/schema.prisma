@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("postgresql://desadmin:DES6040@localhost:5432/boms")
+}
+
+model Customer {
+  id              String         @id @default(cuid())
+  name            String
+  contact         String?
+  email           String?        @unique
+  phone           String?
+  company         String?
+  billingAddress  String?
+  shippingAddress String?
+  notes           String?
+  assets          Asset[]
+  history         AssetHistory[] @relation("CustomerHistory")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model Asset {
+  id          String         @id @default(cuid())
+  name        String
+  category    Category       @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  serial      String?        @unique
+  location    Location?      @relation(fields: [locationId], references: [id])
+  locationId  String?
+  customer    Customer?      @relation(fields: [customerId], references: [id])
+  customerId  String?
+  status      AssetStatus    @default(AVAILABLE)
+  description String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  history     AssetHistory[]
+}
+
+model Category {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  assets Asset[]
+}
+
+model Location {
+  id      String  @id @default(cuid())
+  name    String  @unique
+  address String?
+  assets  Asset[]
+}
+
+model AssetHistory {
+  id         String    @id @default(cuid())
+  asset      Asset     @relation(fields: [assetId], references: [id])
+  assetId    String
+  action     String // e.g. "Assigned to Customer", "Returned", etc.
+  details    String?
+  customer   Customer? @relation("CustomerHistory", fields: [customerId], references: [id])
+  customerId String?
+  timestamp  DateTime  @default(now())
+}
+
+enum AssetStatus {
+  AVAILABLE
+  ASSIGNED
+  MAINTENANCE
+  LOST
+  RETIRED
+}
