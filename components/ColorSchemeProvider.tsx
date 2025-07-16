@@ -29,29 +29,25 @@ export function useColorScheme() {
 }
 
 function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
-  // Always match SSR: start with "dark"
+  // Always start with "dark" to match SSR
   const [colorScheme, setColorScheme] = useState<"light" | "dark">("dark");
-  const [hydrated, setHydrated] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // On mount, check cookie and update state if needed (but do not update DOM attribute here)
+  // Hydrate from cookie after component mounts
   useEffect(() => {
-    setHydrated(true);
-    const cookieScheme =
-      (Cookies.get("mantine-color-scheme") as "light" | "dark") || "dark";
-    if (cookieScheme !== "dark") {
-      setColorScheme(cookieScheme);
+    setMounted(true);
+    const savedScheme = Cookies.get("mantine-color-scheme") as "light" | "dark";
+    if (savedScheme && savedScheme !== colorScheme) {
+      setColorScheme(savedScheme);
     }
   }, []);
 
-  // Only update DOM attribute and cookie when colorScheme changes after hydration
+  // Update cookie when colorScheme changes (but only after mounting)
   useEffect(() => {
-    if (!hydrated) return;
-    document.documentElement.setAttribute(
-      "data-mantine-color-scheme",
-      colorScheme,
-    );
-    Cookies.set("mantine-color-scheme", colorScheme, { expires: 365 });
-  }, [colorScheme, hydrated]);
+    if (mounted) {
+      Cookies.set("mantine-color-scheme", colorScheme, { expires: 365 });
+    }
+  }, [colorScheme, mounted]);
 
   const toggleColorScheme = (value?: "light" | "dark") => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -65,6 +61,7 @@ function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
           fontFamilyMonospace: "var(--font-geist-mono)",
           primaryColor: "blue",
         }}
+        forceColorScheme="dark"
       >
         {children}
       </MantineProvider>
