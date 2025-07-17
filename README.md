@@ -1,25 +1,25 @@
-# DES-BOMS (Business Operations Management System)
+# DES-BOMS (Delivered Engineering Solutions - Batch Order Management System)
 
 ## 🎯 What is DES-BOMS?
 
-**DES-BOMS** is a comprehensive **Business Operations Management System** designed to streamline asset management, customer relationships, and operational workflows for businesses that manage physical assets, equipment, or inventory.
+**DES-BOMS** is a comprehensive **Batch Order Management System** designed specifically for **Delivered Engineering Solutions (DES)** manufacturing operations. The system manages customer orders, batch routing, workstation confirmations, and inspection processes in a modern manufacturing environment.
 
-### 🏢 Perfect For:
-- **Equipment Rental Companies** - Track rental inventory, customer assignments, and return schedules
-- **IT Asset Management** - Manage computers, servers, and IT equipment across organizations
-- **Tool & Equipment Libraries** - Organize shared resources and track who has what
-- **Property Management** - Monitor furniture, appliances, and facility assets
-- **Construction Companies** - Manage tools, machinery, and equipment across job sites
-- **Event Management** - Track event equipment, decorations, and logistics
+### � Perfect For Manufacturing Operations:
+- **Order Management** - Complete purchase order lifecycle from receipt to delivery
+- **Batch Routing** - Sequential workstation routing with real-time tracking
+- **Workstation Control** - Operator confirmations and step-by-step processing
+- **Quality Control** - Built-in inspection and QC record management
+- **Production Monitoring** - Real-time shop floor dashboards and status tracking
+- **Document Management** - Drawing files, CAD models, and specification handling
 
-### 🌟 Key Features:
-- **Asset Tracking** - Complete lifecycle management of physical assets
-- **Customer Management** - Detailed customer profiles with relationship status tracking
-- **Real-time Monitoring** - Live dashboard with health checks and system status
-- **Assignment History** - Full audit trail of who had what, when
-- **Location Management** - Track where assets are located at any time
-- **Batch Operations** - Efficiently manage groups of assets together
-- **Multi-tenant Ready** - Designed to scale for multiple organizations
+### 🌟 Key Manufacturing Features:
+- **Purchase Order Processing** - Customer POs with line items and file attachments
+- **Batch Management** - System-generated batch IDs with quantity tracking
+- **Sequential Routing** - Step-by-step workstation routing with time estimates
+- **Operator Interface** - Login, job queue, and step confirmation system
+- **Quality Control** - Inspector records with Pass/Fail/Rework tracking
+- **Real-time Dashboards** - Live status monitoring across all workstations
+- **Work Travelers** - Printable job routing documentation
 
 ---
 
@@ -69,8 +69,10 @@ docker-compose down
 - **Application**: http://localhost:3000
 - **Database**: localhost:5432
 - **API Endpoints**: 
-  - http://localhost:3000/api/customers
-  - http://localhost:3000/api/stats
+  - http://localhost:3000/api/orders
+  - http://localhost:3000/api/batches
+  - http://localhost:3000/api/workstations
+  - http://localhost:3000/api/qc
 
 ## 💻 Local Development Setup
 
@@ -149,14 +151,28 @@ DES-BOMS/
 
 ## 🗃️ Database Schema
 
-The application includes the following main entities:
+The manufacturing-focused database includes the following main entities:
 
-- **Customer**: Customer management with contact information
-- **Asset**: Asset tracking with serial numbers and status
-- **Category**: Asset categorization system
-- **Location**: Asset location management
-- **Batch**: Batch processing for operations
-- **AssetHistory**: Audit trail for asset changes
+### Order Management
+- **Customer**: Manufacturing customers with billing/shipping addresses
+- **PurchaseOrder**: Customer POs with system-generated order IDs
+- **OrderLineItem**: Individual parts with drawings and specifications
+- **FileAttachment**: CAD files, drawings, and documentation per line item
+
+### Production Management
+- **Batch**: Manufacturing batches with system-generated IDs (DES-YYYY-MMDD-###)
+- **RoutingStep**: Sequential workstation steps with time estimates
+- **Workstation**: Manufacturing stations (LATHE-1, MILL-2, etc.)
+
+### Operator System
+- **StepConfirmation**: Operator login, start/end times, and photo uploads
+- **QCRecord**: Quality control inspections with Pass/Fail/Rework results
+
+### Status Tracking
+- **Order Priority**: Rush / Standard / Hold
+- **Batch Status**: Queued / In Progress / Completed / On Hold / Cancelled
+- **Step Status**: Pending / In Progress / Completed / Skipped / Failed
+- **QC Results**: Pass / Fail / Rework Required
 
 ## 🐛 Troubleshooting
 

@@ -8,6 +8,7 @@ import {
 } from "react";
 import Cookies from "js-cookie";
 import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 
 type ColorSchemeContextType = {
   colorScheme: "light" | "dark";
@@ -40,7 +41,7 @@ function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
     if (savedScheme && savedScheme !== colorScheme) {
       setColorScheme(savedScheme);
     }
-  }, []);
+  }, [colorScheme]);
 
   // Update cookie when colorScheme changes (but only after mounting)
   useEffect(() => {
@@ -63,7 +64,9 @@ function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
         }}
         forceColorScheme="dark"
       >
-        {children}
+        <ModalsProvider>
+          {children}
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeContext.Provider>
   );

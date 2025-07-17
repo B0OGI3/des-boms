@@ -19,77 +19,133 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Customer = $Result.DefaultSelection<Prisma.$CustomerPayload>
 /**
- * Model Asset
+ * Model PurchaseOrder
  * 
  */
-export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
+export type PurchaseOrder = $Result.DefaultSelection<Prisma.$PurchaseOrderPayload>
 /**
- * Model Category
+ * Model OrderLineItem
  * 
  */
-export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
+export type OrderLineItem = $Result.DefaultSelection<Prisma.$OrderLineItemPayload>
 /**
- * Model Location
+ * Model FileAttachment
  * 
  */
-export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
-/**
- * Model AssetHistory
- * 
- */
-export type AssetHistory = $Result.DefaultSelection<Prisma.$AssetHistoryPayload>
+export type FileAttachment = $Result.DefaultSelection<Prisma.$FileAttachmentPayload>
 /**
  * Model Batch
  * 
  */
 export type Batch = $Result.DefaultSelection<Prisma.$BatchPayload>
+/**
+ * Model RoutingStep
+ * 
+ */
+export type RoutingStep = $Result.DefaultSelection<Prisma.$RoutingStepPayload>
+/**
+ * Model Workstation
+ * 
+ */
+export type Workstation = $Result.DefaultSelection<Prisma.$WorkstationPayload>
+/**
+ * Model StepConfirmation
+ * 
+ */
+export type StepConfirmation = $Result.DefaultSelection<Prisma.$StepConfirmationPayload>
+/**
+ * Model QCRecord
+ * 
+ */
+export type QCRecord = $Result.DefaultSelection<Prisma.$QCRecordPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const AssetStatus: {
-  AVAILABLE: 'AVAILABLE',
-  ASSIGNED: 'ASSIGNED',
-  MAINTENANCE: 'MAINTENANCE',
-  LOST: 'LOST',
-  RETIRED: 'RETIRED'
+  export const OrderPriority: {
+  RUSH: 'RUSH',
+  STANDARD: 'STANDARD',
+  HOLD: 'HOLD'
 };
 
-export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
+export type OrderPriority = (typeof OrderPriority)[keyof typeof OrderPriority]
 
 
-export const RelationStatus: {
-  ACTIVE: 'ACTIVE',
-  STRATEGIC: 'STRATEGIC',
-  ONBOARDING: 'ONBOARDING',
-  RETIRED: 'RETIRED'
+export const BatchPriority: {
+  RUSH: 'RUSH',
+  STANDARD: 'STANDARD',
+  HOLD: 'HOLD'
 };
 
-export type RelationStatus = (typeof RelationStatus)[keyof typeof RelationStatus]
+export type BatchPriority = (typeof BatchPriority)[keyof typeof BatchPriority]
 
 
 export const BatchStatus: {
-  ACTIVE: 'ACTIVE',
+  QUEUED: 'QUEUED',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
+  ON_HOLD: 'ON_HOLD',
   CANCELLED: 'CANCELLED'
 };
 
 export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
 
+
+export const StepStatus: {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  SKIPPED: 'SKIPPED',
+  FAILED: 'FAILED'
+};
+
+export type StepStatus = (typeof StepStatus)[keyof typeof StepStatus]
+
+
+export const ConfirmationStatus: {
+  STARTED: 'STARTED',
+  COMPLETED: 'COMPLETED',
+  PAUSED: 'PAUSED',
+  FLAGGED: 'FLAGGED'
+};
+
+export type ConfirmationStatus = (typeof ConfirmationStatus)[keyof typeof ConfirmationStatus]
+
+
+export const QCResult: {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  REWORK_REQUIRED: 'REWORK_REQUIRED'
+};
+
+export type QCResult = (typeof QCResult)[keyof typeof QCResult]
+
 }
 
-export type AssetStatus = $Enums.AssetStatus
+export type OrderPriority = $Enums.OrderPriority
 
-export const AssetStatus: typeof $Enums.AssetStatus
+export const OrderPriority: typeof $Enums.OrderPriority
 
-export type RelationStatus = $Enums.RelationStatus
+export type BatchPriority = $Enums.BatchPriority
 
-export const RelationStatus: typeof $Enums.RelationStatus
+export const BatchPriority: typeof $Enums.BatchPriority
 
 export type BatchStatus = $Enums.BatchStatus
 
 export const BatchStatus: typeof $Enums.BatchStatus
+
+export type StepStatus = $Enums.StepStatus
+
+export const StepStatus: typeof $Enums.StepStatus
+
+export type ConfirmationStatus = $Enums.ConfirmationStatus
+
+export const ConfirmationStatus: typeof $Enums.ConfirmationStatus
+
+export type QCResult = $Enums.QCResult
+
+export const QCResult: typeof $Enums.QCResult
 
 /**
  * ##  Prisma Client ʲˢ
@@ -227,44 +283,34 @@ export class PrismaClient<
   get customer(): Prisma.CustomerDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.asset`: Exposes CRUD operations for the **Asset** model.
+   * `prisma.purchaseOrder`: Exposes CRUD operations for the **PurchaseOrder** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Assets
-    * const assets = await prisma.asset.findMany()
+    * // Fetch zero or more PurchaseOrders
+    * const purchaseOrders = await prisma.purchaseOrder.findMany()
     * ```
     */
-  get asset(): Prisma.AssetDelegate<ExtArgs, ClientOptions>;
+  get purchaseOrder(): Prisma.PurchaseOrderDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.category`: Exposes CRUD operations for the **Category** model.
+   * `prisma.orderLineItem`: Exposes CRUD operations for the **OrderLineItem** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Categories
-    * const categories = await prisma.category.findMany()
+    * // Fetch zero or more OrderLineItems
+    * const orderLineItems = await prisma.orderLineItem.findMany()
     * ```
     */
-  get category(): Prisma.CategoryDelegate<ExtArgs, ClientOptions>;
+  get orderLineItem(): Prisma.OrderLineItemDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.location`: Exposes CRUD operations for the **Location** model.
+   * `prisma.fileAttachment`: Exposes CRUD operations for the **FileAttachment** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Locations
-    * const locations = await prisma.location.findMany()
+    * // Fetch zero or more FileAttachments
+    * const fileAttachments = await prisma.fileAttachment.findMany()
     * ```
     */
-  get location(): Prisma.LocationDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.assetHistory`: Exposes CRUD operations for the **AssetHistory** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more AssetHistories
-    * const assetHistories = await prisma.assetHistory.findMany()
-    * ```
-    */
-  get assetHistory(): Prisma.AssetHistoryDelegate<ExtArgs, ClientOptions>;
+  get fileAttachment(): Prisma.FileAttachmentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.batch`: Exposes CRUD operations for the **Batch** model.
@@ -275,6 +321,46 @@ export class PrismaClient<
     * ```
     */
   get batch(): Prisma.BatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.routingStep`: Exposes CRUD operations for the **RoutingStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RoutingSteps
+    * const routingSteps = await prisma.routingStep.findMany()
+    * ```
+    */
+  get routingStep(): Prisma.RoutingStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workstation`: Exposes CRUD operations for the **Workstation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Workstations
+    * const workstations = await prisma.workstation.findMany()
+    * ```
+    */
+  get workstation(): Prisma.WorkstationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.stepConfirmation`: Exposes CRUD operations for the **StepConfirmation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StepConfirmations
+    * const stepConfirmations = await prisma.stepConfirmation.findMany()
+    * ```
+    */
+  get stepConfirmation(): Prisma.StepConfirmationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.qCRecord`: Exposes CRUD operations for the **QCRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QCRecords
+    * const qCRecords = await prisma.qCRecord.findMany()
+    * ```
+    */
+  get qCRecord(): Prisma.QCRecordDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -716,11 +802,14 @@ export namespace Prisma {
 
   export const ModelName: {
     Customer: 'Customer',
-    Asset: 'Asset',
-    Category: 'Category',
-    Location: 'Location',
-    AssetHistory: 'AssetHistory',
-    Batch: 'Batch'
+    PurchaseOrder: 'PurchaseOrder',
+    OrderLineItem: 'OrderLineItem',
+    FileAttachment: 'FileAttachment',
+    Batch: 'Batch',
+    RoutingStep: 'RoutingStep',
+    Workstation: 'Workstation',
+    StepConfirmation: 'StepConfirmation',
+    QCRecord: 'QCRecord'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -739,7 +828,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "customer" | "asset" | "category" | "location" | "assetHistory" | "batch"
+      modelProps: "customer" | "purchaseOrder" | "orderLineItem" | "fileAttachment" | "batch" | "routingStep" | "workstation" | "stepConfirmation" | "qCRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -817,299 +906,225 @@ export namespace Prisma {
           }
         }
       }
-      Asset: {
-        payload: Prisma.$AssetPayload<ExtArgs>
-        fields: Prisma.AssetFieldRefs
+      PurchaseOrder: {
+        payload: Prisma.$PurchaseOrderPayload<ExtArgs>
+        fields: Prisma.PurchaseOrderFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AssetFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+            args: Prisma.PurchaseOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AssetFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           findFirst: {
-            args: Prisma.AssetFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+            args: Prisma.PurchaseOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AssetFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           findMany: {
-            args: Prisma.AssetFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+            args: Prisma.PurchaseOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
           }
           create: {
-            args: Prisma.AssetCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           createMany: {
-            args: Prisma.AssetCreateManyArgs<ExtArgs>
+            args: Prisma.PurchaseOrderCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.AssetCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+            args: Prisma.PurchaseOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
           }
           delete: {
-            args: Prisma.AssetDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           update: {
-            args: Prisma.AssetUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           deleteMany: {
-            args: Prisma.AssetDeleteManyArgs<ExtArgs>
+            args: Prisma.PurchaseOrderDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AssetUpdateManyArgs<ExtArgs>
+            args: Prisma.PurchaseOrderUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.AssetUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+            args: Prisma.PurchaseOrderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
           }
           upsert: {
-            args: Prisma.AssetUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+            args: Prisma.PurchaseOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
           }
           aggregate: {
-            args: Prisma.AssetAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAsset>
+            args: Prisma.PurchaseOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePurchaseOrder>
           }
           groupBy: {
-            args: Prisma.AssetGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AssetGroupByOutputType>[]
+            args: Prisma.PurchaseOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderGroupByOutputType>[]
           }
           count: {
-            args: Prisma.AssetCountArgs<ExtArgs>
-            result: $Utils.Optional<AssetCountAggregateOutputType> | number
+            args: Prisma.PurchaseOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderCountAggregateOutputType> | number
           }
         }
       }
-      Category: {
-        payload: Prisma.$CategoryPayload<ExtArgs>
-        fields: Prisma.CategoryFieldRefs
+      OrderLineItem: {
+        payload: Prisma.$OrderLineItemPayload<ExtArgs>
+        fields: Prisma.OrderLineItemFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.CategoryFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+            args: Prisma.OrderLineItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.CategoryFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           findFirst: {
-            args: Prisma.CategoryFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+            args: Prisma.OrderLineItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.CategoryFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           findMany: {
-            args: Prisma.CategoryFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+            args: Prisma.OrderLineItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>[]
           }
           create: {
-            args: Prisma.CategoryCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           createMany: {
-            args: Prisma.CategoryCreateManyArgs<ExtArgs>
+            args: Prisma.OrderLineItemCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.CategoryCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+            args: Prisma.OrderLineItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>[]
           }
           delete: {
-            args: Prisma.CategoryDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           update: {
-            args: Prisma.CategoryUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           deleteMany: {
-            args: Prisma.CategoryDeleteManyArgs<ExtArgs>
+            args: Prisma.OrderLineItemDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.CategoryUpdateManyArgs<ExtArgs>
+            args: Prisma.OrderLineItemUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.CategoryUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+            args: Prisma.OrderLineItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>[]
           }
           upsert: {
-            args: Prisma.CategoryUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+            args: Prisma.OrderLineItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderLineItemPayload>
           }
           aggregate: {
-            args: Prisma.CategoryAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCategory>
+            args: Prisma.OrderLineItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrderLineItem>
           }
           groupBy: {
-            args: Prisma.CategoryGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CategoryGroupByOutputType>[]
+            args: Prisma.OrderLineItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderLineItemGroupByOutputType>[]
           }
           count: {
-            args: Prisma.CategoryCountArgs<ExtArgs>
-            result: $Utils.Optional<CategoryCountAggregateOutputType> | number
+            args: Prisma.OrderLineItemCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderLineItemCountAggregateOutputType> | number
           }
         }
       }
-      Location: {
-        payload: Prisma.$LocationPayload<ExtArgs>
-        fields: Prisma.LocationFieldRefs
+      FileAttachment: {
+        payload: Prisma.$FileAttachmentPayload<ExtArgs>
+        fields: Prisma.FileAttachmentFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.LocationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+            args: Prisma.FileAttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.LocationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           findFirst: {
-            args: Prisma.LocationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+            args: Prisma.FileAttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.LocationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           findMany: {
-            args: Prisma.LocationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+            args: Prisma.FileAttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>[]
           }
           create: {
-            args: Prisma.LocationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           createMany: {
-            args: Prisma.LocationCreateManyArgs<ExtArgs>
+            args: Prisma.FileAttachmentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.LocationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+            args: Prisma.FileAttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>[]
           }
           delete: {
-            args: Prisma.LocationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           update: {
-            args: Prisma.LocationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           deleteMany: {
-            args: Prisma.LocationDeleteManyArgs<ExtArgs>
+            args: Prisma.FileAttachmentDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.LocationUpdateManyArgs<ExtArgs>
+            args: Prisma.FileAttachmentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.LocationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+            args: Prisma.FileAttachmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>[]
           }
           upsert: {
-            args: Prisma.LocationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+            args: Prisma.FileAttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FileAttachmentPayload>
           }
           aggregate: {
-            args: Prisma.LocationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateLocation>
+            args: Prisma.FileAttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFileAttachment>
           }
           groupBy: {
-            args: Prisma.LocationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<LocationGroupByOutputType>[]
+            args: Prisma.FileAttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FileAttachmentGroupByOutputType>[]
           }
           count: {
-            args: Prisma.LocationCountArgs<ExtArgs>
-            result: $Utils.Optional<LocationCountAggregateOutputType> | number
-          }
-        }
-      }
-      AssetHistory: {
-        payload: Prisma.$AssetHistoryPayload<ExtArgs>
-        fields: Prisma.AssetHistoryFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.AssetHistoryFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.AssetHistoryFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          findFirst: {
-            args: Prisma.AssetHistoryFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.AssetHistoryFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          findMany: {
-            args: Prisma.AssetHistoryFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>[]
-          }
-          create: {
-            args: Prisma.AssetHistoryCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          createMany: {
-            args: Prisma.AssetHistoryCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.AssetHistoryCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>[]
-          }
-          delete: {
-            args: Prisma.AssetHistoryDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          update: {
-            args: Prisma.AssetHistoryUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          deleteMany: {
-            args: Prisma.AssetHistoryDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.AssetHistoryUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.AssetHistoryUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>[]
-          }
-          upsert: {
-            args: Prisma.AssetHistoryUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AssetHistoryPayload>
-          }
-          aggregate: {
-            args: Prisma.AssetHistoryAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAssetHistory>
-          }
-          groupBy: {
-            args: Prisma.AssetHistoryGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AssetHistoryGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.AssetHistoryCountArgs<ExtArgs>
-            result: $Utils.Optional<AssetHistoryCountAggregateOutputType> | number
+            args: Prisma.FileAttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<FileAttachmentCountAggregateOutputType> | number
           }
         }
       }
@@ -1184,6 +1199,302 @@ export namespace Prisma {
           count: {
             args: Prisma.BatchCountArgs<ExtArgs>
             result: $Utils.Optional<BatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      RoutingStep: {
+        payload: Prisma.$RoutingStepPayload<ExtArgs>
+        fields: Prisma.RoutingStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoutingStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoutingStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          findFirst: {
+            args: Prisma.RoutingStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoutingStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          findMany: {
+            args: Prisma.RoutingStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>[]
+          }
+          create: {
+            args: Prisma.RoutingStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          createMany: {
+            args: Prisma.RoutingStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoutingStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>[]
+          }
+          delete: {
+            args: Prisma.RoutingStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          update: {
+            args: Prisma.RoutingStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoutingStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoutingStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoutingStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.RoutingStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingStepPayload>
+          }
+          aggregate: {
+            args: Prisma.RoutingStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoutingStep>
+          }
+          groupBy: {
+            args: Prisma.RoutingStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoutingStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoutingStepCountArgs<ExtArgs>
+            result: $Utils.Optional<RoutingStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      Workstation: {
+        payload: Prisma.$WorkstationPayload<ExtArgs>
+        fields: Prisma.WorkstationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkstationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkstationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkstationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkstationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          findMany: {
+            args: Prisma.WorkstationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>[]
+          }
+          create: {
+            args: Prisma.WorkstationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          createMany: {
+            args: Prisma.WorkstationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkstationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkstationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          update: {
+            args: Prisma.WorkstationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkstationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkstationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkstationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkstationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkstationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkstation>
+          }
+          groupBy: {
+            args: Prisma.WorkstationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkstationCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationCountAggregateOutputType> | number
+          }
+        }
+      }
+      StepConfirmation: {
+        payload: Prisma.$StepConfirmationPayload<ExtArgs>
+        fields: Prisma.StepConfirmationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StepConfirmationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StepConfirmationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          findFirst: {
+            args: Prisma.StepConfirmationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StepConfirmationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          findMany: {
+            args: Prisma.StepConfirmationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>[]
+          }
+          create: {
+            args: Prisma.StepConfirmationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          createMany: {
+            args: Prisma.StepConfirmationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StepConfirmationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>[]
+          }
+          delete: {
+            args: Prisma.StepConfirmationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          update: {
+            args: Prisma.StepConfirmationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          deleteMany: {
+            args: Prisma.StepConfirmationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StepConfirmationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StepConfirmationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>[]
+          }
+          upsert: {
+            args: Prisma.StepConfirmationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepConfirmationPayload>
+          }
+          aggregate: {
+            args: Prisma.StepConfirmationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStepConfirmation>
+          }
+          groupBy: {
+            args: Prisma.StepConfirmationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StepConfirmationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StepConfirmationCountArgs<ExtArgs>
+            result: $Utils.Optional<StepConfirmationCountAggregateOutputType> | number
+          }
+        }
+      }
+      QCRecord: {
+        payload: Prisma.$QCRecordPayload<ExtArgs>
+        fields: Prisma.QCRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QCRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QCRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.QCRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QCRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          findMany: {
+            args: Prisma.QCRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>[]
+          }
+          create: {
+            args: Prisma.QCRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          createMany: {
+            args: Prisma.QCRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QCRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.QCRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          update: {
+            args: Prisma.QCRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.QCRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QCRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.QCRecordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>[]
+          }
+          upsert: {
+            args: Prisma.QCRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QCRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.QCRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQCRecord>
+          }
+          groupBy: {
+            args: Prisma.QCRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QCRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QCRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<QCRecordCountAggregateOutputType> | number
           }
         }
       }
@@ -1272,11 +1583,14 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     customer?: CustomerOmit
-    asset?: AssetOmit
-    category?: CategoryOmit
-    location?: LocationOmit
-    assetHistory?: AssetHistoryOmit
+    purchaseOrder?: PurchaseOrderOmit
+    orderLineItem?: OrderLineItemOmit
+    fileAttachment?: FileAttachmentOmit
     batch?: BatchOmit
+    routingStep?: RoutingStepOmit
+    workstation?: WorkstationOmit
+    stepConfirmation?: StepConfirmationOmit
+    qCRecord?: QCRecordOmit
   }
 
   /* Types for Logging */
@@ -1371,13 +1685,11 @@ export namespace Prisma {
    */
 
   export type CustomerCountOutputType = {
-    assets: number
-    history: number
+    purchaseOrders: number
   }
 
   export type CustomerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | CustomerCountOutputTypeCountAssetsArgs
-    history?: boolean | CustomerCountOutputTypeCountHistoryArgs
+    purchaseOrders?: boolean | CustomerCountOutputTypeCountPurchaseOrdersArgs
   }
 
   // Custom InputTypes
@@ -1394,108 +1706,190 @@ export namespace Prisma {
   /**
    * CustomerCountOutputType without action
    */
-  export type CustomerCountOutputTypeCountAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetWhereInput
-  }
-
-  /**
-   * CustomerCountOutputType without action
-   */
-  export type CustomerCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetHistoryWhereInput
+  export type CustomerCountOutputTypeCountPurchaseOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderWhereInput
   }
 
 
   /**
-   * Count Type AssetCountOutputType
+   * Count Type PurchaseOrderCountOutputType
    */
 
-  export type AssetCountOutputType = {
-    history: number
+  export type PurchaseOrderCountOutputType = {
+    lineItems: number
   }
 
-  export type AssetCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    history?: boolean | AssetCountOutputTypeCountHistoryArgs
+  export type PurchaseOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItems?: boolean | PurchaseOrderCountOutputTypeCountLineItemsArgs
   }
 
   // Custom InputTypes
   /**
-   * AssetCountOutputType without action
+   * PurchaseOrderCountOutputType without action
    */
-  export type AssetCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AssetCountOutputType
+     * Select specific fields to fetch from the PurchaseOrderCountOutputType
      */
-    select?: AssetCountOutputTypeSelect<ExtArgs> | null
+    select?: PurchaseOrderCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * AssetCountOutputType without action
+   * PurchaseOrderCountOutputType without action
    */
-  export type AssetCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetHistoryWhereInput
+  export type PurchaseOrderCountOutputTypeCountLineItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderLineItemWhereInput
   }
 
 
   /**
-   * Count Type CategoryCountOutputType
+   * Count Type OrderLineItemCountOutputType
    */
 
-  export type CategoryCountOutputType = {
-    assets: number
+  export type OrderLineItemCountOutputType = {
+    fileAttachments: number
+    batches: number
   }
 
-  export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | CategoryCountOutputTypeCountAssetsArgs
+  export type OrderLineItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fileAttachments?: boolean | OrderLineItemCountOutputTypeCountFileAttachmentsArgs
+    batches?: boolean | OrderLineItemCountOutputTypeCountBatchesArgs
   }
 
   // Custom InputTypes
   /**
-   * CategoryCountOutputType without action
+   * OrderLineItemCountOutputType without action
    */
-  export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CategoryCountOutputType
+     * Select specific fields to fetch from the OrderLineItemCountOutputType
      */
-    select?: CategoryCountOutputTypeSelect<ExtArgs> | null
+    select?: OrderLineItemCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * CategoryCountOutputType without action
+   * OrderLineItemCountOutputType without action
    */
-  export type CategoryCountOutputTypeCountAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetWhereInput
+  export type OrderLineItemCountOutputTypeCountFileAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FileAttachmentWhereInput
+  }
+
+  /**
+   * OrderLineItemCountOutputType without action
+   */
+  export type OrderLineItemCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchWhereInput
   }
 
 
   /**
-   * Count Type LocationCountOutputType
+   * Count Type BatchCountOutputType
    */
 
-  export type LocationCountOutputType = {
-    assets: number
+  export type BatchCountOutputType = {
+    routingSteps: number
+    qcRecords: number
   }
 
-  export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | LocationCountOutputTypeCountAssetsArgs
+  export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingSteps?: boolean | BatchCountOutputTypeCountRoutingStepsArgs
+    qcRecords?: boolean | BatchCountOutputTypeCountQcRecordsArgs
   }
 
   // Custom InputTypes
   /**
-   * LocationCountOutputType without action
+   * BatchCountOutputType without action
    */
-  export type LocationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LocationCountOutputType
+     * Select specific fields to fetch from the BatchCountOutputType
      */
-    select?: LocationCountOutputTypeSelect<ExtArgs> | null
+    select?: BatchCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * LocationCountOutputType without action
+   * BatchCountOutputType without action
    */
-  export type LocationCountOutputTypeCountAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetWhereInput
+  export type BatchCountOutputTypeCountRoutingStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingStepWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountQcRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QCRecordWhereInput
+  }
+
+
+  /**
+   * Count Type RoutingStepCountOutputType
+   */
+
+  export type RoutingStepCountOutputType = {
+    confirmations: number
+  }
+
+  export type RoutingStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    confirmations?: boolean | RoutingStepCountOutputTypeCountConfirmationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoutingStepCountOutputType without action
+   */
+  export type RoutingStepCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStepCountOutputType
+     */
+    select?: RoutingStepCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoutingStepCountOutputType without action
+   */
+  export type RoutingStepCountOutputTypeCountConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepConfirmationWhereInput
+  }
+
+
+  /**
+   * Count Type WorkstationCountOutputType
+   */
+
+  export type WorkstationCountOutputType = {
+    routingSteps: number
+    confirmations: number
+  }
+
+  export type WorkstationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingSteps?: boolean | WorkstationCountOutputTypeCountRoutingStepsArgs
+    confirmations?: boolean | WorkstationCountOutputTypeCountConfirmationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCountOutputType
+     */
+    select?: WorkstationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeCountRoutingStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingStepWhereInput
+  }
+
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeCountConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepConfirmationWhereInput
   }
 
 
@@ -1516,49 +1910,40 @@ export namespace Prisma {
   export type CustomerMinAggregateOutputType = {
     id: string | null
     name: string | null
-    contact: string | null
+    contactName: string | null
     email: string | null
     phone: string | null
-    company: string | null
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    relationStart: Date | null
-    relationStatus: $Enums.RelationStatus | null
   }
 
   export type CustomerMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    contact: string | null
+    contactName: string | null
     email: string | null
     phone: string | null
-    company: string | null
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    relationStart: Date | null
-    relationStatus: $Enums.RelationStatus | null
   }
 
   export type CustomerCountAggregateOutputType = {
     id: number
     name: number
-    contact: number
+    contactName: number
     email: number
     phone: number
-    company: number
     billingAddress: number
     shippingAddress: number
     notes: number
     createdAt: number
     updatedAt: number
-    relationStart: number
-    relationStatus: number
     _all: number
   }
 
@@ -1566,49 +1951,40 @@ export namespace Prisma {
   export type CustomerMinAggregateInputType = {
     id?: true
     name?: true
-    contact?: true
+    contactName?: true
     email?: true
     phone?: true
-    company?: true
     billingAddress?: true
     shippingAddress?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
-    relationStart?: true
-    relationStatus?: true
   }
 
   export type CustomerMaxAggregateInputType = {
     id?: true
     name?: true
-    contact?: true
+    contactName?: true
     email?: true
     phone?: true
-    company?: true
     billingAddress?: true
     shippingAddress?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
-    relationStart?: true
-    relationStatus?: true
   }
 
   export type CustomerCountAggregateInputType = {
     id?: true
     name?: true
-    contact?: true
+    contactName?: true
     email?: true
     phone?: true
-    company?: true
     billingAddress?: true
     shippingAddress?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
-    relationStart?: true
-    relationStatus?: true
     _all?: true
   }
 
@@ -1687,17 +2063,14 @@ export namespace Prisma {
   export type CustomerGroupByOutputType = {
     id: string
     name: string
-    contact: string | null
+    contactName: string | null
     email: string | null
     phone: string | null
-    company: string | null
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
-    relationStart: Date
-    relationStatus: $Enums.RelationStatus
     _count: CustomerCountAggregateOutputType | null
     _min: CustomerMinAggregateOutputType | null
     _max: CustomerMaxAggregateOutputType | null
@@ -1720,74 +2093,60 @@ export namespace Prisma {
   export type CustomerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    contact?: boolean
+    contactName?: boolean
     email?: boolean
     phone?: boolean
-    company?: boolean
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    relationStart?: boolean
-    relationStatus?: boolean
-    assets?: boolean | Customer$assetsArgs<ExtArgs>
-    history?: boolean | Customer$historyArgs<ExtArgs>
+    purchaseOrders?: boolean | Customer$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    contact?: boolean
+    contactName?: boolean
     email?: boolean
     phone?: boolean
-    company?: boolean
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    relationStart?: boolean
-    relationStatus?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    contact?: boolean
+    contactName?: boolean
     email?: boolean
     phone?: boolean
-    company?: boolean
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    relationStart?: boolean
-    relationStatus?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectScalar = {
     id?: boolean
     name?: boolean
-    contact?: boolean
+    contactName?: boolean
     email?: boolean
     phone?: boolean
-    company?: boolean
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    relationStart?: boolean
-    relationStatus?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "email" | "phone" | "company" | "billingAddress" | "shippingAddress" | "notes" | "createdAt" | "updatedAt" | "relationStart" | "relationStatus", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contactName" | "email" | "phone" | "billingAddress" | "shippingAddress" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
   export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | Customer$assetsArgs<ExtArgs>
-    history?: boolean | Customer$historyArgs<ExtArgs>
+    purchaseOrders?: boolean | Customer$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CustomerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1796,23 +2155,19 @@ export namespace Prisma {
   export type $CustomerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Customer"
     objects: {
-      assets: Prisma.$AssetPayload<ExtArgs>[]
-      history: Prisma.$AssetHistoryPayload<ExtArgs>[]
+      purchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      contact: string | null
+      contactName: string | null
       email: string | null
       phone: string | null
-      company: string | null
       billingAddress: string | null
       shippingAddress: string | null
       notes: string | null
       createdAt: Date
       updatedAt: Date
-      relationStart: Date
-      relationStatus: $Enums.RelationStatus
     }, ExtArgs["result"]["customer"]>
     composites: {}
   }
@@ -2207,8 +2562,7 @@ export namespace Prisma {
    */
   export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    assets<T extends Customer$assetsArgs<ExtArgs> = {}>(args?: Subset<T, Customer$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    history<T extends Customer$historyArgs<ExtArgs> = {}>(args?: Subset<T, Customer$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purchaseOrders<T extends Customer$purchaseOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Customer$purchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2240,17 +2594,14 @@ export namespace Prisma {
   interface CustomerFieldRefs {
     readonly id: FieldRef<"Customer", 'String'>
     readonly name: FieldRef<"Customer", 'String'>
-    readonly contact: FieldRef<"Customer", 'String'>
+    readonly contactName: FieldRef<"Customer", 'String'>
     readonly email: FieldRef<"Customer", 'String'>
     readonly phone: FieldRef<"Customer", 'String'>
-    readonly company: FieldRef<"Customer", 'String'>
     readonly billingAddress: FieldRef<"Customer", 'String'>
     readonly shippingAddress: FieldRef<"Customer", 'String'>
     readonly notes: FieldRef<"Customer", 'String'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
-    readonly relationStart: FieldRef<"Customer", 'DateTime'>
-    readonly relationStatus: FieldRef<"Customer", 'RelationStatus'>
   }
     
 
@@ -2639,51 +2990,27 @@ export namespace Prisma {
   }
 
   /**
-   * Customer.assets
+   * Customer.purchaseOrders
    */
-  export type Customer$assetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Customer$purchaseOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
-    where?: AssetWhereInput
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
-    cursor?: AssetWhereUniqueInput
+    include?: PurchaseOrderInclude<ExtArgs> | null
+    where?: PurchaseOrderWhereInput
+    orderBy?: PurchaseOrderOrderByWithRelationInput | PurchaseOrderOrderByWithRelationInput[]
+    cursor?: PurchaseOrderWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
-  }
-
-  /**
-   * Customer.history
-   */
-  export type Customer$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    where?: AssetHistoryWhereInput
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    cursor?: AssetHistoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AssetHistoryScalarFieldEnum | AssetHistoryScalarFieldEnum[]
+    distinct?: PurchaseOrderScalarFieldEnum | PurchaseOrderScalarFieldEnum[]
   }
 
   /**
@@ -2706,429 +3033,403 @@ export namespace Prisma {
 
 
   /**
-   * Model Asset
+   * Model PurchaseOrder
    */
 
-  export type AggregateAsset = {
-    _count: AssetCountAggregateOutputType | null
-    _min: AssetMinAggregateOutputType | null
-    _max: AssetMaxAggregateOutputType | null
+  export type AggregatePurchaseOrder = {
+    _count: PurchaseOrderCountAggregateOutputType | null
+    _min: PurchaseOrderMinAggregateOutputType | null
+    _max: PurchaseOrderMaxAggregateOutputType | null
   }
 
-  export type AssetMinAggregateOutputType = {
+  export type PurchaseOrderMinAggregateOutputType = {
     id: string | null
-    name: string | null
-    categoryId: string | null
-    serial: string | null
-    locationId: string | null
+    systemOrderId: string | null
     customerId: string | null
-    status: $Enums.AssetStatus | null
-    description: string | null
+    poNumber: string | null
+    dueDate: Date | null
+    priority: $Enums.OrderPriority | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type AssetMaxAggregateOutputType = {
+  export type PurchaseOrderMaxAggregateOutputType = {
     id: string | null
-    name: string | null
-    categoryId: string | null
-    serial: string | null
-    locationId: string | null
+    systemOrderId: string | null
     customerId: string | null
-    status: $Enums.AssetStatus | null
-    description: string | null
+    poNumber: string | null
+    dueDate: Date | null
+    priority: $Enums.OrderPriority | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type AssetCountAggregateOutputType = {
+  export type PurchaseOrderCountAggregateOutputType = {
     id: number
-    name: number
-    categoryId: number
-    serial: number
-    locationId: number
+    systemOrderId: number
     customerId: number
-    status: number
-    description: number
+    poNumber: number
+    dueDate: number
+    priority: number
+    notes: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
-  export type AssetMinAggregateInputType = {
+  export type PurchaseOrderMinAggregateInputType = {
     id?: true
-    name?: true
-    categoryId?: true
-    serial?: true
-    locationId?: true
+    systemOrderId?: true
     customerId?: true
-    status?: true
-    description?: true
+    poNumber?: true
+    dueDate?: true
+    priority?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type AssetMaxAggregateInputType = {
+  export type PurchaseOrderMaxAggregateInputType = {
     id?: true
-    name?: true
-    categoryId?: true
-    serial?: true
-    locationId?: true
+    systemOrderId?: true
     customerId?: true
-    status?: true
-    description?: true
+    poNumber?: true
+    dueDate?: true
+    priority?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type AssetCountAggregateInputType = {
+  export type PurchaseOrderCountAggregateInputType = {
     id?: true
-    name?: true
-    categoryId?: true
-    serial?: true
-    locationId?: true
+    systemOrderId?: true
     customerId?: true
-    status?: true
-    description?: true
+    poNumber?: true
+    dueDate?: true
+    priority?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
   }
 
-  export type AssetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Asset to aggregate.
+     * Filter which PurchaseOrder to aggregate.
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Assets to fetch.
+     * Determine the order of PurchaseOrders to fetch.
      */
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    orderBy?: PurchaseOrderOrderByWithRelationInput | PurchaseOrderOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: AssetWhereUniqueInput
+    cursor?: PurchaseOrderWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Assets from the position of the cursor.
+     * Take `±n` PurchaseOrders from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Assets.
+     * Skip the first `n` PurchaseOrders.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Assets
+     * Count returned PurchaseOrders
     **/
-    _count?: true | AssetCountAggregateInputType
+    _count?: true | PurchaseOrderCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: AssetMinAggregateInputType
+    _min?: PurchaseOrderMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: AssetMaxAggregateInputType
+    _max?: PurchaseOrderMaxAggregateInputType
   }
 
-  export type GetAssetAggregateType<T extends AssetAggregateArgs> = {
-        [P in keyof T & keyof AggregateAsset]: P extends '_count' | 'count'
+  export type GetPurchaseOrderAggregateType<T extends PurchaseOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurchaseOrder]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateAsset[P]>
-      : GetScalarType<T[P], AggregateAsset[P]>
+        : GetScalarType<T[P], AggregatePurchaseOrder[P]>
+      : GetScalarType<T[P], AggregatePurchaseOrder[P]>
   }
 
 
 
 
-  export type AssetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetWhereInput
-    orderBy?: AssetOrderByWithAggregationInput | AssetOrderByWithAggregationInput[]
-    by: AssetScalarFieldEnum[] | AssetScalarFieldEnum
-    having?: AssetScalarWhereWithAggregatesInput
+  export type PurchaseOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderWhereInput
+    orderBy?: PurchaseOrderOrderByWithAggregationInput | PurchaseOrderOrderByWithAggregationInput[]
+    by: PurchaseOrderScalarFieldEnum[] | PurchaseOrderScalarFieldEnum
+    having?: PurchaseOrderScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: AssetCountAggregateInputType | true
-    _min?: AssetMinAggregateInputType
-    _max?: AssetMaxAggregateInputType
+    _count?: PurchaseOrderCountAggregateInputType | true
+    _min?: PurchaseOrderMinAggregateInputType
+    _max?: PurchaseOrderMaxAggregateInputType
   }
 
-  export type AssetGroupByOutputType = {
+  export type PurchaseOrderGroupByOutputType = {
     id: string
-    name: string
-    categoryId: string
-    serial: string | null
-    locationId: string | null
-    customerId: string | null
-    status: $Enums.AssetStatus
-    description: string | null
+    systemOrderId: string
+    customerId: string
+    poNumber: string
+    dueDate: Date
+    priority: $Enums.OrderPriority
+    notes: string | null
     createdAt: Date
     updatedAt: Date
-    _count: AssetCountAggregateOutputType | null
-    _min: AssetMinAggregateOutputType | null
-    _max: AssetMaxAggregateOutputType | null
+    _count: PurchaseOrderCountAggregateOutputType | null
+    _min: PurchaseOrderMinAggregateOutputType | null
+    _max: PurchaseOrderMaxAggregateOutputType | null
   }
 
-  type GetAssetGroupByPayload<T extends AssetGroupByArgs> = Prisma.PrismaPromise<
+  type GetPurchaseOrderGroupByPayload<T extends PurchaseOrderGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<AssetGroupByOutputType, T['by']> &
+      PickEnumerable<PurchaseOrderGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof AssetGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PurchaseOrderGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], AssetGroupByOutputType[P]>
-            : GetScalarType<T[P], AssetGroupByOutputType[P]>
+              : GetScalarType<T[P], PurchaseOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], PurchaseOrderGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type AssetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PurchaseOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    categoryId?: boolean
-    serial?: boolean
-    locationId?: boolean
+    systemOrderId?: boolean
     customerId?: boolean
-    status?: boolean
-    description?: boolean
+    poNumber?: boolean
+    dueDate?: boolean
+    priority?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
-    history?: boolean | Asset$historyArgs<ExtArgs>
-    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["asset"]>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    lineItems?: boolean | PurchaseOrder$lineItemsArgs<ExtArgs>
+    _count?: boolean | PurchaseOrderCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrder"]>
 
-  export type AssetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PurchaseOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    categoryId?: boolean
-    serial?: boolean
-    locationId?: boolean
+    systemOrderId?: boolean
     customerId?: boolean
-    status?: boolean
-    description?: boolean
+    poNumber?: boolean
+    dueDate?: boolean
+    priority?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
-  }, ExtArgs["result"]["asset"]>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrder"]>
 
-  export type AssetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PurchaseOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    categoryId?: boolean
-    serial?: boolean
-    locationId?: boolean
+    systemOrderId?: boolean
     customerId?: boolean
-    status?: boolean
-    description?: boolean
+    poNumber?: boolean
+    dueDate?: boolean
+    priority?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
-  }, ExtArgs["result"]["asset"]>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrder"]>
 
-  export type AssetSelectScalar = {
+  export type PurchaseOrderSelectScalar = {
     id?: boolean
-    name?: boolean
-    categoryId?: boolean
-    serial?: boolean
-    locationId?: boolean
+    systemOrderId?: boolean
     customerId?: boolean
-    status?: boolean
-    description?: boolean
+    poNumber?: boolean
+    dueDate?: boolean
+    priority?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "categoryId" | "serial" | "locationId" | "customerId" | "status" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
-  export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
-    history?: boolean | Asset$historyArgs<ExtArgs>
-    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
+  export type PurchaseOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "systemOrderId" | "customerId" | "poNumber" | "dueDate" | "priority" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseOrder"]>
+  export type PurchaseOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    lineItems?: boolean | PurchaseOrder$lineItemsArgs<ExtArgs>
+    _count?: boolean | PurchaseOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type AssetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
+  export type PurchaseOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
   }
-  export type AssetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
-    location?: boolean | Asset$locationArgs<ExtArgs>
-    customer?: boolean | Asset$customerArgs<ExtArgs>
+  export type PurchaseOrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
   }
 
-  export type $AssetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Asset"
+  export type $PurchaseOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PurchaseOrder"
     objects: {
-      category: Prisma.$CategoryPayload<ExtArgs>
-      location: Prisma.$LocationPayload<ExtArgs> | null
-      customer: Prisma.$CustomerPayload<ExtArgs> | null
-      history: Prisma.$AssetHistoryPayload<ExtArgs>[]
+      customer: Prisma.$CustomerPayload<ExtArgs>
+      lineItems: Prisma.$OrderLineItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-      categoryId: string
-      serial: string | null
-      locationId: string | null
-      customerId: string | null
-      status: $Enums.AssetStatus
-      description: string | null
+      systemOrderId: string
+      customerId: string
+      poNumber: string
+      dueDate: Date
+      priority: $Enums.OrderPriority
+      notes: string | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["asset"]>
+    }, ExtArgs["result"]["purchaseOrder"]>
     composites: {}
   }
 
-  type AssetGetPayload<S extends boolean | null | undefined | AssetDefaultArgs> = $Result.GetResult<Prisma.$AssetPayload, S>
+  type PurchaseOrderGetPayload<S extends boolean | null | undefined | PurchaseOrderDefaultArgs> = $Result.GetResult<Prisma.$PurchaseOrderPayload, S>
 
-  type AssetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AssetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AssetCountAggregateInputType | true
+  type PurchaseOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PurchaseOrderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PurchaseOrderCountAggregateInputType | true
     }
 
-  export interface AssetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Asset'], meta: { name: 'Asset' } }
+  export interface PurchaseOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PurchaseOrder'], meta: { name: 'PurchaseOrder' } }
     /**
-     * Find zero or one Asset that matches the filter.
-     * @param {AssetFindUniqueArgs} args - Arguments to find a Asset
+     * Find zero or one PurchaseOrder that matches the filter.
+     * @param {PurchaseOrderFindUniqueArgs} args - Arguments to find a PurchaseOrder
      * @example
-     * // Get one Asset
-     * const asset = await prisma.asset.findUnique({
+     * // Get one PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends AssetFindUniqueArgs>(args: SelectSubset<T, AssetFindUniqueArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends PurchaseOrderFindUniqueArgs>(args: SelectSubset<T, PurchaseOrderFindUniqueArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Asset that matches the filter or throw an error with `error.code='P2025'`
+     * Find one PurchaseOrder that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {AssetFindUniqueOrThrowArgs} args - Arguments to find a Asset
+     * @param {PurchaseOrderFindUniqueOrThrowArgs} args - Arguments to find a PurchaseOrder
      * @example
-     * // Get one Asset
-     * const asset = await prisma.asset.findUniqueOrThrow({
+     * // Get one PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AssetFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends PurchaseOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, PurchaseOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Asset that matches the filter.
+     * Find the first PurchaseOrder that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetFindFirstArgs} args - Arguments to find a Asset
+     * @param {PurchaseOrderFindFirstArgs} args - Arguments to find a PurchaseOrder
      * @example
-     * // Get one Asset
-     * const asset = await prisma.asset.findFirst({
+     * // Get one PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends AssetFindFirstArgs>(args?: SelectSubset<T, AssetFindFirstArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends PurchaseOrderFindFirstArgs>(args?: SelectSubset<T, PurchaseOrderFindFirstArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Asset that matches the filter or
+     * Find the first PurchaseOrder that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetFindFirstOrThrowArgs} args - Arguments to find a Asset
+     * @param {PurchaseOrderFindFirstOrThrowArgs} args - Arguments to find a PurchaseOrder
      * @example
-     * // Get one Asset
-     * const asset = await prisma.asset.findFirstOrThrow({
+     * // Get one PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends AssetFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends PurchaseOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, PurchaseOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Assets that matches the filter.
+     * Find zero or more PurchaseOrders that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PurchaseOrderFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Assets
-     * const assets = await prisma.asset.findMany()
+     * // Get all PurchaseOrders
+     * const purchaseOrders = await prisma.purchaseOrder.findMany()
      * 
-     * // Get first 10 Assets
-     * const assets = await prisma.asset.findMany({ take: 10 })
+     * // Get first 10 PurchaseOrders
+     * const purchaseOrders = await prisma.purchaseOrder.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const assetWithIdOnly = await prisma.asset.findMany({ select: { id: true } })
+     * const purchaseOrderWithIdOnly = await prisma.purchaseOrder.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AssetFindManyArgs>(args?: SelectSubset<T, AssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends PurchaseOrderFindManyArgs>(args?: SelectSubset<T, PurchaseOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Asset.
-     * @param {AssetCreateArgs} args - Arguments to create a Asset.
+     * Create a PurchaseOrder.
+     * @param {PurchaseOrderCreateArgs} args - Arguments to create a PurchaseOrder.
      * @example
-     * // Create one Asset
-     * const Asset = await prisma.asset.create({
+     * // Create one PurchaseOrder
+     * const PurchaseOrder = await prisma.purchaseOrder.create({
      *   data: {
-     *     // ... data to create a Asset
+     *     // ... data to create a PurchaseOrder
      *   }
      * })
      * 
      */
-    create<T extends AssetCreateArgs>(args: SelectSubset<T, AssetCreateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends PurchaseOrderCreateArgs>(args: SelectSubset<T, PurchaseOrderCreateArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Assets.
-     * @param {AssetCreateManyArgs} args - Arguments to create many Assets.
+     * Create many PurchaseOrders.
+     * @param {PurchaseOrderCreateManyArgs} args - Arguments to create many PurchaseOrders.
      * @example
-     * // Create many Assets
-     * const asset = await prisma.asset.createMany({
+     * // Create many PurchaseOrders
+     * const purchaseOrder = await prisma.purchaseOrder.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends AssetCreateManyArgs>(args?: SelectSubset<T, AssetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PurchaseOrderCreateManyArgs>(args?: SelectSubset<T, PurchaseOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Assets and returns the data saved in the database.
-     * @param {AssetCreateManyAndReturnArgs} args - Arguments to create many Assets.
+     * Create many PurchaseOrders and returns the data saved in the database.
+     * @param {PurchaseOrderCreateManyAndReturnArgs} args - Arguments to create many PurchaseOrders.
      * @example
-     * // Create many Assets
-     * const asset = await prisma.asset.createManyAndReturn({
+     * // Create many PurchaseOrders
+     * const purchaseOrder = await prisma.purchaseOrder.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Assets and only return the `id`
-     * const assetWithIdOnly = await prisma.asset.createManyAndReturn({
+     * // Create many PurchaseOrders and only return the `id`
+     * const purchaseOrderWithIdOnly = await prisma.purchaseOrder.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3138,28 +3439,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AssetCreateManyAndReturnArgs>(args?: SelectSubset<T, AssetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends PurchaseOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, PurchaseOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Asset.
-     * @param {AssetDeleteArgs} args - Arguments to delete one Asset.
+     * Delete a PurchaseOrder.
+     * @param {PurchaseOrderDeleteArgs} args - Arguments to delete one PurchaseOrder.
      * @example
-     * // Delete one Asset
-     * const Asset = await prisma.asset.delete({
+     * // Delete one PurchaseOrder
+     * const PurchaseOrder = await prisma.purchaseOrder.delete({
      *   where: {
-     *     // ... filter to delete one Asset
+     *     // ... filter to delete one PurchaseOrder
      *   }
      * })
      * 
      */
-    delete<T extends AssetDeleteArgs>(args: SelectSubset<T, AssetDeleteArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends PurchaseOrderDeleteArgs>(args: SelectSubset<T, PurchaseOrderDeleteArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Asset.
-     * @param {AssetUpdateArgs} args - Arguments to update one Asset.
+     * Update one PurchaseOrder.
+     * @param {PurchaseOrderUpdateArgs} args - Arguments to update one PurchaseOrder.
      * @example
-     * // Update one Asset
-     * const asset = await prisma.asset.update({
+     * // Update one PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3169,30 +3470,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AssetUpdateArgs>(args: SelectSubset<T, AssetUpdateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends PurchaseOrderUpdateArgs>(args: SelectSubset<T, PurchaseOrderUpdateArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Assets.
-     * @param {AssetDeleteManyArgs} args - Arguments to filter Assets to delete.
+     * Delete zero or more PurchaseOrders.
+     * @param {PurchaseOrderDeleteManyArgs} args - Arguments to filter PurchaseOrders to delete.
      * @example
-     * // Delete a few Assets
-     * const { count } = await prisma.asset.deleteMany({
+     * // Delete a few PurchaseOrders
+     * const { count } = await prisma.purchaseOrder.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends AssetDeleteManyArgs>(args?: SelectSubset<T, AssetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PurchaseOrderDeleteManyArgs>(args?: SelectSubset<T, PurchaseOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Assets.
+     * Update zero or more PurchaseOrders.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PurchaseOrderUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Assets
-     * const asset = await prisma.asset.updateMany({
+     * // Update many PurchaseOrders
+     * const purchaseOrder = await prisma.purchaseOrder.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3202,14 +3503,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends AssetUpdateManyArgs>(args: SelectSubset<T, AssetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PurchaseOrderUpdateManyArgs>(args: SelectSubset<T, PurchaseOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Assets and returns the data updated in the database.
-     * @param {AssetUpdateManyAndReturnArgs} args - Arguments to update many Assets.
+     * Update zero or more PurchaseOrders and returns the data updated in the database.
+     * @param {PurchaseOrderUpdateManyAndReturnArgs} args - Arguments to update many PurchaseOrders.
      * @example
-     * // Update many Assets
-     * const asset = await prisma.asset.updateManyAndReturn({
+     * // Update many PurchaseOrders
+     * const purchaseOrder = await prisma.purchaseOrder.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3218,8 +3519,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Assets and only return the `id`
-     * const assetWithIdOnly = await prisma.asset.updateManyAndReturn({
+     * // Update zero or more PurchaseOrders and only return the `id`
+     * const purchaseOrderWithIdOnly = await prisma.purchaseOrder.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -3232,56 +3533,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends AssetUpdateManyAndReturnArgs>(args: SelectSubset<T, AssetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends PurchaseOrderUpdateManyAndReturnArgs>(args: SelectSubset<T, PurchaseOrderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Asset.
-     * @param {AssetUpsertArgs} args - Arguments to update or create a Asset.
+     * Create or update one PurchaseOrder.
+     * @param {PurchaseOrderUpsertArgs} args - Arguments to update or create a PurchaseOrder.
      * @example
-     * // Update or create a Asset
-     * const asset = await prisma.asset.upsert({
+     * // Update or create a PurchaseOrder
+     * const purchaseOrder = await prisma.purchaseOrder.upsert({
      *   create: {
-     *     // ... data to create a Asset
+     *     // ... data to create a PurchaseOrder
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Asset we want to update
+     *     // ... the filter for the PurchaseOrder we want to update
      *   }
      * })
      */
-    upsert<T extends AssetUpsertArgs>(args: SelectSubset<T, AssetUpsertArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends PurchaseOrderUpsertArgs>(args: SelectSubset<T, PurchaseOrderUpsertArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Assets.
+     * Count the number of PurchaseOrders.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetCountArgs} args - Arguments to filter Assets to count.
+     * @param {PurchaseOrderCountArgs} args - Arguments to filter PurchaseOrders to count.
      * @example
-     * // Count the number of Assets
-     * const count = await prisma.asset.count({
+     * // Count the number of PurchaseOrders
+     * const count = await prisma.purchaseOrder.count({
      *   where: {
-     *     // ... the filter for the Assets we want to count
+     *     // ... the filter for the PurchaseOrders we want to count
      *   }
      * })
     **/
-    count<T extends AssetCountArgs>(
-      args?: Subset<T, AssetCountArgs>,
+    count<T extends PurchaseOrderCountArgs>(
+      args?: Subset<T, PurchaseOrderCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], AssetCountAggregateOutputType>
+          : GetScalarType<T['select'], PurchaseOrderCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Asset.
+     * Allows you to perform aggregations operations on a PurchaseOrder.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PurchaseOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3301,13 +3602,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends AssetAggregateArgs>(args: Subset<T, AssetAggregateArgs>): Prisma.PrismaPromise<GetAssetAggregateType<T>>
+    aggregate<T extends PurchaseOrderAggregateArgs>(args: Subset<T, PurchaseOrderAggregateArgs>): Prisma.PrismaPromise<GetPurchaseOrderAggregateType<T>>
 
     /**
-     * Group by Asset.
+     * Group by PurchaseOrder.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetGroupByArgs} args - Group by arguments.
+     * @param {PurchaseOrderGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3322,14 +3623,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends AssetGroupByArgs,
+      T extends PurchaseOrderGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AssetGroupByArgs['orderBy'] }
-        : { orderBy?: AssetGroupByArgs['orderBy'] },
+        ? { orderBy: PurchaseOrderGroupByArgs['orderBy'] }
+        : { orderBy?: PurchaseOrderGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3378,25 +3679,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, AssetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PurchaseOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurchaseOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Asset model
+   * Fields of the PurchaseOrder model
    */
-  readonly fields: AssetFieldRefs;
+  readonly fields: PurchaseOrderFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Asset.
+   * The delegate class that acts as a "Promise-like" for PurchaseOrder.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AssetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PurchaseOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    location<T extends Asset$locationArgs<ExtArgs> = {}>(args?: Subset<T, Asset$locationArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    customer<T extends Asset$customerArgs<ExtArgs> = {}>(args?: Subset<T, Asset$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    history<T extends Asset$historyArgs<ExtArgs> = {}>(args?: Subset<T, Asset$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    customer<T extends CustomerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerDefaultArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lineItems<T extends PurchaseOrder$lineItemsArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrder$lineItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3423,800 +3722,915 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Asset model
+   * Fields of the PurchaseOrder model
    */
-  interface AssetFieldRefs {
-    readonly id: FieldRef<"Asset", 'String'>
-    readonly name: FieldRef<"Asset", 'String'>
-    readonly categoryId: FieldRef<"Asset", 'String'>
-    readonly serial: FieldRef<"Asset", 'String'>
-    readonly locationId: FieldRef<"Asset", 'String'>
-    readonly customerId: FieldRef<"Asset", 'String'>
-    readonly status: FieldRef<"Asset", 'AssetStatus'>
-    readonly description: FieldRef<"Asset", 'String'>
-    readonly createdAt: FieldRef<"Asset", 'DateTime'>
-    readonly updatedAt: FieldRef<"Asset", 'DateTime'>
+  interface PurchaseOrderFieldRefs {
+    readonly id: FieldRef<"PurchaseOrder", 'String'>
+    readonly systemOrderId: FieldRef<"PurchaseOrder", 'String'>
+    readonly customerId: FieldRef<"PurchaseOrder", 'String'>
+    readonly poNumber: FieldRef<"PurchaseOrder", 'String'>
+    readonly dueDate: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly priority: FieldRef<"PurchaseOrder", 'OrderPriority'>
+    readonly notes: FieldRef<"PurchaseOrder", 'String'>
+    readonly createdAt: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"PurchaseOrder", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Asset findUnique
+   * PurchaseOrder findUnique
    */
-  export type AssetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter, which Asset to fetch.
+     * Filter, which PurchaseOrder to fetch.
      */
-    where: AssetWhereUniqueInput
+    where: PurchaseOrderWhereUniqueInput
   }
 
   /**
-   * Asset findUniqueOrThrow
+   * PurchaseOrder findUniqueOrThrow
    */
-  export type AssetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter, which Asset to fetch.
+     * Filter, which PurchaseOrder to fetch.
      */
-    where: AssetWhereUniqueInput
+    where: PurchaseOrderWhereUniqueInput
   }
 
   /**
-   * Asset findFirst
+   * PurchaseOrder findFirst
    */
-  export type AssetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter, which Asset to fetch.
+     * Filter, which PurchaseOrder to fetch.
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Assets to fetch.
+     * Determine the order of PurchaseOrders to fetch.
      */
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    orderBy?: PurchaseOrderOrderByWithRelationInput | PurchaseOrderOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Assets.
+     * Sets the position for searching for PurchaseOrders.
      */
-    cursor?: AssetWhereUniqueInput
+    cursor?: PurchaseOrderWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Assets from the position of the cursor.
+     * Take `±n` PurchaseOrders from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Assets.
+     * Skip the first `n` PurchaseOrders.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Assets.
+     * Filter by unique combinations of PurchaseOrders.
      */
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+    distinct?: PurchaseOrderScalarFieldEnum | PurchaseOrderScalarFieldEnum[]
   }
 
   /**
-   * Asset findFirstOrThrow
+   * PurchaseOrder findFirstOrThrow
    */
-  export type AssetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter, which Asset to fetch.
+     * Filter, which PurchaseOrder to fetch.
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Assets to fetch.
+     * Determine the order of PurchaseOrders to fetch.
      */
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    orderBy?: PurchaseOrderOrderByWithRelationInput | PurchaseOrderOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Assets.
+     * Sets the position for searching for PurchaseOrders.
      */
-    cursor?: AssetWhereUniqueInput
+    cursor?: PurchaseOrderWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Assets from the position of the cursor.
+     * Take `±n` PurchaseOrders from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Assets.
+     * Skip the first `n` PurchaseOrders.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Assets.
+     * Filter by unique combinations of PurchaseOrders.
      */
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+    distinct?: PurchaseOrderScalarFieldEnum | PurchaseOrderScalarFieldEnum[]
   }
 
   /**
-   * Asset findMany
+   * PurchaseOrder findMany
    */
-  export type AssetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter, which Assets to fetch.
+     * Filter, which PurchaseOrders to fetch.
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Assets to fetch.
+     * Determine the order of PurchaseOrders to fetch.
      */
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    orderBy?: PurchaseOrderOrderByWithRelationInput | PurchaseOrderOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Assets.
+     * Sets the position for listing PurchaseOrders.
      */
-    cursor?: AssetWhereUniqueInput
+    cursor?: PurchaseOrderWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Assets from the position of the cursor.
+     * Take `±n` PurchaseOrders from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Assets.
+     * Skip the first `n` PurchaseOrders.
      */
     skip?: number
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+    distinct?: PurchaseOrderScalarFieldEnum | PurchaseOrderScalarFieldEnum[]
   }
 
   /**
-   * Asset create
+   * PurchaseOrder create
    */
-  export type AssetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * The data needed to create a Asset.
+     * The data needed to create a PurchaseOrder.
      */
-    data: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+    data: XOR<PurchaseOrderCreateInput, PurchaseOrderUncheckedCreateInput>
   }
 
   /**
-   * Asset createMany
+   * PurchaseOrder createMany
    */
-  export type AssetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Assets.
+     * The data used to create many PurchaseOrders.
      */
-    data: AssetCreateManyInput | AssetCreateManyInput[]
+    data: PurchaseOrderCreateManyInput | PurchaseOrderCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Asset createManyAndReturn
+   * PurchaseOrder createManyAndReturn
    */
-  export type AssetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelectCreateManyAndReturn<ExtArgs> | null
+    select?: PurchaseOrderSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
-     * The data used to create many Assets.
+     * The data used to create many PurchaseOrders.
      */
-    data: AssetCreateManyInput | AssetCreateManyInput[]
+    data: PurchaseOrderCreateManyInput | PurchaseOrderCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: PurchaseOrderIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Asset update
+   * PurchaseOrder update
    */
-  export type AssetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * The data needed to update a Asset.
+     * The data needed to update a PurchaseOrder.
      */
-    data: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+    data: XOR<PurchaseOrderUpdateInput, PurchaseOrderUncheckedUpdateInput>
     /**
-     * Choose, which Asset to update.
+     * Choose, which PurchaseOrder to update.
      */
-    where: AssetWhereUniqueInput
+    where: PurchaseOrderWhereUniqueInput
   }
 
   /**
-   * Asset updateMany
+   * PurchaseOrder updateMany
    */
-  export type AssetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Assets.
+     * The data used to update PurchaseOrders.
      */
-    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    data: XOR<PurchaseOrderUpdateManyMutationInput, PurchaseOrderUncheckedUpdateManyInput>
     /**
-     * Filter which Assets to update
+     * Filter which PurchaseOrders to update
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
-     * Limit how many Assets to update.
+     * Limit how many PurchaseOrders to update.
      */
     limit?: number
   }
 
   /**
-   * Asset updateManyAndReturn
+   * PurchaseOrder updateManyAndReturn
    */
-  export type AssetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: PurchaseOrderSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
-     * The data used to update Assets.
+     * The data used to update PurchaseOrders.
      */
-    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    data: XOR<PurchaseOrderUpdateManyMutationInput, PurchaseOrderUncheckedUpdateManyInput>
     /**
-     * Filter which Assets to update
+     * Filter which PurchaseOrders to update
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
-     * Limit how many Assets to update.
+     * Limit how many PurchaseOrders to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: PurchaseOrderIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Asset upsert
+   * PurchaseOrder upsert
    */
-  export type AssetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * The filter to search for the Asset to update in case it exists.
+     * The filter to search for the PurchaseOrder to update in case it exists.
      */
-    where: AssetWhereUniqueInput
+    where: PurchaseOrderWhereUniqueInput
     /**
-     * In case the Asset found by the `where` argument doesn't exist, create a new Asset with this data.
+     * In case the PurchaseOrder found by the `where` argument doesn't exist, create a new PurchaseOrder with this data.
      */
-    create: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+    create: XOR<PurchaseOrderCreateInput, PurchaseOrderUncheckedCreateInput>
     /**
-     * In case the Asset was found with the provided `where` argument, update it with this data.
+     * In case the PurchaseOrder was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+    update: XOR<PurchaseOrderUpdateInput, PurchaseOrderUncheckedUpdateInput>
   }
 
   /**
-   * Asset delete
+   * PurchaseOrder delete
    */
-  export type AssetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
     /**
-     * Filter which Asset to delete.
+     * Filter which PurchaseOrder to delete.
      */
-    where: AssetWhereUniqueInput
+    where: PurchaseOrderWhereUniqueInput
   }
 
   /**
-   * Asset deleteMany
+   * PurchaseOrder deleteMany
    */
-  export type AssetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Assets to delete
+     * Filter which PurchaseOrders to delete
      */
-    where?: AssetWhereInput
+    where?: PurchaseOrderWhereInput
     /**
-     * Limit how many Assets to delete.
+     * Limit how many PurchaseOrders to delete.
      */
     limit?: number
   }
 
   /**
-   * Asset.location
+   * PurchaseOrder.lineItems
    */
-  export type Asset$locationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrder$lineItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
-    where?: LocationWhereInput
-  }
-
-  /**
-   * Asset.customer
-   */
-  export type Asset$customerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Customer
-     */
-    select?: CustomerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Customer
-     */
-    omit?: CustomerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CustomerInclude<ExtArgs> | null
-    where?: CustomerWhereInput
-  }
-
-  /**
-   * Asset.history
-   */
-  export type Asset$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    where?: AssetHistoryWhereInput
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    cursor?: AssetHistoryWhereUniqueInput
+    include?: OrderLineItemInclude<ExtArgs> | null
+    where?: OrderLineItemWhereInput
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
+    cursor?: OrderLineItemWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AssetHistoryScalarFieldEnum | AssetHistoryScalarFieldEnum[]
+    distinct?: OrderLineItemScalarFieldEnum | OrderLineItemScalarFieldEnum[]
   }
 
   /**
-   * Asset without action
+   * PurchaseOrder without action
    */
-  export type AssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PurchaseOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Asset
+     * Select specific fields to fetch from the PurchaseOrder
      */
-    select?: AssetSelect<ExtArgs> | null
+    select?: PurchaseOrderSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Asset
+     * Omit specific fields from the PurchaseOrder
      */
-    omit?: AssetOmit<ExtArgs> | null
+    omit?: PurchaseOrderOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetInclude<ExtArgs> | null
+    include?: PurchaseOrderInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Category
+   * Model OrderLineItem
    */
 
-  export type AggregateCategory = {
-    _count: CategoryCountAggregateOutputType | null
-    _min: CategoryMinAggregateOutputType | null
-    _max: CategoryMaxAggregateOutputType | null
+  export type AggregateOrderLineItem = {
+    _count: OrderLineItemCountAggregateOutputType | null
+    _avg: OrderLineItemAvgAggregateOutputType | null
+    _sum: OrderLineItemSumAggregateOutputType | null
+    _min: OrderLineItemMinAggregateOutputType | null
+    _max: OrderLineItemMaxAggregateOutputType | null
   }
 
-  export type CategoryMinAggregateOutputType = {
+  export type OrderLineItemAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type OrderLineItemSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type OrderLineItemMinAggregateOutputType = {
     id: string | null
-    name: string | null
+    orderId: string | null
+    partNumber: string | null
+    partName: string | null
+    drawingNumber: string | null
+    revisionLevel: string | null
+    quantity: number | null
+    dueDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type CategoryMaxAggregateOutputType = {
+  export type OrderLineItemMaxAggregateOutputType = {
     id: string | null
-    name: string | null
+    orderId: string | null
+    partNumber: string | null
+    partName: string | null
+    drawingNumber: string | null
+    revisionLevel: string | null
+    quantity: number | null
+    dueDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type CategoryCountAggregateOutputType = {
+  export type OrderLineItemCountAggregateOutputType = {
     id: number
-    name: number
+    orderId: number
+    partNumber: number
+    partName: number
+    drawingNumber: number
+    revisionLevel: number
+    quantity: number
+    dueDate: number
+    notes: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type CategoryMinAggregateInputType = {
-    id?: true
-    name?: true
+  export type OrderLineItemAvgAggregateInputType = {
+    quantity?: true
   }
 
-  export type CategoryMaxAggregateInputType = {
-    id?: true
-    name?: true
+  export type OrderLineItemSumAggregateInputType = {
+    quantity?: true
   }
 
-  export type CategoryCountAggregateInputType = {
+  export type OrderLineItemMinAggregateInputType = {
     id?: true
-    name?: true
+    orderId?: true
+    partNumber?: true
+    partName?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    quantity?: true
+    dueDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderLineItemMaxAggregateInputType = {
+    id?: true
+    orderId?: true
+    partNumber?: true
+    partName?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    quantity?: true
+    dueDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderLineItemCountAggregateInputType = {
+    id?: true
+    orderId?: true
+    partNumber?: true
+    partName?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    quantity?: true
+    dueDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
-  export type CategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Category to aggregate.
+     * Filter which OrderLineItem to aggregate.
      */
-    where?: CategoryWhereInput
+    where?: OrderLineItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Categories to fetch.
+     * Determine the order of OrderLineItems to fetch.
      */
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: CategoryWhereUniqueInput
+    cursor?: OrderLineItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Categories from the position of the cursor.
+     * Take `±n` OrderLineItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Categories.
+     * Skip the first `n` OrderLineItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Categories
+     * Count returned OrderLineItems
     **/
-    _count?: true | CategoryCountAggregateInputType
+    _count?: true | OrderLineItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderLineItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderLineItemSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: CategoryMinAggregateInputType
+    _min?: OrderLineItemMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: CategoryMaxAggregateInputType
+    _max?: OrderLineItemMaxAggregateInputType
   }
 
-  export type GetCategoryAggregateType<T extends CategoryAggregateArgs> = {
-        [P in keyof T & keyof AggregateCategory]: P extends '_count' | 'count'
+  export type GetOrderLineItemAggregateType<T extends OrderLineItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderLineItem]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateCategory[P]>
-      : GetScalarType<T[P], AggregateCategory[P]>
+        : GetScalarType<T[P], AggregateOrderLineItem[P]>
+      : GetScalarType<T[P], AggregateOrderLineItem[P]>
   }
 
 
 
 
-  export type CategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CategoryWhereInput
-    orderBy?: CategoryOrderByWithAggregationInput | CategoryOrderByWithAggregationInput[]
-    by: CategoryScalarFieldEnum[] | CategoryScalarFieldEnum
-    having?: CategoryScalarWhereWithAggregatesInput
+  export type OrderLineItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderLineItemWhereInput
+    orderBy?: OrderLineItemOrderByWithAggregationInput | OrderLineItemOrderByWithAggregationInput[]
+    by: OrderLineItemScalarFieldEnum[] | OrderLineItemScalarFieldEnum
+    having?: OrderLineItemScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: CategoryCountAggregateInputType | true
-    _min?: CategoryMinAggregateInputType
-    _max?: CategoryMaxAggregateInputType
+    _count?: OrderLineItemCountAggregateInputType | true
+    _avg?: OrderLineItemAvgAggregateInputType
+    _sum?: OrderLineItemSumAggregateInputType
+    _min?: OrderLineItemMinAggregateInputType
+    _max?: OrderLineItemMaxAggregateInputType
   }
 
-  export type CategoryGroupByOutputType = {
+  export type OrderLineItemGroupByOutputType = {
     id: string
-    name: string
-    _count: CategoryCountAggregateOutputType | null
-    _min: CategoryMinAggregateOutputType | null
-    _max: CategoryMaxAggregateOutputType | null
+    orderId: string
+    partNumber: string
+    partName: string
+    drawingNumber: string | null
+    revisionLevel: string | null
+    quantity: number
+    dueDate: Date | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OrderLineItemCountAggregateOutputType | null
+    _avg: OrderLineItemAvgAggregateOutputType | null
+    _sum: OrderLineItemSumAggregateOutputType | null
+    _min: OrderLineItemMinAggregateOutputType | null
+    _max: OrderLineItemMaxAggregateOutputType | null
   }
 
-  type GetCategoryGroupByPayload<T extends CategoryGroupByArgs> = Prisma.PrismaPromise<
+  type GetOrderLineItemGroupByPayload<T extends OrderLineItemGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CategoryGroupByOutputType, T['by']> &
+      PickEnumerable<OrderLineItemGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof CategoryGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof OrderLineItemGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], CategoryGroupByOutputType[P]>
-            : GetScalarType<T[P], CategoryGroupByOutputType[P]>
+              : GetScalarType<T[P], OrderLineItemGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderLineItemGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type CategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type OrderLineItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    assets?: boolean | Category$assetsArgs<ExtArgs>
-    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["category"]>
+    orderId?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    quantity?: boolean
+    dueDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    fileAttachments?: boolean | OrderLineItem$fileAttachmentsArgs<ExtArgs>
+    batches?: boolean | OrderLineItem$batchesArgs<ExtArgs>
+    _count?: boolean | OrderLineItemCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderLineItem"]>
 
-  export type CategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type OrderLineItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-  }, ExtArgs["result"]["category"]>
+    orderId?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    quantity?: boolean
+    dueDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderLineItem"]>
 
-  export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type OrderLineItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-  }, ExtArgs["result"]["category"]>
+    orderId?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    quantity?: boolean
+    dueDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderLineItem"]>
 
-  export type CategorySelectScalar = {
+  export type OrderLineItemSelectScalar = {
     id?: boolean
-    name?: boolean
+    orderId?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    quantity?: boolean
+    dueDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["category"]>
-  export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | Category$assetsArgs<ExtArgs>
-    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
+  export type OrderLineItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "partNumber" | "partName" | "drawingNumber" | "revisionLevel" | "quantity" | "dueDate" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["orderLineItem"]>
+  export type OrderLineItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    fileAttachments?: boolean | OrderLineItem$fileAttachmentsArgs<ExtArgs>
+    batches?: boolean | OrderLineItem$batchesArgs<ExtArgs>
+    _count?: boolean | OrderLineItemCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type OrderLineItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+  }
+  export type OrderLineItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+  }
 
-  export type $CategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Category"
+  export type $OrderLineItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrderLineItem"
     objects: {
-      assets: Prisma.$AssetPayload<ExtArgs>[]
+      purchaseOrder: Prisma.$PurchaseOrderPayload<ExtArgs>
+      fileAttachments: Prisma.$FileAttachmentPayload<ExtArgs>[]
+      batches: Prisma.$BatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-    }, ExtArgs["result"]["category"]>
+      orderId: string
+      partNumber: string
+      partName: string
+      drawingNumber: string | null
+      revisionLevel: string | null
+      quantity: number
+      dueDate: Date | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["orderLineItem"]>
     composites: {}
   }
 
-  type CategoryGetPayload<S extends boolean | null | undefined | CategoryDefaultArgs> = $Result.GetResult<Prisma.$CategoryPayload, S>
+  type OrderLineItemGetPayload<S extends boolean | null | undefined | OrderLineItemDefaultArgs> = $Result.GetResult<Prisma.$OrderLineItemPayload, S>
 
-  type CategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CategoryCountAggregateInputType | true
+  type OrderLineItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderLineItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderLineItemCountAggregateInputType | true
     }
 
-  export interface CategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Category'], meta: { name: 'Category' } }
+  export interface OrderLineItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrderLineItem'], meta: { name: 'OrderLineItem' } }
     /**
-     * Find zero or one Category that matches the filter.
-     * @param {CategoryFindUniqueArgs} args - Arguments to find a Category
+     * Find zero or one OrderLineItem that matches the filter.
+     * @param {OrderLineItemFindUniqueArgs} args - Arguments to find a OrderLineItem
      * @example
-     * // Get one Category
-     * const category = await prisma.category.findUnique({
+     * // Get one OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends CategoryFindUniqueArgs>(args: SelectSubset<T, CategoryFindUniqueArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends OrderLineItemFindUniqueArgs>(args: SelectSubset<T, OrderLineItemFindUniqueArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Category that matches the filter or throw an error with `error.code='P2025'`
+     * Find one OrderLineItem that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {CategoryFindUniqueOrThrowArgs} args - Arguments to find a Category
+     * @param {OrderLineItemFindUniqueOrThrowArgs} args - Arguments to find a OrderLineItem
      * @example
-     * // Get one Category
-     * const category = await prisma.category.findUniqueOrThrow({
+     * // Get one OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, CategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends OrderLineItemFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderLineItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Category that matches the filter.
+     * Find the first OrderLineItem that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryFindFirstArgs} args - Arguments to find a Category
+     * @param {OrderLineItemFindFirstArgs} args - Arguments to find a OrderLineItem
      * @example
-     * // Get one Category
-     * const category = await prisma.category.findFirst({
+     * // Get one OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends CategoryFindFirstArgs>(args?: SelectSubset<T, CategoryFindFirstArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends OrderLineItemFindFirstArgs>(args?: SelectSubset<T, OrderLineItemFindFirstArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Category that matches the filter or
+     * Find the first OrderLineItem that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryFindFirstOrThrowArgs} args - Arguments to find a Category
+     * @param {OrderLineItemFindFirstOrThrowArgs} args - Arguments to find a OrderLineItem
      * @example
-     * // Get one Category
-     * const category = await prisma.category.findFirstOrThrow({
+     * // Get one OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends CategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, CategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends OrderLineItemFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderLineItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Categories that matches the filter.
+     * Find zero or more OrderLineItems that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {OrderLineItemFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Categories
-     * const categories = await prisma.category.findMany()
+     * // Get all OrderLineItems
+     * const orderLineItems = await prisma.orderLineItem.findMany()
      * 
-     * // Get first 10 Categories
-     * const categories = await prisma.category.findMany({ take: 10 })
+     * // Get first 10 OrderLineItems
+     * const orderLineItems = await prisma.orderLineItem.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const categoryWithIdOnly = await prisma.category.findMany({ select: { id: true } })
+     * const orderLineItemWithIdOnly = await prisma.orderLineItem.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CategoryFindManyArgs>(args?: SelectSubset<T, CategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends OrderLineItemFindManyArgs>(args?: SelectSubset<T, OrderLineItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Category.
-     * @param {CategoryCreateArgs} args - Arguments to create a Category.
+     * Create a OrderLineItem.
+     * @param {OrderLineItemCreateArgs} args - Arguments to create a OrderLineItem.
      * @example
-     * // Create one Category
-     * const Category = await prisma.category.create({
+     * // Create one OrderLineItem
+     * const OrderLineItem = await prisma.orderLineItem.create({
      *   data: {
-     *     // ... data to create a Category
+     *     // ... data to create a OrderLineItem
      *   }
      * })
      * 
      */
-    create<T extends CategoryCreateArgs>(args: SelectSubset<T, CategoryCreateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends OrderLineItemCreateArgs>(args: SelectSubset<T, OrderLineItemCreateArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Categories.
-     * @param {CategoryCreateManyArgs} args - Arguments to create many Categories.
+     * Create many OrderLineItems.
+     * @param {OrderLineItemCreateManyArgs} args - Arguments to create many OrderLineItems.
      * @example
-     * // Create many Categories
-     * const category = await prisma.category.createMany({
+     * // Create many OrderLineItems
+     * const orderLineItem = await prisma.orderLineItem.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends CategoryCreateManyArgs>(args?: SelectSubset<T, CategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends OrderLineItemCreateManyArgs>(args?: SelectSubset<T, OrderLineItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Categories and returns the data saved in the database.
-     * @param {CategoryCreateManyAndReturnArgs} args - Arguments to create many Categories.
+     * Create many OrderLineItems and returns the data saved in the database.
+     * @param {OrderLineItemCreateManyAndReturnArgs} args - Arguments to create many OrderLineItems.
      * @example
-     * // Create many Categories
-     * const category = await prisma.category.createManyAndReturn({
+     * // Create many OrderLineItems
+     * const orderLineItem = await prisma.orderLineItem.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Categories and only return the `id`
-     * const categoryWithIdOnly = await prisma.category.createManyAndReturn({
+     * // Create many OrderLineItems and only return the `id`
+     * const orderLineItemWithIdOnly = await prisma.orderLineItem.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -4226,28 +4640,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, CategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends OrderLineItemCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderLineItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Category.
-     * @param {CategoryDeleteArgs} args - Arguments to delete one Category.
+     * Delete a OrderLineItem.
+     * @param {OrderLineItemDeleteArgs} args - Arguments to delete one OrderLineItem.
      * @example
-     * // Delete one Category
-     * const Category = await prisma.category.delete({
+     * // Delete one OrderLineItem
+     * const OrderLineItem = await prisma.orderLineItem.delete({
      *   where: {
-     *     // ... filter to delete one Category
+     *     // ... filter to delete one OrderLineItem
      *   }
      * })
      * 
      */
-    delete<T extends CategoryDeleteArgs>(args: SelectSubset<T, CategoryDeleteArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends OrderLineItemDeleteArgs>(args: SelectSubset<T, OrderLineItemDeleteArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Category.
-     * @param {CategoryUpdateArgs} args - Arguments to update one Category.
+     * Update one OrderLineItem.
+     * @param {OrderLineItemUpdateArgs} args - Arguments to update one OrderLineItem.
      * @example
-     * // Update one Category
-     * const category = await prisma.category.update({
+     * // Update one OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4257,30 +4671,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CategoryUpdateArgs>(args: SelectSubset<T, CategoryUpdateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends OrderLineItemUpdateArgs>(args: SelectSubset<T, OrderLineItemUpdateArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Categories.
-     * @param {CategoryDeleteManyArgs} args - Arguments to filter Categories to delete.
+     * Delete zero or more OrderLineItems.
+     * @param {OrderLineItemDeleteManyArgs} args - Arguments to filter OrderLineItems to delete.
      * @example
-     * // Delete a few Categories
-     * const { count } = await prisma.category.deleteMany({
+     * // Delete a few OrderLineItems
+     * const { count } = await prisma.orderLineItem.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends CategoryDeleteManyArgs>(args?: SelectSubset<T, CategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends OrderLineItemDeleteManyArgs>(args?: SelectSubset<T, OrderLineItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Categories.
+     * Update zero or more OrderLineItems.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {OrderLineItemUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Categories
-     * const category = await prisma.category.updateMany({
+     * // Update many OrderLineItems
+     * const orderLineItem = await prisma.orderLineItem.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4290,14 +4704,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends CategoryUpdateManyArgs>(args: SelectSubset<T, CategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends OrderLineItemUpdateManyArgs>(args: SelectSubset<T, OrderLineItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Categories and returns the data updated in the database.
-     * @param {CategoryUpdateManyAndReturnArgs} args - Arguments to update many Categories.
+     * Update zero or more OrderLineItems and returns the data updated in the database.
+     * @param {OrderLineItemUpdateManyAndReturnArgs} args - Arguments to update many OrderLineItems.
      * @example
-     * // Update many Categories
-     * const category = await prisma.category.updateManyAndReturn({
+     * // Update many OrderLineItems
+     * const orderLineItem = await prisma.orderLineItem.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4306,8 +4720,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Categories and only return the `id`
-     * const categoryWithIdOnly = await prisma.category.updateManyAndReturn({
+     * // Update zero or more OrderLineItems and only return the `id`
+     * const orderLineItemWithIdOnly = await prisma.orderLineItem.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -4320,56 +4734,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, CategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends OrderLineItemUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderLineItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Category.
-     * @param {CategoryUpsertArgs} args - Arguments to update or create a Category.
+     * Create or update one OrderLineItem.
+     * @param {OrderLineItemUpsertArgs} args - Arguments to update or create a OrderLineItem.
      * @example
-     * // Update or create a Category
-     * const category = await prisma.category.upsert({
+     * // Update or create a OrderLineItem
+     * const orderLineItem = await prisma.orderLineItem.upsert({
      *   create: {
-     *     // ... data to create a Category
+     *     // ... data to create a OrderLineItem
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Category we want to update
+     *     // ... the filter for the OrderLineItem we want to update
      *   }
      * })
      */
-    upsert<T extends CategoryUpsertArgs>(args: SelectSubset<T, CategoryUpsertArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends OrderLineItemUpsertArgs>(args: SelectSubset<T, OrderLineItemUpsertArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Categories.
+     * Count the number of OrderLineItems.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryCountArgs} args - Arguments to filter Categories to count.
+     * @param {OrderLineItemCountArgs} args - Arguments to filter OrderLineItems to count.
      * @example
-     * // Count the number of Categories
-     * const count = await prisma.category.count({
+     * // Count the number of OrderLineItems
+     * const count = await prisma.orderLineItem.count({
      *   where: {
-     *     // ... the filter for the Categories we want to count
+     *     // ... the filter for the OrderLineItems we want to count
      *   }
      * })
     **/
-    count<T extends CategoryCountArgs>(
-      args?: Subset<T, CategoryCountArgs>,
+    count<T extends OrderLineItemCountArgs>(
+      args?: Subset<T, OrderLineItemCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], CategoryCountAggregateOutputType>
+          : GetScalarType<T['select'], OrderLineItemCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Category.
+     * Allows you to perform aggregations operations on a OrderLineItem.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {OrderLineItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -4389,13 +4803,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends CategoryAggregateArgs>(args: Subset<T, CategoryAggregateArgs>): Prisma.PrismaPromise<GetCategoryAggregateType<T>>
+    aggregate<T extends OrderLineItemAggregateArgs>(args: Subset<T, OrderLineItemAggregateArgs>): Prisma.PrismaPromise<GetOrderLineItemAggregateType<T>>
 
     /**
-     * Group by Category.
+     * Group by OrderLineItem.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CategoryGroupByArgs} args - Group by arguments.
+     * @param {OrderLineItemGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -4410,14 +4824,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends CategoryGroupByArgs,
+      T extends OrderLineItemGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CategoryGroupByArgs['orderBy'] }
-        : { orderBy?: CategoryGroupByArgs['orderBy'] },
+        ? { orderBy: OrderLineItemGroupByArgs['orderBy'] }
+        : { orderBy?: OrderLineItemGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -4466,22 +4880,24 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, CategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, OrderLineItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderLineItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Category model
+   * Fields of the OrderLineItem model
    */
-  readonly fields: CategoryFieldRefs;
+  readonly fields: OrderLineItemFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Category.
+   * The delegate class that acts as a "Promise-like" for OrderLineItem.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__OrderLineItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    assets<T extends Category$assetsArgs<ExtArgs> = {}>(args?: Subset<T, Category$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purchaseOrder<T extends PurchaseOrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fileAttachments<T extends OrderLineItem$fileAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItem$fileAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    batches<T extends OrderLineItem$batchesArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItem$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4508,758 +4924,863 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Category model
+   * Fields of the OrderLineItem model
    */
-  interface CategoryFieldRefs {
-    readonly id: FieldRef<"Category", 'String'>
-    readonly name: FieldRef<"Category", 'String'>
+  interface OrderLineItemFieldRefs {
+    readonly id: FieldRef<"OrderLineItem", 'String'>
+    readonly orderId: FieldRef<"OrderLineItem", 'String'>
+    readonly partNumber: FieldRef<"OrderLineItem", 'String'>
+    readonly partName: FieldRef<"OrderLineItem", 'String'>
+    readonly drawingNumber: FieldRef<"OrderLineItem", 'String'>
+    readonly revisionLevel: FieldRef<"OrderLineItem", 'String'>
+    readonly quantity: FieldRef<"OrderLineItem", 'Int'>
+    readonly dueDate: FieldRef<"OrderLineItem", 'DateTime'>
+    readonly notes: FieldRef<"OrderLineItem", 'String'>
+    readonly createdAt: FieldRef<"OrderLineItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"OrderLineItem", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Category findUnique
+   * OrderLineItem findUnique
    */
-  export type CategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * Filter, which Category to fetch.
+     * Filter, which OrderLineItem to fetch.
      */
-    where: CategoryWhereUniqueInput
+    where: OrderLineItemWhereUniqueInput
   }
 
   /**
-   * Category findUniqueOrThrow
+   * OrderLineItem findUniqueOrThrow
    */
-  export type CategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * Filter, which Category to fetch.
+     * Filter, which OrderLineItem to fetch.
      */
-    where: CategoryWhereUniqueInput
+    where: OrderLineItemWhereUniqueInput
   }
 
   /**
-   * Category findFirst
+   * OrderLineItem findFirst
    */
-  export type CategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * Filter, which Category to fetch.
+     * Filter, which OrderLineItem to fetch.
      */
-    where?: CategoryWhereInput
+    where?: OrderLineItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Categories to fetch.
+     * Determine the order of OrderLineItems to fetch.
      */
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Categories.
+     * Sets the position for searching for OrderLineItems.
      */
-    cursor?: CategoryWhereUniqueInput
+    cursor?: OrderLineItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Categories from the position of the cursor.
+     * Take `±n` OrderLineItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Categories.
+     * Skip the first `n` OrderLineItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Categories.
+     * Filter by unique combinations of OrderLineItems.
      */
-    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+    distinct?: OrderLineItemScalarFieldEnum | OrderLineItemScalarFieldEnum[]
   }
 
   /**
-   * Category findFirstOrThrow
+   * OrderLineItem findFirstOrThrow
    */
-  export type CategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * Filter, which Category to fetch.
+     * Filter, which OrderLineItem to fetch.
      */
-    where?: CategoryWhereInput
+    where?: OrderLineItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Categories to fetch.
+     * Determine the order of OrderLineItems to fetch.
      */
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Categories.
+     * Sets the position for searching for OrderLineItems.
      */
-    cursor?: CategoryWhereUniqueInput
+    cursor?: OrderLineItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Categories from the position of the cursor.
+     * Take `±n` OrderLineItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Categories.
+     * Skip the first `n` OrderLineItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Categories.
+     * Filter by unique combinations of OrderLineItems.
      */
-    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+    distinct?: OrderLineItemScalarFieldEnum | OrderLineItemScalarFieldEnum[]
   }
 
   /**
-   * Category findMany
+   * OrderLineItem findMany
    */
-  export type CategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * Filter, which Categories to fetch.
+     * Filter, which OrderLineItems to fetch.
      */
-    where?: CategoryWhereInput
+    where?: OrderLineItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Categories to fetch.
+     * Determine the order of OrderLineItems to fetch.
      */
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Categories.
+     * Sets the position for listing OrderLineItems.
      */
-    cursor?: CategoryWhereUniqueInput
+    cursor?: OrderLineItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Categories from the position of the cursor.
+     * Take `±n` OrderLineItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Categories.
+     * Skip the first `n` OrderLineItems.
      */
     skip?: number
-    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+    distinct?: OrderLineItemScalarFieldEnum | OrderLineItemScalarFieldEnum[]
   }
 
   /**
-   * Category create
+   * OrderLineItem create
    */
-  export type CategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: OrderLineItemInclude<ExtArgs> | null
     /**
-     * The data needed to create a Category.
+     * The data needed to create a OrderLineItem.
      */
-    data: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
+    data: XOR<OrderLineItemCreateInput, OrderLineItemUncheckedCreateInput>
   }
 
   /**
-   * Category createMany
+   * OrderLineItem createMany
    */
-  export type CategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Categories.
+     * The data used to create many OrderLineItems.
      */
-    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+    data: OrderLineItemCreateManyInput | OrderLineItemCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Category createManyAndReturn
+   * OrderLineItem createManyAndReturn
    */
-  export type CategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelectCreateManyAndReturn<ExtArgs> | null
+    select?: OrderLineItemSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
-     * The data used to create many Categories.
+     * The data used to create many OrderLineItems.
      */
-    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+    data: OrderLineItemCreateManyInput | OrderLineItemCreateManyInput[]
     skipDuplicates?: boolean
-  }
-
-  /**
-   * Category update
-   */
-  export type CategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Category
-     */
-    select?: CategorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Category
-     */
-    omit?: CategoryOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Category.
-     */
-    data: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
-    /**
-     * Choose, which Category to update.
-     */
-    where: CategoryWhereUniqueInput
+    include?: OrderLineItemIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Category updateMany
+   * OrderLineItem update
    */
-  export type CategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Categories.
+     * Select specific fields to fetch from the OrderLineItem
      */
-    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    select?: OrderLineItemSelect<ExtArgs> | null
     /**
-     * Filter which Categories to update
+     * Omit specific fields from the OrderLineItem
      */
-    where?: CategoryWhereInput
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
-     * Limit how many Categories to update.
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrderLineItem.
+     */
+    data: XOR<OrderLineItemUpdateInput, OrderLineItemUncheckedUpdateInput>
+    /**
+     * Choose, which OrderLineItem to update.
+     */
+    where: OrderLineItemWhereUniqueInput
+  }
+
+  /**
+   * OrderLineItem updateMany
+   */
+  export type OrderLineItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrderLineItems.
+     */
+    data: XOR<OrderLineItemUpdateManyMutationInput, OrderLineItemUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderLineItems to update
+     */
+    where?: OrderLineItemWhereInput
+    /**
+     * Limit how many OrderLineItems to update.
      */
     limit?: number
   }
 
   /**
-   * Category updateManyAndReturn
+   * OrderLineItem updateManyAndReturn
    */
-  export type CategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the OrderLineItem
      */
-    select?: CategorySelectUpdateManyAndReturn<ExtArgs> | null
+    select?: OrderLineItemSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the OrderLineItem
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: OrderLineItemOmit<ExtArgs> | null
     /**
-     * The data used to update Categories.
+     * The data used to update OrderLineItems.
      */
-    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    data: XOR<OrderLineItemUpdateManyMutationInput, OrderLineItemUncheckedUpdateManyInput>
     /**
-     * Filter which Categories to update
+     * Filter which OrderLineItems to update
      */
-    where?: CategoryWhereInput
+    where?: OrderLineItemWhereInput
     /**
-     * Limit how many Categories to update.
+     * Limit how many OrderLineItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderLineItem upsert
+   */
+  export type OrderLineItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderLineItem
+     */
+    select?: OrderLineItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderLineItem
+     */
+    omit?: OrderLineItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrderLineItem to update in case it exists.
+     */
+    where: OrderLineItemWhereUniqueInput
+    /**
+     * In case the OrderLineItem found by the `where` argument doesn't exist, create a new OrderLineItem with this data.
+     */
+    create: XOR<OrderLineItemCreateInput, OrderLineItemUncheckedCreateInput>
+    /**
+     * In case the OrderLineItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderLineItemUpdateInput, OrderLineItemUncheckedUpdateInput>
+  }
+
+  /**
+   * OrderLineItem delete
+   */
+  export type OrderLineItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderLineItem
+     */
+    select?: OrderLineItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderLineItem
+     */
+    omit?: OrderLineItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemInclude<ExtArgs> | null
+    /**
+     * Filter which OrderLineItem to delete.
+     */
+    where: OrderLineItemWhereUniqueInput
+  }
+
+  /**
+   * OrderLineItem deleteMany
+   */
+  export type OrderLineItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderLineItems to delete
+     */
+    where?: OrderLineItemWhereInput
+    /**
+     * Limit how many OrderLineItems to delete.
      */
     limit?: number
   }
 
   /**
-   * Category upsert
+   * OrderLineItem.fileAttachments
    */
-  export type CategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItem$fileAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the FileAttachment
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Category to update in case it exists.
-     */
-    where: CategoryWhereUniqueInput
-    /**
-     * In case the Category found by the `where` argument doesn't exist, create a new Category with this data.
-     */
-    create: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
-    /**
-     * In case the Category was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
-  }
-
-  /**
-   * Category delete
-   */
-  export type CategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Category
-     */
-    select?: CategorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Category
-     */
-    omit?: CategoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CategoryInclude<ExtArgs> | null
-    /**
-     * Filter which Category to delete.
-     */
-    where: CategoryWhereUniqueInput
-  }
-
-  /**
-   * Category deleteMany
-   */
-  export type CategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Categories to delete
-     */
-    where?: CategoryWhereInput
-    /**
-     * Limit how many Categories to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Category.assets
-   */
-  export type Category$assetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Asset
-     */
-    select?: AssetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Asset
-     */
-    omit?: AssetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetInclude<ExtArgs> | null
-    where?: AssetWhereInput
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
-    cursor?: AssetWhereUniqueInput
+    include?: FileAttachmentInclude<ExtArgs> | null
+    where?: FileAttachmentWhereInput
+    orderBy?: FileAttachmentOrderByWithRelationInput | FileAttachmentOrderByWithRelationInput[]
+    cursor?: FileAttachmentWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+    distinct?: FileAttachmentScalarFieldEnum | FileAttachmentScalarFieldEnum[]
   }
 
   /**
-   * Category without action
+   * OrderLineItem.batches
    */
-  export type CategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OrderLineItem$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Category
+     * Select specific fields to fetch from the Batch
      */
-    select?: CategorySelect<ExtArgs> | null
+    select?: BatchSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Category
+     * Omit specific fields from the Batch
      */
-    omit?: CategoryOmit<ExtArgs> | null
+    omit?: BatchOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CategoryInclude<ExtArgs> | null
+    include?: BatchInclude<ExtArgs> | null
+    where?: BatchWhereInput
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    cursor?: BatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * OrderLineItem without action
+   */
+  export type OrderLineItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderLineItem
+     */
+    select?: OrderLineItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderLineItem
+     */
+    omit?: OrderLineItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Location
+   * Model FileAttachment
    */
 
-  export type AggregateLocation = {
-    _count: LocationCountAggregateOutputType | null
-    _min: LocationMinAggregateOutputType | null
-    _max: LocationMaxAggregateOutputType | null
+  export type AggregateFileAttachment = {
+    _count: FileAttachmentCountAggregateOutputType | null
+    _min: FileAttachmentMinAggregateOutputType | null
+    _max: FileAttachmentMaxAggregateOutputType | null
   }
 
-  export type LocationMinAggregateOutputType = {
+  export type FileAttachmentMinAggregateOutputType = {
     id: string | null
-    name: string | null
-    address: string | null
+    lineItemId: string | null
+    fileName: string | null
+    fileType: string | null
+    fileUrl: string | null
+    uploadedBy: string | null
+    description: string | null
+    createdAt: Date | null
   }
 
-  export type LocationMaxAggregateOutputType = {
+  export type FileAttachmentMaxAggregateOutputType = {
     id: string | null
-    name: string | null
-    address: string | null
+    lineItemId: string | null
+    fileName: string | null
+    fileType: string | null
+    fileUrl: string | null
+    uploadedBy: string | null
+    description: string | null
+    createdAt: Date | null
   }
 
-  export type LocationCountAggregateOutputType = {
+  export type FileAttachmentCountAggregateOutputType = {
     id: number
-    name: number
-    address: number
+    lineItemId: number
+    fileName: number
+    fileType: number
+    fileUrl: number
+    uploadedBy: number
+    description: number
+    createdAt: number
     _all: number
   }
 
 
-  export type LocationMinAggregateInputType = {
+  export type FileAttachmentMinAggregateInputType = {
     id?: true
-    name?: true
-    address?: true
+    lineItemId?: true
+    fileName?: true
+    fileType?: true
+    fileUrl?: true
+    uploadedBy?: true
+    description?: true
+    createdAt?: true
   }
 
-  export type LocationMaxAggregateInputType = {
+  export type FileAttachmentMaxAggregateInputType = {
     id?: true
-    name?: true
-    address?: true
+    lineItemId?: true
+    fileName?: true
+    fileType?: true
+    fileUrl?: true
+    uploadedBy?: true
+    description?: true
+    createdAt?: true
   }
 
-  export type LocationCountAggregateInputType = {
+  export type FileAttachmentCountAggregateInputType = {
     id?: true
-    name?: true
-    address?: true
+    lineItemId?: true
+    fileName?: true
+    fileType?: true
+    fileUrl?: true
+    uploadedBy?: true
+    description?: true
+    createdAt?: true
     _all?: true
   }
 
-  export type LocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Location to aggregate.
+     * Filter which FileAttachment to aggregate.
      */
-    where?: LocationWhereInput
+    where?: FileAttachmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Locations to fetch.
+     * Determine the order of FileAttachments to fetch.
      */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    orderBy?: FileAttachmentOrderByWithRelationInput | FileAttachmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: LocationWhereUniqueInput
+    cursor?: FileAttachmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Locations from the position of the cursor.
+     * Take `±n` FileAttachments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Locations.
+     * Skip the first `n` FileAttachments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Locations
+     * Count returned FileAttachments
     **/
-    _count?: true | LocationCountAggregateInputType
+    _count?: true | FileAttachmentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: LocationMinAggregateInputType
+    _min?: FileAttachmentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: LocationMaxAggregateInputType
+    _max?: FileAttachmentMaxAggregateInputType
   }
 
-  export type GetLocationAggregateType<T extends LocationAggregateArgs> = {
-        [P in keyof T & keyof AggregateLocation]: P extends '_count' | 'count'
+  export type GetFileAttachmentAggregateType<T extends FileAttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateFileAttachment]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateLocation[P]>
-      : GetScalarType<T[P], AggregateLocation[P]>
+        : GetScalarType<T[P], AggregateFileAttachment[P]>
+      : GetScalarType<T[P], AggregateFileAttachment[P]>
   }
 
 
 
 
-  export type LocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LocationWhereInput
-    orderBy?: LocationOrderByWithAggregationInput | LocationOrderByWithAggregationInput[]
-    by: LocationScalarFieldEnum[] | LocationScalarFieldEnum
-    having?: LocationScalarWhereWithAggregatesInput
+  export type FileAttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FileAttachmentWhereInput
+    orderBy?: FileAttachmentOrderByWithAggregationInput | FileAttachmentOrderByWithAggregationInput[]
+    by: FileAttachmentScalarFieldEnum[] | FileAttachmentScalarFieldEnum
+    having?: FileAttachmentScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: LocationCountAggregateInputType | true
-    _min?: LocationMinAggregateInputType
-    _max?: LocationMaxAggregateInputType
+    _count?: FileAttachmentCountAggregateInputType | true
+    _min?: FileAttachmentMinAggregateInputType
+    _max?: FileAttachmentMaxAggregateInputType
   }
 
-  export type LocationGroupByOutputType = {
+  export type FileAttachmentGroupByOutputType = {
     id: string
-    name: string
-    address: string | null
-    _count: LocationCountAggregateOutputType | null
-    _min: LocationMinAggregateOutputType | null
-    _max: LocationMaxAggregateOutputType | null
+    lineItemId: string
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description: string | null
+    createdAt: Date
+    _count: FileAttachmentCountAggregateOutputType | null
+    _min: FileAttachmentMinAggregateOutputType | null
+    _max: FileAttachmentMaxAggregateOutputType | null
   }
 
-  type GetLocationGroupByPayload<T extends LocationGroupByArgs> = Prisma.PrismaPromise<
+  type GetFileAttachmentGroupByPayload<T extends FileAttachmentGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<LocationGroupByOutputType, T['by']> &
+      PickEnumerable<FileAttachmentGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof LocationGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof FileAttachmentGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], LocationGroupByOutputType[P]>
-            : GetScalarType<T[P], LocationGroupByOutputType[P]>
+              : GetScalarType<T[P], FileAttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], FileAttachmentGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type LocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FileAttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    address?: boolean
-    assets?: boolean | Location$assetsArgs<ExtArgs>
-    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["location"]>
+    lineItemId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    fileUrl?: boolean
+    uploadedBy?: boolean
+    description?: boolean
+    createdAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fileAttachment"]>
 
-  export type LocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FileAttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    address?: boolean
-  }, ExtArgs["result"]["location"]>
+    lineItemId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    fileUrl?: boolean
+    uploadedBy?: boolean
+    description?: boolean
+    createdAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fileAttachment"]>
 
-  export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FileAttachmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    address?: boolean
-  }, ExtArgs["result"]["location"]>
+    lineItemId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    fileUrl?: boolean
+    uploadedBy?: boolean
+    description?: boolean
+    createdAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fileAttachment"]>
 
-  export type LocationSelectScalar = {
+  export type FileAttachmentSelectScalar = {
     id?: boolean
-    name?: boolean
-    address?: boolean
+    lineItemId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    fileUrl?: boolean
+    uploadedBy?: boolean
+    description?: boolean
+    createdAt?: boolean
   }
 
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address", ExtArgs["result"]["location"]>
-  export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assets?: boolean | Location$assetsArgs<ExtArgs>
-    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
+  export type FileAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lineItemId" | "fileName" | "fileType" | "fileUrl" | "uploadedBy" | "description" | "createdAt", ExtArgs["result"]["fileAttachment"]>
+  export type FileAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
   }
-  export type LocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type LocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FileAttachmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }
+  export type FileAttachmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }
 
-  export type $LocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Location"
+  export type $FileAttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FileAttachment"
     objects: {
-      assets: Prisma.$AssetPayload<ExtArgs>[]
+      lineItem: Prisma.$OrderLineItemPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-      address: string | null
-    }, ExtArgs["result"]["location"]>
+      lineItemId: string
+      fileName: string
+      fileType: string
+      fileUrl: string
+      uploadedBy: string
+      description: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["fileAttachment"]>
     composites: {}
   }
 
-  type LocationGetPayload<S extends boolean | null | undefined | LocationDefaultArgs> = $Result.GetResult<Prisma.$LocationPayload, S>
+  type FileAttachmentGetPayload<S extends boolean | null | undefined | FileAttachmentDefaultArgs> = $Result.GetResult<Prisma.$FileAttachmentPayload, S>
 
-  type LocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<LocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: LocationCountAggregateInputType | true
+  type FileAttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FileAttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FileAttachmentCountAggregateInputType | true
     }
 
-  export interface LocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Location'], meta: { name: 'Location' } }
+  export interface FileAttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FileAttachment'], meta: { name: 'FileAttachment' } }
     /**
-     * Find zero or one Location that matches the filter.
-     * @param {LocationFindUniqueArgs} args - Arguments to find a Location
+     * Find zero or one FileAttachment that matches the filter.
+     * @param {FileAttachmentFindUniqueArgs} args - Arguments to find a FileAttachment
      * @example
-     * // Get one Location
-     * const location = await prisma.location.findUnique({
+     * // Get one FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends LocationFindUniqueArgs>(args: SelectSubset<T, LocationFindUniqueArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends FileAttachmentFindUniqueArgs>(args: SelectSubset<T, FileAttachmentFindUniqueArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Location that matches the filter or throw an error with `error.code='P2025'`
+     * Find one FileAttachment that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {LocationFindUniqueOrThrowArgs} args - Arguments to find a Location
+     * @param {FileAttachmentFindUniqueOrThrowArgs} args - Arguments to find a FileAttachment
      * @example
-     * // Get one Location
-     * const location = await prisma.location.findUniqueOrThrow({
+     * // Get one FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends LocationFindUniqueOrThrowArgs>(args: SelectSubset<T, LocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends FileAttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, FileAttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Location that matches the filter.
+     * Find the first FileAttachment that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindFirstArgs} args - Arguments to find a Location
+     * @param {FileAttachmentFindFirstArgs} args - Arguments to find a FileAttachment
      * @example
-     * // Get one Location
-     * const location = await prisma.location.findFirst({
+     * // Get one FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends LocationFindFirstArgs>(args?: SelectSubset<T, LocationFindFirstArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends FileAttachmentFindFirstArgs>(args?: SelectSubset<T, FileAttachmentFindFirstArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Location that matches the filter or
+     * Find the first FileAttachment that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindFirstOrThrowArgs} args - Arguments to find a Location
+     * @param {FileAttachmentFindFirstOrThrowArgs} args - Arguments to find a FileAttachment
      * @example
-     * // Get one Location
-     * const location = await prisma.location.findFirstOrThrow({
+     * // Get one FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends LocationFindFirstOrThrowArgs>(args?: SelectSubset<T, LocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends FileAttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, FileAttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Locations that matches the filter.
+     * Find zero or more FileAttachments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {FileAttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Locations
-     * const locations = await prisma.location.findMany()
+     * // Get all FileAttachments
+     * const fileAttachments = await prisma.fileAttachment.findMany()
      * 
-     * // Get first 10 Locations
-     * const locations = await prisma.location.findMany({ take: 10 })
+     * // Get first 10 FileAttachments
+     * const fileAttachments = await prisma.fileAttachment.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const locationWithIdOnly = await prisma.location.findMany({ select: { id: true } })
+     * const fileAttachmentWithIdOnly = await prisma.fileAttachment.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends LocationFindManyArgs>(args?: SelectSubset<T, LocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends FileAttachmentFindManyArgs>(args?: SelectSubset<T, FileAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Location.
-     * @param {LocationCreateArgs} args - Arguments to create a Location.
+     * Create a FileAttachment.
+     * @param {FileAttachmentCreateArgs} args - Arguments to create a FileAttachment.
      * @example
-     * // Create one Location
-     * const Location = await prisma.location.create({
+     * // Create one FileAttachment
+     * const FileAttachment = await prisma.fileAttachment.create({
      *   data: {
-     *     // ... data to create a Location
+     *     // ... data to create a FileAttachment
      *   }
      * })
      * 
      */
-    create<T extends LocationCreateArgs>(args: SelectSubset<T, LocationCreateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends FileAttachmentCreateArgs>(args: SelectSubset<T, FileAttachmentCreateArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Locations.
-     * @param {LocationCreateManyArgs} args - Arguments to create many Locations.
+     * Create many FileAttachments.
+     * @param {FileAttachmentCreateManyArgs} args - Arguments to create many FileAttachments.
      * @example
-     * // Create many Locations
-     * const location = await prisma.location.createMany({
+     * // Create many FileAttachments
+     * const fileAttachment = await prisma.fileAttachment.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends LocationCreateManyArgs>(args?: SelectSubset<T, LocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends FileAttachmentCreateManyArgs>(args?: SelectSubset<T, FileAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Locations and returns the data saved in the database.
-     * @param {LocationCreateManyAndReturnArgs} args - Arguments to create many Locations.
+     * Create many FileAttachments and returns the data saved in the database.
+     * @param {FileAttachmentCreateManyAndReturnArgs} args - Arguments to create many FileAttachments.
      * @example
-     * // Create many Locations
-     * const location = await prisma.location.createManyAndReturn({
+     * // Create many FileAttachments
+     * const fileAttachment = await prisma.fileAttachment.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Locations and only return the `id`
-     * const locationWithIdOnly = await prisma.location.createManyAndReturn({
+     * // Create many FileAttachments and only return the `id`
+     * const fileAttachmentWithIdOnly = await prisma.fileAttachment.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -5269,28 +5790,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends LocationCreateManyAndReturnArgs>(args?: SelectSubset<T, LocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends FileAttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, FileAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Location.
-     * @param {LocationDeleteArgs} args - Arguments to delete one Location.
+     * Delete a FileAttachment.
+     * @param {FileAttachmentDeleteArgs} args - Arguments to delete one FileAttachment.
      * @example
-     * // Delete one Location
-     * const Location = await prisma.location.delete({
+     * // Delete one FileAttachment
+     * const FileAttachment = await prisma.fileAttachment.delete({
      *   where: {
-     *     // ... filter to delete one Location
+     *     // ... filter to delete one FileAttachment
      *   }
      * })
      * 
      */
-    delete<T extends LocationDeleteArgs>(args: SelectSubset<T, LocationDeleteArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends FileAttachmentDeleteArgs>(args: SelectSubset<T, FileAttachmentDeleteArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Location.
-     * @param {LocationUpdateArgs} args - Arguments to update one Location.
+     * Update one FileAttachment.
+     * @param {FileAttachmentUpdateArgs} args - Arguments to update one FileAttachment.
      * @example
-     * // Update one Location
-     * const location = await prisma.location.update({
+     * // Update one FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5300,30 +5821,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends LocationUpdateArgs>(args: SelectSubset<T, LocationUpdateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends FileAttachmentUpdateArgs>(args: SelectSubset<T, FileAttachmentUpdateArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Locations.
-     * @param {LocationDeleteManyArgs} args - Arguments to filter Locations to delete.
+     * Delete zero or more FileAttachments.
+     * @param {FileAttachmentDeleteManyArgs} args - Arguments to filter FileAttachments to delete.
      * @example
-     * // Delete a few Locations
-     * const { count } = await prisma.location.deleteMany({
+     * // Delete a few FileAttachments
+     * const { count } = await prisma.fileAttachment.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends LocationDeleteManyArgs>(args?: SelectSubset<T, LocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends FileAttachmentDeleteManyArgs>(args?: SelectSubset<T, FileAttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Locations.
+     * Update zero or more FileAttachments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {FileAttachmentUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Locations
-     * const location = await prisma.location.updateMany({
+     * // Update many FileAttachments
+     * const fileAttachment = await prisma.fileAttachment.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5333,14 +5854,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends LocationUpdateManyArgs>(args: SelectSubset<T, LocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends FileAttachmentUpdateManyArgs>(args: SelectSubset<T, FileAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Locations and returns the data updated in the database.
-     * @param {LocationUpdateManyAndReturnArgs} args - Arguments to update many Locations.
+     * Update zero or more FileAttachments and returns the data updated in the database.
+     * @param {FileAttachmentUpdateManyAndReturnArgs} args - Arguments to update many FileAttachments.
      * @example
-     * // Update many Locations
-     * const location = await prisma.location.updateManyAndReturn({
+     * // Update many FileAttachments
+     * const fileAttachment = await prisma.fileAttachment.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5349,8 +5870,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Locations and only return the `id`
-     * const locationWithIdOnly = await prisma.location.updateManyAndReturn({
+     * // Update zero or more FileAttachments and only return the `id`
+     * const fileAttachmentWithIdOnly = await prisma.fileAttachment.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -5363,56 +5884,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends LocationUpdateManyAndReturnArgs>(args: SelectSubset<T, LocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends FileAttachmentUpdateManyAndReturnArgs>(args: SelectSubset<T, FileAttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Location.
-     * @param {LocationUpsertArgs} args - Arguments to update or create a Location.
+     * Create or update one FileAttachment.
+     * @param {FileAttachmentUpsertArgs} args - Arguments to update or create a FileAttachment.
      * @example
-     * // Update or create a Location
-     * const location = await prisma.location.upsert({
+     * // Update or create a FileAttachment
+     * const fileAttachment = await prisma.fileAttachment.upsert({
      *   create: {
-     *     // ... data to create a Location
+     *     // ... data to create a FileAttachment
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Location we want to update
+     *     // ... the filter for the FileAttachment we want to update
      *   }
      * })
      */
-    upsert<T extends LocationUpsertArgs>(args: SelectSubset<T, LocationUpsertArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends FileAttachmentUpsertArgs>(args: SelectSubset<T, FileAttachmentUpsertArgs<ExtArgs>>): Prisma__FileAttachmentClient<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Locations.
+     * Count the number of FileAttachments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationCountArgs} args - Arguments to filter Locations to count.
+     * @param {FileAttachmentCountArgs} args - Arguments to filter FileAttachments to count.
      * @example
-     * // Count the number of Locations
-     * const count = await prisma.location.count({
+     * // Count the number of FileAttachments
+     * const count = await prisma.fileAttachment.count({
      *   where: {
-     *     // ... the filter for the Locations we want to count
+     *     // ... the filter for the FileAttachments we want to count
      *   }
      * })
     **/
-    count<T extends LocationCountArgs>(
-      args?: Subset<T, LocationCountArgs>,
+    count<T extends FileAttachmentCountArgs>(
+      args?: Subset<T, FileAttachmentCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], LocationCountAggregateOutputType>
+          : GetScalarType<T['select'], FileAttachmentCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Location.
+     * Allows you to perform aggregations operations on a FileAttachment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {FileAttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -5432,13 +5953,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends LocationAggregateArgs>(args: Subset<T, LocationAggregateArgs>): Prisma.PrismaPromise<GetLocationAggregateType<T>>
+    aggregate<T extends FileAttachmentAggregateArgs>(args: Subset<T, FileAttachmentAggregateArgs>): Prisma.PrismaPromise<GetFileAttachmentAggregateType<T>>
 
     /**
-     * Group by Location.
+     * Group by FileAttachment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationGroupByArgs} args - Group by arguments.
+     * @param {FileAttachmentGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -5453,14 +5974,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends LocationGroupByArgs,
+      T extends FileAttachmentGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: LocationGroupByArgs['orderBy'] }
-        : { orderBy?: LocationGroupByArgs['orderBy'] },
+        ? { orderBy: FileAttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: FileAttachmentGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -5509,22 +6030,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, LocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, FileAttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFileAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Location model
+   * Fields of the FileAttachment model
    */
-  readonly fields: LocationFieldRefs;
+  readonly fields: FileAttachmentFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Location.
+   * The delegate class that acts as a "Promise-like" for FileAttachment.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__LocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__FileAttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    assets<T extends Location$assetsArgs<ExtArgs> = {}>(args?: Subset<T, Location$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    lineItem<T extends OrderLineItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItemDefaultArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5551,1537 +6072,428 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Location model
+   * Fields of the FileAttachment model
    */
-  interface LocationFieldRefs {
-    readonly id: FieldRef<"Location", 'String'>
-    readonly name: FieldRef<"Location", 'String'>
-    readonly address: FieldRef<"Location", 'String'>
+  interface FileAttachmentFieldRefs {
+    readonly id: FieldRef<"FileAttachment", 'String'>
+    readonly lineItemId: FieldRef<"FileAttachment", 'String'>
+    readonly fileName: FieldRef<"FileAttachment", 'String'>
+    readonly fileType: FieldRef<"FileAttachment", 'String'>
+    readonly fileUrl: FieldRef<"FileAttachment", 'String'>
+    readonly uploadedBy: FieldRef<"FileAttachment", 'String'>
+    readonly description: FieldRef<"FileAttachment", 'String'>
+    readonly createdAt: FieldRef<"FileAttachment", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Location findUnique
+   * FileAttachment findUnique
    */
-  export type LocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter, which Location to fetch.
+     * Filter, which FileAttachment to fetch.
      */
-    where: LocationWhereUniqueInput
+    where: FileAttachmentWhereUniqueInput
   }
 
   /**
-   * Location findUniqueOrThrow
+   * FileAttachment findUniqueOrThrow
    */
-  export type LocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter, which Location to fetch.
+     * Filter, which FileAttachment to fetch.
      */
-    where: LocationWhereUniqueInput
+    where: FileAttachmentWhereUniqueInput
   }
 
   /**
-   * Location findFirst
+   * FileAttachment findFirst
    */
-  export type LocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter, which Location to fetch.
+     * Filter, which FileAttachment to fetch.
      */
-    where?: LocationWhereInput
+    where?: FileAttachmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Locations to fetch.
+     * Determine the order of FileAttachments to fetch.
      */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    orderBy?: FileAttachmentOrderByWithRelationInput | FileAttachmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Locations.
+     * Sets the position for searching for FileAttachments.
      */
-    cursor?: LocationWhereUniqueInput
+    cursor?: FileAttachmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Locations from the position of the cursor.
+     * Take `±n` FileAttachments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Locations.
+     * Skip the first `n` FileAttachments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Locations.
+     * Filter by unique combinations of FileAttachments.
      */
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+    distinct?: FileAttachmentScalarFieldEnum | FileAttachmentScalarFieldEnum[]
   }
 
   /**
-   * Location findFirstOrThrow
+   * FileAttachment findFirstOrThrow
    */
-  export type LocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter, which Location to fetch.
+     * Filter, which FileAttachment to fetch.
      */
-    where?: LocationWhereInput
+    where?: FileAttachmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Locations to fetch.
+     * Determine the order of FileAttachments to fetch.
      */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    orderBy?: FileAttachmentOrderByWithRelationInput | FileAttachmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Locations.
+     * Sets the position for searching for FileAttachments.
      */
-    cursor?: LocationWhereUniqueInput
+    cursor?: FileAttachmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Locations from the position of the cursor.
+     * Take `±n` FileAttachments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Locations.
+     * Skip the first `n` FileAttachments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Locations.
+     * Filter by unique combinations of FileAttachments.
      */
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+    distinct?: FileAttachmentScalarFieldEnum | FileAttachmentScalarFieldEnum[]
   }
 
   /**
-   * Location findMany
+   * FileAttachment findMany
    */
-  export type LocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter, which Locations to fetch.
+     * Filter, which FileAttachments to fetch.
      */
-    where?: LocationWhereInput
+    where?: FileAttachmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Locations to fetch.
+     * Determine the order of FileAttachments to fetch.
      */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    orderBy?: FileAttachmentOrderByWithRelationInput | FileAttachmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Locations.
+     * Sets the position for listing FileAttachments.
      */
-    cursor?: LocationWhereUniqueInput
+    cursor?: FileAttachmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Locations from the position of the cursor.
+     * Take `±n` FileAttachments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Locations.
+     * Skip the first `n` FileAttachments.
      */
     skip?: number
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+    distinct?: FileAttachmentScalarFieldEnum | FileAttachmentScalarFieldEnum[]
   }
 
   /**
-   * Location create
+   * FileAttachment create
    */
-  export type LocationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LocationInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * The data needed to create a Location.
+     * The data needed to create a FileAttachment.
      */
-    data: XOR<LocationCreateInput, LocationUncheckedCreateInput>
+    data: XOR<FileAttachmentCreateInput, FileAttachmentUncheckedCreateInput>
   }
 
   /**
-   * Location createMany
+   * FileAttachment createMany
    */
-  export type LocationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Locations.
+     * The data used to create many FileAttachments.
      */
-    data: LocationCreateManyInput | LocationCreateManyInput[]
+    data: FileAttachmentCreateManyInput | FileAttachmentCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Location createManyAndReturn
+   * FileAttachment createManyAndReturn
    */
-  export type LocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Location
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: LocationSelectCreateManyAndReturn<ExtArgs> | null
+    select?: FileAttachmentSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Location
+     * Omit specific fields from the FileAttachment
      */
-    omit?: LocationOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
-     * The data used to create many Locations.
+     * The data used to create many FileAttachments.
      */
-    data: LocationCreateManyInput | LocationCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Location update
-   */
-  export type LocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Location.
-     */
-    data: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
-    /**
-     * Choose, which Location to update.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location updateMany
-   */
-  export type LocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Locations.
-     */
-    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
-    /**
-     * Filter which Locations to update
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location updateManyAndReturn
-   */
-  export type LocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * The data used to update Locations.
-     */
-    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
-    /**
-     * Filter which Locations to update
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location upsert
-   */
-  export type LocationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Location to update in case it exists.
-     */
-    where: LocationWhereUniqueInput
-    /**
-     * In case the Location found by the `where` argument doesn't exist, create a new Location with this data.
-     */
-    create: XOR<LocationCreateInput, LocationUncheckedCreateInput>
-    /**
-     * In case the Location was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
-  }
-
-  /**
-   * Location delete
-   */
-  export type LocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter which Location to delete.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location deleteMany
-   */
-  export type LocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Locations to delete
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location.assets
-   */
-  export type Location$assetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Asset
-     */
-    select?: AssetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Asset
-     */
-    omit?: AssetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetInclude<ExtArgs> | null
-    where?: AssetWhereInput
-    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
-    cursor?: AssetWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
-  }
-
-  /**
-   * Location without action
-   */
-  export type LocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model AssetHistory
-   */
-
-  export type AggregateAssetHistory = {
-    _count: AssetHistoryCountAggregateOutputType | null
-    _min: AssetHistoryMinAggregateOutputType | null
-    _max: AssetHistoryMaxAggregateOutputType | null
-  }
-
-  export type AssetHistoryMinAggregateOutputType = {
-    id: string | null
-    assetId: string | null
-    action: string | null
-    details: string | null
-    customerId: string | null
-    timestamp: Date | null
-  }
-
-  export type AssetHistoryMaxAggregateOutputType = {
-    id: string | null
-    assetId: string | null
-    action: string | null
-    details: string | null
-    customerId: string | null
-    timestamp: Date | null
-  }
-
-  export type AssetHistoryCountAggregateOutputType = {
-    id: number
-    assetId: number
-    action: number
-    details: number
-    customerId: number
-    timestamp: number
-    _all: number
-  }
-
-
-  export type AssetHistoryMinAggregateInputType = {
-    id?: true
-    assetId?: true
-    action?: true
-    details?: true
-    customerId?: true
-    timestamp?: true
-  }
-
-  export type AssetHistoryMaxAggregateInputType = {
-    id?: true
-    assetId?: true
-    action?: true
-    details?: true
-    customerId?: true
-    timestamp?: true
-  }
-
-  export type AssetHistoryCountAggregateInputType = {
-    id?: true
-    assetId?: true
-    action?: true
-    details?: true
-    customerId?: true
-    timestamp?: true
-    _all?: true
-  }
-
-  export type AssetHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which AssetHistory to aggregate.
-     */
-    where?: AssetHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AssetHistories to fetch.
-     */
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AssetHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AssetHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AssetHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned AssetHistories
-    **/
-    _count?: true | AssetHistoryCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AssetHistoryMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AssetHistoryMaxAggregateInputType
-  }
-
-  export type GetAssetHistoryAggregateType<T extends AssetHistoryAggregateArgs> = {
-        [P in keyof T & keyof AggregateAssetHistory]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAssetHistory[P]>
-      : GetScalarType<T[P], AggregateAssetHistory[P]>
-  }
-
-
-
-
-  export type AssetHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AssetHistoryWhereInput
-    orderBy?: AssetHistoryOrderByWithAggregationInput | AssetHistoryOrderByWithAggregationInput[]
-    by: AssetHistoryScalarFieldEnum[] | AssetHistoryScalarFieldEnum
-    having?: AssetHistoryScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AssetHistoryCountAggregateInputType | true
-    _min?: AssetHistoryMinAggregateInputType
-    _max?: AssetHistoryMaxAggregateInputType
-  }
-
-  export type AssetHistoryGroupByOutputType = {
-    id: string
-    assetId: string
-    action: string
-    details: string | null
-    customerId: string | null
-    timestamp: Date
-    _count: AssetHistoryCountAggregateOutputType | null
-    _min: AssetHistoryMinAggregateOutputType | null
-    _max: AssetHistoryMaxAggregateOutputType | null
-  }
-
-  type GetAssetHistoryGroupByPayload<T extends AssetHistoryGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AssetHistoryGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AssetHistoryGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AssetHistoryGroupByOutputType[P]>
-            : GetScalarType<T[P], AssetHistoryGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AssetHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    assetId?: boolean
-    action?: boolean
-    details?: boolean
-    customerId?: boolean
-    timestamp?: boolean
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }, ExtArgs["result"]["assetHistory"]>
-
-  export type AssetHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    assetId?: boolean
-    action?: boolean
-    details?: boolean
-    customerId?: boolean
-    timestamp?: boolean
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }, ExtArgs["result"]["assetHistory"]>
-
-  export type AssetHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    assetId?: boolean
-    action?: boolean
-    details?: boolean
-    customerId?: boolean
-    timestamp?: boolean
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }, ExtArgs["result"]["assetHistory"]>
-
-  export type AssetHistorySelectScalar = {
-    id?: boolean
-    assetId?: boolean
-    action?: boolean
-    details?: boolean
-    customerId?: boolean
-    timestamp?: boolean
-  }
-
-  export type AssetHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assetId" | "action" | "details" | "customerId" | "timestamp", ExtArgs["result"]["assetHistory"]>
-  export type AssetHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }
-  export type AssetHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }
-  export type AssetHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    asset?: boolean | AssetDefaultArgs<ExtArgs>
-    customer?: boolean | AssetHistory$customerArgs<ExtArgs>
-  }
-
-  export type $AssetHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "AssetHistory"
-    objects: {
-      asset: Prisma.$AssetPayload<ExtArgs>
-      customer: Prisma.$CustomerPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      assetId: string
-      action: string
-      details: string | null
-      customerId: string | null
-      timestamp: Date
-    }, ExtArgs["result"]["assetHistory"]>
-    composites: {}
-  }
-
-  type AssetHistoryGetPayload<S extends boolean | null | undefined | AssetHistoryDefaultArgs> = $Result.GetResult<Prisma.$AssetHistoryPayload, S>
-
-  type AssetHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AssetHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AssetHistoryCountAggregateInputType | true
-    }
-
-  export interface AssetHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AssetHistory'], meta: { name: 'AssetHistory' } }
-    /**
-     * Find zero or one AssetHistory that matches the filter.
-     * @param {AssetHistoryFindUniqueArgs} args - Arguments to find a AssetHistory
-     * @example
-     * // Get one AssetHistory
-     * const assetHistory = await prisma.assetHistory.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AssetHistoryFindUniqueArgs>(args: SelectSubset<T, AssetHistoryFindUniqueArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one AssetHistory that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AssetHistoryFindUniqueOrThrowArgs} args - Arguments to find a AssetHistory
-     * @example
-     * // Get one AssetHistory
-     * const assetHistory = await prisma.assetHistory.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AssetHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first AssetHistory that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryFindFirstArgs} args - Arguments to find a AssetHistory
-     * @example
-     * // Get one AssetHistory
-     * const assetHistory = await prisma.assetHistory.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AssetHistoryFindFirstArgs>(args?: SelectSubset<T, AssetHistoryFindFirstArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first AssetHistory that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryFindFirstOrThrowArgs} args - Arguments to find a AssetHistory
-     * @example
-     * // Get one AssetHistory
-     * const assetHistory = await prisma.assetHistory.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AssetHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more AssetHistories that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all AssetHistories
-     * const assetHistories = await prisma.assetHistory.findMany()
-     * 
-     * // Get first 10 AssetHistories
-     * const assetHistories = await prisma.assetHistory.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const assetHistoryWithIdOnly = await prisma.assetHistory.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends AssetHistoryFindManyArgs>(args?: SelectSubset<T, AssetHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a AssetHistory.
-     * @param {AssetHistoryCreateArgs} args - Arguments to create a AssetHistory.
-     * @example
-     * // Create one AssetHistory
-     * const AssetHistory = await prisma.assetHistory.create({
-     *   data: {
-     *     // ... data to create a AssetHistory
-     *   }
-     * })
-     * 
-     */
-    create<T extends AssetHistoryCreateArgs>(args: SelectSubset<T, AssetHistoryCreateArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many AssetHistories.
-     * @param {AssetHistoryCreateManyArgs} args - Arguments to create many AssetHistories.
-     * @example
-     * // Create many AssetHistories
-     * const assetHistory = await prisma.assetHistory.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AssetHistoryCreateManyArgs>(args?: SelectSubset<T, AssetHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many AssetHistories and returns the data saved in the database.
-     * @param {AssetHistoryCreateManyAndReturnArgs} args - Arguments to create many AssetHistories.
-     * @example
-     * // Create many AssetHistories
-     * const assetHistory = await prisma.assetHistory.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many AssetHistories and only return the `id`
-     * const assetHistoryWithIdOnly = await prisma.assetHistory.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AssetHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, AssetHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a AssetHistory.
-     * @param {AssetHistoryDeleteArgs} args - Arguments to delete one AssetHistory.
-     * @example
-     * // Delete one AssetHistory
-     * const AssetHistory = await prisma.assetHistory.delete({
-     *   where: {
-     *     // ... filter to delete one AssetHistory
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AssetHistoryDeleteArgs>(args: SelectSubset<T, AssetHistoryDeleteArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one AssetHistory.
-     * @param {AssetHistoryUpdateArgs} args - Arguments to update one AssetHistory.
-     * @example
-     * // Update one AssetHistory
-     * const assetHistory = await prisma.assetHistory.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AssetHistoryUpdateArgs>(args: SelectSubset<T, AssetHistoryUpdateArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more AssetHistories.
-     * @param {AssetHistoryDeleteManyArgs} args - Arguments to filter AssetHistories to delete.
-     * @example
-     * // Delete a few AssetHistories
-     * const { count } = await prisma.assetHistory.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AssetHistoryDeleteManyArgs>(args?: SelectSubset<T, AssetHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more AssetHistories.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many AssetHistories
-     * const assetHistory = await prisma.assetHistory.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AssetHistoryUpdateManyArgs>(args: SelectSubset<T, AssetHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more AssetHistories and returns the data updated in the database.
-     * @param {AssetHistoryUpdateManyAndReturnArgs} args - Arguments to update many AssetHistories.
-     * @example
-     * // Update many AssetHistories
-     * const assetHistory = await prisma.assetHistory.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more AssetHistories and only return the `id`
-     * const assetHistoryWithIdOnly = await prisma.assetHistory.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AssetHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, AssetHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one AssetHistory.
-     * @param {AssetHistoryUpsertArgs} args - Arguments to update or create a AssetHistory.
-     * @example
-     * // Update or create a AssetHistory
-     * const assetHistory = await prisma.assetHistory.upsert({
-     *   create: {
-     *     // ... data to create a AssetHistory
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the AssetHistory we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AssetHistoryUpsertArgs>(args: SelectSubset<T, AssetHistoryUpsertArgs<ExtArgs>>): Prisma__AssetHistoryClient<$Result.GetResult<Prisma.$AssetHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of AssetHistories.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryCountArgs} args - Arguments to filter AssetHistories to count.
-     * @example
-     * // Count the number of AssetHistories
-     * const count = await prisma.assetHistory.count({
-     *   where: {
-     *     // ... the filter for the AssetHistories we want to count
-     *   }
-     * })
-    **/
-    count<T extends AssetHistoryCountArgs>(
-      args?: Subset<T, AssetHistoryCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AssetHistoryCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a AssetHistory.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AssetHistoryAggregateArgs>(args: Subset<T, AssetHistoryAggregateArgs>): Prisma.PrismaPromise<GetAssetHistoryAggregateType<T>>
-
-    /**
-     * Group by AssetHistory.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AssetHistoryGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AssetHistoryGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AssetHistoryGroupByArgs['orderBy'] }
-        : { orderBy?: AssetHistoryGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AssetHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the AssetHistory model
-   */
-  readonly fields: AssetHistoryFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for AssetHistory.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AssetHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    customer<T extends AssetHistory$customerArgs<ExtArgs> = {}>(args?: Subset<T, AssetHistory$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the AssetHistory model
-   */
-  interface AssetHistoryFieldRefs {
-    readonly id: FieldRef<"AssetHistory", 'String'>
-    readonly assetId: FieldRef<"AssetHistory", 'String'>
-    readonly action: FieldRef<"AssetHistory", 'String'>
-    readonly details: FieldRef<"AssetHistory", 'String'>
-    readonly customerId: FieldRef<"AssetHistory", 'String'>
-    readonly timestamp: FieldRef<"AssetHistory", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * AssetHistory findUnique
-   */
-  export type AssetHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which AssetHistory to fetch.
-     */
-    where: AssetHistoryWhereUniqueInput
-  }
-
-  /**
-   * AssetHistory findUniqueOrThrow
-   */
-  export type AssetHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which AssetHistory to fetch.
-     */
-    where: AssetHistoryWhereUniqueInput
-  }
-
-  /**
-   * AssetHistory findFirst
-   */
-  export type AssetHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which AssetHistory to fetch.
-     */
-    where?: AssetHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AssetHistories to fetch.
-     */
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for AssetHistories.
-     */
-    cursor?: AssetHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AssetHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AssetHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AssetHistories.
-     */
-    distinct?: AssetHistoryScalarFieldEnum | AssetHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * AssetHistory findFirstOrThrow
-   */
-  export type AssetHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which AssetHistory to fetch.
-     */
-    where?: AssetHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AssetHistories to fetch.
-     */
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for AssetHistories.
-     */
-    cursor?: AssetHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AssetHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AssetHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AssetHistories.
-     */
-    distinct?: AssetHistoryScalarFieldEnum | AssetHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * AssetHistory findMany
-   */
-  export type AssetHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which AssetHistories to fetch.
-     */
-    where?: AssetHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AssetHistories to fetch.
-     */
-    orderBy?: AssetHistoryOrderByWithRelationInput | AssetHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing AssetHistories.
-     */
-    cursor?: AssetHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AssetHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AssetHistories.
-     */
-    skip?: number
-    distinct?: AssetHistoryScalarFieldEnum | AssetHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * AssetHistory create
-   */
-  export type AssetHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
-    /**
-     * The data needed to create a AssetHistory.
-     */
-    data: XOR<AssetHistoryCreateInput, AssetHistoryUncheckedCreateInput>
-  }
-
-  /**
-   * AssetHistory createMany
-   */
-  export type AssetHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many AssetHistories.
-     */
-    data: AssetHistoryCreateManyInput | AssetHistoryCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * AssetHistory createManyAndReturn
-   */
-  export type AssetHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * The data used to create many AssetHistories.
-     */
-    data: AssetHistoryCreateManyInput | AssetHistoryCreateManyInput[]
+    data: FileAttachmentCreateManyInput | FileAttachmentCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: FileAttachmentIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * AssetHistory update
+   * FileAttachment update
    */
-  export type AssetHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AssetHistory
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: AssetHistorySelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AssetHistory
+     * Omit specific fields from the FileAttachment
      */
-    omit?: AssetHistoryOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetHistoryInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * The data needed to update a AssetHistory.
+     * The data needed to update a FileAttachment.
      */
-    data: XOR<AssetHistoryUpdateInput, AssetHistoryUncheckedUpdateInput>
+    data: XOR<FileAttachmentUpdateInput, FileAttachmentUncheckedUpdateInput>
     /**
-     * Choose, which AssetHistory to update.
+     * Choose, which FileAttachment to update.
      */
-    where: AssetHistoryWhereUniqueInput
+    where: FileAttachmentWhereUniqueInput
   }
 
   /**
-   * AssetHistory updateMany
+   * FileAttachment updateMany
    */
-  export type AssetHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update AssetHistories.
+     * The data used to update FileAttachments.
      */
-    data: XOR<AssetHistoryUpdateManyMutationInput, AssetHistoryUncheckedUpdateManyInput>
+    data: XOR<FileAttachmentUpdateManyMutationInput, FileAttachmentUncheckedUpdateManyInput>
     /**
-     * Filter which AssetHistories to update
+     * Filter which FileAttachments to update
      */
-    where?: AssetHistoryWhereInput
+    where?: FileAttachmentWhereInput
     /**
-     * Limit how many AssetHistories to update.
+     * Limit how many FileAttachments to update.
      */
     limit?: number
   }
 
   /**
-   * AssetHistory updateManyAndReturn
+   * FileAttachment updateManyAndReturn
    */
-  export type AssetHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AssetHistory
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: AssetHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    select?: FileAttachmentSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the AssetHistory
+     * Omit specific fields from the FileAttachment
      */
-    omit?: AssetHistoryOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
-     * The data used to update AssetHistories.
+     * The data used to update FileAttachments.
      */
-    data: XOR<AssetHistoryUpdateManyMutationInput, AssetHistoryUncheckedUpdateManyInput>
+    data: XOR<FileAttachmentUpdateManyMutationInput, FileAttachmentUncheckedUpdateManyInput>
     /**
-     * Filter which AssetHistories to update
+     * Filter which FileAttachments to update
      */
-    where?: AssetHistoryWhereInput
+    where?: FileAttachmentWhereInput
     /**
-     * Limit how many AssetHistories to update.
+     * Limit how many FileAttachments to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: FileAttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * AssetHistory upsert
+   * FileAttachment upsert
    */
-  export type AssetHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AssetHistory
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: AssetHistorySelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AssetHistory
+     * Omit specific fields from the FileAttachment
      */
-    omit?: AssetHistoryOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetHistoryInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * The filter to search for the AssetHistory to update in case it exists.
+     * The filter to search for the FileAttachment to update in case it exists.
      */
-    where: AssetHistoryWhereUniqueInput
+    where: FileAttachmentWhereUniqueInput
     /**
-     * In case the AssetHistory found by the `where` argument doesn't exist, create a new AssetHistory with this data.
+     * In case the FileAttachment found by the `where` argument doesn't exist, create a new FileAttachment with this data.
      */
-    create: XOR<AssetHistoryCreateInput, AssetHistoryUncheckedCreateInput>
+    create: XOR<FileAttachmentCreateInput, FileAttachmentUncheckedCreateInput>
     /**
-     * In case the AssetHistory was found with the provided `where` argument, update it with this data.
+     * In case the FileAttachment was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<AssetHistoryUpdateInput, AssetHistoryUncheckedUpdateInput>
+    update: XOR<FileAttachmentUpdateInput, FileAttachmentUncheckedUpdateInput>
   }
 
   /**
-   * AssetHistory delete
+   * FileAttachment delete
    */
-  export type AssetHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AssetHistory
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: AssetHistorySelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AssetHistory
+     * Omit specific fields from the FileAttachment
      */
-    omit?: AssetHistoryOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AssetHistoryInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
     /**
-     * Filter which AssetHistory to delete.
+     * Filter which FileAttachment to delete.
      */
-    where: AssetHistoryWhereUniqueInput
+    where: FileAttachmentWhereUniqueInput
   }
 
   /**
-   * AssetHistory deleteMany
+   * FileAttachment deleteMany
    */
-  export type AssetHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which AssetHistories to delete
+     * Filter which FileAttachments to delete
      */
-    where?: AssetHistoryWhereInput
+    where?: FileAttachmentWhereInput
     /**
-     * Limit how many AssetHistories to delete.
+     * Limit how many FileAttachments to delete.
      */
     limit?: number
   }
 
   /**
-   * AssetHistory.customer
+   * FileAttachment without action
    */
-  export type AssetHistory$customerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FileAttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Customer
+     * Select specific fields to fetch from the FileAttachment
      */
-    select?: CustomerSelect<ExtArgs> | null
+    select?: FileAttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Customer
+     * Omit specific fields from the FileAttachment
      */
-    omit?: CustomerOmit<ExtArgs> | null
+    omit?: FileAttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CustomerInclude<ExtArgs> | null
-    where?: CustomerWhereInput
-  }
-
-  /**
-   * AssetHistory without action
-   */
-  export type AssetHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AssetHistory
-     */
-    select?: AssetHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AssetHistory
-     */
-    omit?: AssetHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AssetHistoryInclude<ExtArgs> | null
+    include?: FileAttachmentInclude<ExtArgs> | null
   }
 
 
@@ -7091,62 +6503,116 @@ export namespace Prisma {
 
   export type AggregateBatch = {
     _count: BatchCountAggregateOutputType | null
+    _avg: BatchAvgAggregateOutputType | null
+    _sum: BatchSumAggregateOutputType | null
     _min: BatchMinAggregateOutputType | null
     _max: BatchMaxAggregateOutputType | null
   }
 
+  export type BatchAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type BatchSumAggregateOutputType = {
+    quantity: number | null
+  }
+
   export type BatchMinAggregateOutputType = {
     id: string | null
-    name: string | null
-    description: string | null
+    batchId: string | null
+    lineItemId: string | null
+    quantity: number | null
+    startDate: Date | null
+    estimatedCompletion: Date | null
+    actualCompletion: Date | null
+    priority: $Enums.BatchPriority | null
     status: $Enums.BatchStatus | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type BatchMaxAggregateOutputType = {
     id: string | null
-    name: string | null
-    description: string | null
+    batchId: string | null
+    lineItemId: string | null
+    quantity: number | null
+    startDate: Date | null
+    estimatedCompletion: Date | null
+    actualCompletion: Date | null
+    priority: $Enums.BatchPriority | null
     status: $Enums.BatchStatus | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type BatchCountAggregateOutputType = {
     id: number
-    name: number
-    description: number
+    batchId: number
+    lineItemId: number
+    quantity: number
+    startDate: number
+    estimatedCompletion: number
+    actualCompletion: number
+    priority: number
     status: number
+    notes: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type BatchAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type BatchSumAggregateInputType = {
+    quantity?: true
+  }
+
   export type BatchMinAggregateInputType = {
     id?: true
-    name?: true
-    description?: true
+    batchId?: true
+    lineItemId?: true
+    quantity?: true
+    startDate?: true
+    estimatedCompletion?: true
+    actualCompletion?: true
+    priority?: true
     status?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type BatchMaxAggregateInputType = {
     id?: true
-    name?: true
-    description?: true
+    batchId?: true
+    lineItemId?: true
+    quantity?: true
+    startDate?: true
+    estimatedCompletion?: true
+    actualCompletion?: true
+    priority?: true
     status?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type BatchCountAggregateInputType = {
     id?: true
-    name?: true
-    description?: true
+    batchId?: true
+    lineItemId?: true
+    quantity?: true
+    startDate?: true
+    estimatedCompletion?: true
+    actualCompletion?: true
+    priority?: true
     status?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7190,6 +6656,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BatchMinAggregateInputType
@@ -7220,18 +6698,28 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BatchCountAggregateInputType | true
+    _avg?: BatchAvgAggregateInputType
+    _sum?: BatchSumAggregateInputType
     _min?: BatchMinAggregateInputType
     _max?: BatchMaxAggregateInputType
   }
 
   export type BatchGroupByOutputType = {
     id: string
-    name: string
-    description: string | null
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate: Date | null
+    estimatedCompletion: Date | null
+    actualCompletion: Date | null
+    priority: $Enums.BatchPriority
     status: $Enums.BatchStatus
+    notes: string | null
     createdAt: Date
     updatedAt: Date
     _count: BatchCountAggregateOutputType | null
+    _avg: BatchAvgAggregateOutputType | null
+    _sum: BatchSumAggregateOutputType | null
     _min: BatchMinAggregateOutputType | null
     _max: BatchMaxAggregateOutputType | null
   }
@@ -7252,50 +6740,102 @@ export namespace Prisma {
 
   export type BatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    description?: boolean
+    batchId?: boolean
+    lineItemId?: boolean
+    quantity?: boolean
+    startDate?: boolean
+    estimatedCompletion?: boolean
+    actualCompletion?: boolean
+    priority?: boolean
     status?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+    routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
+    qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
+    _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    description?: boolean
+    batchId?: boolean
+    lineItemId?: boolean
+    quantity?: boolean
+    startDate?: boolean
+    estimatedCompletion?: boolean
+    actualCompletion?: boolean
+    priority?: boolean
     status?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    description?: boolean
+    batchId?: boolean
+    lineItemId?: boolean
+    quantity?: boolean
+    startDate?: boolean
+    estimatedCompletion?: boolean
+    actualCompletion?: boolean
+    priority?: boolean
     status?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectScalar = {
     id?: boolean
-    name?: boolean
-    description?: boolean
+    batchId?: boolean
+    lineItemId?: boolean
+    quantity?: boolean
+    startDate?: boolean
+    estimatedCompletion?: boolean
+    actualCompletion?: boolean
+    priority?: boolean
     status?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "lineItemId" | "quantity" | "startDate" | "estimatedCompletion" | "actualCompletion" | "priority" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+  export type BatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+    routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
+    qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
+    _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }
+  export type BatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
+  }
 
   export type $BatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Batch"
-    objects: {}
+    objects: {
+      lineItem: Prisma.$OrderLineItemPayload<ExtArgs>
+      routingSteps: Prisma.$RoutingStepPayload<ExtArgs>[]
+      qcRecords: Prisma.$QCRecordPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-      description: string | null
+      batchId: string
+      lineItemId: string
+      quantity: number
+      startDate: Date | null
+      estimatedCompletion: Date | null
+      actualCompletion: Date | null
+      priority: $Enums.BatchPriority
       status: $Enums.BatchStatus
+      notes: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["batch"]>
@@ -7692,6 +7232,9 @@ export namespace Prisma {
    */
   export interface Prisma__BatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    lineItem<T extends OrderLineItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItemDefaultArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    routingSteps<T extends Batch$routingStepsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$routingStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    qcRecords<T extends Batch$qcRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$qcRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7722,9 +7265,15 @@ export namespace Prisma {
    */
   interface BatchFieldRefs {
     readonly id: FieldRef<"Batch", 'String'>
-    readonly name: FieldRef<"Batch", 'String'>
-    readonly description: FieldRef<"Batch", 'String'>
+    readonly batchId: FieldRef<"Batch", 'String'>
+    readonly lineItemId: FieldRef<"Batch", 'String'>
+    readonly quantity: FieldRef<"Batch", 'Int'>
+    readonly startDate: FieldRef<"Batch", 'DateTime'>
+    readonly estimatedCompletion: FieldRef<"Batch", 'DateTime'>
+    readonly actualCompletion: FieldRef<"Batch", 'DateTime'>
+    readonly priority: FieldRef<"Batch", 'BatchPriority'>
     readonly status: FieldRef<"Batch", 'BatchStatus'>
+    readonly notes: FieldRef<"Batch", 'String'>
     readonly createdAt: FieldRef<"Batch", 'DateTime'>
     readonly updatedAt: FieldRef<"Batch", 'DateTime'>
   }
@@ -7744,6 +7293,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * Filter, which Batch to fetch.
      */
     where: BatchWhereUniqueInput
@@ -7762,6 +7315,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * Filter, which Batch to fetch.
      */
     where: BatchWhereUniqueInput
@@ -7779,6 +7336,10 @@ export namespace Prisma {
      * Omit specific fields from the Batch
      */
     omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
     /**
      * Filter, which Batch to fetch.
      */
@@ -7828,6 +7389,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * Filter, which Batch to fetch.
      */
     where?: BatchWhereInput
@@ -7876,6 +7441,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * Filter, which Batches to fetch.
      */
     where?: BatchWhereInput
@@ -7919,6 +7488,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * The data needed to create a Batch.
      */
     data: XOR<BatchCreateInput, BatchUncheckedCreateInput>
@@ -7952,6 +7525,10 @@ export namespace Prisma {
      */
     data: BatchCreateManyInput | BatchCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7966,6 +7543,10 @@ export namespace Prisma {
      * Omit specific fields from the Batch
      */
     omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
     /**
      * The data needed to update a Batch.
      */
@@ -8018,6 +7599,10 @@ export namespace Prisma {
      * Limit how many Batches to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8032,6 +7617,10 @@ export namespace Prisma {
      * Omit specific fields from the Batch
      */
     omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
     /**
      * The filter to search for the Batch to update in case it exists.
      */
@@ -8059,6 +7648,10 @@ export namespace Prisma {
      */
     omit?: BatchOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
      * Filter which Batch to delete.
      */
     where: BatchWhereUniqueInput
@@ -8079,6 +7672,54 @@ export namespace Prisma {
   }
 
   /**
+   * Batch.routingSteps
+   */
+  export type Batch$routingStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    where?: RoutingStepWhereInput
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    cursor?: RoutingStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoutingStepScalarFieldEnum | RoutingStepScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.qcRecords
+   */
+  export type Batch$qcRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    where?: QCRecordWhereInput
+    orderBy?: QCRecordOrderByWithRelationInput | QCRecordOrderByWithRelationInput[]
+    cursor?: QCRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QCRecordScalarFieldEnum | QCRecordScalarFieldEnum[]
+  }
+
+  /**
    * Batch without action
    */
   export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8090,6 +7731,4600 @@ export namespace Prisma {
      * Omit specific fields from the Batch
      */
     omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RoutingStep
+   */
+
+  export type AggregateRoutingStep = {
+    _count: RoutingStepCountAggregateOutputType | null
+    _avg: RoutingStepAvgAggregateOutputType | null
+    _sum: RoutingStepSumAggregateOutputType | null
+    _min: RoutingStepMinAggregateOutputType | null
+    _max: RoutingStepMaxAggregateOutputType | null
+  }
+
+  export type RoutingStepAvgAggregateOutputType = {
+    stepNumber: number | null
+    estimatedTime: number | null
+  }
+
+  export type RoutingStepSumAggregateOutputType = {
+    stepNumber: number | null
+    estimatedTime: number | null
+  }
+
+  export type RoutingStepMinAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    stepNumber: number | null
+    workstationId: string | null
+    description: string | null
+    required: boolean | null
+    estimatedTime: number | null
+    notes: string | null
+    status: $Enums.StepStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingStepMaxAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    stepNumber: number | null
+    workstationId: string | null
+    description: string | null
+    required: boolean | null
+    estimatedTime: number | null
+    notes: string | null
+    status: $Enums.StepStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingStepCountAggregateOutputType = {
+    id: number
+    batchId: number
+    stepNumber: number
+    workstationId: number
+    description: number
+    required: number
+    estimatedTime: number
+    notes: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoutingStepAvgAggregateInputType = {
+    stepNumber?: true
+    estimatedTime?: true
+  }
+
+  export type RoutingStepSumAggregateInputType = {
+    stepNumber?: true
+    estimatedTime?: true
+  }
+
+  export type RoutingStepMinAggregateInputType = {
+    id?: true
+    batchId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    required?: true
+    estimatedTime?: true
+    notes?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingStepMaxAggregateInputType = {
+    id?: true
+    batchId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    required?: true
+    estimatedTime?: true
+    notes?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingStepCountAggregateInputType = {
+    id?: true
+    batchId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    required?: true
+    estimatedTime?: true
+    notes?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoutingStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingStep to aggregate.
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingSteps to fetch.
+     */
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoutingStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RoutingSteps
+    **/
+    _count?: true | RoutingStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoutingStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoutingStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoutingStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoutingStepMaxAggregateInputType
+  }
+
+  export type GetRoutingStepAggregateType<T extends RoutingStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoutingStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoutingStep[P]>
+      : GetScalarType<T[P], AggregateRoutingStep[P]>
+  }
+
+
+
+
+  export type RoutingStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingStepWhereInput
+    orderBy?: RoutingStepOrderByWithAggregationInput | RoutingStepOrderByWithAggregationInput[]
+    by: RoutingStepScalarFieldEnum[] | RoutingStepScalarFieldEnum
+    having?: RoutingStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoutingStepCountAggregateInputType | true
+    _avg?: RoutingStepAvgAggregateInputType
+    _sum?: RoutingStepSumAggregateInputType
+    _min?: RoutingStepMinAggregateInputType
+    _max?: RoutingStepMaxAggregateInputType
+  }
+
+  export type RoutingStepGroupByOutputType = {
+    id: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required: boolean
+    estimatedTime: number | null
+    notes: string | null
+    status: $Enums.StepStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: RoutingStepCountAggregateOutputType | null
+    _avg: RoutingStepAvgAggregateOutputType | null
+    _sum: RoutingStepSumAggregateOutputType | null
+    _min: RoutingStepMinAggregateOutputType | null
+    _max: RoutingStepMaxAggregateOutputType | null
+  }
+
+  type GetRoutingStepGroupByPayload<T extends RoutingStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoutingStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoutingStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoutingStepGroupByOutputType[P]>
+            : GetScalarType<T[P], RoutingStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoutingStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    required?: boolean
+    estimatedTime?: boolean
+    notes?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    confirmations?: boolean | RoutingStep$confirmationsArgs<ExtArgs>
+    _count?: boolean | RoutingStepCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingStep"]>
+
+  export type RoutingStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    required?: boolean
+    estimatedTime?: boolean
+    notes?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingStep"]>
+
+  export type RoutingStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    required?: boolean
+    estimatedTime?: boolean
+    notes?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingStep"]>
+
+  export type RoutingStepSelectScalar = {
+    id?: boolean
+    batchId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    required?: boolean
+    estimatedTime?: boolean
+    notes?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoutingStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "stepNumber" | "workstationId" | "description" | "required" | "estimatedTime" | "notes" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["routingStep"]>
+  export type RoutingStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    confirmations?: boolean | RoutingStep$confirmationsArgs<ExtArgs>
+    _count?: boolean | RoutingStepCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RoutingStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type RoutingStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+
+  export type $RoutingStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RoutingStep"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      workstation: Prisma.$WorkstationPayload<ExtArgs>
+      confirmations: Prisma.$StepConfirmationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchId: string
+      stepNumber: number
+      workstationId: string
+      description: string
+      required: boolean
+      estimatedTime: number | null
+      notes: string | null
+      status: $Enums.StepStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["routingStep"]>
+    composites: {}
+  }
+
+  type RoutingStepGetPayload<S extends boolean | null | undefined | RoutingStepDefaultArgs> = $Result.GetResult<Prisma.$RoutingStepPayload, S>
+
+  type RoutingStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoutingStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoutingStepCountAggregateInputType | true
+    }
+
+  export interface RoutingStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RoutingStep'], meta: { name: 'RoutingStep' } }
+    /**
+     * Find zero or one RoutingStep that matches the filter.
+     * @param {RoutingStepFindUniqueArgs} args - Arguments to find a RoutingStep
+     * @example
+     * // Get one RoutingStep
+     * const routingStep = await prisma.routingStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoutingStepFindUniqueArgs>(args: SelectSubset<T, RoutingStepFindUniqueArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RoutingStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoutingStepFindUniqueOrThrowArgs} args - Arguments to find a RoutingStep
+     * @example
+     * // Get one RoutingStep
+     * const routingStep = await prisma.routingStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoutingStepFindUniqueOrThrowArgs>(args: SelectSubset<T, RoutingStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepFindFirstArgs} args - Arguments to find a RoutingStep
+     * @example
+     * // Get one RoutingStep
+     * const routingStep = await prisma.routingStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoutingStepFindFirstArgs>(args?: SelectSubset<T, RoutingStepFindFirstArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepFindFirstOrThrowArgs} args - Arguments to find a RoutingStep
+     * @example
+     * // Get one RoutingStep
+     * const routingStep = await prisma.routingStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoutingStepFindFirstOrThrowArgs>(args?: SelectSubset<T, RoutingStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RoutingSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RoutingSteps
+     * const routingSteps = await prisma.routingStep.findMany()
+     * 
+     * // Get first 10 RoutingSteps
+     * const routingSteps = await prisma.routingStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const routingStepWithIdOnly = await prisma.routingStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoutingStepFindManyArgs>(args?: SelectSubset<T, RoutingStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RoutingStep.
+     * @param {RoutingStepCreateArgs} args - Arguments to create a RoutingStep.
+     * @example
+     * // Create one RoutingStep
+     * const RoutingStep = await prisma.routingStep.create({
+     *   data: {
+     *     // ... data to create a RoutingStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoutingStepCreateArgs>(args: SelectSubset<T, RoutingStepCreateArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RoutingSteps.
+     * @param {RoutingStepCreateManyArgs} args - Arguments to create many RoutingSteps.
+     * @example
+     * // Create many RoutingSteps
+     * const routingStep = await prisma.routingStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoutingStepCreateManyArgs>(args?: SelectSubset<T, RoutingStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RoutingSteps and returns the data saved in the database.
+     * @param {RoutingStepCreateManyAndReturnArgs} args - Arguments to create many RoutingSteps.
+     * @example
+     * // Create many RoutingSteps
+     * const routingStep = await prisma.routingStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RoutingSteps and only return the `id`
+     * const routingStepWithIdOnly = await prisma.routingStep.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoutingStepCreateManyAndReturnArgs>(args?: SelectSubset<T, RoutingStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RoutingStep.
+     * @param {RoutingStepDeleteArgs} args - Arguments to delete one RoutingStep.
+     * @example
+     * // Delete one RoutingStep
+     * const RoutingStep = await prisma.routingStep.delete({
+     *   where: {
+     *     // ... filter to delete one RoutingStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoutingStepDeleteArgs>(args: SelectSubset<T, RoutingStepDeleteArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RoutingStep.
+     * @param {RoutingStepUpdateArgs} args - Arguments to update one RoutingStep.
+     * @example
+     * // Update one RoutingStep
+     * const routingStep = await prisma.routingStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoutingStepUpdateArgs>(args: SelectSubset<T, RoutingStepUpdateArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RoutingSteps.
+     * @param {RoutingStepDeleteManyArgs} args - Arguments to filter RoutingSteps to delete.
+     * @example
+     * // Delete a few RoutingSteps
+     * const { count } = await prisma.routingStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoutingStepDeleteManyArgs>(args?: SelectSubset<T, RoutingStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RoutingSteps
+     * const routingStep = await prisma.routingStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoutingStepUpdateManyArgs>(args: SelectSubset<T, RoutingStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingSteps and returns the data updated in the database.
+     * @param {RoutingStepUpdateManyAndReturnArgs} args - Arguments to update many RoutingSteps.
+     * @example
+     * // Update many RoutingSteps
+     * const routingStep = await prisma.routingStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RoutingSteps and only return the `id`
+     * const routingStepWithIdOnly = await prisma.routingStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoutingStepUpdateManyAndReturnArgs>(args: SelectSubset<T, RoutingStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RoutingStep.
+     * @param {RoutingStepUpsertArgs} args - Arguments to update or create a RoutingStep.
+     * @example
+     * // Update or create a RoutingStep
+     * const routingStep = await prisma.routingStep.upsert({
+     *   create: {
+     *     // ... data to create a RoutingStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RoutingStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoutingStepUpsertArgs>(args: SelectSubset<T, RoutingStepUpsertArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RoutingSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepCountArgs} args - Arguments to filter RoutingSteps to count.
+     * @example
+     * // Count the number of RoutingSteps
+     * const count = await prisma.routingStep.count({
+     *   where: {
+     *     // ... the filter for the RoutingSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoutingStepCountArgs>(
+      args?: Subset<T, RoutingStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoutingStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RoutingStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoutingStepAggregateArgs>(args: Subset<T, RoutingStepAggregateArgs>): Prisma.PrismaPromise<GetRoutingStepAggregateType<T>>
+
+    /**
+     * Group by RoutingStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoutingStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoutingStepGroupByArgs['orderBy'] }
+        : { orderBy?: RoutingStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoutingStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoutingStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RoutingStep model
+   */
+  readonly fields: RoutingStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RoutingStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoutingStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    confirmations<T extends RoutingStep$confirmationsArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStep$confirmationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RoutingStep model
+   */
+  interface RoutingStepFieldRefs {
+    readonly id: FieldRef<"RoutingStep", 'String'>
+    readonly batchId: FieldRef<"RoutingStep", 'String'>
+    readonly stepNumber: FieldRef<"RoutingStep", 'Int'>
+    readonly workstationId: FieldRef<"RoutingStep", 'String'>
+    readonly description: FieldRef<"RoutingStep", 'String'>
+    readonly required: FieldRef<"RoutingStep", 'Boolean'>
+    readonly estimatedTime: FieldRef<"RoutingStep", 'Int'>
+    readonly notes: FieldRef<"RoutingStep", 'String'>
+    readonly status: FieldRef<"RoutingStep", 'StepStatus'>
+    readonly createdAt: FieldRef<"RoutingStep", 'DateTime'>
+    readonly updatedAt: FieldRef<"RoutingStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RoutingStep findUnique
+   */
+  export type RoutingStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingStep to fetch.
+     */
+    where: RoutingStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingStep findUniqueOrThrow
+   */
+  export type RoutingStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingStep to fetch.
+     */
+    where: RoutingStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingStep findFirst
+   */
+  export type RoutingStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingStep to fetch.
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingSteps to fetch.
+     */
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingSteps.
+     */
+    cursor?: RoutingStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingSteps.
+     */
+    distinct?: RoutingStepScalarFieldEnum | RoutingStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep findFirstOrThrow
+   */
+  export type RoutingStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingStep to fetch.
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingSteps to fetch.
+     */
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingSteps.
+     */
+    cursor?: RoutingStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingSteps.
+     */
+    distinct?: RoutingStepScalarFieldEnum | RoutingStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep findMany
+   */
+  export type RoutingStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingSteps to fetch.
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingSteps to fetch.
+     */
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RoutingSteps.
+     */
+    cursor?: RoutingStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingSteps.
+     */
+    skip?: number
+    distinct?: RoutingStepScalarFieldEnum | RoutingStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep create
+   */
+  export type RoutingStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RoutingStep.
+     */
+    data: XOR<RoutingStepCreateInput, RoutingStepUncheckedCreateInput>
+  }
+
+  /**
+   * RoutingStep createMany
+   */
+  export type RoutingStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RoutingSteps.
+     */
+    data: RoutingStepCreateManyInput | RoutingStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoutingStep createManyAndReturn
+   */
+  export type RoutingStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * The data used to create many RoutingSteps.
+     */
+    data: RoutingStepCreateManyInput | RoutingStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RoutingStep update
+   */
+  export type RoutingStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RoutingStep.
+     */
+    data: XOR<RoutingStepUpdateInput, RoutingStepUncheckedUpdateInput>
+    /**
+     * Choose, which RoutingStep to update.
+     */
+    where: RoutingStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingStep updateMany
+   */
+  export type RoutingStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RoutingSteps.
+     */
+    data: XOR<RoutingStepUpdateManyMutationInput, RoutingStepUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingSteps to update
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * Limit how many RoutingSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingStep updateManyAndReturn
+   */
+  export type RoutingStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * The data used to update RoutingSteps.
+     */
+    data: XOR<RoutingStepUpdateManyMutationInput, RoutingStepUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingSteps to update
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * Limit how many RoutingSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RoutingStep upsert
+   */
+  export type RoutingStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RoutingStep to update in case it exists.
+     */
+    where: RoutingStepWhereUniqueInput
+    /**
+     * In case the RoutingStep found by the `where` argument doesn't exist, create a new RoutingStep with this data.
+     */
+    create: XOR<RoutingStepCreateInput, RoutingStepUncheckedCreateInput>
+    /**
+     * In case the RoutingStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoutingStepUpdateInput, RoutingStepUncheckedUpdateInput>
+  }
+
+  /**
+   * RoutingStep delete
+   */
+  export type RoutingStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    /**
+     * Filter which RoutingStep to delete.
+     */
+    where: RoutingStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingStep deleteMany
+   */
+  export type RoutingStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingSteps to delete
+     */
+    where?: RoutingStepWhereInput
+    /**
+     * Limit how many RoutingSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingStep.confirmations
+   */
+  export type RoutingStep$confirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    where?: StepConfirmationWhereInput
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    cursor?: StepConfirmationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep without action
+   */
+  export type RoutingStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Workstation
+   */
+
+  export type AggregateWorkstation = {
+    _count: WorkstationCountAggregateOutputType | null
+    _min: WorkstationMinAggregateOutputType | null
+    _max: WorkstationMaxAggregateOutputType | null
+  }
+
+  export type WorkstationMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkstationMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkstationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Workstation to aggregate.
+     */
+    where?: WorkstationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Workstations to fetch.
+     */
+    orderBy?: WorkstationOrderByWithRelationInput | WorkstationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkstationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Workstations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Workstations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Workstations
+    **/
+    _count?: true | WorkstationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkstationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkstationMaxAggregateInputType
+  }
+
+  export type GetWorkstationAggregateType<T extends WorkstationAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkstation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkstation[P]>
+      : GetScalarType<T[P], AggregateWorkstation[P]>
+  }
+
+
+
+
+  export type WorkstationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkstationWhereInput
+    orderBy?: WorkstationOrderByWithAggregationInput | WorkstationOrderByWithAggregationInput[]
+    by: WorkstationScalarFieldEnum[] | WorkstationScalarFieldEnum
+    having?: WorkstationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkstationCountAggregateInputType | true
+    _min?: WorkstationMinAggregateInputType
+    _max?: WorkstationMaxAggregateInputType
+  }
+
+  export type WorkstationGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkstationCountAggregateOutputType | null
+    _min: WorkstationMinAggregateOutputType | null
+    _max: WorkstationMaxAggregateOutputType | null
+  }
+
+  type GetWorkstationGroupByPayload<T extends WorkstationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkstationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkstationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkstationGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkstationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkstationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    routingSteps?: boolean | Workstation$routingStepsArgs<ExtArgs>
+    confirmations?: boolean | Workstation$confirmationsArgs<ExtArgs>
+    _count?: boolean | WorkstationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workstation"]>
+
+  export type WorkstationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workstation"]>
+
+  export type WorkstationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workstation"]>
+
+  export type WorkstationSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkstationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["workstation"]>
+  export type WorkstationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingSteps?: boolean | Workstation$routingStepsArgs<ExtArgs>
+    confirmations?: boolean | Workstation$confirmationsArgs<ExtArgs>
+    _count?: boolean | WorkstationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkstationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type WorkstationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $WorkstationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Workstation"
+    objects: {
+      routingSteps: Prisma.$RoutingStepPayload<ExtArgs>[]
+      confirmations: Prisma.$StepConfirmationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workstation"]>
+    composites: {}
+  }
+
+  type WorkstationGetPayload<S extends boolean | null | undefined | WorkstationDefaultArgs> = $Result.GetResult<Prisma.$WorkstationPayload, S>
+
+  type WorkstationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkstationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkstationCountAggregateInputType | true
+    }
+
+  export interface WorkstationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Workstation'], meta: { name: 'Workstation' } }
+    /**
+     * Find zero or one Workstation that matches the filter.
+     * @param {WorkstationFindUniqueArgs} args - Arguments to find a Workstation
+     * @example
+     * // Get one Workstation
+     * const workstation = await prisma.workstation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkstationFindUniqueArgs>(args: SelectSubset<T, WorkstationFindUniqueArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Workstation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkstationFindUniqueOrThrowArgs} args - Arguments to find a Workstation
+     * @example
+     * // Get one Workstation
+     * const workstation = await prisma.workstation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkstationFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkstationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Workstation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationFindFirstArgs} args - Arguments to find a Workstation
+     * @example
+     * // Get one Workstation
+     * const workstation = await prisma.workstation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkstationFindFirstArgs>(args?: SelectSubset<T, WorkstationFindFirstArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Workstation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationFindFirstOrThrowArgs} args - Arguments to find a Workstation
+     * @example
+     * // Get one Workstation
+     * const workstation = await prisma.workstation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkstationFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkstationFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Workstations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Workstations
+     * const workstations = await prisma.workstation.findMany()
+     * 
+     * // Get first 10 Workstations
+     * const workstations = await prisma.workstation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workstationWithIdOnly = await prisma.workstation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkstationFindManyArgs>(args?: SelectSubset<T, WorkstationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Workstation.
+     * @param {WorkstationCreateArgs} args - Arguments to create a Workstation.
+     * @example
+     * // Create one Workstation
+     * const Workstation = await prisma.workstation.create({
+     *   data: {
+     *     // ... data to create a Workstation
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkstationCreateArgs>(args: SelectSubset<T, WorkstationCreateArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Workstations.
+     * @param {WorkstationCreateManyArgs} args - Arguments to create many Workstations.
+     * @example
+     * // Create many Workstations
+     * const workstation = await prisma.workstation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkstationCreateManyArgs>(args?: SelectSubset<T, WorkstationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Workstations and returns the data saved in the database.
+     * @param {WorkstationCreateManyAndReturnArgs} args - Arguments to create many Workstations.
+     * @example
+     * // Create many Workstations
+     * const workstation = await prisma.workstation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Workstations and only return the `id`
+     * const workstationWithIdOnly = await prisma.workstation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkstationCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkstationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Workstation.
+     * @param {WorkstationDeleteArgs} args - Arguments to delete one Workstation.
+     * @example
+     * // Delete one Workstation
+     * const Workstation = await prisma.workstation.delete({
+     *   where: {
+     *     // ... filter to delete one Workstation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkstationDeleteArgs>(args: SelectSubset<T, WorkstationDeleteArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Workstation.
+     * @param {WorkstationUpdateArgs} args - Arguments to update one Workstation.
+     * @example
+     * // Update one Workstation
+     * const workstation = await prisma.workstation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkstationUpdateArgs>(args: SelectSubset<T, WorkstationUpdateArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Workstations.
+     * @param {WorkstationDeleteManyArgs} args - Arguments to filter Workstations to delete.
+     * @example
+     * // Delete a few Workstations
+     * const { count } = await prisma.workstation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkstationDeleteManyArgs>(args?: SelectSubset<T, WorkstationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Workstations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Workstations
+     * const workstation = await prisma.workstation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkstationUpdateManyArgs>(args: SelectSubset<T, WorkstationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Workstations and returns the data updated in the database.
+     * @param {WorkstationUpdateManyAndReturnArgs} args - Arguments to update many Workstations.
+     * @example
+     * // Update many Workstations
+     * const workstation = await prisma.workstation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Workstations and only return the `id`
+     * const workstationWithIdOnly = await prisma.workstation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkstationUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkstationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Workstation.
+     * @param {WorkstationUpsertArgs} args - Arguments to update or create a Workstation.
+     * @example
+     * // Update or create a Workstation
+     * const workstation = await prisma.workstation.upsert({
+     *   create: {
+     *     // ... data to create a Workstation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Workstation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkstationUpsertArgs>(args: SelectSubset<T, WorkstationUpsertArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Workstations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCountArgs} args - Arguments to filter Workstations to count.
+     * @example
+     * // Count the number of Workstations
+     * const count = await prisma.workstation.count({
+     *   where: {
+     *     // ... the filter for the Workstations we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkstationCountArgs>(
+      args?: Subset<T, WorkstationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkstationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Workstation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkstationAggregateArgs>(args: Subset<T, WorkstationAggregateArgs>): Prisma.PrismaPromise<GetWorkstationAggregateType<T>>
+
+    /**
+     * Group by Workstation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkstationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkstationGroupByArgs['orderBy'] }
+        : { orderBy?: WorkstationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkstationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkstationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Workstation model
+   */
+  readonly fields: WorkstationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Workstation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkstationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    routingSteps<T extends Workstation$routingStepsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$routingStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    confirmations<T extends Workstation$confirmationsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$confirmationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Workstation model
+   */
+  interface WorkstationFieldRefs {
+    readonly id: FieldRef<"Workstation", 'String'>
+    readonly name: FieldRef<"Workstation", 'String'>
+    readonly description: FieldRef<"Workstation", 'String'>
+    readonly active: FieldRef<"Workstation", 'Boolean'>
+    readonly createdAt: FieldRef<"Workstation", 'DateTime'>
+    readonly updatedAt: FieldRef<"Workstation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Workstation findUnique
+   */
+  export type WorkstationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter, which Workstation to fetch.
+     */
+    where: WorkstationWhereUniqueInput
+  }
+
+  /**
+   * Workstation findUniqueOrThrow
+   */
+  export type WorkstationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter, which Workstation to fetch.
+     */
+    where: WorkstationWhereUniqueInput
+  }
+
+  /**
+   * Workstation findFirst
+   */
+  export type WorkstationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter, which Workstation to fetch.
+     */
+    where?: WorkstationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Workstations to fetch.
+     */
+    orderBy?: WorkstationOrderByWithRelationInput | WorkstationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Workstations.
+     */
+    cursor?: WorkstationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Workstations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Workstations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Workstations.
+     */
+    distinct?: WorkstationScalarFieldEnum | WorkstationScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation findFirstOrThrow
+   */
+  export type WorkstationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter, which Workstation to fetch.
+     */
+    where?: WorkstationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Workstations to fetch.
+     */
+    orderBy?: WorkstationOrderByWithRelationInput | WorkstationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Workstations.
+     */
+    cursor?: WorkstationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Workstations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Workstations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Workstations.
+     */
+    distinct?: WorkstationScalarFieldEnum | WorkstationScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation findMany
+   */
+  export type WorkstationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter, which Workstations to fetch.
+     */
+    where?: WorkstationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Workstations to fetch.
+     */
+    orderBy?: WorkstationOrderByWithRelationInput | WorkstationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Workstations.
+     */
+    cursor?: WorkstationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Workstations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Workstations.
+     */
+    skip?: number
+    distinct?: WorkstationScalarFieldEnum | WorkstationScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation create
+   */
+  export type WorkstationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Workstation.
+     */
+    data: XOR<WorkstationCreateInput, WorkstationUncheckedCreateInput>
+  }
+
+  /**
+   * Workstation createMany
+   */
+  export type WorkstationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Workstations.
+     */
+    data: WorkstationCreateManyInput | WorkstationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Workstation createManyAndReturn
+   */
+  export type WorkstationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Workstations.
+     */
+    data: WorkstationCreateManyInput | WorkstationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Workstation update
+   */
+  export type WorkstationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Workstation.
+     */
+    data: XOR<WorkstationUpdateInput, WorkstationUncheckedUpdateInput>
+    /**
+     * Choose, which Workstation to update.
+     */
+    where: WorkstationWhereUniqueInput
+  }
+
+  /**
+   * Workstation updateMany
+   */
+  export type WorkstationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Workstations.
+     */
+    data: XOR<WorkstationUpdateManyMutationInput, WorkstationUncheckedUpdateManyInput>
+    /**
+     * Filter which Workstations to update
+     */
+    where?: WorkstationWhereInput
+    /**
+     * Limit how many Workstations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Workstation updateManyAndReturn
+   */
+  export type WorkstationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * The data used to update Workstations.
+     */
+    data: XOR<WorkstationUpdateManyMutationInput, WorkstationUncheckedUpdateManyInput>
+    /**
+     * Filter which Workstations to update
+     */
+    where?: WorkstationWhereInput
+    /**
+     * Limit how many Workstations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Workstation upsert
+   */
+  export type WorkstationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Workstation to update in case it exists.
+     */
+    where: WorkstationWhereUniqueInput
+    /**
+     * In case the Workstation found by the `where` argument doesn't exist, create a new Workstation with this data.
+     */
+    create: XOR<WorkstationCreateInput, WorkstationUncheckedCreateInput>
+    /**
+     * In case the Workstation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkstationUpdateInput, WorkstationUncheckedUpdateInput>
+  }
+
+  /**
+   * Workstation delete
+   */
+  export type WorkstationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    /**
+     * Filter which Workstation to delete.
+     */
+    where: WorkstationWhereUniqueInput
+  }
+
+  /**
+   * Workstation deleteMany
+   */
+  export type WorkstationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Workstations to delete
+     */
+    where?: WorkstationWhereInput
+    /**
+     * Limit how many Workstations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Workstation.routingSteps
+   */
+  export type Workstation$routingStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    where?: RoutingStepWhereInput
+    orderBy?: RoutingStepOrderByWithRelationInput | RoutingStepOrderByWithRelationInput[]
+    cursor?: RoutingStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoutingStepScalarFieldEnum | RoutingStepScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation.confirmations
+   */
+  export type Workstation$confirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    where?: StepConfirmationWhereInput
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    cursor?: StepConfirmationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation without action
+   */
+  export type WorkstationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StepConfirmation
+   */
+
+  export type AggregateStepConfirmation = {
+    _count: StepConfirmationCountAggregateOutputType | null
+    _min: StepConfirmationMinAggregateOutputType | null
+    _max: StepConfirmationMaxAggregateOutputType | null
+  }
+
+  export type StepConfirmationMinAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    workstationId: string | null
+    operatorName: string | null
+    operatorId: string | null
+    startTime: Date | null
+    endTime: Date | null
+    notes: string | null
+    photoUrl: string | null
+    flagged: boolean | null
+    status: $Enums.ConfirmationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StepConfirmationMaxAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    workstationId: string | null
+    operatorName: string | null
+    operatorId: string | null
+    startTime: Date | null
+    endTime: Date | null
+    notes: string | null
+    photoUrl: string | null
+    flagged: boolean | null
+    status: $Enums.ConfirmationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StepConfirmationCountAggregateOutputType = {
+    id: number
+    stepId: number
+    workstationId: number
+    operatorName: number
+    operatorId: number
+    startTime: number
+    endTime: number
+    notes: number
+    photoUrl: number
+    flagged: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StepConfirmationMinAggregateInputType = {
+    id?: true
+    stepId?: true
+    workstationId?: true
+    operatorName?: true
+    operatorId?: true
+    startTime?: true
+    endTime?: true
+    notes?: true
+    photoUrl?: true
+    flagged?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StepConfirmationMaxAggregateInputType = {
+    id?: true
+    stepId?: true
+    workstationId?: true
+    operatorName?: true
+    operatorId?: true
+    startTime?: true
+    endTime?: true
+    notes?: true
+    photoUrl?: true
+    flagged?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StepConfirmationCountAggregateInputType = {
+    id?: true
+    stepId?: true
+    workstationId?: true
+    operatorName?: true
+    operatorId?: true
+    startTime?: true
+    endTime?: true
+    notes?: true
+    photoUrl?: true
+    flagged?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StepConfirmationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StepConfirmation to aggregate.
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepConfirmations to fetch.
+     */
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StepConfirmationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepConfirmations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepConfirmations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StepConfirmations
+    **/
+    _count?: true | StepConfirmationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StepConfirmationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StepConfirmationMaxAggregateInputType
+  }
+
+  export type GetStepConfirmationAggregateType<T extends StepConfirmationAggregateArgs> = {
+        [P in keyof T & keyof AggregateStepConfirmation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStepConfirmation[P]>
+      : GetScalarType<T[P], AggregateStepConfirmation[P]>
+  }
+
+
+
+
+  export type StepConfirmationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepConfirmationWhereInput
+    orderBy?: StepConfirmationOrderByWithAggregationInput | StepConfirmationOrderByWithAggregationInput[]
+    by: StepConfirmationScalarFieldEnum[] | StepConfirmationScalarFieldEnum
+    having?: StepConfirmationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StepConfirmationCountAggregateInputType | true
+    _min?: StepConfirmationMinAggregateInputType
+    _max?: StepConfirmationMaxAggregateInputType
+  }
+
+  export type StepConfirmationGroupByOutputType = {
+    id: string
+    stepId: string
+    workstationId: string
+    operatorName: string
+    operatorId: string | null
+    startTime: Date | null
+    endTime: Date | null
+    notes: string | null
+    photoUrl: string | null
+    flagged: boolean
+    status: $Enums.ConfirmationStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: StepConfirmationCountAggregateOutputType | null
+    _min: StepConfirmationMinAggregateOutputType | null
+    _max: StepConfirmationMaxAggregateOutputType | null
+  }
+
+  type GetStepConfirmationGroupByPayload<T extends StepConfirmationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StepConfirmationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StepConfirmationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StepConfirmationGroupByOutputType[P]>
+            : GetScalarType<T[P], StepConfirmationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StepConfirmationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    workstationId?: boolean
+    operatorName?: boolean
+    operatorId?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    flagged?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepConfirmation"]>
+
+  export type StepConfirmationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    workstationId?: boolean
+    operatorName?: boolean
+    operatorId?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    flagged?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepConfirmation"]>
+
+  export type StepConfirmationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    workstationId?: boolean
+    operatorName?: boolean
+    operatorId?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    flagged?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepConfirmation"]>
+
+  export type StepConfirmationSelectScalar = {
+    id?: boolean
+    stepId?: boolean
+    workstationId?: boolean
+    operatorName?: boolean
+    operatorId?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    flagged?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StepConfirmationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "workstationId" | "operatorName" | "operatorId" | "startTime" | "endTime" | "notes" | "photoUrl" | "flagged" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["stepConfirmation"]>
+  export type StepConfirmationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type StepConfirmationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type StepConfirmationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+
+  export type $StepConfirmationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StepConfirmation"
+    objects: {
+      routingStep: Prisma.$RoutingStepPayload<ExtArgs>
+      workstation: Prisma.$WorkstationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      stepId: string
+      workstationId: string
+      operatorName: string
+      operatorId: string | null
+      startTime: Date | null
+      endTime: Date | null
+      notes: string | null
+      photoUrl: string | null
+      flagged: boolean
+      status: $Enums.ConfirmationStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["stepConfirmation"]>
+    composites: {}
+  }
+
+  type StepConfirmationGetPayload<S extends boolean | null | undefined | StepConfirmationDefaultArgs> = $Result.GetResult<Prisma.$StepConfirmationPayload, S>
+
+  type StepConfirmationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StepConfirmationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StepConfirmationCountAggregateInputType | true
+    }
+
+  export interface StepConfirmationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StepConfirmation'], meta: { name: 'StepConfirmation' } }
+    /**
+     * Find zero or one StepConfirmation that matches the filter.
+     * @param {StepConfirmationFindUniqueArgs} args - Arguments to find a StepConfirmation
+     * @example
+     * // Get one StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StepConfirmationFindUniqueArgs>(args: SelectSubset<T, StepConfirmationFindUniqueArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StepConfirmation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StepConfirmationFindUniqueOrThrowArgs} args - Arguments to find a StepConfirmation
+     * @example
+     * // Get one StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StepConfirmationFindUniqueOrThrowArgs>(args: SelectSubset<T, StepConfirmationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StepConfirmation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationFindFirstArgs} args - Arguments to find a StepConfirmation
+     * @example
+     * // Get one StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StepConfirmationFindFirstArgs>(args?: SelectSubset<T, StepConfirmationFindFirstArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StepConfirmation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationFindFirstOrThrowArgs} args - Arguments to find a StepConfirmation
+     * @example
+     * // Get one StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StepConfirmationFindFirstOrThrowArgs>(args?: SelectSubset<T, StepConfirmationFindFirstOrThrowArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StepConfirmations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StepConfirmations
+     * const stepConfirmations = await prisma.stepConfirmation.findMany()
+     * 
+     * // Get first 10 StepConfirmations
+     * const stepConfirmations = await prisma.stepConfirmation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const stepConfirmationWithIdOnly = await prisma.stepConfirmation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StepConfirmationFindManyArgs>(args?: SelectSubset<T, StepConfirmationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StepConfirmation.
+     * @param {StepConfirmationCreateArgs} args - Arguments to create a StepConfirmation.
+     * @example
+     * // Create one StepConfirmation
+     * const StepConfirmation = await prisma.stepConfirmation.create({
+     *   data: {
+     *     // ... data to create a StepConfirmation
+     *   }
+     * })
+     * 
+     */
+    create<T extends StepConfirmationCreateArgs>(args: SelectSubset<T, StepConfirmationCreateArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StepConfirmations.
+     * @param {StepConfirmationCreateManyArgs} args - Arguments to create many StepConfirmations.
+     * @example
+     * // Create many StepConfirmations
+     * const stepConfirmation = await prisma.stepConfirmation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StepConfirmationCreateManyArgs>(args?: SelectSubset<T, StepConfirmationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StepConfirmations and returns the data saved in the database.
+     * @param {StepConfirmationCreateManyAndReturnArgs} args - Arguments to create many StepConfirmations.
+     * @example
+     * // Create many StepConfirmations
+     * const stepConfirmation = await prisma.stepConfirmation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StepConfirmations and only return the `id`
+     * const stepConfirmationWithIdOnly = await prisma.stepConfirmation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StepConfirmationCreateManyAndReturnArgs>(args?: SelectSubset<T, StepConfirmationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StepConfirmation.
+     * @param {StepConfirmationDeleteArgs} args - Arguments to delete one StepConfirmation.
+     * @example
+     * // Delete one StepConfirmation
+     * const StepConfirmation = await prisma.stepConfirmation.delete({
+     *   where: {
+     *     // ... filter to delete one StepConfirmation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StepConfirmationDeleteArgs>(args: SelectSubset<T, StepConfirmationDeleteArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StepConfirmation.
+     * @param {StepConfirmationUpdateArgs} args - Arguments to update one StepConfirmation.
+     * @example
+     * // Update one StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StepConfirmationUpdateArgs>(args: SelectSubset<T, StepConfirmationUpdateArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StepConfirmations.
+     * @param {StepConfirmationDeleteManyArgs} args - Arguments to filter StepConfirmations to delete.
+     * @example
+     * // Delete a few StepConfirmations
+     * const { count } = await prisma.stepConfirmation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StepConfirmationDeleteManyArgs>(args?: SelectSubset<T, StepConfirmationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StepConfirmations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StepConfirmations
+     * const stepConfirmation = await prisma.stepConfirmation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StepConfirmationUpdateManyArgs>(args: SelectSubset<T, StepConfirmationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StepConfirmations and returns the data updated in the database.
+     * @param {StepConfirmationUpdateManyAndReturnArgs} args - Arguments to update many StepConfirmations.
+     * @example
+     * // Update many StepConfirmations
+     * const stepConfirmation = await prisma.stepConfirmation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StepConfirmations and only return the `id`
+     * const stepConfirmationWithIdOnly = await prisma.stepConfirmation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StepConfirmationUpdateManyAndReturnArgs>(args: SelectSubset<T, StepConfirmationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StepConfirmation.
+     * @param {StepConfirmationUpsertArgs} args - Arguments to update or create a StepConfirmation.
+     * @example
+     * // Update or create a StepConfirmation
+     * const stepConfirmation = await prisma.stepConfirmation.upsert({
+     *   create: {
+     *     // ... data to create a StepConfirmation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StepConfirmation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StepConfirmationUpsertArgs>(args: SelectSubset<T, StepConfirmationUpsertArgs<ExtArgs>>): Prisma__StepConfirmationClient<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StepConfirmations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationCountArgs} args - Arguments to filter StepConfirmations to count.
+     * @example
+     * // Count the number of StepConfirmations
+     * const count = await prisma.stepConfirmation.count({
+     *   where: {
+     *     // ... the filter for the StepConfirmations we want to count
+     *   }
+     * })
+    **/
+    count<T extends StepConfirmationCountArgs>(
+      args?: Subset<T, StepConfirmationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StepConfirmationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StepConfirmation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StepConfirmationAggregateArgs>(args: Subset<T, StepConfirmationAggregateArgs>): Prisma.PrismaPromise<GetStepConfirmationAggregateType<T>>
+
+    /**
+     * Group by StepConfirmation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepConfirmationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StepConfirmationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StepConfirmationGroupByArgs['orderBy'] }
+        : { orderBy?: StepConfirmationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StepConfirmationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStepConfirmationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StepConfirmation model
+   */
+  readonly fields: StepConfirmationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StepConfirmation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StepConfirmationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    routingStep<T extends RoutingStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStepDefaultArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StepConfirmation model
+   */
+  interface StepConfirmationFieldRefs {
+    readonly id: FieldRef<"StepConfirmation", 'String'>
+    readonly stepId: FieldRef<"StepConfirmation", 'String'>
+    readonly workstationId: FieldRef<"StepConfirmation", 'String'>
+    readonly operatorName: FieldRef<"StepConfirmation", 'String'>
+    readonly operatorId: FieldRef<"StepConfirmation", 'String'>
+    readonly startTime: FieldRef<"StepConfirmation", 'DateTime'>
+    readonly endTime: FieldRef<"StepConfirmation", 'DateTime'>
+    readonly notes: FieldRef<"StepConfirmation", 'String'>
+    readonly photoUrl: FieldRef<"StepConfirmation", 'String'>
+    readonly flagged: FieldRef<"StepConfirmation", 'Boolean'>
+    readonly status: FieldRef<"StepConfirmation", 'ConfirmationStatus'>
+    readonly createdAt: FieldRef<"StepConfirmation", 'DateTime'>
+    readonly updatedAt: FieldRef<"StepConfirmation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StepConfirmation findUnique
+   */
+  export type StepConfirmationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter, which StepConfirmation to fetch.
+     */
+    where: StepConfirmationWhereUniqueInput
+  }
+
+  /**
+   * StepConfirmation findUniqueOrThrow
+   */
+  export type StepConfirmationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter, which StepConfirmation to fetch.
+     */
+    where: StepConfirmationWhereUniqueInput
+  }
+
+  /**
+   * StepConfirmation findFirst
+   */
+  export type StepConfirmationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter, which StepConfirmation to fetch.
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepConfirmations to fetch.
+     */
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StepConfirmations.
+     */
+    cursor?: StepConfirmationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepConfirmations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepConfirmations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StepConfirmations.
+     */
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * StepConfirmation findFirstOrThrow
+   */
+  export type StepConfirmationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter, which StepConfirmation to fetch.
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepConfirmations to fetch.
+     */
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StepConfirmations.
+     */
+    cursor?: StepConfirmationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepConfirmations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepConfirmations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StepConfirmations.
+     */
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * StepConfirmation findMany
+   */
+  export type StepConfirmationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter, which StepConfirmations to fetch.
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepConfirmations to fetch.
+     */
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StepConfirmations.
+     */
+    cursor?: StepConfirmationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepConfirmations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepConfirmations.
+     */
+    skip?: number
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * StepConfirmation create
+   */
+  export type StepConfirmationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StepConfirmation.
+     */
+    data: XOR<StepConfirmationCreateInput, StepConfirmationUncheckedCreateInput>
+  }
+
+  /**
+   * StepConfirmation createMany
+   */
+  export type StepConfirmationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StepConfirmations.
+     */
+    data: StepConfirmationCreateManyInput | StepConfirmationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StepConfirmation createManyAndReturn
+   */
+  export type StepConfirmationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * The data used to create many StepConfirmations.
+     */
+    data: StepConfirmationCreateManyInput | StepConfirmationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StepConfirmation update
+   */
+  export type StepConfirmationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StepConfirmation.
+     */
+    data: XOR<StepConfirmationUpdateInput, StepConfirmationUncheckedUpdateInput>
+    /**
+     * Choose, which StepConfirmation to update.
+     */
+    where: StepConfirmationWhereUniqueInput
+  }
+
+  /**
+   * StepConfirmation updateMany
+   */
+  export type StepConfirmationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StepConfirmations.
+     */
+    data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyInput>
+    /**
+     * Filter which StepConfirmations to update
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * Limit how many StepConfirmations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StepConfirmation updateManyAndReturn
+   */
+  export type StepConfirmationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * The data used to update StepConfirmations.
+     */
+    data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyInput>
+    /**
+     * Filter which StepConfirmations to update
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * Limit how many StepConfirmations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StepConfirmation upsert
+   */
+  export type StepConfirmationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StepConfirmation to update in case it exists.
+     */
+    where: StepConfirmationWhereUniqueInput
+    /**
+     * In case the StepConfirmation found by the `where` argument doesn't exist, create a new StepConfirmation with this data.
+     */
+    create: XOR<StepConfirmationCreateInput, StepConfirmationUncheckedCreateInput>
+    /**
+     * In case the StepConfirmation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StepConfirmationUpdateInput, StepConfirmationUncheckedUpdateInput>
+  }
+
+  /**
+   * StepConfirmation delete
+   */
+  export type StepConfirmationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    /**
+     * Filter which StepConfirmation to delete.
+     */
+    where: StepConfirmationWhereUniqueInput
+  }
+
+  /**
+   * StepConfirmation deleteMany
+   */
+  export type StepConfirmationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StepConfirmations to delete
+     */
+    where?: StepConfirmationWhereInput
+    /**
+     * Limit how many StepConfirmations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StepConfirmation without action
+   */
+  export type StepConfirmationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QCRecord
+   */
+
+  export type AggregateQCRecord = {
+    _count: QCRecordCountAggregateOutputType | null
+    _min: QCRecordMinAggregateOutputType | null
+    _max: QCRecordMaxAggregateOutputType | null
+  }
+
+  export type QCRecordMinAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    inspector: string | null
+    inspectionDate: Date | null
+    result: $Enums.QCResult | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QCRecordMaxAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    inspector: string | null
+    inspectionDate: Date | null
+    result: $Enums.QCResult | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QCRecordCountAggregateOutputType = {
+    id: number
+    batchId: number
+    inspector: number
+    inspectionDate: number
+    result: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QCRecordMinAggregateInputType = {
+    id?: true
+    batchId?: true
+    inspector?: true
+    inspectionDate?: true
+    result?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QCRecordMaxAggregateInputType = {
+    id?: true
+    batchId?: true
+    inspector?: true
+    inspectionDate?: true
+    result?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QCRecordCountAggregateInputType = {
+    id?: true
+    batchId?: true
+    inspector?: true
+    inspectionDate?: true
+    result?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QCRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QCRecord to aggregate.
+     */
+    where?: QCRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QCRecords to fetch.
+     */
+    orderBy?: QCRecordOrderByWithRelationInput | QCRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QCRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QCRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QCRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QCRecords
+    **/
+    _count?: true | QCRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QCRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QCRecordMaxAggregateInputType
+  }
+
+  export type GetQCRecordAggregateType<T extends QCRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateQCRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQCRecord[P]>
+      : GetScalarType<T[P], AggregateQCRecord[P]>
+  }
+
+
+
+
+  export type QCRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QCRecordWhereInput
+    orderBy?: QCRecordOrderByWithAggregationInput | QCRecordOrderByWithAggregationInput[]
+    by: QCRecordScalarFieldEnum[] | QCRecordScalarFieldEnum
+    having?: QCRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QCRecordCountAggregateInputType | true
+    _min?: QCRecordMinAggregateInputType
+    _max?: QCRecordMaxAggregateInputType
+  }
+
+  export type QCRecordGroupByOutputType = {
+    id: string
+    batchId: string
+    inspector: string
+    inspectionDate: Date
+    result: $Enums.QCResult
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QCRecordCountAggregateOutputType | null
+    _min: QCRecordMinAggregateOutputType | null
+    _max: QCRecordMaxAggregateOutputType | null
+  }
+
+  type GetQCRecordGroupByPayload<T extends QCRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QCRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QCRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QCRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], QCRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QCRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    inspector?: boolean
+    inspectionDate?: boolean
+    result?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["qCRecord"]>
+
+  export type QCRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    inspector?: boolean
+    inspectionDate?: boolean
+    result?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["qCRecord"]>
+
+  export type QCRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    inspector?: boolean
+    inspectionDate?: boolean
+    result?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["qCRecord"]>
+
+  export type QCRecordSelectScalar = {
+    id?: boolean
+    batchId?: boolean
+    inspector?: boolean
+    inspectionDate?: boolean
+    result?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QCRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "inspector" | "inspectionDate" | "result" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["qCRecord"]>
+  export type QCRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+  export type QCRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+  export type QCRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+
+  export type $QCRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QCRecord"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchId: string
+      inspector: string
+      inspectionDate: Date
+      result: $Enums.QCResult
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["qCRecord"]>
+    composites: {}
+  }
+
+  type QCRecordGetPayload<S extends boolean | null | undefined | QCRecordDefaultArgs> = $Result.GetResult<Prisma.$QCRecordPayload, S>
+
+  type QCRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QCRecordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QCRecordCountAggregateInputType | true
+    }
+
+  export interface QCRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QCRecord'], meta: { name: 'QCRecord' } }
+    /**
+     * Find zero or one QCRecord that matches the filter.
+     * @param {QCRecordFindUniqueArgs} args - Arguments to find a QCRecord
+     * @example
+     * // Get one QCRecord
+     * const qCRecord = await prisma.qCRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QCRecordFindUniqueArgs>(args: SelectSubset<T, QCRecordFindUniqueArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one QCRecord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QCRecordFindUniqueOrThrowArgs} args - Arguments to find a QCRecord
+     * @example
+     * // Get one QCRecord
+     * const qCRecord = await prisma.qCRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QCRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, QCRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QCRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordFindFirstArgs} args - Arguments to find a QCRecord
+     * @example
+     * // Get one QCRecord
+     * const qCRecord = await prisma.qCRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QCRecordFindFirstArgs>(args?: SelectSubset<T, QCRecordFindFirstArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QCRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordFindFirstOrThrowArgs} args - Arguments to find a QCRecord
+     * @example
+     * // Get one QCRecord
+     * const qCRecord = await prisma.qCRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QCRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, QCRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QCRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QCRecords
+     * const qCRecords = await prisma.qCRecord.findMany()
+     * 
+     * // Get first 10 QCRecords
+     * const qCRecords = await prisma.qCRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qCRecordWithIdOnly = await prisma.qCRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QCRecordFindManyArgs>(args?: SelectSubset<T, QCRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a QCRecord.
+     * @param {QCRecordCreateArgs} args - Arguments to create a QCRecord.
+     * @example
+     * // Create one QCRecord
+     * const QCRecord = await prisma.qCRecord.create({
+     *   data: {
+     *     // ... data to create a QCRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends QCRecordCreateArgs>(args: SelectSubset<T, QCRecordCreateArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many QCRecords.
+     * @param {QCRecordCreateManyArgs} args - Arguments to create many QCRecords.
+     * @example
+     * // Create many QCRecords
+     * const qCRecord = await prisma.qCRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QCRecordCreateManyArgs>(args?: SelectSubset<T, QCRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QCRecords and returns the data saved in the database.
+     * @param {QCRecordCreateManyAndReturnArgs} args - Arguments to create many QCRecords.
+     * @example
+     * // Create many QCRecords
+     * const qCRecord = await prisma.qCRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QCRecords and only return the `id`
+     * const qCRecordWithIdOnly = await prisma.qCRecord.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QCRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, QCRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a QCRecord.
+     * @param {QCRecordDeleteArgs} args - Arguments to delete one QCRecord.
+     * @example
+     * // Delete one QCRecord
+     * const QCRecord = await prisma.qCRecord.delete({
+     *   where: {
+     *     // ... filter to delete one QCRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QCRecordDeleteArgs>(args: SelectSubset<T, QCRecordDeleteArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one QCRecord.
+     * @param {QCRecordUpdateArgs} args - Arguments to update one QCRecord.
+     * @example
+     * // Update one QCRecord
+     * const qCRecord = await prisma.qCRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QCRecordUpdateArgs>(args: SelectSubset<T, QCRecordUpdateArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more QCRecords.
+     * @param {QCRecordDeleteManyArgs} args - Arguments to filter QCRecords to delete.
+     * @example
+     * // Delete a few QCRecords
+     * const { count } = await prisma.qCRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QCRecordDeleteManyArgs>(args?: SelectSubset<T, QCRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QCRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QCRecords
+     * const qCRecord = await prisma.qCRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QCRecordUpdateManyArgs>(args: SelectSubset<T, QCRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QCRecords and returns the data updated in the database.
+     * @param {QCRecordUpdateManyAndReturnArgs} args - Arguments to update many QCRecords.
+     * @example
+     * // Update many QCRecords
+     * const qCRecord = await prisma.qCRecord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more QCRecords and only return the `id`
+     * const qCRecordWithIdOnly = await prisma.qCRecord.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends QCRecordUpdateManyAndReturnArgs>(args: SelectSubset<T, QCRecordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one QCRecord.
+     * @param {QCRecordUpsertArgs} args - Arguments to update or create a QCRecord.
+     * @example
+     * // Update or create a QCRecord
+     * const qCRecord = await prisma.qCRecord.upsert({
+     *   create: {
+     *     // ... data to create a QCRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QCRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QCRecordUpsertArgs>(args: SelectSubset<T, QCRecordUpsertArgs<ExtArgs>>): Prisma__QCRecordClient<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of QCRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordCountArgs} args - Arguments to filter QCRecords to count.
+     * @example
+     * // Count the number of QCRecords
+     * const count = await prisma.qCRecord.count({
+     *   where: {
+     *     // ... the filter for the QCRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends QCRecordCountArgs>(
+      args?: Subset<T, QCRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QCRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QCRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QCRecordAggregateArgs>(args: Subset<T, QCRecordAggregateArgs>): Prisma.PrismaPromise<GetQCRecordAggregateType<T>>
+
+    /**
+     * Group by QCRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QCRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QCRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QCRecordGroupByArgs['orderBy'] }
+        : { orderBy?: QCRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QCRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQCRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QCRecord model
+   */
+  readonly fields: QCRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QCRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QCRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QCRecord model
+   */
+  interface QCRecordFieldRefs {
+    readonly id: FieldRef<"QCRecord", 'String'>
+    readonly batchId: FieldRef<"QCRecord", 'String'>
+    readonly inspector: FieldRef<"QCRecord", 'String'>
+    readonly inspectionDate: FieldRef<"QCRecord", 'DateTime'>
+    readonly result: FieldRef<"QCRecord", 'QCResult'>
+    readonly notes: FieldRef<"QCRecord", 'String'>
+    readonly createdAt: FieldRef<"QCRecord", 'DateTime'>
+    readonly updatedAt: FieldRef<"QCRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QCRecord findUnique
+   */
+  export type QCRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QCRecord to fetch.
+     */
+    where: QCRecordWhereUniqueInput
+  }
+
+  /**
+   * QCRecord findUniqueOrThrow
+   */
+  export type QCRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QCRecord to fetch.
+     */
+    where: QCRecordWhereUniqueInput
+  }
+
+  /**
+   * QCRecord findFirst
+   */
+  export type QCRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QCRecord to fetch.
+     */
+    where?: QCRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QCRecords to fetch.
+     */
+    orderBy?: QCRecordOrderByWithRelationInput | QCRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QCRecords.
+     */
+    cursor?: QCRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QCRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QCRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QCRecords.
+     */
+    distinct?: QCRecordScalarFieldEnum | QCRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QCRecord findFirstOrThrow
+   */
+  export type QCRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QCRecord to fetch.
+     */
+    where?: QCRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QCRecords to fetch.
+     */
+    orderBy?: QCRecordOrderByWithRelationInput | QCRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QCRecords.
+     */
+    cursor?: QCRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QCRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QCRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QCRecords.
+     */
+    distinct?: QCRecordScalarFieldEnum | QCRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QCRecord findMany
+   */
+  export type QCRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which QCRecords to fetch.
+     */
+    where?: QCRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QCRecords to fetch.
+     */
+    orderBy?: QCRecordOrderByWithRelationInput | QCRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QCRecords.
+     */
+    cursor?: QCRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QCRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QCRecords.
+     */
+    skip?: number
+    distinct?: QCRecordScalarFieldEnum | QCRecordScalarFieldEnum[]
+  }
+
+  /**
+   * QCRecord create
+   */
+  export type QCRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a QCRecord.
+     */
+    data: XOR<QCRecordCreateInput, QCRecordUncheckedCreateInput>
+  }
+
+  /**
+   * QCRecord createMany
+   */
+  export type QCRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QCRecords.
+     */
+    data: QCRecordCreateManyInput | QCRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QCRecord createManyAndReturn
+   */
+  export type QCRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * The data used to create many QCRecords.
+     */
+    data: QCRecordCreateManyInput | QCRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * QCRecord update
+   */
+  export type QCRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a QCRecord.
+     */
+    data: XOR<QCRecordUpdateInput, QCRecordUncheckedUpdateInput>
+    /**
+     * Choose, which QCRecord to update.
+     */
+    where: QCRecordWhereUniqueInput
+  }
+
+  /**
+   * QCRecord updateMany
+   */
+  export type QCRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QCRecords.
+     */
+    data: XOR<QCRecordUpdateManyMutationInput, QCRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which QCRecords to update
+     */
+    where?: QCRecordWhereInput
+    /**
+     * Limit how many QCRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QCRecord updateManyAndReturn
+   */
+  export type QCRecordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * The data used to update QCRecords.
+     */
+    data: XOR<QCRecordUpdateManyMutationInput, QCRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which QCRecords to update
+     */
+    where?: QCRecordWhereInput
+    /**
+     * Limit how many QCRecords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * QCRecord upsert
+   */
+  export type QCRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the QCRecord to update in case it exists.
+     */
+    where: QCRecordWhereUniqueInput
+    /**
+     * In case the QCRecord found by the `where` argument doesn't exist, create a new QCRecord with this data.
+     */
+    create: XOR<QCRecordCreateInput, QCRecordUncheckedCreateInput>
+    /**
+     * In case the QCRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QCRecordUpdateInput, QCRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * QCRecord delete
+   */
+  export type QCRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
+    /**
+     * Filter which QCRecord to delete.
+     */
+    where: QCRecordWhereUniqueInput
+  }
+
+  /**
+   * QCRecord deleteMany
+   */
+  export type QCRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QCRecords to delete
+     */
+    where?: QCRecordWhereInput
+    /**
+     * Limit how many QCRecords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * QCRecord without action
+   */
+  export type QCRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QCRecord
+     */
+    select?: QCRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QCRecord
+     */
+    omit?: QCRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QCRecordInclude<ExtArgs> | null
   }
 
 
@@ -8110,77 +12345,143 @@ export namespace Prisma {
   export const CustomerScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    contact: 'contact',
+    contactName: 'contactName',
     email: 'email',
     phone: 'phone',
-    company: 'company',
     billingAddress: 'billingAddress',
     shippingAddress: 'shippingAddress',
     notes: 'notes',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    relationStart: 'relationStart',
-    relationStatus: 'relationStatus'
+    updatedAt: 'updatedAt'
   };
 
   export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
 
 
-  export const AssetScalarFieldEnum: {
+  export const PurchaseOrderScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    categoryId: 'categoryId',
-    serial: 'serial',
-    locationId: 'locationId',
+    systemOrderId: 'systemOrderId',
     customerId: 'customerId',
-    status: 'status',
-    description: 'description',
+    poNumber: 'poNumber',
+    dueDate: 'dueDate',
+    priority: 'priority',
+    notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+  export type PurchaseOrderScalarFieldEnum = (typeof PurchaseOrderScalarFieldEnum)[keyof typeof PurchaseOrderScalarFieldEnum]
 
 
-  export const CategoryScalarFieldEnum: {
+  export const OrderLineItemScalarFieldEnum: {
     id: 'id',
-    name: 'name'
+    orderId: 'orderId',
+    partNumber: 'partNumber',
+    partName: 'partName',
+    drawingNumber: 'drawingNumber',
+    revisionLevel: 'revisionLevel',
+    quantity: 'quantity',
+    dueDate: 'dueDate',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
-  export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+  export type OrderLineItemScalarFieldEnum = (typeof OrderLineItemScalarFieldEnum)[keyof typeof OrderLineItemScalarFieldEnum]
 
 
-  export const LocationScalarFieldEnum: {
+  export const FileAttachmentScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    address: 'address'
+    lineItemId: 'lineItemId',
+    fileName: 'fileName',
+    fileType: 'fileType',
+    fileUrl: 'fileUrl',
+    uploadedBy: 'uploadedBy',
+    description: 'description',
+    createdAt: 'createdAt'
   };
 
-  export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
-
-
-  export const AssetHistoryScalarFieldEnum: {
-    id: 'id',
-    assetId: 'assetId',
-    action: 'action',
-    details: 'details',
-    customerId: 'customerId',
-    timestamp: 'timestamp'
-  };
-
-  export type AssetHistoryScalarFieldEnum = (typeof AssetHistoryScalarFieldEnum)[keyof typeof AssetHistoryScalarFieldEnum]
+  export type FileAttachmentScalarFieldEnum = (typeof FileAttachmentScalarFieldEnum)[keyof typeof FileAttachmentScalarFieldEnum]
 
 
   export const BatchScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    description: 'description',
+    batchId: 'batchId',
+    lineItemId: 'lineItemId',
+    quantity: 'quantity',
+    startDate: 'startDate',
+    estimatedCompletion: 'estimatedCompletion',
+    actualCompletion: 'actualCompletion',
+    priority: 'priority',
     status: 'status',
+    notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+  export const RoutingStepScalarFieldEnum: {
+    id: 'id',
+    batchId: 'batchId',
+    stepNumber: 'stepNumber',
+    workstationId: 'workstationId',
+    description: 'description',
+    required: 'required',
+    estimatedTime: 'estimatedTime',
+    notes: 'notes',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoutingStepScalarFieldEnum = (typeof RoutingStepScalarFieldEnum)[keyof typeof RoutingStepScalarFieldEnum]
+
+
+  export const WorkstationScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkstationScalarFieldEnum = (typeof WorkstationScalarFieldEnum)[keyof typeof WorkstationScalarFieldEnum]
+
+
+  export const StepConfirmationScalarFieldEnum: {
+    id: 'id',
+    stepId: 'stepId',
+    workstationId: 'workstationId',
+    operatorName: 'operatorName',
+    operatorId: 'operatorId',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    notes: 'notes',
+    photoUrl: 'photoUrl',
+    flagged: 'flagged',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StepConfirmationScalarFieldEnum = (typeof StepConfirmationScalarFieldEnum)[keyof typeof StepConfirmationScalarFieldEnum]
+
+
+  export const QCRecordScalarFieldEnum: {
+    id: 'id',
+    batchId: 'batchId',
+    inspector: 'inspector',
+    inspectionDate: 'inspectionDate',
+    result: 'result',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QCRecordScalarFieldEnum = (typeof QCRecordScalarFieldEnum)[keyof typeof QCRecordScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8241,30 +12542,44 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'RelationStatus'
+   * Reference to a field of type 'OrderPriority'
    */
-  export type EnumRelationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationStatus'>
+  export type EnumOrderPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderPriority'>
     
 
 
   /**
-   * Reference to a field of type 'RelationStatus[]'
+   * Reference to a field of type 'OrderPriority[]'
    */
-  export type ListEnumRelationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationStatus[]'>
+  export type ListEnumOrderPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderPriority[]'>
     
 
 
   /**
-   * Reference to a field of type 'AssetStatus'
+   * Reference to a field of type 'Int'
    */
-  export type EnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'AssetStatus[]'
+   * Reference to a field of type 'Int[]'
    */
-  export type ListEnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus[]'>
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchPriority'
+   */
+  export type EnumBatchPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchPriority'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchPriority[]'
+   */
+  export type ListEnumBatchPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchPriority[]'>
     
 
 
@@ -8283,16 +12598,65 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Boolean'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'StepStatus'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type EnumStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'StepStatus[]'
+   */
+  export type ListEnumStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ConfirmationStatus'
+   */
+  export type EnumConfirmationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConfirmationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ConfirmationStatus[]'
+   */
+  export type ListEnumConfirmationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConfirmationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'QCResult'
+   */
+  export type EnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult'>
+    
+
+
+  /**
+   * Reference to a field of type 'QCResult[]'
+   */
+  export type ListEnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -8305,37 +12669,29 @@ export namespace Prisma {
     NOT?: CustomerWhereInput | CustomerWhereInput[]
     id?: StringFilter<"Customer"> | string
     name?: StringFilter<"Customer"> | string
-    contact?: StringNullableFilter<"Customer"> | string | null
+    contactName?: StringNullableFilter<"Customer"> | string | null
     email?: StringNullableFilter<"Customer"> | string | null
     phone?: StringNullableFilter<"Customer"> | string | null
-    company?: StringNullableFilter<"Customer"> | string | null
     billingAddress?: StringNullableFilter<"Customer"> | string | null
     shippingAddress?: StringNullableFilter<"Customer"> | string | null
     notes?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
-    relationStart?: DateTimeFilter<"Customer"> | Date | string
-    relationStatus?: EnumRelationStatusFilter<"Customer"> | $Enums.RelationStatus
-    assets?: AssetListRelationFilter
-    history?: AssetHistoryListRelationFilter
+    purchaseOrders?: PurchaseOrderListRelationFilter
   }
 
   export type CustomerOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    contact?: SortOrderInput | SortOrder
+    contactName?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
-    company?: SortOrderInput | SortOrder
     billingAddress?: SortOrderInput | SortOrder
     shippingAddress?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    relationStart?: SortOrder
-    relationStatus?: SortOrder
-    assets?: AssetOrderByRelationAggregateInput
-    history?: AssetHistoryOrderByRelationAggregateInput
+    purchaseOrders?: PurchaseOrderOrderByRelationAggregateInput
   }
 
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -8345,34 +12701,27 @@ export namespace Prisma {
     OR?: CustomerWhereInput[]
     NOT?: CustomerWhereInput | CustomerWhereInput[]
     name?: StringFilter<"Customer"> | string
-    contact?: StringNullableFilter<"Customer"> | string | null
+    contactName?: StringNullableFilter<"Customer"> | string | null
     phone?: StringNullableFilter<"Customer"> | string | null
-    company?: StringNullableFilter<"Customer"> | string | null
     billingAddress?: StringNullableFilter<"Customer"> | string | null
     shippingAddress?: StringNullableFilter<"Customer"> | string | null
     notes?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
-    relationStart?: DateTimeFilter<"Customer"> | Date | string
-    relationStatus?: EnumRelationStatusFilter<"Customer"> | $Enums.RelationStatus
-    assets?: AssetListRelationFilter
-    history?: AssetHistoryListRelationFilter
+    purchaseOrders?: PurchaseOrderListRelationFilter
   }, "id" | "email">
 
   export type CustomerOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    contact?: SortOrderInput | SortOrder
+    contactName?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
-    company?: SortOrderInput | SortOrder
     billingAddress?: SortOrderInput | SortOrder
     shippingAddress?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    relationStart?: SortOrder
-    relationStatus?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
     _max?: CustomerMaxOrderByAggregateInput
     _min?: CustomerMinOrderByAggregateInput
@@ -8384,254 +12733,255 @@ export namespace Prisma {
     NOT?: CustomerScalarWhereWithAggregatesInput | CustomerScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Customer"> | string
     name?: StringWithAggregatesFilter<"Customer"> | string
-    contact?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    contactName?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     email?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Customer"> | string | null
-    company?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     billingAddress?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     shippingAddress?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
-    relationStart?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
-    relationStatus?: EnumRelationStatusWithAggregatesFilter<"Customer"> | $Enums.RelationStatus
   }
 
-  export type AssetWhereInput = {
-    AND?: AssetWhereInput | AssetWhereInput[]
-    OR?: AssetWhereInput[]
-    NOT?: AssetWhereInput | AssetWhereInput[]
-    id?: StringFilter<"Asset"> | string
-    name?: StringFilter<"Asset"> | string
-    categoryId?: StringFilter<"Asset"> | string
-    serial?: StringNullableFilter<"Asset"> | string | null
-    locationId?: StringNullableFilter<"Asset"> | string | null
-    customerId?: StringNullableFilter<"Asset"> | string | null
-    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
-    description?: StringNullableFilter<"Asset"> | string | null
-    createdAt?: DateTimeFilter<"Asset"> | Date | string
-    updatedAt?: DateTimeFilter<"Asset"> | Date | string
-    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
-    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
-    history?: AssetHistoryListRelationFilter
+  export type PurchaseOrderWhereInput = {
+    AND?: PurchaseOrderWhereInput | PurchaseOrderWhereInput[]
+    OR?: PurchaseOrderWhereInput[]
+    NOT?: PurchaseOrderWhereInput | PurchaseOrderWhereInput[]
+    id?: StringFilter<"PurchaseOrder"> | string
+    systemOrderId?: StringFilter<"PurchaseOrder"> | string
+    customerId?: StringFilter<"PurchaseOrder"> | string
+    poNumber?: StringFilter<"PurchaseOrder"> | string
+    dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
+    notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
+    lineItems?: OrderLineItemListRelationFilter
   }
 
-  export type AssetOrderByWithRelationInput = {
+  export type PurchaseOrderOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    categoryId?: SortOrder
-    serial?: SortOrderInput | SortOrder
-    locationId?: SortOrderInput | SortOrder
-    customerId?: SortOrderInput | SortOrder
-    status?: SortOrder
-    description?: SortOrderInput | SortOrder
+    systemOrderId?: SortOrder
+    customerId?: SortOrder
+    poNumber?: SortOrder
+    dueDate?: SortOrder
+    priority?: SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    category?: CategoryOrderByWithRelationInput
-    location?: LocationOrderByWithRelationInput
     customer?: CustomerOrderByWithRelationInput
-    history?: AssetHistoryOrderByRelationAggregateInput
+    lineItems?: OrderLineItemOrderByRelationAggregateInput
   }
 
-  export type AssetWhereUniqueInput = Prisma.AtLeast<{
+  export type PurchaseOrderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    serial?: string
-    AND?: AssetWhereInput | AssetWhereInput[]
-    OR?: AssetWhereInput[]
-    NOT?: AssetWhereInput | AssetWhereInput[]
-    name?: StringFilter<"Asset"> | string
-    categoryId?: StringFilter<"Asset"> | string
-    locationId?: StringNullableFilter<"Asset"> | string | null
-    customerId?: StringNullableFilter<"Asset"> | string | null
-    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
-    description?: StringNullableFilter<"Asset"> | string | null
-    createdAt?: DateTimeFilter<"Asset"> | Date | string
-    updatedAt?: DateTimeFilter<"Asset"> | Date | string
-    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
-    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
-    history?: AssetHistoryListRelationFilter
-  }, "id" | "serial">
+    systemOrderId?: string
+    AND?: PurchaseOrderWhereInput | PurchaseOrderWhereInput[]
+    OR?: PurchaseOrderWhereInput[]
+    NOT?: PurchaseOrderWhereInput | PurchaseOrderWhereInput[]
+    customerId?: StringFilter<"PurchaseOrder"> | string
+    poNumber?: StringFilter<"PurchaseOrder"> | string
+    dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
+    notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
+    lineItems?: OrderLineItemListRelationFilter
+  }, "id" | "systemOrderId">
 
-  export type AssetOrderByWithAggregationInput = {
+  export type PurchaseOrderOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    categoryId?: SortOrder
-    serial?: SortOrderInput | SortOrder
-    locationId?: SortOrderInput | SortOrder
-    customerId?: SortOrderInput | SortOrder
-    status?: SortOrder
-    description?: SortOrderInput | SortOrder
+    systemOrderId?: SortOrder
+    customerId?: SortOrder
+    poNumber?: SortOrder
+    dueDate?: SortOrder
+    priority?: SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: AssetCountOrderByAggregateInput
-    _max?: AssetMaxOrderByAggregateInput
-    _min?: AssetMinOrderByAggregateInput
+    _count?: PurchaseOrderCountOrderByAggregateInput
+    _max?: PurchaseOrderMaxOrderByAggregateInput
+    _min?: PurchaseOrderMinOrderByAggregateInput
   }
 
-  export type AssetScalarWhereWithAggregatesInput = {
-    AND?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
-    OR?: AssetScalarWhereWithAggregatesInput[]
-    NOT?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Asset"> | string
-    name?: StringWithAggregatesFilter<"Asset"> | string
-    categoryId?: StringWithAggregatesFilter<"Asset"> | string
-    serial?: StringNullableWithAggregatesFilter<"Asset"> | string | null
-    locationId?: StringNullableWithAggregatesFilter<"Asset"> | string | null
-    customerId?: StringNullableWithAggregatesFilter<"Asset"> | string | null
-    status?: EnumAssetStatusWithAggregatesFilter<"Asset"> | $Enums.AssetStatus
-    description?: StringNullableWithAggregatesFilter<"Asset"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+  export type PurchaseOrderScalarWhereWithAggregatesInput = {
+    AND?: PurchaseOrderScalarWhereWithAggregatesInput | PurchaseOrderScalarWhereWithAggregatesInput[]
+    OR?: PurchaseOrderScalarWhereWithAggregatesInput[]
+    NOT?: PurchaseOrderScalarWhereWithAggregatesInput | PurchaseOrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PurchaseOrder"> | string
+    systemOrderId?: StringWithAggregatesFilter<"PurchaseOrder"> | string
+    customerId?: StringWithAggregatesFilter<"PurchaseOrder"> | string
+    poNumber?: StringWithAggregatesFilter<"PurchaseOrder"> | string
+    dueDate?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
+    priority?: EnumOrderPriorityWithAggregatesFilter<"PurchaseOrder"> | $Enums.OrderPriority
+    notes?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
   }
 
-  export type CategoryWhereInput = {
-    AND?: CategoryWhereInput | CategoryWhereInput[]
-    OR?: CategoryWhereInput[]
-    NOT?: CategoryWhereInput | CategoryWhereInput[]
-    id?: StringFilter<"Category"> | string
-    name?: StringFilter<"Category"> | string
-    assets?: AssetListRelationFilter
+  export type OrderLineItemWhereInput = {
+    AND?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
+    OR?: OrderLineItemWhereInput[]
+    NOT?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
+    id?: StringFilter<"OrderLineItem"> | string
+    orderId?: StringFilter<"OrderLineItem"> | string
+    partNumber?: StringFilter<"OrderLineItem"> | string
+    partName?: StringFilter<"OrderLineItem"> | string
+    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
+    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    quantity?: IntFilter<"OrderLineItem"> | number
+    dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
+    notes?: StringNullableFilter<"OrderLineItem"> | string | null
+    createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+    purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    fileAttachments?: FileAttachmentListRelationFilter
+    batches?: BatchListRelationFilter
   }
 
-  export type CategoryOrderByWithRelationInput = {
+  export type OrderLineItemOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    assets?: AssetOrderByRelationAggregateInput
+    orderId?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    drawingNumber?: SortOrderInput | SortOrder
+    revisionLevel?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    purchaseOrder?: PurchaseOrderOrderByWithRelationInput
+    fileAttachments?: FileAttachmentOrderByRelationAggregateInput
+    batches?: BatchOrderByRelationAggregateInput
   }
 
-  export type CategoryWhereUniqueInput = Prisma.AtLeast<{
+  export type OrderLineItemWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    name?: string
-    AND?: CategoryWhereInput | CategoryWhereInput[]
-    OR?: CategoryWhereInput[]
-    NOT?: CategoryWhereInput | CategoryWhereInput[]
-    assets?: AssetListRelationFilter
-  }, "id" | "name">
-
-  export type CategoryOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    _count?: CategoryCountOrderByAggregateInput
-    _max?: CategoryMaxOrderByAggregateInput
-    _min?: CategoryMinOrderByAggregateInput
-  }
-
-  export type CategoryScalarWhereWithAggregatesInput = {
-    AND?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
-    OR?: CategoryScalarWhereWithAggregatesInput[]
-    NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Category"> | string
-    name?: StringWithAggregatesFilter<"Category"> | string
-  }
-
-  export type LocationWhereInput = {
-    AND?: LocationWhereInput | LocationWhereInput[]
-    OR?: LocationWhereInput[]
-    NOT?: LocationWhereInput | LocationWhereInput[]
-    id?: StringFilter<"Location"> | string
-    name?: StringFilter<"Location"> | string
-    address?: StringNullableFilter<"Location"> | string | null
-    assets?: AssetListRelationFilter
-  }
-
-  export type LocationOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    address?: SortOrderInput | SortOrder
-    assets?: AssetOrderByRelationAggregateInput
-  }
-
-  export type LocationWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    name?: string
-    AND?: LocationWhereInput | LocationWhereInput[]
-    OR?: LocationWhereInput[]
-    NOT?: LocationWhereInput | LocationWhereInput[]
-    address?: StringNullableFilter<"Location"> | string | null
-    assets?: AssetListRelationFilter
-  }, "id" | "name">
-
-  export type LocationOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    address?: SortOrderInput | SortOrder
-    _count?: LocationCountOrderByAggregateInput
-    _max?: LocationMaxOrderByAggregateInput
-    _min?: LocationMinOrderByAggregateInput
-  }
-
-  export type LocationScalarWhereWithAggregatesInput = {
-    AND?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
-    OR?: LocationScalarWhereWithAggregatesInput[]
-    NOT?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Location"> | string
-    name?: StringWithAggregatesFilter<"Location"> | string
-    address?: StringNullableWithAggregatesFilter<"Location"> | string | null
-  }
-
-  export type AssetHistoryWhereInput = {
-    AND?: AssetHistoryWhereInput | AssetHistoryWhereInput[]
-    OR?: AssetHistoryWhereInput[]
-    NOT?: AssetHistoryWhereInput | AssetHistoryWhereInput[]
-    id?: StringFilter<"AssetHistory"> | string
-    assetId?: StringFilter<"AssetHistory"> | string
-    action?: StringFilter<"AssetHistory"> | string
-    details?: StringNullableFilter<"AssetHistory"> | string | null
-    customerId?: StringNullableFilter<"AssetHistory"> | string | null
-    timestamp?: DateTimeFilter<"AssetHistory"> | Date | string
-    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
-    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
-  }
-
-  export type AssetHistoryOrderByWithRelationInput = {
-    id?: SortOrder
-    assetId?: SortOrder
-    action?: SortOrder
-    details?: SortOrderInput | SortOrder
-    customerId?: SortOrderInput | SortOrder
-    timestamp?: SortOrder
-    asset?: AssetOrderByWithRelationInput
-    customer?: CustomerOrderByWithRelationInput
-  }
-
-  export type AssetHistoryWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: AssetHistoryWhereInput | AssetHistoryWhereInput[]
-    OR?: AssetHistoryWhereInput[]
-    NOT?: AssetHistoryWhereInput | AssetHistoryWhereInput[]
-    assetId?: StringFilter<"AssetHistory"> | string
-    action?: StringFilter<"AssetHistory"> | string
-    details?: StringNullableFilter<"AssetHistory"> | string | null
-    customerId?: StringNullableFilter<"AssetHistory"> | string | null
-    timestamp?: DateTimeFilter<"AssetHistory"> | Date | string
-    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
-    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
+    AND?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
+    OR?: OrderLineItemWhereInput[]
+    NOT?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
+    orderId?: StringFilter<"OrderLineItem"> | string
+    partNumber?: StringFilter<"OrderLineItem"> | string
+    partName?: StringFilter<"OrderLineItem"> | string
+    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
+    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    quantity?: IntFilter<"OrderLineItem"> | number
+    dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
+    notes?: StringNullableFilter<"OrderLineItem"> | string | null
+    createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+    purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    fileAttachments?: FileAttachmentListRelationFilter
+    batches?: BatchListRelationFilter
   }, "id">
 
-  export type AssetHistoryOrderByWithAggregationInput = {
+  export type OrderLineItemOrderByWithAggregationInput = {
     id?: SortOrder
-    assetId?: SortOrder
-    action?: SortOrder
-    details?: SortOrderInput | SortOrder
-    customerId?: SortOrderInput | SortOrder
-    timestamp?: SortOrder
-    _count?: AssetHistoryCountOrderByAggregateInput
-    _max?: AssetHistoryMaxOrderByAggregateInput
-    _min?: AssetHistoryMinOrderByAggregateInput
+    orderId?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    drawingNumber?: SortOrderInput | SortOrder
+    revisionLevel?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrderLineItemCountOrderByAggregateInput
+    _avg?: OrderLineItemAvgOrderByAggregateInput
+    _max?: OrderLineItemMaxOrderByAggregateInput
+    _min?: OrderLineItemMinOrderByAggregateInput
+    _sum?: OrderLineItemSumOrderByAggregateInput
   }
 
-  export type AssetHistoryScalarWhereWithAggregatesInput = {
-    AND?: AssetHistoryScalarWhereWithAggregatesInput | AssetHistoryScalarWhereWithAggregatesInput[]
-    OR?: AssetHistoryScalarWhereWithAggregatesInput[]
-    NOT?: AssetHistoryScalarWhereWithAggregatesInput | AssetHistoryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AssetHistory"> | string
-    assetId?: StringWithAggregatesFilter<"AssetHistory"> | string
-    action?: StringWithAggregatesFilter<"AssetHistory"> | string
-    details?: StringNullableWithAggregatesFilter<"AssetHistory"> | string | null
-    customerId?: StringNullableWithAggregatesFilter<"AssetHistory"> | string | null
-    timestamp?: DateTimeWithAggregatesFilter<"AssetHistory"> | Date | string
+  export type OrderLineItemScalarWhereWithAggregatesInput = {
+    AND?: OrderLineItemScalarWhereWithAggregatesInput | OrderLineItemScalarWhereWithAggregatesInput[]
+    OR?: OrderLineItemScalarWhereWithAggregatesInput[]
+    NOT?: OrderLineItemScalarWhereWithAggregatesInput | OrderLineItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OrderLineItem"> | string
+    orderId?: StringWithAggregatesFilter<"OrderLineItem"> | string
+    partNumber?: StringWithAggregatesFilter<"OrderLineItem"> | string
+    partName?: StringWithAggregatesFilter<"OrderLineItem"> | string
+    drawingNumber?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
+    revisionLevel?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
+    quantity?: IntWithAggregatesFilter<"OrderLineItem"> | number
+    dueDate?: DateTimeNullableWithAggregatesFilter<"OrderLineItem"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OrderLineItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OrderLineItem"> | Date | string
+  }
+
+  export type FileAttachmentWhereInput = {
+    AND?: FileAttachmentWhereInput | FileAttachmentWhereInput[]
+    OR?: FileAttachmentWhereInput[]
+    NOT?: FileAttachmentWhereInput | FileAttachmentWhereInput[]
+    id?: StringFilter<"FileAttachment"> | string
+    lineItemId?: StringFilter<"FileAttachment"> | string
+    fileName?: StringFilter<"FileAttachment"> | string
+    fileType?: StringFilter<"FileAttachment"> | string
+    fileUrl?: StringFilter<"FileAttachment"> | string
+    uploadedBy?: StringFilter<"FileAttachment"> | string
+    description?: StringNullableFilter<"FileAttachment"> | string | null
+    createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
+    lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
+  }
+
+  export type FileAttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    lineItemId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    fileUrl?: SortOrder
+    uploadedBy?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    lineItem?: OrderLineItemOrderByWithRelationInput
+  }
+
+  export type FileAttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FileAttachmentWhereInput | FileAttachmentWhereInput[]
+    OR?: FileAttachmentWhereInput[]
+    NOT?: FileAttachmentWhereInput | FileAttachmentWhereInput[]
+    lineItemId?: StringFilter<"FileAttachment"> | string
+    fileName?: StringFilter<"FileAttachment"> | string
+    fileType?: StringFilter<"FileAttachment"> | string
+    fileUrl?: StringFilter<"FileAttachment"> | string
+    uploadedBy?: StringFilter<"FileAttachment"> | string
+    description?: StringNullableFilter<"FileAttachment"> | string | null
+    createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
+    lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
+  }, "id">
+
+  export type FileAttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    lineItemId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    fileUrl?: SortOrder
+    uploadedBy?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FileAttachmentCountOrderByAggregateInput
+    _max?: FileAttachmentMaxOrderByAggregateInput
+    _min?: FileAttachmentMinOrderByAggregateInput
+  }
+
+  export type FileAttachmentScalarWhereWithAggregatesInput = {
+    AND?: FileAttachmentScalarWhereWithAggregatesInput | FileAttachmentScalarWhereWithAggregatesInput[]
+    OR?: FileAttachmentScalarWhereWithAggregatesInput[]
+    NOT?: FileAttachmentScalarWhereWithAggregatesInput | FileAttachmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FileAttachment"> | string
+    lineItemId?: StringWithAggregatesFilter<"FileAttachment"> | string
+    fileName?: StringWithAggregatesFilter<"FileAttachment"> | string
+    fileType?: StringWithAggregatesFilter<"FileAttachment"> | string
+    fileUrl?: StringWithAggregatesFilter<"FileAttachment"> | string
+    uploadedBy?: StringWithAggregatesFilter<"FileAttachment"> | string
+    description?: StringNullableWithAggregatesFilter<"FileAttachment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FileAttachment"> | Date | string
   }
 
   export type BatchWhereInput = {
@@ -8639,44 +12989,79 @@ export namespace Prisma {
     OR?: BatchWhereInput[]
     NOT?: BatchWhereInput | BatchWhereInput[]
     id?: StringFilter<"Batch"> | string
-    name?: StringFilter<"Batch"> | string
-    description?: StringNullableFilter<"Batch"> | string | null
+    batchId?: StringFilter<"Batch"> | string
+    lineItemId?: StringFilter<"Batch"> | string
+    quantity?: IntFilter<"Batch"> | number
+    startDate?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    estimatedCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    actualCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    priority?: EnumBatchPriorityFilter<"Batch"> | $Enums.BatchPriority
     status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    notes?: StringNullableFilter<"Batch"> | string | null
     createdAt?: DateTimeFilter<"Batch"> | Date | string
     updatedAt?: DateTimeFilter<"Batch"> | Date | string
+    lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
+    routingSteps?: RoutingStepListRelationFilter
+    qcRecords?: QCRecordListRelationFilter
   }
 
   export type BatchOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
+    batchId?: SortOrder
+    lineItemId?: SortOrder
+    quantity?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    estimatedCompletion?: SortOrderInput | SortOrder
+    actualCompletion?: SortOrderInput | SortOrder
+    priority?: SortOrder
     status?: SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lineItem?: OrderLineItemOrderByWithRelationInput
+    routingSteps?: RoutingStepOrderByRelationAggregateInput
+    qcRecords?: QCRecordOrderByRelationAggregateInput
   }
 
   export type BatchWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    batchId?: string
     AND?: BatchWhereInput | BatchWhereInput[]
     OR?: BatchWhereInput[]
     NOT?: BatchWhereInput | BatchWhereInput[]
-    name?: StringFilter<"Batch"> | string
-    description?: StringNullableFilter<"Batch"> | string | null
+    lineItemId?: StringFilter<"Batch"> | string
+    quantity?: IntFilter<"Batch"> | number
+    startDate?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    estimatedCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    actualCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    priority?: EnumBatchPriorityFilter<"Batch"> | $Enums.BatchPriority
     status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    notes?: StringNullableFilter<"Batch"> | string | null
     createdAt?: DateTimeFilter<"Batch"> | Date | string
     updatedAt?: DateTimeFilter<"Batch"> | Date | string
-  }, "id">
+    lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
+    routingSteps?: RoutingStepListRelationFilter
+    qcRecords?: QCRecordListRelationFilter
+  }, "id" | "batchId">
 
   export type BatchOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
+    batchId?: SortOrder
+    lineItemId?: SortOrder
+    quantity?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    estimatedCompletion?: SortOrderInput | SortOrder
+    actualCompletion?: SortOrderInput | SortOrder
+    priority?: SortOrder
     status?: SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BatchCountOrderByAggregateInput
+    _avg?: BatchAvgOrderByAggregateInput
     _max?: BatchMaxOrderByAggregateInput
     _min?: BatchMinOrderByAggregateInput
+    _sum?: BatchSumOrderByAggregateInput
   }
 
   export type BatchScalarWhereWithAggregatesInput = {
@@ -8684,430 +13069,1172 @@ export namespace Prisma {
     OR?: BatchScalarWhereWithAggregatesInput[]
     NOT?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Batch"> | string
-    name?: StringWithAggregatesFilter<"Batch"> | string
-    description?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    batchId?: StringWithAggregatesFilter<"Batch"> | string
+    lineItemId?: StringWithAggregatesFilter<"Batch"> | string
+    quantity?: IntWithAggregatesFilter<"Batch"> | number
+    startDate?: DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
+    estimatedCompletion?: DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
+    actualCompletion?: DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
+    priority?: EnumBatchPriorityWithAggregatesFilter<"Batch"> | $Enums.BatchPriority
     status?: EnumBatchStatusWithAggregatesFilter<"Batch"> | $Enums.BatchStatus
+    notes?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+  }
+
+  export type RoutingStepWhereInput = {
+    AND?: RoutingStepWhereInput | RoutingStepWhereInput[]
+    OR?: RoutingStepWhereInput[]
+    NOT?: RoutingStepWhereInput | RoutingStepWhereInput[]
+    id?: StringFilter<"RoutingStep"> | string
+    batchId?: StringFilter<"RoutingStep"> | string
+    stepNumber?: IntFilter<"RoutingStep"> | number
+    workstationId?: StringFilter<"RoutingStep"> | string
+    description?: StringFilter<"RoutingStep"> | string
+    required?: BoolFilter<"RoutingStep"> | boolean
+    estimatedTime?: IntNullableFilter<"RoutingStep"> | number | null
+    notes?: StringNullableFilter<"RoutingStep"> | string | null
+    status?: EnumStepStatusFilter<"RoutingStep"> | $Enums.StepStatus
+    createdAt?: DateTimeFilter<"RoutingStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingStep"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+    confirmations?: StepConfirmationListRelationFilter
+  }
+
+  export type RoutingStepOrderByWithRelationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    required?: SortOrder
+    estimatedTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    workstation?: WorkstationOrderByWithRelationInput
+    confirmations?: StepConfirmationOrderByRelationAggregateInput
+  }
+
+  export type RoutingStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batchId_stepNumber?: RoutingStepBatchIdStepNumberCompoundUniqueInput
+    AND?: RoutingStepWhereInput | RoutingStepWhereInput[]
+    OR?: RoutingStepWhereInput[]
+    NOT?: RoutingStepWhereInput | RoutingStepWhereInput[]
+    batchId?: StringFilter<"RoutingStep"> | string
+    stepNumber?: IntFilter<"RoutingStep"> | number
+    workstationId?: StringFilter<"RoutingStep"> | string
+    description?: StringFilter<"RoutingStep"> | string
+    required?: BoolFilter<"RoutingStep"> | boolean
+    estimatedTime?: IntNullableFilter<"RoutingStep"> | number | null
+    notes?: StringNullableFilter<"RoutingStep"> | string | null
+    status?: EnumStepStatusFilter<"RoutingStep"> | $Enums.StepStatus
+    createdAt?: DateTimeFilter<"RoutingStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingStep"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+    confirmations?: StepConfirmationListRelationFilter
+  }, "id" | "batchId_stepNumber">
+
+  export type RoutingStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    required?: SortOrder
+    estimatedTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoutingStepCountOrderByAggregateInput
+    _avg?: RoutingStepAvgOrderByAggregateInput
+    _max?: RoutingStepMaxOrderByAggregateInput
+    _min?: RoutingStepMinOrderByAggregateInput
+    _sum?: RoutingStepSumOrderByAggregateInput
+  }
+
+  export type RoutingStepScalarWhereWithAggregatesInput = {
+    AND?: RoutingStepScalarWhereWithAggregatesInput | RoutingStepScalarWhereWithAggregatesInput[]
+    OR?: RoutingStepScalarWhereWithAggregatesInput[]
+    NOT?: RoutingStepScalarWhereWithAggregatesInput | RoutingStepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RoutingStep"> | string
+    batchId?: StringWithAggregatesFilter<"RoutingStep"> | string
+    stepNumber?: IntWithAggregatesFilter<"RoutingStep"> | number
+    workstationId?: StringWithAggregatesFilter<"RoutingStep"> | string
+    description?: StringWithAggregatesFilter<"RoutingStep"> | string
+    required?: BoolWithAggregatesFilter<"RoutingStep"> | boolean
+    estimatedTime?: IntNullableWithAggregatesFilter<"RoutingStep"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"RoutingStep"> | string | null
+    status?: EnumStepStatusWithAggregatesFilter<"RoutingStep"> | $Enums.StepStatus
+    createdAt?: DateTimeWithAggregatesFilter<"RoutingStep"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RoutingStep"> | Date | string
+  }
+
+  export type WorkstationWhereInput = {
+    AND?: WorkstationWhereInput | WorkstationWhereInput[]
+    OR?: WorkstationWhereInput[]
+    NOT?: WorkstationWhereInput | WorkstationWhereInput[]
+    id?: StringFilter<"Workstation"> | string
+    name?: StringFilter<"Workstation"> | string
+    description?: StringNullableFilter<"Workstation"> | string | null
+    active?: BoolFilter<"Workstation"> | boolean
+    createdAt?: DateTimeFilter<"Workstation"> | Date | string
+    updatedAt?: DateTimeFilter<"Workstation"> | Date | string
+    routingSteps?: RoutingStepListRelationFilter
+    confirmations?: StepConfirmationListRelationFilter
+  }
+
+  export type WorkstationOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    routingSteps?: RoutingStepOrderByRelationAggregateInput
+    confirmations?: StepConfirmationOrderByRelationAggregateInput
+  }
+
+  export type WorkstationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: WorkstationWhereInput | WorkstationWhereInput[]
+    OR?: WorkstationWhereInput[]
+    NOT?: WorkstationWhereInput | WorkstationWhereInput[]
+    description?: StringNullableFilter<"Workstation"> | string | null
+    active?: BoolFilter<"Workstation"> | boolean
+    createdAt?: DateTimeFilter<"Workstation"> | Date | string
+    updatedAt?: DateTimeFilter<"Workstation"> | Date | string
+    routingSteps?: RoutingStepListRelationFilter
+    confirmations?: StepConfirmationListRelationFilter
+  }, "id" | "name">
+
+  export type WorkstationOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkstationCountOrderByAggregateInput
+    _max?: WorkstationMaxOrderByAggregateInput
+    _min?: WorkstationMinOrderByAggregateInput
+  }
+
+  export type WorkstationScalarWhereWithAggregatesInput = {
+    AND?: WorkstationScalarWhereWithAggregatesInput | WorkstationScalarWhereWithAggregatesInput[]
+    OR?: WorkstationScalarWhereWithAggregatesInput[]
+    NOT?: WorkstationScalarWhereWithAggregatesInput | WorkstationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Workstation"> | string
+    name?: StringWithAggregatesFilter<"Workstation"> | string
+    description?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
+    active?: BoolWithAggregatesFilter<"Workstation"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Workstation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Workstation"> | Date | string
+  }
+
+  export type StepConfirmationWhereInput = {
+    AND?: StepConfirmationWhereInput | StepConfirmationWhereInput[]
+    OR?: StepConfirmationWhereInput[]
+    NOT?: StepConfirmationWhereInput | StepConfirmationWhereInput[]
+    id?: StringFilter<"StepConfirmation"> | string
+    stepId?: StringFilter<"StepConfirmation"> | string
+    workstationId?: StringFilter<"StepConfirmation"> | string
+    operatorName?: StringFilter<"StepConfirmation"> | string
+    operatorId?: StringNullableFilter<"StepConfirmation"> | string | null
+    startTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    notes?: StringNullableFilter<"StepConfirmation"> | string | null
+    photoUrl?: StringNullableFilter<"StepConfirmation"> | string | null
+    flagged?: BoolFilter<"StepConfirmation"> | boolean
+    status?: EnumConfirmationStatusFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+    updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+    routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }
+
+  export type StepConfirmationOrderByWithRelationInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    workstationId?: SortOrder
+    operatorName?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    startTime?: SortOrderInput | SortOrder
+    endTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    flagged?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    routingStep?: RoutingStepOrderByWithRelationInput
+    workstation?: WorkstationOrderByWithRelationInput
+  }
+
+  export type StepConfirmationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StepConfirmationWhereInput | StepConfirmationWhereInput[]
+    OR?: StepConfirmationWhereInput[]
+    NOT?: StepConfirmationWhereInput | StepConfirmationWhereInput[]
+    stepId?: StringFilter<"StepConfirmation"> | string
+    workstationId?: StringFilter<"StepConfirmation"> | string
+    operatorName?: StringFilter<"StepConfirmation"> | string
+    operatorId?: StringNullableFilter<"StepConfirmation"> | string | null
+    startTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    notes?: StringNullableFilter<"StepConfirmation"> | string | null
+    photoUrl?: StringNullableFilter<"StepConfirmation"> | string | null
+    flagged?: BoolFilter<"StepConfirmation"> | boolean
+    status?: EnumConfirmationStatusFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+    updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+    routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }, "id">
+
+  export type StepConfirmationOrderByWithAggregationInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    workstationId?: SortOrder
+    operatorName?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    startTime?: SortOrderInput | SortOrder
+    endTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    flagged?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StepConfirmationCountOrderByAggregateInput
+    _max?: StepConfirmationMaxOrderByAggregateInput
+    _min?: StepConfirmationMinOrderByAggregateInput
+  }
+
+  export type StepConfirmationScalarWhereWithAggregatesInput = {
+    AND?: StepConfirmationScalarWhereWithAggregatesInput | StepConfirmationScalarWhereWithAggregatesInput[]
+    OR?: StepConfirmationScalarWhereWithAggregatesInput[]
+    NOT?: StepConfirmationScalarWhereWithAggregatesInput | StepConfirmationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StepConfirmation"> | string
+    stepId?: StringWithAggregatesFilter<"StepConfirmation"> | string
+    workstationId?: StringWithAggregatesFilter<"StepConfirmation"> | string
+    operatorName?: StringWithAggregatesFilter<"StepConfirmation"> | string
+    operatorId?: StringNullableWithAggregatesFilter<"StepConfirmation"> | string | null
+    startTime?: DateTimeNullableWithAggregatesFilter<"StepConfirmation"> | Date | string | null
+    endTime?: DateTimeNullableWithAggregatesFilter<"StepConfirmation"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"StepConfirmation"> | string | null
+    photoUrl?: StringNullableWithAggregatesFilter<"StepConfirmation"> | string | null
+    flagged?: BoolWithAggregatesFilter<"StepConfirmation"> | boolean
+    status?: EnumConfirmationStatusWithAggregatesFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
+    createdAt?: DateTimeWithAggregatesFilter<"StepConfirmation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StepConfirmation"> | Date | string
+  }
+
+  export type QCRecordWhereInput = {
+    AND?: QCRecordWhereInput | QCRecordWhereInput[]
+    OR?: QCRecordWhereInput[]
+    NOT?: QCRecordWhereInput | QCRecordWhereInput[]
+    id?: StringFilter<"QCRecord"> | string
+    batchId?: StringFilter<"QCRecord"> | string
+    inspector?: StringFilter<"QCRecord"> | string
+    inspectionDate?: DateTimeFilter<"QCRecord"> | Date | string
+    result?: EnumQCResultFilter<"QCRecord"> | $Enums.QCResult
+    notes?: StringNullableFilter<"QCRecord"> | string | null
+    createdAt?: DateTimeFilter<"QCRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"QCRecord"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+  }
+
+  export type QCRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    inspector?: SortOrder
+    inspectionDate?: SortOrder
+    result?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+  }
+
+  export type QCRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QCRecordWhereInput | QCRecordWhereInput[]
+    OR?: QCRecordWhereInput[]
+    NOT?: QCRecordWhereInput | QCRecordWhereInput[]
+    batchId?: StringFilter<"QCRecord"> | string
+    inspector?: StringFilter<"QCRecord"> | string
+    inspectionDate?: DateTimeFilter<"QCRecord"> | Date | string
+    result?: EnumQCResultFilter<"QCRecord"> | $Enums.QCResult
+    notes?: StringNullableFilter<"QCRecord"> | string | null
+    createdAt?: DateTimeFilter<"QCRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"QCRecord"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+  }, "id">
+
+  export type QCRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    inspector?: SortOrder
+    inspectionDate?: SortOrder
+    result?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QCRecordCountOrderByAggregateInput
+    _max?: QCRecordMaxOrderByAggregateInput
+    _min?: QCRecordMinOrderByAggregateInput
+  }
+
+  export type QCRecordScalarWhereWithAggregatesInput = {
+    AND?: QCRecordScalarWhereWithAggregatesInput | QCRecordScalarWhereWithAggregatesInput[]
+    OR?: QCRecordScalarWhereWithAggregatesInput[]
+    NOT?: QCRecordScalarWhereWithAggregatesInput | QCRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QCRecord"> | string
+    batchId?: StringWithAggregatesFilter<"QCRecord"> | string
+    inspector?: StringWithAggregatesFilter<"QCRecord"> | string
+    inspectionDate?: DateTimeWithAggregatesFilter<"QCRecord"> | Date | string
+    result?: EnumQCResultWithAggregatesFilter<"QCRecord"> | $Enums.QCResult
+    notes?: StringNullableWithAggregatesFilter<"QCRecord"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QCRecord"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QCRecord"> | Date | string
   }
 
   export type CustomerCreateInput = {
     id?: string
     name: string
-    contact?: string | null
+    contactName?: string | null
     email?: string | null
     phone?: string | null
-    company?: string | null
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    assets?: AssetCreateNestedManyWithoutCustomerInput
-    history?: AssetHistoryCreateNestedManyWithoutCustomerInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateInput = {
     id?: string
     name: string
-    contact?: string | null
+    contactName?: string | null
     email?: string | null
     phone?: string | null
-    company?: string | null
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    assets?: AssetUncheckedCreateNestedManyWithoutCustomerInput
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutCustomerInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    assets?: AssetUpdateManyWithoutCustomerNestedInput
-    history?: AssetHistoryUpdateManyWithoutCustomerNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    assets?: AssetUncheckedUpdateManyWithoutCustomerNestedInput
-    history?: AssetHistoryUncheckedUpdateManyWithoutCustomerNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerCreateManyInput = {
     id?: string
     name: string
-    contact?: string | null
+    contactName?: string | null
     email?: string | null
     phone?: string | null
-    company?: string | null
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
   }
 
   export type CustomerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
   }
 
   export type CustomerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
   }
 
-  export type AssetCreateInput = {
+  export type PurchaseOrderCreateInput = {
     id?: string
-    name: string
-    serial?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    category: CategoryCreateNestedOneWithoutAssetsInput
-    location?: LocationCreateNestedOneWithoutAssetsInput
-    customer?: CustomerCreateNestedOneWithoutAssetsInput
-    history?: AssetHistoryCreateNestedManyWithoutAssetInput
+    customer: CustomerCreateNestedOneWithoutPurchaseOrdersInput
+    lineItems?: OrderLineItemCreateNestedManyWithoutPurchaseOrderInput
   }
 
-  export type AssetUncheckedCreateInput = {
+  export type PurchaseOrderUncheckedCreateInput = {
     id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    locationId?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    customerId: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutAssetInput
+    lineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
-  export type AssetUpdateInput = {
+  export type PurchaseOrderUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutAssetsNestedInput
-    location?: LocationUpdateOneWithoutAssetsNestedInput
-    customer?: CustomerUpdateOneWithoutAssetsNestedInput
-    history?: AssetHistoryUpdateManyWithoutAssetNestedInput
+    customer?: CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput
+    lineItems?: OrderLineItemUpdateManyWithoutPurchaseOrderNestedInput
   }
 
-  export type AssetUncheckedUpdateInput = {
+  export type PurchaseOrderUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: AssetHistoryUncheckedUpdateManyWithoutAssetNestedInput
+    lineItems?: OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
 
-  export type AssetCreateManyInput = {
+  export type PurchaseOrderCreateManyInput = {
     id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    locationId?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    customerId: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AssetUpdateManyMutationInput = {
+  export type PurchaseOrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AssetUncheckedUpdateManyInput = {
+  export type PurchaseOrderUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CategoryCreateInput = {
+  export type OrderLineItemCreateInput = {
     id?: string
-    name: string
-    assets?: AssetCreateNestedManyWithoutCategoryInput
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
+    batches?: BatchCreateNestedManyWithoutLineItemInput
   }
 
-  export type CategoryUncheckedCreateInput = {
+  export type OrderLineItemUncheckedCreateInput = {
     id?: string
-    name: string
-    assets?: AssetUncheckedCreateNestedManyWithoutCategoryInput
+    orderId: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fileAttachments?: FileAttachmentUncheckedCreateNestedManyWithoutLineItemInput
+    batches?: BatchUncheckedCreateNestedManyWithoutLineItemInput
   }
 
-  export type CategoryUpdateInput = {
+  export type OrderLineItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    assets?: AssetUpdateManyWithoutCategoryNestedInput
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUpdateManyWithoutLineItemNestedInput
   }
 
-  export type CategoryUncheckedUpdateInput = {
+  export type OrderLineItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    assets?: AssetUncheckedUpdateManyWithoutCategoryNestedInput
+    orderId?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fileAttachments?: FileAttachmentUncheckedUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutLineItemNestedInput
   }
 
-  export type CategoryCreateManyInput = {
+  export type OrderLineItemCreateManyInput = {
     id?: string
-    name: string
+    orderId: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type CategoryUpdateManyMutationInput = {
+  export type OrderLineItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CategoryUncheckedUpdateManyInput = {
+  export type OrderLineItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LocationCreateInput = {
+  export type FileAttachmentCreateInput = {
     id?: string
-    name: string
-    address?: string | null
-    assets?: AssetCreateNestedManyWithoutLocationInput
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description?: string | null
+    createdAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutFileAttachmentsInput
   }
 
-  export type LocationUncheckedCreateInput = {
+  export type FileAttachmentUncheckedCreateInput = {
     id?: string
-    name: string
-    address?: string | null
-    assets?: AssetUncheckedCreateNestedManyWithoutLocationInput
+    lineItemId: string
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description?: string | null
+    createdAt?: Date | string
   }
 
-  export type LocationUpdateInput = {
+  export type FileAttachmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    assets?: AssetUpdateManyWithoutLocationNestedInput
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutFileAttachmentsNestedInput
   }
 
-  export type LocationUncheckedUpdateInput = {
+  export type FileAttachmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    assets?: AssetUncheckedUpdateManyWithoutLocationNestedInput
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LocationCreateManyInput = {
+  export type FileAttachmentCreateManyInput = {
     id?: string
-    name: string
-    address?: string | null
+    lineItemId: string
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description?: string | null
+    createdAt?: Date | string
   }
 
-  export type LocationUpdateManyMutationInput = {
+  export type FileAttachmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LocationUncheckedUpdateManyInput = {
+  export type FileAttachmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type AssetHistoryCreateInput = {
-    id?: string
-    action: string
-    details?: string | null
-    timestamp?: Date | string
-    asset: AssetCreateNestedOneWithoutHistoryInput
-    customer?: CustomerCreateNestedOneWithoutHistoryInput
-  }
-
-  export type AssetHistoryUncheckedCreateInput = {
-    id?: string
-    assetId: string
-    action: string
-    details?: string | null
-    customerId?: string | null
-    timestamp?: Date | string
-  }
-
-  export type AssetHistoryUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    asset?: AssetUpdateOneRequiredWithoutHistoryNestedInput
-    customer?: CustomerUpdateOneWithoutHistoryNestedInput
-  }
-
-  export type AssetHistoryUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    assetId?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryCreateManyInput = {
-    id?: string
-    assetId: string
-    action: string
-    details?: string | null
-    customerId?: string | null
-    timestamp?: Date | string
-  }
-
-  export type AssetHistoryUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    assetId?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BatchCreateInput = {
     id?: string
-    name: string
-    description?: string | null
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
     status?: $Enums.BatchStatus
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
+    routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateInput = {
     id?: string
-    name: string
-    description?: string | null
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
     status?: $Enums.BatchStatus
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
     status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
+    routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
     status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchCreateManyInput = {
     id?: string
-    name: string
-    description?: string | null
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
     status?: $Enums.BatchStatus
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type BatchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
     status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BatchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingStepCreateInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepCreateManyInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingStepUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingStepUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationCreateInput = {
+    id?: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingStep: RoutingStepCreateNestedOneWithoutConfirmationsInput
+    workstation: WorkstationCreateNestedOneWithoutConfirmationsInput
+  }
+
+  export type StepConfirmationUncheckedCreateInput = {
+    id?: string
+    stepId: string
+    workstationId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingStep?: RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput
+  }
+
+  export type StepConfirmationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationCreateManyInput = {
+    id?: string
+    stepId: string
+    workstationId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordCreateInput = {
+    id?: string
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutQcRecordsInput
+  }
+
+  export type QCRecordUncheckedCreateInput = {
+    id?: string
+    batchId: string
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QCRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutQcRecordsNestedInput
+  }
+
+  export type QCRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordCreateManyInput = {
+    id?: string
+    batchId: string
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QCRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9153,23 +14280,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type EnumRelationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumRelationStatusFilter<$PrismaModel> | $Enums.RelationStatus
-  }
-
-  export type AssetListRelationFilter = {
-    every?: AssetWhereInput
-    some?: AssetWhereInput
-    none?: AssetWhereInput
-  }
-
-  export type AssetHistoryListRelationFilter = {
-    every?: AssetHistoryWhereInput
-    some?: AssetHistoryWhereInput
-    none?: AssetHistoryWhereInput
+  export type PurchaseOrderListRelationFilter = {
+    every?: PurchaseOrderWhereInput
+    some?: PurchaseOrderWhereInput
+    none?: PurchaseOrderWhereInput
   }
 
   export type SortOrderInput = {
@@ -9177,60 +14291,47 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type AssetOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AssetHistoryOrderByRelationAggregateInput = {
+  export type PurchaseOrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type CustomerCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    contact?: SortOrder
+    contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    company?: SortOrder
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    relationStart?: SortOrder
-    relationStatus?: SortOrder
   }
 
   export type CustomerMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    contact?: SortOrder
+    contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    company?: SortOrder
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    relationStart?: SortOrder
-    relationStatus?: SortOrder
   }
 
   export type CustomerMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    contact?: SortOrder
+    contactName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    company?: SortOrder
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    relationStart?: SortOrder
-    relationStatus?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -9283,150 +14384,244 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type EnumRelationStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationStatus
+  export type EnumOrderPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderPriority | EnumOrderPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderPriorityFilter<$PrismaModel> | $Enums.OrderPriority
+  }
+
+  export type CustomerScalarRelationFilter = {
+    is?: CustomerWhereInput
+    isNot?: CustomerWhereInput
+  }
+
+  export type OrderLineItemListRelationFilter = {
+    every?: OrderLineItemWhereInput
+    some?: OrderLineItemWhereInput
+    none?: OrderLineItemWhereInput
+  }
+
+  export type OrderLineItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PurchaseOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    systemOrderId?: SortOrder
+    customerId?: SortOrder
+    poNumber?: SortOrder
+    dueDate?: SortOrder
+    priority?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    systemOrderId?: SortOrder
+    customerId?: SortOrder
+    poNumber?: SortOrder
+    dueDate?: SortOrder
+    priority?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    systemOrderId?: SortOrder
+    customerId?: SortOrder
+    poNumber?: SortOrder
+    dueDate?: SortOrder
+    priority?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumOrderPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderPriority | EnumOrderPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderPriorityWithAggregatesFilter<$PrismaModel> | $Enums.OrderPriority
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRelationStatusFilter<$PrismaModel>
-    _max?: NestedEnumRelationStatusFilter<$PrismaModel>
+    _min?: NestedEnumOrderPriorityFilter<$PrismaModel>
+    _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
   }
 
-  export type EnumAssetStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumAssetStatusFilter<$PrismaModel> | $Enums.AssetStatus
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type CategoryScalarRelationFilter = {
-    is?: CategoryWhereInput
-    isNot?: CategoryWhereInput
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type LocationNullableScalarRelationFilter = {
-    is?: LocationWhereInput | null
-    isNot?: LocationWhereInput | null
+  export type PurchaseOrderScalarRelationFilter = {
+    is?: PurchaseOrderWhereInput
+    isNot?: PurchaseOrderWhereInput
   }
 
-  export type CustomerNullableScalarRelationFilter = {
-    is?: CustomerWhereInput | null
-    isNot?: CustomerWhereInput | null
+  export type FileAttachmentListRelationFilter = {
+    every?: FileAttachmentWhereInput
+    some?: FileAttachmentWhereInput
+    none?: FileAttachmentWhereInput
   }
 
-  export type AssetCountOrderByAggregateInput = {
+  export type BatchListRelationFilter = {
+    every?: BatchWhereInput
+    some?: BatchWhereInput
+    none?: BatchWhereInput
+  }
+
+  export type FileAttachmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BatchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderLineItemCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    categoryId?: SortOrder
-    serial?: SortOrder
-    locationId?: SortOrder
-    customerId?: SortOrder
-    status?: SortOrder
-    description?: SortOrder
+    orderId?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    quantity?: SortOrder
+    dueDate?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type AssetMaxOrderByAggregateInput = {
+  export type OrderLineItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type OrderLineItemMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    categoryId?: SortOrder
-    serial?: SortOrder
-    locationId?: SortOrder
-    customerId?: SortOrder
-    status?: SortOrder
-    description?: SortOrder
+    orderId?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    quantity?: SortOrder
+    dueDate?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type AssetMinOrderByAggregateInput = {
+  export type OrderLineItemMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    categoryId?: SortOrder
-    serial?: SortOrder
-    locationId?: SortOrder
-    customerId?: SortOrder
-    status?: SortOrder
-    description?: SortOrder
+    orderId?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    quantity?: SortOrder
+    dueDate?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type EnumAssetStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssetStatus
+  export type OrderLineItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumAssetStatusFilter<$PrismaModel>
-    _max?: NestedEnumAssetStatusFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type CategoryCountOrderByAggregateInput = {
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type OrderLineItemScalarRelationFilter = {
+    is?: OrderLineItemWhereInput
+    isNot?: OrderLineItemWhereInput
+  }
+
+  export type FileAttachmentCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    lineItemId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    fileUrl?: SortOrder
+    uploadedBy?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type CategoryMaxOrderByAggregateInput = {
+  export type FileAttachmentMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    lineItemId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    fileUrl?: SortOrder
+    uploadedBy?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type CategoryMinOrderByAggregateInput = {
+  export type FileAttachmentMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    lineItemId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    fileUrl?: SortOrder
+    uploadedBy?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type LocationCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    address?: SortOrder
-  }
-
-  export type LocationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    address?: SortOrder
-  }
-
-  export type LocationMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    address?: SortOrder
-  }
-
-  export type AssetScalarRelationFilter = {
-    is?: AssetWhereInput
-    isNot?: AssetWhereInput
-  }
-
-  export type AssetHistoryCountOrderByAggregateInput = {
-    id?: SortOrder
-    assetId?: SortOrder
-    action?: SortOrder
-    details?: SortOrder
-    customerId?: SortOrder
-    timestamp?: SortOrder
-  }
-
-  export type AssetHistoryMaxOrderByAggregateInput = {
-    id?: SortOrder
-    assetId?: SortOrder
-    action?: SortOrder
-    details?: SortOrder
-    customerId?: SortOrder
-    timestamp?: SortOrder
-  }
-
-  export type AssetHistoryMinOrderByAggregateInput = {
-    id?: SortOrder
-    assetId?: SortOrder
-    action?: SortOrder
-    details?: SortOrder
-    customerId?: SortOrder
-    timestamp?: SortOrder
+  export type EnumBatchPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchPriority | EnumBatchPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchPriorityFilter<$PrismaModel> | $Enums.BatchPriority
   }
 
   export type EnumBatchStatusFilter<$PrismaModel = never> = {
@@ -9436,31 +14631,87 @@ export namespace Prisma {
     not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
   }
 
+  export type RoutingStepListRelationFilter = {
+    every?: RoutingStepWhereInput
+    some?: RoutingStepWhereInput
+    none?: RoutingStepWhereInput
+  }
+
+  export type QCRecordListRelationFilter = {
+    every?: QCRecordWhereInput
+    some?: QCRecordWhereInput
+    none?: QCRecordWhereInput
+  }
+
+  export type RoutingStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type QCRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type BatchCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+    batchId?: SortOrder
+    lineItemId?: SortOrder
+    quantity?: SortOrder
+    startDate?: SortOrder
+    estimatedCompletion?: SortOrder
+    actualCompletion?: SortOrder
+    priority?: SortOrder
     status?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
+  export type BatchAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
   export type BatchMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+    batchId?: SortOrder
+    lineItemId?: SortOrder
+    quantity?: SortOrder
+    startDate?: SortOrder
+    estimatedCompletion?: SortOrder
+    actualCompletion?: SortOrder
+    priority?: SortOrder
     status?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type BatchMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+    batchId?: SortOrder
+    lineItemId?: SortOrder
+    quantity?: SortOrder
+    startDate?: SortOrder
+    estimatedCompletion?: SortOrder
+    actualCompletion?: SortOrder
+    priority?: SortOrder
     status?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BatchSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type EnumBatchPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchPriority | EnumBatchPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchPriorityWithAggregatesFilter<$PrismaModel> | $Enums.BatchPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchPriorityFilter<$PrismaModel>
+    _max?: NestedEnumBatchPriorityFilter<$PrismaModel>
   }
 
   export type EnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -9473,32 +14724,299 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
-  export type AssetCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput> | AssetCreateWithoutCustomerInput[] | AssetUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCustomerInput | AssetCreateOrConnectWithoutCustomerInput[]
-    createMany?: AssetCreateManyCustomerInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type AssetHistoryCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput> | AssetHistoryCreateWithoutCustomerInput[] | AssetHistoryUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutCustomerInput | AssetHistoryCreateOrConnectWithoutCustomerInput[]
-    createMany?: AssetHistoryCreateManyCustomerInputEnvelope
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type AssetUncheckedCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput> | AssetCreateWithoutCustomerInput[] | AssetUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCustomerInput | AssetCreateOrConnectWithoutCustomerInput[]
-    createMany?: AssetCreateManyCustomerInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type EnumStepStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
   }
 
-  export type AssetHistoryUncheckedCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput> | AssetHistoryCreateWithoutCustomerInput[] | AssetHistoryUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutCustomerInput | AssetHistoryCreateOrConnectWithoutCustomerInput[]
-    createMany?: AssetHistoryCreateManyCustomerInputEnvelope
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
+  export type BatchScalarRelationFilter = {
+    is?: BatchWhereInput
+    isNot?: BatchWhereInput
+  }
+
+  export type WorkstationScalarRelationFilter = {
+    is?: WorkstationWhereInput
+    isNot?: WorkstationWhereInput
+  }
+
+  export type StepConfirmationListRelationFilter = {
+    every?: StepConfirmationWhereInput
+    some?: StepConfirmationWhereInput
+    none?: StepConfirmationWhereInput
+  }
+
+  export type StepConfirmationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RoutingStepBatchIdStepNumberCompoundUniqueInput = {
+    batchId: string
+    stepNumber: number
+  }
+
+  export type RoutingStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    required?: SortOrder
+    estimatedTime?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingStepAvgOrderByAggregateInput = {
+    stepNumber?: SortOrder
+    estimatedTime?: SortOrder
+  }
+
+  export type RoutingStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    required?: SortOrder
+    estimatedTime?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    required?: SortOrder
+    estimatedTime?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingStepSumOrderByAggregateInput = {
+    stepNumber?: SortOrder
+    estimatedTime?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusWithAggregatesFilter<$PrismaModel> | $Enums.StepStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStepStatusFilter<$PrismaModel>
+    _max?: NestedEnumStepStatusFilter<$PrismaModel>
+  }
+
+  export type WorkstationCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumConfirmationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ConfirmationStatus | EnumConfirmationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumConfirmationStatusFilter<$PrismaModel> | $Enums.ConfirmationStatus
+  }
+
+  export type RoutingStepScalarRelationFilter = {
+    is?: RoutingStepWhereInput
+    isNot?: RoutingStepWhereInput
+  }
+
+  export type StepConfirmationCountOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    workstationId?: SortOrder
+    operatorName?: SortOrder
+    operatorId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    flagged?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StepConfirmationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    workstationId?: SortOrder
+    operatorName?: SortOrder
+    operatorId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    flagged?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StepConfirmationMinOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    workstationId?: SortOrder
+    operatorName?: SortOrder
+    operatorId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    flagged?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumConfirmationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ConfirmationStatus | EnumConfirmationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumConfirmationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ConfirmationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumConfirmationStatusFilter<$PrismaModel>
+    _max?: NestedEnumConfirmationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumQCResultFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
+  }
+
+  export type QCRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    inspector?: SortOrder
+    inspectionDate?: SortOrder
+    result?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QCRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    inspector?: SortOrder
+    inspectionDate?: SortOrder
+    result?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QCRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    inspector?: SortOrder
+    inspectionDate?: SortOrder
+    result?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQCResultFilter<$PrismaModel>
+    _max?: NestedEnumQCResultFilter<$PrismaModel>
+  }
+
+  export type PurchaseOrderCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput> | PurchaseOrderCreateWithoutCustomerInput[] | PurchaseOrderUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutCustomerInput | PurchaseOrderCreateOrConnectWithoutCustomerInput[]
+    createMany?: PurchaseOrderCreateManyCustomerInputEnvelope
+    connect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+  }
+
+  export type PurchaseOrderUncheckedCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput> | PurchaseOrderCreateWithoutCustomerInput[] | PurchaseOrderUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutCustomerInput | PurchaseOrderCreateOrConnectWithoutCustomerInput[]
+    createMany?: PurchaseOrderCreateManyCustomerInputEnvelope
+    connect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -9513,274 +15031,542 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type EnumRelationStatusFieldUpdateOperationsInput = {
-    set?: $Enums.RelationStatus
+  export type PurchaseOrderUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput> | PurchaseOrderCreateWithoutCustomerInput[] | PurchaseOrderUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutCustomerInput | PurchaseOrderCreateOrConnectWithoutCustomerInput[]
+    upsert?: PurchaseOrderUpsertWithWhereUniqueWithoutCustomerInput | PurchaseOrderUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: PurchaseOrderCreateManyCustomerInputEnvelope
+    set?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    disconnect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    delete?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    connect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    update?: PurchaseOrderUpdateWithWhereUniqueWithoutCustomerInput | PurchaseOrderUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: PurchaseOrderUpdateManyWithWhereWithoutCustomerInput | PurchaseOrderUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: PurchaseOrderScalarWhereInput | PurchaseOrderScalarWhereInput[]
   }
 
-  export type AssetUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput> | AssetCreateWithoutCustomerInput[] | AssetUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCustomerInput | AssetCreateOrConnectWithoutCustomerInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutCustomerInput | AssetUpsertWithWhereUniqueWithoutCustomerInput[]
-    createMany?: AssetCreateManyCustomerInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutCustomerInput | AssetUpdateWithWhereUniqueWithoutCustomerInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutCustomerInput | AssetUpdateManyWithWhereWithoutCustomerInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  export type PurchaseOrderUncheckedUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput> | PurchaseOrderCreateWithoutCustomerInput[] | PurchaseOrderUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutCustomerInput | PurchaseOrderCreateOrConnectWithoutCustomerInput[]
+    upsert?: PurchaseOrderUpsertWithWhereUniqueWithoutCustomerInput | PurchaseOrderUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: PurchaseOrderCreateManyCustomerInputEnvelope
+    set?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    disconnect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    delete?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    connect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
+    update?: PurchaseOrderUpdateWithWhereUniqueWithoutCustomerInput | PurchaseOrderUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: PurchaseOrderUpdateManyWithWhereWithoutCustomerInput | PurchaseOrderUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: PurchaseOrderScalarWhereInput | PurchaseOrderScalarWhereInput[]
   }
 
-  export type AssetHistoryUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput> | AssetHistoryCreateWithoutCustomerInput[] | AssetHistoryUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutCustomerInput | AssetHistoryCreateOrConnectWithoutCustomerInput[]
-    upsert?: AssetHistoryUpsertWithWhereUniqueWithoutCustomerInput | AssetHistoryUpsertWithWhereUniqueWithoutCustomerInput[]
-    createMany?: AssetHistoryCreateManyCustomerInputEnvelope
-    set?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    disconnect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    delete?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    update?: AssetHistoryUpdateWithWhereUniqueWithoutCustomerInput | AssetHistoryUpdateWithWhereUniqueWithoutCustomerInput[]
-    updateMany?: AssetHistoryUpdateManyWithWhereWithoutCustomerInput | AssetHistoryUpdateManyWithWhereWithoutCustomerInput[]
-    deleteMany?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
-  }
-
-  export type AssetUncheckedUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput> | AssetCreateWithoutCustomerInput[] | AssetUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCustomerInput | AssetCreateOrConnectWithoutCustomerInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutCustomerInput | AssetUpsertWithWhereUniqueWithoutCustomerInput[]
-    createMany?: AssetCreateManyCustomerInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutCustomerInput | AssetUpdateWithWhereUniqueWithoutCustomerInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutCustomerInput | AssetUpdateManyWithWhereWithoutCustomerInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
-  }
-
-  export type AssetHistoryUncheckedUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput> | AssetHistoryCreateWithoutCustomerInput[] | AssetHistoryUncheckedCreateWithoutCustomerInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutCustomerInput | AssetHistoryCreateOrConnectWithoutCustomerInput[]
-    upsert?: AssetHistoryUpsertWithWhereUniqueWithoutCustomerInput | AssetHistoryUpsertWithWhereUniqueWithoutCustomerInput[]
-    createMany?: AssetHistoryCreateManyCustomerInputEnvelope
-    set?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    disconnect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    delete?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    update?: AssetHistoryUpdateWithWhereUniqueWithoutCustomerInput | AssetHistoryUpdateWithWhereUniqueWithoutCustomerInput[]
-    updateMany?: AssetHistoryUpdateManyWithWhereWithoutCustomerInput | AssetHistoryUpdateManyWithWhereWithoutCustomerInput[]
-    deleteMany?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
-  }
-
-  export type CategoryCreateNestedOneWithoutAssetsInput = {
-    create?: XOR<CategoryCreateWithoutAssetsInput, CategoryUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: CategoryCreateOrConnectWithoutAssetsInput
-    connect?: CategoryWhereUniqueInput
-  }
-
-  export type LocationCreateNestedOneWithoutAssetsInput = {
-    create?: XOR<LocationCreateWithoutAssetsInput, LocationUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: LocationCreateOrConnectWithoutAssetsInput
-    connect?: LocationWhereUniqueInput
-  }
-
-  export type CustomerCreateNestedOneWithoutAssetsInput = {
-    create?: XOR<CustomerCreateWithoutAssetsInput, CustomerUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: CustomerCreateOrConnectWithoutAssetsInput
+  export type CustomerCreateNestedOneWithoutPurchaseOrdersInput = {
+    create?: XOR<CustomerCreateWithoutPurchaseOrdersInput, CustomerUncheckedCreateWithoutPurchaseOrdersInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutPurchaseOrdersInput
     connect?: CustomerWhereUniqueInput
   }
 
-  export type AssetHistoryCreateNestedManyWithoutAssetInput = {
-    create?: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput> | AssetHistoryCreateWithoutAssetInput[] | AssetHistoryUncheckedCreateWithoutAssetInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutAssetInput | AssetHistoryCreateOrConnectWithoutAssetInput[]
-    createMany?: AssetHistoryCreateManyAssetInputEnvelope
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
+  export type OrderLineItemCreateNestedManyWithoutPurchaseOrderInput = {
+    create?: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput> | OrderLineItemCreateWithoutPurchaseOrderInput[] | OrderLineItemUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPurchaseOrderInput | OrderLineItemCreateOrConnectWithoutPurchaseOrderInput[]
+    createMany?: OrderLineItemCreateManyPurchaseOrderInputEnvelope
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
   }
 
-  export type AssetHistoryUncheckedCreateNestedManyWithoutAssetInput = {
-    create?: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput> | AssetHistoryCreateWithoutAssetInput[] | AssetHistoryUncheckedCreateWithoutAssetInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutAssetInput | AssetHistoryCreateOrConnectWithoutAssetInput[]
-    createMany?: AssetHistoryCreateManyAssetInputEnvelope
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
+  export type OrderLineItemUncheckedCreateNestedManyWithoutPurchaseOrderInput = {
+    create?: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput> | OrderLineItemCreateWithoutPurchaseOrderInput[] | OrderLineItemUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPurchaseOrderInput | OrderLineItemCreateOrConnectWithoutPurchaseOrderInput[]
+    createMany?: OrderLineItemCreateManyPurchaseOrderInputEnvelope
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
   }
 
-  export type EnumAssetStatusFieldUpdateOperationsInput = {
-    set?: $Enums.AssetStatus
+  export type EnumOrderPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.OrderPriority
   }
 
-  export type CategoryUpdateOneRequiredWithoutAssetsNestedInput = {
-    create?: XOR<CategoryCreateWithoutAssetsInput, CategoryUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: CategoryCreateOrConnectWithoutAssetsInput
-    upsert?: CategoryUpsertWithoutAssetsInput
-    connect?: CategoryWhereUniqueInput
-    update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutAssetsInput, CategoryUpdateWithoutAssetsInput>, CategoryUncheckedUpdateWithoutAssetsInput>
-  }
-
-  export type LocationUpdateOneWithoutAssetsNestedInput = {
-    create?: XOR<LocationCreateWithoutAssetsInput, LocationUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: LocationCreateOrConnectWithoutAssetsInput
-    upsert?: LocationUpsertWithoutAssetsInput
-    disconnect?: LocationWhereInput | boolean
-    delete?: LocationWhereInput | boolean
-    connect?: LocationWhereUniqueInput
-    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutAssetsInput, LocationUpdateWithoutAssetsInput>, LocationUncheckedUpdateWithoutAssetsInput>
-  }
-
-  export type CustomerUpdateOneWithoutAssetsNestedInput = {
-    create?: XOR<CustomerCreateWithoutAssetsInput, CustomerUncheckedCreateWithoutAssetsInput>
-    connectOrCreate?: CustomerCreateOrConnectWithoutAssetsInput
-    upsert?: CustomerUpsertWithoutAssetsInput
-    disconnect?: CustomerWhereInput | boolean
-    delete?: CustomerWhereInput | boolean
+  export type CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput = {
+    create?: XOR<CustomerCreateWithoutPurchaseOrdersInput, CustomerUncheckedCreateWithoutPurchaseOrdersInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutPurchaseOrdersInput
+    upsert?: CustomerUpsertWithoutPurchaseOrdersInput
     connect?: CustomerWhereUniqueInput
-    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutAssetsInput, CustomerUpdateWithoutAssetsInput>, CustomerUncheckedUpdateWithoutAssetsInput>
+    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutPurchaseOrdersInput, CustomerUpdateWithoutPurchaseOrdersInput>, CustomerUncheckedUpdateWithoutPurchaseOrdersInput>
   }
 
-  export type AssetHistoryUpdateManyWithoutAssetNestedInput = {
-    create?: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput> | AssetHistoryCreateWithoutAssetInput[] | AssetHistoryUncheckedCreateWithoutAssetInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutAssetInput | AssetHistoryCreateOrConnectWithoutAssetInput[]
-    upsert?: AssetHistoryUpsertWithWhereUniqueWithoutAssetInput | AssetHistoryUpsertWithWhereUniqueWithoutAssetInput[]
-    createMany?: AssetHistoryCreateManyAssetInputEnvelope
-    set?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    disconnect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    delete?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    update?: AssetHistoryUpdateWithWhereUniqueWithoutAssetInput | AssetHistoryUpdateWithWhereUniqueWithoutAssetInput[]
-    updateMany?: AssetHistoryUpdateManyWithWhereWithoutAssetInput | AssetHistoryUpdateManyWithWhereWithoutAssetInput[]
-    deleteMany?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
+  export type OrderLineItemUpdateManyWithoutPurchaseOrderNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput> | OrderLineItemCreateWithoutPurchaseOrderInput[] | OrderLineItemUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPurchaseOrderInput | OrderLineItemCreateOrConnectWithoutPurchaseOrderInput[]
+    upsert?: OrderLineItemUpsertWithWhereUniqueWithoutPurchaseOrderInput | OrderLineItemUpsertWithWhereUniqueWithoutPurchaseOrderInput[]
+    createMany?: OrderLineItemCreateManyPurchaseOrderInputEnvelope
+    set?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    disconnect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    delete?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    update?: OrderLineItemUpdateWithWhereUniqueWithoutPurchaseOrderInput | OrderLineItemUpdateWithWhereUniqueWithoutPurchaseOrderInput[]
+    updateMany?: OrderLineItemUpdateManyWithWhereWithoutPurchaseOrderInput | OrderLineItemUpdateManyWithWhereWithoutPurchaseOrderInput[]
+    deleteMany?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
   }
 
-  export type AssetHistoryUncheckedUpdateManyWithoutAssetNestedInput = {
-    create?: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput> | AssetHistoryCreateWithoutAssetInput[] | AssetHistoryUncheckedCreateWithoutAssetInput[]
-    connectOrCreate?: AssetHistoryCreateOrConnectWithoutAssetInput | AssetHistoryCreateOrConnectWithoutAssetInput[]
-    upsert?: AssetHistoryUpsertWithWhereUniqueWithoutAssetInput | AssetHistoryUpsertWithWhereUniqueWithoutAssetInput[]
-    createMany?: AssetHistoryCreateManyAssetInputEnvelope
-    set?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    disconnect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    delete?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    connect?: AssetHistoryWhereUniqueInput | AssetHistoryWhereUniqueInput[]
-    update?: AssetHistoryUpdateWithWhereUniqueWithoutAssetInput | AssetHistoryUpdateWithWhereUniqueWithoutAssetInput[]
-    updateMany?: AssetHistoryUpdateManyWithWhereWithoutAssetInput | AssetHistoryUpdateManyWithWhereWithoutAssetInput[]
-    deleteMany?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
+  export type OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput> | OrderLineItemCreateWithoutPurchaseOrderInput[] | OrderLineItemUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPurchaseOrderInput | OrderLineItemCreateOrConnectWithoutPurchaseOrderInput[]
+    upsert?: OrderLineItemUpsertWithWhereUniqueWithoutPurchaseOrderInput | OrderLineItemUpsertWithWhereUniqueWithoutPurchaseOrderInput[]
+    createMany?: OrderLineItemCreateManyPurchaseOrderInputEnvelope
+    set?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    disconnect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    delete?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    update?: OrderLineItemUpdateWithWhereUniqueWithoutPurchaseOrderInput | OrderLineItemUpdateWithWhereUniqueWithoutPurchaseOrderInput[]
+    updateMany?: OrderLineItemUpdateManyWithWhereWithoutPurchaseOrderInput | OrderLineItemUpdateManyWithWhereWithoutPurchaseOrderInput[]
+    deleteMany?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
   }
 
-  export type AssetCreateNestedManyWithoutCategoryInput = {
-    create?: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput> | AssetCreateWithoutCategoryInput[] | AssetUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCategoryInput | AssetCreateOrConnectWithoutCategoryInput[]
-    createMany?: AssetCreateManyCategoryInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type PurchaseOrderCreateNestedOneWithoutLineItemsInput = {
+    create?: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutLineItemsInput
+    connect?: PurchaseOrderWhereUniqueInput
   }
 
-  export type AssetUncheckedCreateNestedManyWithoutCategoryInput = {
-    create?: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput> | AssetCreateWithoutCategoryInput[] | AssetUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCategoryInput | AssetCreateOrConnectWithoutCategoryInput[]
-    createMany?: AssetCreateManyCategoryInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type FileAttachmentCreateNestedManyWithoutLineItemInput = {
+    create?: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput> | FileAttachmentCreateWithoutLineItemInput[] | FileAttachmentUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: FileAttachmentCreateOrConnectWithoutLineItemInput | FileAttachmentCreateOrConnectWithoutLineItemInput[]
+    createMany?: FileAttachmentCreateManyLineItemInputEnvelope
+    connect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
   }
 
-  export type AssetUpdateManyWithoutCategoryNestedInput = {
-    create?: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput> | AssetCreateWithoutCategoryInput[] | AssetUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCategoryInput | AssetCreateOrConnectWithoutCategoryInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutCategoryInput | AssetUpsertWithWhereUniqueWithoutCategoryInput[]
-    createMany?: AssetCreateManyCategoryInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutCategoryInput | AssetUpdateWithWhereUniqueWithoutCategoryInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutCategoryInput | AssetUpdateManyWithWhereWithoutCategoryInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  export type BatchCreateNestedManyWithoutLineItemInput = {
+    create?: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput> | BatchCreateWithoutLineItemInput[] | BatchUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutLineItemInput | BatchCreateOrConnectWithoutLineItemInput[]
+    createMany?: BatchCreateManyLineItemInputEnvelope
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
   }
 
-  export type AssetUncheckedUpdateManyWithoutCategoryNestedInput = {
-    create?: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput> | AssetCreateWithoutCategoryInput[] | AssetUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutCategoryInput | AssetCreateOrConnectWithoutCategoryInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutCategoryInput | AssetUpsertWithWhereUniqueWithoutCategoryInput[]
-    createMany?: AssetCreateManyCategoryInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutCategoryInput | AssetUpdateWithWhereUniqueWithoutCategoryInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutCategoryInput | AssetUpdateManyWithWhereWithoutCategoryInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  export type FileAttachmentUncheckedCreateNestedManyWithoutLineItemInput = {
+    create?: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput> | FileAttachmentCreateWithoutLineItemInput[] | FileAttachmentUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: FileAttachmentCreateOrConnectWithoutLineItemInput | FileAttachmentCreateOrConnectWithoutLineItemInput[]
+    createMany?: FileAttachmentCreateManyLineItemInputEnvelope
+    connect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
   }
 
-  export type AssetCreateNestedManyWithoutLocationInput = {
-    create?: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput> | AssetCreateWithoutLocationInput[] | AssetUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutLocationInput | AssetCreateOrConnectWithoutLocationInput[]
-    createMany?: AssetCreateManyLocationInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type BatchUncheckedCreateNestedManyWithoutLineItemInput = {
+    create?: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput> | BatchCreateWithoutLineItemInput[] | BatchUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutLineItemInput | BatchCreateOrConnectWithoutLineItemInput[]
+    createMany?: BatchCreateManyLineItemInputEnvelope
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
   }
 
-  export type AssetUncheckedCreateNestedManyWithoutLocationInput = {
-    create?: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput> | AssetCreateWithoutLocationInput[] | AssetUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutLocationInput | AssetCreateOrConnectWithoutLocationInput[]
-    createMany?: AssetCreateManyLocationInputEnvelope
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
-  export type AssetUpdateManyWithoutLocationNestedInput = {
-    create?: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput> | AssetCreateWithoutLocationInput[] | AssetUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutLocationInput | AssetCreateOrConnectWithoutLocationInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutLocationInput | AssetUpsertWithWhereUniqueWithoutLocationInput[]
-    createMany?: AssetCreateManyLocationInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutLocationInput | AssetUpdateWithWhereUniqueWithoutLocationInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutLocationInput | AssetUpdateManyWithWhereWithoutLocationInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
-  export type AssetUncheckedUpdateManyWithoutLocationNestedInput = {
-    create?: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput> | AssetCreateWithoutLocationInput[] | AssetUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: AssetCreateOrConnectWithoutLocationInput | AssetCreateOrConnectWithoutLocationInput[]
-    upsert?: AssetUpsertWithWhereUniqueWithoutLocationInput | AssetUpsertWithWhereUniqueWithoutLocationInput[]
-    createMany?: AssetCreateManyLocationInputEnvelope
-    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
-    update?: AssetUpdateWithWhereUniqueWithoutLocationInput | AssetUpdateWithWhereUniqueWithoutLocationInput[]
-    updateMany?: AssetUpdateManyWithWhereWithoutLocationInput | AssetUpdateManyWithWhereWithoutLocationInput[]
-    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  export type PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput = {
+    create?: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutLineItemsInput
+    upsert?: PurchaseOrderUpsertWithoutLineItemsInput
+    connect?: PurchaseOrderWhereUniqueInput
+    update?: XOR<XOR<PurchaseOrderUpdateToOneWithWhereWithoutLineItemsInput, PurchaseOrderUpdateWithoutLineItemsInput>, PurchaseOrderUncheckedUpdateWithoutLineItemsInput>
   }
 
-  export type AssetCreateNestedOneWithoutHistoryInput = {
-    create?: XOR<AssetCreateWithoutHistoryInput, AssetUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: AssetCreateOrConnectWithoutHistoryInput
-    connect?: AssetWhereUniqueInput
+  export type FileAttachmentUpdateManyWithoutLineItemNestedInput = {
+    create?: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput> | FileAttachmentCreateWithoutLineItemInput[] | FileAttachmentUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: FileAttachmentCreateOrConnectWithoutLineItemInput | FileAttachmentCreateOrConnectWithoutLineItemInput[]
+    upsert?: FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput | FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput[]
+    createMany?: FileAttachmentCreateManyLineItemInputEnvelope
+    set?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    disconnect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    delete?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    connect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    update?: FileAttachmentUpdateWithWhereUniqueWithoutLineItemInput | FileAttachmentUpdateWithWhereUniqueWithoutLineItemInput[]
+    updateMany?: FileAttachmentUpdateManyWithWhereWithoutLineItemInput | FileAttachmentUpdateManyWithWhereWithoutLineItemInput[]
+    deleteMany?: FileAttachmentScalarWhereInput | FileAttachmentScalarWhereInput[]
   }
 
-  export type CustomerCreateNestedOneWithoutHistoryInput = {
-    create?: XOR<CustomerCreateWithoutHistoryInput, CustomerUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: CustomerCreateOrConnectWithoutHistoryInput
-    connect?: CustomerWhereUniqueInput
+  export type BatchUpdateManyWithoutLineItemNestedInput = {
+    create?: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput> | BatchCreateWithoutLineItemInput[] | BatchUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutLineItemInput | BatchCreateOrConnectWithoutLineItemInput[]
+    upsert?: BatchUpsertWithWhereUniqueWithoutLineItemInput | BatchUpsertWithWhereUniqueWithoutLineItemInput[]
+    createMany?: BatchCreateManyLineItemInputEnvelope
+    set?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    disconnect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    delete?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    update?: BatchUpdateWithWhereUniqueWithoutLineItemInput | BatchUpdateWithWhereUniqueWithoutLineItemInput[]
+    updateMany?: BatchUpdateManyWithWhereWithoutLineItemInput | BatchUpdateManyWithWhereWithoutLineItemInput[]
+    deleteMany?: BatchScalarWhereInput | BatchScalarWhereInput[]
   }
 
-  export type AssetUpdateOneRequiredWithoutHistoryNestedInput = {
-    create?: XOR<AssetCreateWithoutHistoryInput, AssetUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: AssetCreateOrConnectWithoutHistoryInput
-    upsert?: AssetUpsertWithoutHistoryInput
-    connect?: AssetWhereUniqueInput
-    update?: XOR<XOR<AssetUpdateToOneWithWhereWithoutHistoryInput, AssetUpdateWithoutHistoryInput>, AssetUncheckedUpdateWithoutHistoryInput>
+  export type FileAttachmentUncheckedUpdateManyWithoutLineItemNestedInput = {
+    create?: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput> | FileAttachmentCreateWithoutLineItemInput[] | FileAttachmentUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: FileAttachmentCreateOrConnectWithoutLineItemInput | FileAttachmentCreateOrConnectWithoutLineItemInput[]
+    upsert?: FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput | FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput[]
+    createMany?: FileAttachmentCreateManyLineItemInputEnvelope
+    set?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    disconnect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    delete?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    connect?: FileAttachmentWhereUniqueInput | FileAttachmentWhereUniqueInput[]
+    update?: FileAttachmentUpdateWithWhereUniqueWithoutLineItemInput | FileAttachmentUpdateWithWhereUniqueWithoutLineItemInput[]
+    updateMany?: FileAttachmentUpdateManyWithWhereWithoutLineItemInput | FileAttachmentUpdateManyWithWhereWithoutLineItemInput[]
+    deleteMany?: FileAttachmentScalarWhereInput | FileAttachmentScalarWhereInput[]
   }
 
-  export type CustomerUpdateOneWithoutHistoryNestedInput = {
-    create?: XOR<CustomerCreateWithoutHistoryInput, CustomerUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: CustomerCreateOrConnectWithoutHistoryInput
-    upsert?: CustomerUpsertWithoutHistoryInput
-    disconnect?: CustomerWhereInput | boolean
-    delete?: CustomerWhereInput | boolean
-    connect?: CustomerWhereUniqueInput
-    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutHistoryInput, CustomerUpdateWithoutHistoryInput>, CustomerUncheckedUpdateWithoutHistoryInput>
+  export type BatchUncheckedUpdateManyWithoutLineItemNestedInput = {
+    create?: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput> | BatchCreateWithoutLineItemInput[] | BatchUncheckedCreateWithoutLineItemInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutLineItemInput | BatchCreateOrConnectWithoutLineItemInput[]
+    upsert?: BatchUpsertWithWhereUniqueWithoutLineItemInput | BatchUpsertWithWhereUniqueWithoutLineItemInput[]
+    createMany?: BatchCreateManyLineItemInputEnvelope
+    set?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    disconnect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    delete?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    update?: BatchUpdateWithWhereUniqueWithoutLineItemInput | BatchUpdateWithWhereUniqueWithoutLineItemInput[]
+    updateMany?: BatchUpdateManyWithWhereWithoutLineItemInput | BatchUpdateManyWithWhereWithoutLineItemInput[]
+    deleteMany?: BatchScalarWhereInput | BatchScalarWhereInput[]
+  }
+
+  export type OrderLineItemCreateNestedOneWithoutFileAttachmentsInput = {
+    create?: XOR<OrderLineItemCreateWithoutFileAttachmentsInput, OrderLineItemUncheckedCreateWithoutFileAttachmentsInput>
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutFileAttachmentsInput
+    connect?: OrderLineItemWhereUniqueInput
+  }
+
+  export type OrderLineItemUpdateOneRequiredWithoutFileAttachmentsNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutFileAttachmentsInput, OrderLineItemUncheckedCreateWithoutFileAttachmentsInput>
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutFileAttachmentsInput
+    upsert?: OrderLineItemUpsertWithoutFileAttachmentsInput
+    connect?: OrderLineItemWhereUniqueInput
+    update?: XOR<XOR<OrderLineItemUpdateToOneWithWhereWithoutFileAttachmentsInput, OrderLineItemUpdateWithoutFileAttachmentsInput>, OrderLineItemUncheckedUpdateWithoutFileAttachmentsInput>
+  }
+
+  export type OrderLineItemCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<OrderLineItemCreateWithoutBatchesInput, OrderLineItemUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutBatchesInput
+    connect?: OrderLineItemWhereUniqueInput
+  }
+
+  export type RoutingStepCreateNestedManyWithoutBatchInput = {
+    create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
+    createMany?: RoutingStepCreateManyBatchInputEnvelope
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+  }
+
+  export type QCRecordCreateNestedManyWithoutBatchInput = {
+    create?: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput> | QCRecordCreateWithoutBatchInput[] | QCRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: QCRecordCreateOrConnectWithoutBatchInput | QCRecordCreateOrConnectWithoutBatchInput[]
+    createMany?: QCRecordCreateManyBatchInputEnvelope
+    connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+  }
+
+  export type RoutingStepUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
+    createMany?: RoutingStepCreateManyBatchInputEnvelope
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+  }
+
+  export type QCRecordUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput> | QCRecordCreateWithoutBatchInput[] | QCRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: QCRecordCreateOrConnectWithoutBatchInput | QCRecordCreateOrConnectWithoutBatchInput[]
+    createMany?: QCRecordCreateManyBatchInputEnvelope
+    connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+  }
+
+  export type EnumBatchPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.BatchPriority
   }
 
   export type EnumBatchStatusFieldUpdateOperationsInput = {
     set?: $Enums.BatchStatus
+  }
+
+  export type OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutBatchesInput, OrderLineItemUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutBatchesInput
+    upsert?: OrderLineItemUpsertWithoutBatchesInput
+    connect?: OrderLineItemWhereUniqueInput
+    update?: XOR<XOR<OrderLineItemUpdateToOneWithWhereWithoutBatchesInput, OrderLineItemUpdateWithoutBatchesInput>, OrderLineItemUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type RoutingStepUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
+    upsert?: RoutingStepUpsertWithWhereUniqueWithoutBatchInput | RoutingStepUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: RoutingStepCreateManyBatchInputEnvelope
+    set?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    disconnect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    delete?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    update?: RoutingStepUpdateWithWhereUniqueWithoutBatchInput | RoutingStepUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: RoutingStepUpdateManyWithWhereWithoutBatchInput | RoutingStepUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+  }
+
+  export type QCRecordUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput> | QCRecordCreateWithoutBatchInput[] | QCRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: QCRecordCreateOrConnectWithoutBatchInput | QCRecordCreateOrConnectWithoutBatchInput[]
+    upsert?: QCRecordUpsertWithWhereUniqueWithoutBatchInput | QCRecordUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: QCRecordCreateManyBatchInputEnvelope
+    set?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    disconnect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    delete?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    update?: QCRecordUpdateWithWhereUniqueWithoutBatchInput | QCRecordUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: QCRecordUpdateManyWithWhereWithoutBatchInput | QCRecordUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
+  }
+
+  export type RoutingStepUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
+    upsert?: RoutingStepUpsertWithWhereUniqueWithoutBatchInput | RoutingStepUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: RoutingStepCreateManyBatchInputEnvelope
+    set?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    disconnect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    delete?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    update?: RoutingStepUpdateWithWhereUniqueWithoutBatchInput | RoutingStepUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: RoutingStepUpdateManyWithWhereWithoutBatchInput | RoutingStepUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+  }
+
+  export type QCRecordUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput> | QCRecordCreateWithoutBatchInput[] | QCRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: QCRecordCreateOrConnectWithoutBatchInput | QCRecordCreateOrConnectWithoutBatchInput[]
+    upsert?: QCRecordUpsertWithWhereUniqueWithoutBatchInput | QCRecordUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: QCRecordCreateManyBatchInputEnvelope
+    set?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    disconnect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    delete?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+    update?: QCRecordUpdateWithWhereUniqueWithoutBatchInput | QCRecordUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: QCRecordUpdateManyWithWhereWithoutBatchInput | QCRecordUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
+  }
+
+  export type BatchCreateNestedOneWithoutRoutingStepsInput = {
+    create?: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutRoutingStepsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type WorkstationCreateNestedOneWithoutRoutingStepsInput = {
+    create?: XOR<WorkstationCreateWithoutRoutingStepsInput, WorkstationUncheckedCreateWithoutRoutingStepsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutRoutingStepsInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type StepConfirmationCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: StepConfirmationCreateManyRoutingStepInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: StepConfirmationCreateManyRoutingStepInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EnumStepStatusFieldUpdateOperationsInput = {
+    set?: $Enums.StepStatus
+  }
+
+  export type BatchUpdateOneRequiredWithoutRoutingStepsNestedInput = {
+    create?: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutRoutingStepsInput
+    upsert?: BatchUpsertWithoutRoutingStepsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutRoutingStepsInput, BatchUpdateWithoutRoutingStepsInput>, BatchUncheckedUpdateWithoutRoutingStepsInput>
+  }
+
+  export type WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput = {
+    create?: XOR<WorkstationCreateWithoutRoutingStepsInput, WorkstationUncheckedCreateWithoutRoutingStepsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutRoutingStepsInput
+    upsert?: WorkstationUpsertWithoutRoutingStepsInput
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutRoutingStepsInput, WorkstationUpdateWithoutRoutingStepsInput>, WorkstationUncheckedUpdateWithoutRoutingStepsInput>
+  }
+
+  export type StepConfirmationUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput | StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: StepConfirmationCreateManyRoutingStepInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput | StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput | StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput | StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: StepConfirmationCreateManyRoutingStepInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput | StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput | StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type RoutingStepCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
+    createMany?: RoutingStepCreateManyWorkstationInputEnvelope
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+  }
+
+  export type StepConfirmationCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput> | StepConfirmationCreateWithoutWorkstationInput[] | StepConfirmationUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutWorkstationInput | StepConfirmationCreateOrConnectWithoutWorkstationInput[]
+    createMany?: StepConfirmationCreateManyWorkstationInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
+    createMany?: RoutingStepCreateManyWorkstationInputEnvelope
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+  }
+
+  export type StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput> | StepConfirmationCreateWithoutWorkstationInput[] | StepConfirmationUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutWorkstationInput | StepConfirmationCreateOrConnectWithoutWorkstationInput[]
+    createMany?: StepConfirmationCreateManyWorkstationInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type RoutingStepUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
+    upsert?: RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput | RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: RoutingStepCreateManyWorkstationInputEnvelope
+    set?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    disconnect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    delete?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    update?: RoutingStepUpdateWithWhereUniqueWithoutWorkstationInput | RoutingStepUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: RoutingStepUpdateManyWithWhereWithoutWorkstationInput | RoutingStepUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+  }
+
+  export type StepConfirmationUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput> | StepConfirmationCreateWithoutWorkstationInput[] | StepConfirmationUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutWorkstationInput | StepConfirmationCreateOrConnectWithoutWorkstationInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutWorkstationInput | StepConfirmationUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: StepConfirmationCreateManyWorkstationInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutWorkstationInput | StepConfirmationUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutWorkstationInput | StepConfirmationUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
+    upsert?: RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput | RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: RoutingStepCreateManyWorkstationInputEnvelope
+    set?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    disconnect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    delete?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    connect?: RoutingStepWhereUniqueInput | RoutingStepWhereUniqueInput[]
+    update?: RoutingStepUpdateWithWhereUniqueWithoutWorkstationInput | RoutingStepUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: RoutingStepUpdateManyWithWhereWithoutWorkstationInput | RoutingStepUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput> | StepConfirmationCreateWithoutWorkstationInput[] | StepConfirmationUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutWorkstationInput | StepConfirmationCreateOrConnectWithoutWorkstationInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutWorkstationInput | StepConfirmationUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: StepConfirmationCreateManyWorkstationInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutWorkstationInput | StepConfirmationUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutWorkstationInput | StepConfirmationUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type RoutingStepCreateNestedOneWithoutConfirmationsInput = {
+    create?: XOR<RoutingStepCreateWithoutConfirmationsInput, RoutingStepUncheckedCreateWithoutConfirmationsInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutConfirmationsInput
+    connect?: RoutingStepWhereUniqueInput
+  }
+
+  export type WorkstationCreateNestedOneWithoutConfirmationsInput = {
+    create?: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutConfirmationsInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type EnumConfirmationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ConfirmationStatus
+  }
+
+  export type RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutConfirmationsInput, RoutingStepUncheckedCreateWithoutConfirmationsInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutConfirmationsInput
+    upsert?: RoutingStepUpsertWithoutConfirmationsInput
+    connect?: RoutingStepWhereUniqueInput
+    update?: XOR<XOR<RoutingStepUpdateToOneWithWhereWithoutConfirmationsInput, RoutingStepUpdateWithoutConfirmationsInput>, RoutingStepUncheckedUpdateWithoutConfirmationsInput>
+  }
+
+  export type WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput = {
+    create?: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutConfirmationsInput
+    upsert?: WorkstationUpsertWithoutConfirmationsInput
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutConfirmationsInput, WorkstationUpdateWithoutConfirmationsInput>, WorkstationUncheckedUpdateWithoutConfirmationsInput>
+  }
+
+  export type BatchCreateNestedOneWithoutQcRecordsInput = {
+    create?: XOR<BatchCreateWithoutQcRecordsInput, BatchUncheckedCreateWithoutQcRecordsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutQcRecordsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type EnumQCResultFieldUpdateOperationsInput = {
+    set?: $Enums.QCResult
+  }
+
+  export type BatchUpdateOneRequiredWithoutQcRecordsNestedInput = {
+    create?: XOR<BatchCreateWithoutQcRecordsInput, BatchUncheckedCreateWithoutQcRecordsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutQcRecordsInput
+    upsert?: BatchUpsertWithoutQcRecordsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutQcRecordsInput, BatchUpdateWithoutQcRecordsInput>, BatchUncheckedUpdateWithoutQcRecordsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -9820,13 +15606,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedEnumRelationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumRelationStatusFilter<$PrismaModel> | $Enums.RelationStatus
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -9899,31 +15678,80 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RelationStatus | EnumRelationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RelationStatus[] | ListEnumRelationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumRelationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRelationStatusFilter<$PrismaModel>
-    _max?: NestedEnumRelationStatusFilter<$PrismaModel>
+  export type NestedEnumOrderPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderPriority | EnumOrderPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderPriorityFilter<$PrismaModel> | $Enums.OrderPriority
   }
 
-  export type NestedEnumAssetStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumAssetStatusFilter<$PrismaModel> | $Enums.AssetStatus
+  export type NestedEnumOrderPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderPriority | EnumOrderPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderPriorityWithAggregatesFilter<$PrismaModel> | $Enums.OrderPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderPriorityFilter<$PrismaModel>
+    _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
   }
 
-  export type NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssetStatus
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumAssetStatusFilter<$PrismaModel>
-    _max?: NestedEnumAssetStatusFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBatchPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchPriority | EnumBatchPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchPriorityFilter<$PrismaModel> | $Enums.BatchPriority
   }
 
   export type NestedEnumBatchStatusFilter<$PrismaModel = never> = {
@@ -9931,6 +15759,16 @@ export namespace Prisma {
     in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type NestedEnumBatchPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchPriority | EnumBatchPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchPriority[] | ListEnumBatchPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchPriorityWithAggregatesFilter<$PrismaModel> | $Enums.BatchPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchPriorityFilter<$PrismaModel>
+    _max?: NestedEnumBatchPriorityFilter<$PrismaModel>
   }
 
   export type NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -9943,796 +15781,1781 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
-  export type AssetCreateWithoutCustomerInput = {
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumStepStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusWithAggregatesFilter<$PrismaModel> | $Enums.StepStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStepStatusFilter<$PrismaModel>
+    _max?: NestedEnumStepStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumConfirmationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ConfirmationStatus | EnumConfirmationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumConfirmationStatusFilter<$PrismaModel> | $Enums.ConfirmationStatus
+  }
+
+  export type NestedEnumConfirmationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ConfirmationStatus | EnumConfirmationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ConfirmationStatus[] | ListEnumConfirmationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumConfirmationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ConfirmationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumConfirmationStatusFilter<$PrismaModel>
+    _max?: NestedEnumConfirmationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumQCResultFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
+  }
+
+  export type NestedEnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQCResultFilter<$PrismaModel>
+    _max?: NestedEnumQCResultFilter<$PrismaModel>
+  }
+
+  export type PurchaseOrderCreateWithoutCustomerInput = {
     id?: string
-    name: string
-    serial?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    category: CategoryCreateNestedOneWithoutAssetsInput
-    location?: LocationCreateNestedOneWithoutAssetsInput
-    history?: AssetHistoryCreateNestedManyWithoutAssetInput
+    lineItems?: OrderLineItemCreateNestedManyWithoutPurchaseOrderInput
   }
 
-  export type AssetUncheckedCreateWithoutCustomerInput = {
+  export type PurchaseOrderUncheckedCreateWithoutCustomerInput = {
     id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    locationId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutAssetInput
+    lineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
-  export type AssetCreateOrConnectWithoutCustomerInput = {
-    where: AssetWhereUniqueInput
-    create: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput>
+  export type PurchaseOrderCreateOrConnectWithoutCustomerInput = {
+    where: PurchaseOrderWhereUniqueInput
+    create: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput>
   }
 
-  export type AssetCreateManyCustomerInputEnvelope = {
-    data: AssetCreateManyCustomerInput | AssetCreateManyCustomerInput[]
+  export type PurchaseOrderCreateManyCustomerInputEnvelope = {
+    data: PurchaseOrderCreateManyCustomerInput | PurchaseOrderCreateManyCustomerInput[]
     skipDuplicates?: boolean
   }
 
-  export type AssetHistoryCreateWithoutCustomerInput = {
-    id?: string
-    action: string
-    details?: string | null
-    timestamp?: Date | string
-    asset: AssetCreateNestedOneWithoutHistoryInput
+  export type PurchaseOrderUpsertWithWhereUniqueWithoutCustomerInput = {
+    where: PurchaseOrderWhereUniqueInput
+    update: XOR<PurchaseOrderUpdateWithoutCustomerInput, PurchaseOrderUncheckedUpdateWithoutCustomerInput>
+    create: XOR<PurchaseOrderCreateWithoutCustomerInput, PurchaseOrderUncheckedCreateWithoutCustomerInput>
   }
 
-  export type AssetHistoryUncheckedCreateWithoutCustomerInput = {
-    id?: string
-    assetId: string
-    action: string
-    details?: string | null
-    timestamp?: Date | string
+  export type PurchaseOrderUpdateWithWhereUniqueWithoutCustomerInput = {
+    where: PurchaseOrderWhereUniqueInput
+    data: XOR<PurchaseOrderUpdateWithoutCustomerInput, PurchaseOrderUncheckedUpdateWithoutCustomerInput>
   }
 
-  export type AssetHistoryCreateOrConnectWithoutCustomerInput = {
-    where: AssetHistoryWhereUniqueInput
-    create: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput>
+  export type PurchaseOrderUpdateManyWithWhereWithoutCustomerInput = {
+    where: PurchaseOrderScalarWhereInput
+    data: XOR<PurchaseOrderUpdateManyMutationInput, PurchaseOrderUncheckedUpdateManyWithoutCustomerInput>
   }
 
-  export type AssetHistoryCreateManyCustomerInputEnvelope = {
-    data: AssetHistoryCreateManyCustomerInput | AssetHistoryCreateManyCustomerInput[]
-    skipDuplicates?: boolean
+  export type PurchaseOrderScalarWhereInput = {
+    AND?: PurchaseOrderScalarWhereInput | PurchaseOrderScalarWhereInput[]
+    OR?: PurchaseOrderScalarWhereInput[]
+    NOT?: PurchaseOrderScalarWhereInput | PurchaseOrderScalarWhereInput[]
+    id?: StringFilter<"PurchaseOrder"> | string
+    systemOrderId?: StringFilter<"PurchaseOrder"> | string
+    customerId?: StringFilter<"PurchaseOrder"> | string
+    poNumber?: StringFilter<"PurchaseOrder"> | string
+    dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
+    notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
   }
 
-  export type AssetUpsertWithWhereUniqueWithoutCustomerInput = {
-    where: AssetWhereUniqueInput
-    update: XOR<AssetUpdateWithoutCustomerInput, AssetUncheckedUpdateWithoutCustomerInput>
-    create: XOR<AssetCreateWithoutCustomerInput, AssetUncheckedCreateWithoutCustomerInput>
-  }
-
-  export type AssetUpdateWithWhereUniqueWithoutCustomerInput = {
-    where: AssetWhereUniqueInput
-    data: XOR<AssetUpdateWithoutCustomerInput, AssetUncheckedUpdateWithoutCustomerInput>
-  }
-
-  export type AssetUpdateManyWithWhereWithoutCustomerInput = {
-    where: AssetScalarWhereInput
-    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyWithoutCustomerInput>
-  }
-
-  export type AssetScalarWhereInput = {
-    AND?: AssetScalarWhereInput | AssetScalarWhereInput[]
-    OR?: AssetScalarWhereInput[]
-    NOT?: AssetScalarWhereInput | AssetScalarWhereInput[]
-    id?: StringFilter<"Asset"> | string
-    name?: StringFilter<"Asset"> | string
-    categoryId?: StringFilter<"Asset"> | string
-    serial?: StringNullableFilter<"Asset"> | string | null
-    locationId?: StringNullableFilter<"Asset"> | string | null
-    customerId?: StringNullableFilter<"Asset"> | string | null
-    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
-    description?: StringNullableFilter<"Asset"> | string | null
-    createdAt?: DateTimeFilter<"Asset"> | Date | string
-    updatedAt?: DateTimeFilter<"Asset"> | Date | string
-  }
-
-  export type AssetHistoryUpsertWithWhereUniqueWithoutCustomerInput = {
-    where: AssetHistoryWhereUniqueInput
-    update: XOR<AssetHistoryUpdateWithoutCustomerInput, AssetHistoryUncheckedUpdateWithoutCustomerInput>
-    create: XOR<AssetHistoryCreateWithoutCustomerInput, AssetHistoryUncheckedCreateWithoutCustomerInput>
-  }
-
-  export type AssetHistoryUpdateWithWhereUniqueWithoutCustomerInput = {
-    where: AssetHistoryWhereUniqueInput
-    data: XOR<AssetHistoryUpdateWithoutCustomerInput, AssetHistoryUncheckedUpdateWithoutCustomerInput>
-  }
-
-  export type AssetHistoryUpdateManyWithWhereWithoutCustomerInput = {
-    where: AssetHistoryScalarWhereInput
-    data: XOR<AssetHistoryUpdateManyMutationInput, AssetHistoryUncheckedUpdateManyWithoutCustomerInput>
-  }
-
-  export type AssetHistoryScalarWhereInput = {
-    AND?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
-    OR?: AssetHistoryScalarWhereInput[]
-    NOT?: AssetHistoryScalarWhereInput | AssetHistoryScalarWhereInput[]
-    id?: StringFilter<"AssetHistory"> | string
-    assetId?: StringFilter<"AssetHistory"> | string
-    action?: StringFilter<"AssetHistory"> | string
-    details?: StringNullableFilter<"AssetHistory"> | string | null
-    customerId?: StringNullableFilter<"AssetHistory"> | string | null
-    timestamp?: DateTimeFilter<"AssetHistory"> | Date | string
-  }
-
-  export type CategoryCreateWithoutAssetsInput = {
+  export type CustomerCreateWithoutPurchaseOrdersInput = {
     id?: string
     name: string
-  }
-
-  export type CategoryUncheckedCreateWithoutAssetsInput = {
-    id?: string
-    name: string
-  }
-
-  export type CategoryCreateOrConnectWithoutAssetsInput = {
-    where: CategoryWhereUniqueInput
-    create: XOR<CategoryCreateWithoutAssetsInput, CategoryUncheckedCreateWithoutAssetsInput>
-  }
-
-  export type LocationCreateWithoutAssetsInput = {
-    id?: string
-    name: string
-    address?: string | null
-  }
-
-  export type LocationUncheckedCreateWithoutAssetsInput = {
-    id?: string
-    name: string
-    address?: string | null
-  }
-
-  export type LocationCreateOrConnectWithoutAssetsInput = {
-    where: LocationWhereUniqueInput
-    create: XOR<LocationCreateWithoutAssetsInput, LocationUncheckedCreateWithoutAssetsInput>
-  }
-
-  export type CustomerCreateWithoutAssetsInput = {
-    id?: string
-    name: string
-    contact?: string | null
+    contactName?: string | null
     email?: string | null
     phone?: string | null
-    company?: string | null
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    history?: AssetHistoryCreateNestedManyWithoutCustomerInput
   }
 
-  export type CustomerUncheckedCreateWithoutAssetsInput = {
+  export type CustomerUncheckedCreateWithoutPurchaseOrdersInput = {
     id?: string
     name: string
-    contact?: string | null
+    contactName?: string | null
     email?: string | null
     phone?: string | null
-    company?: string | null
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutCustomerInput
   }
 
-  export type CustomerCreateOrConnectWithoutAssetsInput = {
+  export type CustomerCreateOrConnectWithoutPurchaseOrdersInput = {
     where: CustomerWhereUniqueInput
-    create: XOR<CustomerCreateWithoutAssetsInput, CustomerUncheckedCreateWithoutAssetsInput>
+    create: XOR<CustomerCreateWithoutPurchaseOrdersInput, CustomerUncheckedCreateWithoutPurchaseOrdersInput>
   }
 
-  export type AssetHistoryCreateWithoutAssetInput = {
+  export type OrderLineItemCreateWithoutPurchaseOrderInput = {
     id?: string
-    action: string
-    details?: string | null
-    timestamp?: Date | string
-    customer?: CustomerCreateNestedOneWithoutHistoryInput
-  }
-
-  export type AssetHistoryUncheckedCreateWithoutAssetInput = {
-    id?: string
-    action: string
-    details?: string | null
-    customerId?: string | null
-    timestamp?: Date | string
-  }
-
-  export type AssetHistoryCreateOrConnectWithoutAssetInput = {
-    where: AssetHistoryWhereUniqueInput
-    create: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput>
-  }
-
-  export type AssetHistoryCreateManyAssetInputEnvelope = {
-    data: AssetHistoryCreateManyAssetInput | AssetHistoryCreateManyAssetInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type CategoryUpsertWithoutAssetsInput = {
-    update: XOR<CategoryUpdateWithoutAssetsInput, CategoryUncheckedUpdateWithoutAssetsInput>
-    create: XOR<CategoryCreateWithoutAssetsInput, CategoryUncheckedCreateWithoutAssetsInput>
-    where?: CategoryWhereInput
-  }
-
-  export type CategoryUpdateToOneWithWhereWithoutAssetsInput = {
-    where?: CategoryWhereInput
-    data: XOR<CategoryUpdateWithoutAssetsInput, CategoryUncheckedUpdateWithoutAssetsInput>
-  }
-
-  export type CategoryUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type CategoryUncheckedUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type LocationUpsertWithoutAssetsInput = {
-    update: XOR<LocationUpdateWithoutAssetsInput, LocationUncheckedUpdateWithoutAssetsInput>
-    create: XOR<LocationCreateWithoutAssetsInput, LocationUncheckedCreateWithoutAssetsInput>
-    where?: LocationWhereInput
-  }
-
-  export type LocationUpdateToOneWithWhereWithoutAssetsInput = {
-    where?: LocationWhereInput
-    data: XOR<LocationUpdateWithoutAssetsInput, LocationUncheckedUpdateWithoutAssetsInput>
-  }
-
-  export type LocationUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LocationUncheckedUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type CustomerUpsertWithoutAssetsInput = {
-    update: XOR<CustomerUpdateWithoutAssetsInput, CustomerUncheckedUpdateWithoutAssetsInput>
-    create: XOR<CustomerCreateWithoutAssetsInput, CustomerUncheckedCreateWithoutAssetsInput>
-    where?: CustomerWhereInput
-  }
-
-  export type CustomerUpdateToOneWithWhereWithoutAssetsInput = {
-    where?: CustomerWhereInput
-    data: XOR<CustomerUpdateWithoutAssetsInput, CustomerUncheckedUpdateWithoutAssetsInput>
-  }
-
-  export type CustomerUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
-    billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    history?: AssetHistoryUpdateManyWithoutCustomerNestedInput
-  }
-
-  export type CustomerUncheckedUpdateWithoutAssetsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
-    billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    history?: AssetHistoryUncheckedUpdateManyWithoutCustomerNestedInput
-  }
-
-  export type AssetHistoryUpsertWithWhereUniqueWithoutAssetInput = {
-    where: AssetHistoryWhereUniqueInput
-    update: XOR<AssetHistoryUpdateWithoutAssetInput, AssetHistoryUncheckedUpdateWithoutAssetInput>
-    create: XOR<AssetHistoryCreateWithoutAssetInput, AssetHistoryUncheckedCreateWithoutAssetInput>
-  }
-
-  export type AssetHistoryUpdateWithWhereUniqueWithoutAssetInput = {
-    where: AssetHistoryWhereUniqueInput
-    data: XOR<AssetHistoryUpdateWithoutAssetInput, AssetHistoryUncheckedUpdateWithoutAssetInput>
-  }
-
-  export type AssetHistoryUpdateManyWithWhereWithoutAssetInput = {
-    where: AssetHistoryScalarWhereInput
-    data: XOR<AssetHistoryUpdateManyMutationInput, AssetHistoryUncheckedUpdateManyWithoutAssetInput>
-  }
-
-  export type AssetCreateWithoutCategoryInput = {
-    id?: string
-    name: string
-    serial?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutAssetsInput
-    customer?: CustomerCreateNestedOneWithoutAssetsInput
-    history?: AssetHistoryCreateNestedManyWithoutAssetInput
-  }
-
-  export type AssetUncheckedCreateWithoutCategoryInput = {
-    id?: string
-    name: string
-    serial?: string | null
-    locationId?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutAssetInput
-  }
-
-  export type AssetCreateOrConnectWithoutCategoryInput = {
-    where: AssetWhereUniqueInput
-    create: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput>
-  }
-
-  export type AssetCreateManyCategoryInputEnvelope = {
-    data: AssetCreateManyCategoryInput | AssetCreateManyCategoryInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AssetUpsertWithWhereUniqueWithoutCategoryInput = {
-    where: AssetWhereUniqueInput
-    update: XOR<AssetUpdateWithoutCategoryInput, AssetUncheckedUpdateWithoutCategoryInput>
-    create: XOR<AssetCreateWithoutCategoryInput, AssetUncheckedCreateWithoutCategoryInput>
-  }
-
-  export type AssetUpdateWithWhereUniqueWithoutCategoryInput = {
-    where: AssetWhereUniqueInput
-    data: XOR<AssetUpdateWithoutCategoryInput, AssetUncheckedUpdateWithoutCategoryInput>
-  }
-
-  export type AssetUpdateManyWithWhereWithoutCategoryInput = {
-    where: AssetScalarWhereInput
-    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyWithoutCategoryInput>
-  }
-
-  export type AssetCreateWithoutLocationInput = {
-    id?: string
-    name: string
-    serial?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    category: CategoryCreateNestedOneWithoutAssetsInput
-    customer?: CustomerCreateNestedOneWithoutAssetsInput
-    history?: AssetHistoryCreateNestedManyWithoutAssetInput
-  }
-
-  export type AssetUncheckedCreateWithoutLocationInput = {
-    id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    history?: AssetHistoryUncheckedCreateNestedManyWithoutAssetInput
-  }
-
-  export type AssetCreateOrConnectWithoutLocationInput = {
-    where: AssetWhereUniqueInput
-    create: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput>
-  }
-
-  export type AssetCreateManyLocationInputEnvelope = {
-    data: AssetCreateManyLocationInput | AssetCreateManyLocationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AssetUpsertWithWhereUniqueWithoutLocationInput = {
-    where: AssetWhereUniqueInput
-    update: XOR<AssetUpdateWithoutLocationInput, AssetUncheckedUpdateWithoutLocationInput>
-    create: XOR<AssetCreateWithoutLocationInput, AssetUncheckedCreateWithoutLocationInput>
-  }
-
-  export type AssetUpdateWithWhereUniqueWithoutLocationInput = {
-    where: AssetWhereUniqueInput
-    data: XOR<AssetUpdateWithoutLocationInput, AssetUncheckedUpdateWithoutLocationInput>
-  }
-
-  export type AssetUpdateManyWithWhereWithoutLocationInput = {
-    where: AssetScalarWhereInput
-    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyWithoutLocationInput>
-  }
-
-  export type AssetCreateWithoutHistoryInput = {
-    id?: string
-    name: string
-    serial?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    category: CategoryCreateNestedOneWithoutAssetsInput
-    location?: LocationCreateNestedOneWithoutAssetsInput
-    customer?: CustomerCreateNestedOneWithoutAssetsInput
-  }
-
-  export type AssetUncheckedCreateWithoutHistoryInput = {
-    id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    locationId?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AssetCreateOrConnectWithoutHistoryInput = {
-    where: AssetWhereUniqueInput
-    create: XOR<AssetCreateWithoutHistoryInput, AssetUncheckedCreateWithoutHistoryInput>
-  }
-
-  export type CustomerCreateWithoutHistoryInput = {
-    id?: string
-    name: string
-    contact?: string | null
-    email?: string | null
-    phone?: string | null
-    company?: string | null
-    billingAddress?: string | null
-    shippingAddress?: string | null
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    assets?: AssetCreateNestedManyWithoutCustomerInput
+    fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
+    batches?: BatchCreateNestedManyWithoutLineItemInput
   }
 
-  export type CustomerUncheckedCreateWithoutHistoryInput = {
+  export type OrderLineItemUncheckedCreateWithoutPurchaseOrderInput = {
     id?: string
-    name: string
-    contact?: string | null
-    email?: string | null
-    phone?: string | null
-    company?: string | null
-    billingAddress?: string | null
-    shippingAddress?: string | null
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    relationStart?: Date | string
-    relationStatus?: $Enums.RelationStatus
-    assets?: AssetUncheckedCreateNestedManyWithoutCustomerInput
+    fileAttachments?: FileAttachmentUncheckedCreateNestedManyWithoutLineItemInput
+    batches?: BatchUncheckedCreateNestedManyWithoutLineItemInput
   }
 
-  export type CustomerCreateOrConnectWithoutHistoryInput = {
-    where: CustomerWhereUniqueInput
-    create: XOR<CustomerCreateWithoutHistoryInput, CustomerUncheckedCreateWithoutHistoryInput>
+  export type OrderLineItemCreateOrConnectWithoutPurchaseOrderInput = {
+    where: OrderLineItemWhereUniqueInput
+    create: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput>
   }
 
-  export type AssetUpsertWithoutHistoryInput = {
-    update: XOR<AssetUpdateWithoutHistoryInput, AssetUncheckedUpdateWithoutHistoryInput>
-    create: XOR<AssetCreateWithoutHistoryInput, AssetUncheckedCreateWithoutHistoryInput>
-    where?: AssetWhereInput
+  export type OrderLineItemCreateManyPurchaseOrderInputEnvelope = {
+    data: OrderLineItemCreateManyPurchaseOrderInput | OrderLineItemCreateManyPurchaseOrderInput[]
+    skipDuplicates?: boolean
   }
 
-  export type AssetUpdateToOneWithWhereWithoutHistoryInput = {
-    where?: AssetWhereInput
-    data: XOR<AssetUpdateWithoutHistoryInput, AssetUncheckedUpdateWithoutHistoryInput>
-  }
-
-  export type AssetUpdateWithoutHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutAssetsNestedInput
-    location?: LocationUpdateOneWithoutAssetsNestedInput
-    customer?: CustomerUpdateOneWithoutAssetsNestedInput
-  }
-
-  export type AssetUncheckedUpdateWithoutHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CustomerUpsertWithoutHistoryInput = {
-    update: XOR<CustomerUpdateWithoutHistoryInput, CustomerUncheckedUpdateWithoutHistoryInput>
-    create: XOR<CustomerCreateWithoutHistoryInput, CustomerUncheckedCreateWithoutHistoryInput>
+  export type CustomerUpsertWithoutPurchaseOrdersInput = {
+    update: XOR<CustomerUpdateWithoutPurchaseOrdersInput, CustomerUncheckedUpdateWithoutPurchaseOrdersInput>
+    create: XOR<CustomerCreateWithoutPurchaseOrdersInput, CustomerUncheckedCreateWithoutPurchaseOrdersInput>
     where?: CustomerWhereInput
   }
 
-  export type CustomerUpdateToOneWithWhereWithoutHistoryInput = {
+  export type CustomerUpdateToOneWithWhereWithoutPurchaseOrdersInput = {
     where?: CustomerWhereInput
-    data: XOR<CustomerUpdateWithoutHistoryInput, CustomerUncheckedUpdateWithoutHistoryInput>
+    data: XOR<CustomerUpdateWithoutPurchaseOrdersInput, CustomerUncheckedUpdateWithoutPurchaseOrdersInput>
   }
 
-  export type CustomerUpdateWithoutHistoryInput = {
+  export type CustomerUpdateWithoutPurchaseOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    assets?: AssetUpdateManyWithoutCustomerNestedInput
   }
 
-  export type CustomerUncheckedUpdateWithoutHistoryInput = {
+  export type CustomerUncheckedUpdateWithoutPurchaseOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: NullableStringFieldUpdateOperationsInput | string | null
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    relationStatus?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
-    assets?: AssetUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
-  export type AssetCreateManyCustomerInput = {
+  export type OrderLineItemUpsertWithWhereUniqueWithoutPurchaseOrderInput = {
+    where: OrderLineItemWhereUniqueInput
+    update: XOR<OrderLineItemUpdateWithoutPurchaseOrderInput, OrderLineItemUncheckedUpdateWithoutPurchaseOrderInput>
+    create: XOR<OrderLineItemCreateWithoutPurchaseOrderInput, OrderLineItemUncheckedCreateWithoutPurchaseOrderInput>
+  }
+
+  export type OrderLineItemUpdateWithWhereUniqueWithoutPurchaseOrderInput = {
+    where: OrderLineItemWhereUniqueInput
+    data: XOR<OrderLineItemUpdateWithoutPurchaseOrderInput, OrderLineItemUncheckedUpdateWithoutPurchaseOrderInput>
+  }
+
+  export type OrderLineItemUpdateManyWithWhereWithoutPurchaseOrderInput = {
+    where: OrderLineItemScalarWhereInput
+    data: XOR<OrderLineItemUpdateManyMutationInput, OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderInput>
+  }
+
+  export type OrderLineItemScalarWhereInput = {
+    AND?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
+    OR?: OrderLineItemScalarWhereInput[]
+    NOT?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
+    id?: StringFilter<"OrderLineItem"> | string
+    orderId?: StringFilter<"OrderLineItem"> | string
+    partNumber?: StringFilter<"OrderLineItem"> | string
+    partName?: StringFilter<"OrderLineItem"> | string
+    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
+    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    quantity?: IntFilter<"OrderLineItem"> | number
+    dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
+    notes?: StringNullableFilter<"OrderLineItem"> | string | null
+    createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+  }
+
+  export type PurchaseOrderCreateWithoutLineItemsInput = {
     id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    locationId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    systemOrderId?: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    customer: CustomerCreateNestedOneWithoutPurchaseOrdersInput
+  }
+
+  export type PurchaseOrderUncheckedCreateWithoutLineItemsInput = {
+    id?: string
+    systemOrderId?: string
+    customerId: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AssetHistoryCreateManyCustomerInput = {
+  export type PurchaseOrderCreateOrConnectWithoutLineItemsInput = {
+    where: PurchaseOrderWhereUniqueInput
+    create: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
+  }
+
+  export type FileAttachmentCreateWithoutLineItemInput = {
     id?: string
-    assetId: string
-    action: string
-    details?: string | null
-    timestamp?: Date | string
-  }
-
-  export type AssetUpdateWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutAssetsNestedInput
-    location?: LocationUpdateOneWithoutAssetsNestedInput
-    history?: AssetHistoryUpdateManyWithoutAssetNestedInput
-  }
-
-  export type AssetUncheckedUpdateWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: AssetHistoryUncheckedUpdateManyWithoutAssetNestedInput
-  }
-
-  export type AssetUncheckedUpdateManyWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryUpdateWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    asset?: AssetUpdateOneRequiredWithoutHistoryNestedInput
-  }
-
-  export type AssetHistoryUncheckedUpdateWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    assetId?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryUncheckedUpdateManyWithoutCustomerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    assetId?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryCreateManyAssetInput = {
-    id?: string
-    action: string
-    details?: string | null
-    customerId?: string | null
-    timestamp?: Date | string
-  }
-
-  export type AssetHistoryUpdateWithoutAssetInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    customer?: CustomerUpdateOneWithoutHistoryNestedInput
-  }
-
-  export type AssetHistoryUncheckedUpdateWithoutAssetInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetHistoryUncheckedUpdateManyWithoutAssetInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetCreateManyCategoryInput = {
-    id?: string
-    name: string
-    serial?: string | null
-    locationId?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
     description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FileAttachmentUncheckedCreateWithoutLineItemInput = {
+    id?: string
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FileAttachmentCreateOrConnectWithoutLineItemInput = {
+    where: FileAttachmentWhereUniqueInput
+    create: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput>
+  }
+
+  export type FileAttachmentCreateManyLineItemInputEnvelope = {
+    data: FileAttachmentCreateManyLineItemInput | FileAttachmentCreateManyLineItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchCreateWithoutLineItemInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutLineItemInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutLineItemInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput>
+  }
+
+  export type BatchCreateManyLineItemInputEnvelope = {
+    data: BatchCreateManyLineItemInput | BatchCreateManyLineItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PurchaseOrderUpsertWithoutLineItemsInput = {
+    update: XOR<PurchaseOrderUpdateWithoutLineItemsInput, PurchaseOrderUncheckedUpdateWithoutLineItemsInput>
+    create: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
+    where?: PurchaseOrderWhereInput
+  }
+
+  export type PurchaseOrderUpdateToOneWithWhereWithoutLineItemsInput = {
+    where?: PurchaseOrderWhereInput
+    data: XOR<PurchaseOrderUpdateWithoutLineItemsInput, PurchaseOrderUncheckedUpdateWithoutLineItemsInput>
+  }
+
+  export type PurchaseOrderUpdateWithoutLineItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer?: CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput
+  }
+
+  export type PurchaseOrderUncheckedUpdateWithoutLineItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput = {
+    where: FileAttachmentWhereUniqueInput
+    update: XOR<FileAttachmentUpdateWithoutLineItemInput, FileAttachmentUncheckedUpdateWithoutLineItemInput>
+    create: XOR<FileAttachmentCreateWithoutLineItemInput, FileAttachmentUncheckedCreateWithoutLineItemInput>
+  }
+
+  export type FileAttachmentUpdateWithWhereUniqueWithoutLineItemInput = {
+    where: FileAttachmentWhereUniqueInput
+    data: XOR<FileAttachmentUpdateWithoutLineItemInput, FileAttachmentUncheckedUpdateWithoutLineItemInput>
+  }
+
+  export type FileAttachmentUpdateManyWithWhereWithoutLineItemInput = {
+    where: FileAttachmentScalarWhereInput
+    data: XOR<FileAttachmentUpdateManyMutationInput, FileAttachmentUncheckedUpdateManyWithoutLineItemInput>
+  }
+
+  export type FileAttachmentScalarWhereInput = {
+    AND?: FileAttachmentScalarWhereInput | FileAttachmentScalarWhereInput[]
+    OR?: FileAttachmentScalarWhereInput[]
+    NOT?: FileAttachmentScalarWhereInput | FileAttachmentScalarWhereInput[]
+    id?: StringFilter<"FileAttachment"> | string
+    lineItemId?: StringFilter<"FileAttachment"> | string
+    fileName?: StringFilter<"FileAttachment"> | string
+    fileType?: StringFilter<"FileAttachment"> | string
+    fileUrl?: StringFilter<"FileAttachment"> | string
+    uploadedBy?: StringFilter<"FileAttachment"> | string
+    description?: StringNullableFilter<"FileAttachment"> | string | null
+    createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
+  }
+
+  export type BatchUpsertWithWhereUniqueWithoutLineItemInput = {
+    where: BatchWhereUniqueInput
+    update: XOR<BatchUpdateWithoutLineItemInput, BatchUncheckedUpdateWithoutLineItemInput>
+    create: XOR<BatchCreateWithoutLineItemInput, BatchUncheckedCreateWithoutLineItemInput>
+  }
+
+  export type BatchUpdateWithWhereUniqueWithoutLineItemInput = {
+    where: BatchWhereUniqueInput
+    data: XOR<BatchUpdateWithoutLineItemInput, BatchUncheckedUpdateWithoutLineItemInput>
+  }
+
+  export type BatchUpdateManyWithWhereWithoutLineItemInput = {
+    where: BatchScalarWhereInput
+    data: XOR<BatchUpdateManyMutationInput, BatchUncheckedUpdateManyWithoutLineItemInput>
+  }
+
+  export type BatchScalarWhereInput = {
+    AND?: BatchScalarWhereInput | BatchScalarWhereInput[]
+    OR?: BatchScalarWhereInput[]
+    NOT?: BatchScalarWhereInput | BatchScalarWhereInput[]
+    id?: StringFilter<"Batch"> | string
+    batchId?: StringFilter<"Batch"> | string
+    lineItemId?: StringFilter<"Batch"> | string
+    quantity?: IntFilter<"Batch"> | number
+    startDate?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    estimatedCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    actualCompletion?: DateTimeNullableFilter<"Batch"> | Date | string | null
+    priority?: EnumBatchPriorityFilter<"Batch"> | $Enums.BatchPriority
+    status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    notes?: StringNullableFilter<"Batch"> | string | null
+    createdAt?: DateTimeFilter<"Batch"> | Date | string
+    updatedAt?: DateTimeFilter<"Batch"> | Date | string
+  }
+
+  export type OrderLineItemCreateWithoutFileAttachmentsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    batches?: BatchCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemUncheckedCreateWithoutFileAttachmentsInput = {
+    id?: string
+    orderId: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batches?: BatchUncheckedCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemCreateOrConnectWithoutFileAttachmentsInput = {
+    where: OrderLineItemWhereUniqueInput
+    create: XOR<OrderLineItemCreateWithoutFileAttachmentsInput, OrderLineItemUncheckedCreateWithoutFileAttachmentsInput>
+  }
+
+  export type OrderLineItemUpsertWithoutFileAttachmentsInput = {
+    update: XOR<OrderLineItemUpdateWithoutFileAttachmentsInput, OrderLineItemUncheckedUpdateWithoutFileAttachmentsInput>
+    create: XOR<OrderLineItemCreateWithoutFileAttachmentsInput, OrderLineItemUncheckedCreateWithoutFileAttachmentsInput>
+    where?: OrderLineItemWhereInput
+  }
+
+  export type OrderLineItemUpdateToOneWithWhereWithoutFileAttachmentsInput = {
+    where?: OrderLineItemWhereInput
+    data: XOR<OrderLineItemUpdateWithoutFileAttachmentsInput, OrderLineItemUncheckedUpdateWithoutFileAttachmentsInput>
+  }
+
+  export type OrderLineItemUpdateWithoutFileAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    batches?: BatchUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateWithoutFileAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batches?: BatchUncheckedUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemCreateWithoutBatchesInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemUncheckedCreateWithoutBatchesInput = {
+    id?: string
+    orderId: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fileAttachments?: FileAttachmentUncheckedCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemCreateOrConnectWithoutBatchesInput = {
+    where: OrderLineItemWhereUniqueInput
+    create: XOR<OrderLineItemCreateWithoutBatchesInput, OrderLineItemUncheckedCreateWithoutBatchesInput>
+  }
+
+  export type RoutingStepCreateWithoutBatchInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutBatchInput = {
+    id?: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepCreateOrConnectWithoutBatchInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput>
+  }
+
+  export type RoutingStepCreateManyBatchInputEnvelope = {
+    data: RoutingStepCreateManyBatchInput | RoutingStepCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QCRecordCreateWithoutBatchInput = {
+    id?: string
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AssetUpdateWithoutCategoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutAssetsNestedInput
-    customer?: CustomerUpdateOneWithoutAssetsNestedInput
-    history?: AssetHistoryUpdateManyWithoutAssetNestedInput
-  }
-
-  export type AssetUncheckedUpdateWithoutCategoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: AssetHistoryUncheckedUpdateManyWithoutAssetNestedInput
-  }
-
-  export type AssetUncheckedUpdateManyWithoutCategoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    locationId?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AssetCreateManyLocationInput = {
+  export type QCRecordUncheckedCreateWithoutBatchInput = {
     id?: string
-    name: string
-    categoryId: string
-    serial?: string | null
-    customerId?: string | null
-    status?: $Enums.AssetStatus
-    description?: string | null
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AssetUpdateWithoutLocationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutAssetsNestedInput
-    customer?: CustomerUpdateOneWithoutAssetsNestedInput
-    history?: AssetHistoryUpdateManyWithoutAssetNestedInput
+  export type QCRecordCreateOrConnectWithoutBatchInput = {
+    where: QCRecordWhereUniqueInput
+    create: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput>
   }
 
-  export type AssetUncheckedUpdateWithoutLocationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: AssetHistoryUncheckedUpdateManyWithoutAssetNestedInput
+  export type QCRecordCreateManyBatchInputEnvelope = {
+    data: QCRecordCreateManyBatchInput | QCRecordCreateManyBatchInput[]
+    skipDuplicates?: boolean
   }
 
-  export type AssetUncheckedUpdateManyWithoutLocationInput = {
+  export type OrderLineItemUpsertWithoutBatchesInput = {
+    update: XOR<OrderLineItemUpdateWithoutBatchesInput, OrderLineItemUncheckedUpdateWithoutBatchesInput>
+    create: XOR<OrderLineItemCreateWithoutBatchesInput, OrderLineItemUncheckedCreateWithoutBatchesInput>
+    where?: OrderLineItemWhereInput
+  }
+
+  export type OrderLineItemUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: OrderLineItemWhereInput
+    data: XOR<OrderLineItemUpdateWithoutBatchesInput, OrderLineItemUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type OrderLineItemUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fileAttachments?: FileAttachmentUncheckedUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type RoutingStepUpsertWithWhereUniqueWithoutBatchInput = {
+    where: RoutingStepWhereUniqueInput
+    update: XOR<RoutingStepUpdateWithoutBatchInput, RoutingStepUncheckedUpdateWithoutBatchInput>
+    create: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput>
+  }
+
+  export type RoutingStepUpdateWithWhereUniqueWithoutBatchInput = {
+    where: RoutingStepWhereUniqueInput
+    data: XOR<RoutingStepUpdateWithoutBatchInput, RoutingStepUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type RoutingStepUpdateManyWithWhereWithoutBatchInput = {
+    where: RoutingStepScalarWhereInput
+    data: XOR<RoutingStepUpdateManyMutationInput, RoutingStepUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type RoutingStepScalarWhereInput = {
+    AND?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+    OR?: RoutingStepScalarWhereInput[]
+    NOT?: RoutingStepScalarWhereInput | RoutingStepScalarWhereInput[]
+    id?: StringFilter<"RoutingStep"> | string
+    batchId?: StringFilter<"RoutingStep"> | string
+    stepNumber?: IntFilter<"RoutingStep"> | number
+    workstationId?: StringFilter<"RoutingStep"> | string
+    description?: StringFilter<"RoutingStep"> | string
+    required?: BoolFilter<"RoutingStep"> | boolean
+    estimatedTime?: IntNullableFilter<"RoutingStep"> | number | null
+    notes?: StringNullableFilter<"RoutingStep"> | string | null
+    status?: EnumStepStatusFilter<"RoutingStep"> | $Enums.StepStatus
+    createdAt?: DateTimeFilter<"RoutingStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingStep"> | Date | string
+  }
+
+  export type QCRecordUpsertWithWhereUniqueWithoutBatchInput = {
+    where: QCRecordWhereUniqueInput
+    update: XOR<QCRecordUpdateWithoutBatchInput, QCRecordUncheckedUpdateWithoutBatchInput>
+    create: XOR<QCRecordCreateWithoutBatchInput, QCRecordUncheckedCreateWithoutBatchInput>
+  }
+
+  export type QCRecordUpdateWithWhereUniqueWithoutBatchInput = {
+    where: QCRecordWhereUniqueInput
+    data: XOR<QCRecordUpdateWithoutBatchInput, QCRecordUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type QCRecordUpdateManyWithWhereWithoutBatchInput = {
+    where: QCRecordScalarWhereInput
+    data: XOR<QCRecordUpdateManyMutationInput, QCRecordUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type QCRecordScalarWhereInput = {
+    AND?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
+    OR?: QCRecordScalarWhereInput[]
+    NOT?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
+    id?: StringFilter<"QCRecord"> | string
+    batchId?: StringFilter<"QCRecord"> | string
+    inspector?: StringFilter<"QCRecord"> | string
+    inspectionDate?: DateTimeFilter<"QCRecord"> | Date | string
+    result?: EnumQCResultFilter<"QCRecord"> | $Enums.QCResult
+    notes?: StringNullableFilter<"QCRecord"> | string | null
+    createdAt?: DateTimeFilter<"QCRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"QCRecord"> | Date | string
+  }
+
+  export type BatchCreateWithoutRoutingStepsInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
+    qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutRoutingStepsInput = {
+    id?: string
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutRoutingStepsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
+  }
+
+  export type WorkstationCreateWithoutRoutingStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutRoutingStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutRoutingStepsInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutRoutingStepsInput, WorkstationUncheckedCreateWithoutRoutingStepsInput>
+  }
+
+  export type StepConfirmationCreateWithoutRoutingStepInput = {
+    id?: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workstation: WorkstationCreateNestedOneWithoutConfirmationsInput
+  }
+
+  export type StepConfirmationUncheckedCreateWithoutRoutingStepInput = {
+    id?: string
+    workstationId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationCreateOrConnectWithoutRoutingStepInput = {
+    where: StepConfirmationWhereUniqueInput
+    create: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type StepConfirmationCreateManyRoutingStepInputEnvelope = {
+    data: StepConfirmationCreateManyRoutingStepInput | StepConfirmationCreateManyRoutingStepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchUpsertWithoutRoutingStepsInput = {
+    update: XOR<BatchUpdateWithoutRoutingStepsInput, BatchUncheckedUpdateWithoutRoutingStepsInput>
+    create: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutRoutingStepsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutRoutingStepsInput, BatchUncheckedUpdateWithoutRoutingStepsInput>
+  }
+
+  export type BatchUpdateWithoutRoutingStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
+    qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutRoutingStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type WorkstationUpsertWithoutRoutingStepsInput = {
+    update: XOR<WorkstationUpdateWithoutRoutingStepsInput, WorkstationUncheckedUpdateWithoutRoutingStepsInput>
+    create: XOR<WorkstationCreateWithoutRoutingStepsInput, WorkstationUncheckedCreateWithoutRoutingStepsInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutRoutingStepsInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutRoutingStepsInput, WorkstationUncheckedUpdateWithoutRoutingStepsInput>
+  }
+
+  export type WorkstationUpdateWithoutRoutingStepsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    categoryId?: StringFieldUpdateOperationsInput | string
-    serial?: NullableStringFieldUpdateOperationsInput | string | null
-    customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutRoutingStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput = {
+    where: StepConfirmationWhereUniqueInput
+    update: XOR<StepConfirmationUpdateWithoutRoutingStepInput, StepConfirmationUncheckedUpdateWithoutRoutingStepInput>
+    create: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput = {
+    where: StepConfirmationWhereUniqueInput
+    data: XOR<StepConfirmationUpdateWithoutRoutingStepInput, StepConfirmationUncheckedUpdateWithoutRoutingStepInput>
+  }
+
+  export type StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput = {
+    where: StepConfirmationScalarWhereInput
+    data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyWithoutRoutingStepInput>
+  }
+
+  export type StepConfirmationScalarWhereInput = {
+    AND?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+    OR?: StepConfirmationScalarWhereInput[]
+    NOT?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+    id?: StringFilter<"StepConfirmation"> | string
+    stepId?: StringFilter<"StepConfirmation"> | string
+    workstationId?: StringFilter<"StepConfirmation"> | string
+    operatorName?: StringFilter<"StepConfirmation"> | string
+    operatorId?: StringNullableFilter<"StepConfirmation"> | string | null
+    startTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"StepConfirmation"> | Date | string | null
+    notes?: StringNullableFilter<"StepConfirmation"> | string | null
+    photoUrl?: StringNullableFilter<"StepConfirmation"> | string | null
+    flagged?: BoolFilter<"StepConfirmation"> | boolean
+    status?: EnumConfirmationStatusFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+    updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+  }
+
+  export type RoutingStepCreateWithoutWorkstationInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutWorkstationInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepCreateOrConnectWithoutWorkstationInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type RoutingStepCreateManyWorkstationInputEnvelope = {
+    data: RoutingStepCreateManyWorkstationInput | RoutingStepCreateManyWorkstationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StepConfirmationCreateWithoutWorkstationInput = {
+    id?: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingStep: RoutingStepCreateNestedOneWithoutConfirmationsInput
+  }
+
+  export type StepConfirmationUncheckedCreateWithoutWorkstationInput = {
+    id?: string
+    stepId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationCreateOrConnectWithoutWorkstationInput = {
+    where: StepConfirmationWhereUniqueInput
+    create: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type StepConfirmationCreateManyWorkstationInputEnvelope = {
+    data: StepConfirmationCreateManyWorkstationInput | StepConfirmationCreateManyWorkstationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput = {
+    where: RoutingStepWhereUniqueInput
+    update: XOR<RoutingStepUpdateWithoutWorkstationInput, RoutingStepUncheckedUpdateWithoutWorkstationInput>
+    create: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type RoutingStepUpdateWithWhereUniqueWithoutWorkstationInput = {
+    where: RoutingStepWhereUniqueInput
+    data: XOR<RoutingStepUpdateWithoutWorkstationInput, RoutingStepUncheckedUpdateWithoutWorkstationInput>
+  }
+
+  export type RoutingStepUpdateManyWithWhereWithoutWorkstationInput = {
+    where: RoutingStepScalarWhereInput
+    data: XOR<RoutingStepUpdateManyMutationInput, RoutingStepUncheckedUpdateManyWithoutWorkstationInput>
+  }
+
+  export type StepConfirmationUpsertWithWhereUniqueWithoutWorkstationInput = {
+    where: StepConfirmationWhereUniqueInput
+    update: XOR<StepConfirmationUpdateWithoutWorkstationInput, StepConfirmationUncheckedUpdateWithoutWorkstationInput>
+    create: XOR<StepConfirmationCreateWithoutWorkstationInput, StepConfirmationUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type StepConfirmationUpdateWithWhereUniqueWithoutWorkstationInput = {
+    where: StepConfirmationWhereUniqueInput
+    data: XOR<StepConfirmationUpdateWithoutWorkstationInput, StepConfirmationUncheckedUpdateWithoutWorkstationInput>
+  }
+
+  export type StepConfirmationUpdateManyWithWhereWithoutWorkstationInput = {
+    where: StepConfirmationScalarWhereInput
+    data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyWithoutWorkstationInput>
+  }
+
+  export type RoutingStepCreateWithoutConfirmationsInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutConfirmationsInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingStepCreateOrConnectWithoutConfirmationsInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutConfirmationsInput, RoutingStepUncheckedCreateWithoutConfirmationsInput>
+  }
+
+  export type WorkstationCreateWithoutConfirmationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutConfirmationsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutConfirmationsInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
+  }
+
+  export type RoutingStepUpsertWithoutConfirmationsInput = {
+    update: XOR<RoutingStepUpdateWithoutConfirmationsInput, RoutingStepUncheckedUpdateWithoutConfirmationsInput>
+    create: XOR<RoutingStepCreateWithoutConfirmationsInput, RoutingStepUncheckedCreateWithoutConfirmationsInput>
+    where?: RoutingStepWhereInput
+  }
+
+  export type RoutingStepUpdateToOneWithWhereWithoutConfirmationsInput = {
+    where?: RoutingStepWhereInput
+    data: XOR<RoutingStepUpdateWithoutConfirmationsInput, RoutingStepUncheckedUpdateWithoutConfirmationsInput>
+  }
+
+  export type RoutingStepUpdateWithoutConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationUpsertWithoutConfirmationsInput = {
+    update: XOR<WorkstationUpdateWithoutConfirmationsInput, WorkstationUncheckedUpdateWithoutConfirmationsInput>
+    create: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutConfirmationsInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutConfirmationsInput, WorkstationUncheckedUpdateWithoutConfirmationsInput>
+  }
+
+  export type WorkstationUpdateWithoutConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type BatchCreateWithoutQcRecordsInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
+    routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutQcRecordsInput = {
+    id?: string
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutQcRecordsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutQcRecordsInput, BatchUncheckedCreateWithoutQcRecordsInput>
+  }
+
+  export type BatchUpsertWithoutQcRecordsInput = {
+    update: XOR<BatchUpdateWithoutQcRecordsInput, BatchUncheckedUpdateWithoutQcRecordsInput>
+    create: XOR<BatchCreateWithoutQcRecordsInput, BatchUncheckedCreateWithoutQcRecordsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutQcRecordsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutQcRecordsInput, BatchUncheckedUpdateWithoutQcRecordsInput>
+  }
+
+  export type BatchUpdateWithoutQcRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
+    routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutQcRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type PurchaseOrderCreateManyCustomerInput = {
+    id?: string
+    systemOrderId?: string
+    poNumber: string
+    dueDate: Date | string
+    priority?: $Enums.OrderPriority
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItems?: OrderLineItemUpdateManyWithoutPurchaseOrderNestedInput
+  }
+
+  export type PurchaseOrderUncheckedUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItems?: OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
+  }
+
+  export type PurchaseOrderUncheckedUpdateManyWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    systemOrderId?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderLineItemCreateManyPurchaseOrderInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    quantity: number
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderLineItemUpdateWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fileAttachments?: FileAttachmentUncheckedUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FileAttachmentCreateManyLineItemInput = {
+    id?: string
+    fileName: string
+    fileType: string
+    fileUrl: string
+    uploadedBy: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BatchCreateManyLineItemInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FileAttachmentUpdateWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FileAttachmentUncheckedUpdateWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FileAttachmentUncheckedUpdateManyWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchUpdateWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateManyWithoutLineItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingStepCreateManyBatchInput = {
+    id?: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QCRecordCreateManyBatchInput = {
+    id?: string
+    inspector: string
+    inspectionDate?: Date | string
+    result: $Enums.QCResult
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingStepUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QCRecordUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inspector?: StringFieldUpdateOperationsInput | string
+    inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationCreateManyRoutingStepInput = {
+    id?: string
+    workstationId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workstation?: WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput
+  }
+
+  export type StepConfirmationUncheckedUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingStepCreateManyWorkstationInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationCreateManyWorkstationInput = {
+    id?: string
+    stepId: string
+    operatorName: string
+    operatorId?: string | null
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingStepUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateManyWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingStep?: RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput
+  }
+
+  export type StepConfirmationUncheckedUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

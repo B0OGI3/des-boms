@@ -123,57 +123,114 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.CustomerScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  contact: 'contact',
+  contactName: 'contactName',
   email: 'email',
   phone: 'phone',
-  company: 'company',
   billingAddress: 'billingAddress',
   shippingAddress: 'shippingAddress',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  relationStart: 'relationStart',
-  relationStatus: 'relationStatus'
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AssetScalarFieldEnum = {
+exports.Prisma.PurchaseOrderScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  categoryId: 'categoryId',
-  serial: 'serial',
-  locationId: 'locationId',
+  systemOrderId: 'systemOrderId',
   customerId: 'customerId',
-  status: 'status',
-  description: 'description',
+  poNumber: 'poNumber',
+  dueDate: 'dueDate',
+  priority: 'priority',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CategoryScalarFieldEnum = {
+exports.Prisma.OrderLineItemScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  orderId: 'orderId',
+  partNumber: 'partNumber',
+  partName: 'partName',
+  drawingNumber: 'drawingNumber',
+  revisionLevel: 'revisionLevel',
+  quantity: 'quantity',
+  dueDate: 'dueDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.LocationScalarFieldEnum = {
+exports.Prisma.FileAttachmentScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  address: 'address'
-};
-
-exports.Prisma.AssetHistoryScalarFieldEnum = {
-  id: 'id',
-  assetId: 'assetId',
-  action: 'action',
-  details: 'details',
-  customerId: 'customerId',
-  timestamp: 'timestamp'
+  lineItemId: 'lineItemId',
+  fileName: 'fileName',
+  fileType: 'fileType',
+  fileUrl: 'fileUrl',
+  uploadedBy: 'uploadedBy',
+  description: 'description',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.BatchScalarFieldEnum = {
   id: 'id',
+  batchId: 'batchId',
+  lineItemId: 'lineItemId',
+  quantity: 'quantity',
+  startDate: 'startDate',
+  estimatedCompletion: 'estimatedCompletion',
+  actualCompletion: 'actualCompletion',
+  priority: 'priority',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoutingStepScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  stepNumber: 'stepNumber',
+  workstationId: 'workstationId',
+  description: 'description',
+  required: 'required',
+  estimatedTime: 'estimatedTime',
+  notes: 'notes',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkstationScalarFieldEnum = {
+  id: 'id',
   name: 'name',
   description: 'description',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StepConfirmationScalarFieldEnum = {
+  id: 'id',
+  stepId: 'stepId',
+  workstationId: 'workstationId',
+  operatorName: 'operatorName',
+  operatorId: 'operatorId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  flagged: 'flagged',
   status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QCRecordScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  inspector: 'inspector',
+  inspectionDate: 'inspectionDate',
+  result: 'result',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -192,34 +249,57 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.RelationStatus = exports.$Enums.RelationStatus = {
-  ACTIVE: 'ACTIVE',
-  STRATEGIC: 'STRATEGIC',
-  ONBOARDING: 'ONBOARDING',
-  RETIRED: 'RETIRED'
+exports.OrderPriority = exports.$Enums.OrderPriority = {
+  RUSH: 'RUSH',
+  STANDARD: 'STANDARD',
+  HOLD: 'HOLD'
 };
 
-exports.AssetStatus = exports.$Enums.AssetStatus = {
-  AVAILABLE: 'AVAILABLE',
-  ASSIGNED: 'ASSIGNED',
-  MAINTENANCE: 'MAINTENANCE',
-  LOST: 'LOST',
-  RETIRED: 'RETIRED'
+exports.BatchPriority = exports.$Enums.BatchPriority = {
+  RUSH: 'RUSH',
+  STANDARD: 'STANDARD',
+  HOLD: 'HOLD'
 };
 
 exports.BatchStatus = exports.$Enums.BatchStatus = {
-  ACTIVE: 'ACTIVE',
+  QUEUED: 'QUEUED',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
+  ON_HOLD: 'ON_HOLD',
   CANCELLED: 'CANCELLED'
+};
+
+exports.StepStatus = exports.$Enums.StepStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  SKIPPED: 'SKIPPED',
+  FAILED: 'FAILED'
+};
+
+exports.ConfirmationStatus = exports.$Enums.ConfirmationStatus = {
+  STARTED: 'STARTED',
+  COMPLETED: 'COMPLETED',
+  PAUSED: 'PAUSED',
+  FLAGGED: 'FLAGGED'
+};
+
+exports.QCResult = exports.$Enums.QCResult = {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  REWORK_REQUIRED: 'REWORK_REQUIRED'
 };
 
 exports.Prisma.ModelName = {
   Customer: 'Customer',
-  Asset: 'Asset',
-  Category: 'Category',
-  Location: 'Location',
-  AssetHistory: 'AssetHistory',
-  Batch: 'Batch'
+  PurchaseOrder: 'PurchaseOrder',
+  OrderLineItem: 'OrderLineItem',
+  FileAttachment: 'FileAttachment',
+  Batch: 'Batch',
+  RoutingStep: 'RoutingStep',
+  Workstation: 'Workstation',
+  StepConfirmation: 'StepConfirmation',
+  QCRecord: 'QCRecord'
 };
 
 /**

@@ -5,7 +5,7 @@ export async function GET() {
   try {
     // Fetch aggregated stats from the database
     const [inventoryCount, batchCount, customerCount] = await Promise.all([
-      prisma.asset.count(),
+      prisma.orderLineItem.count(),
       prisma.batch.count(),
       prisma.customer.count(),
     ]);

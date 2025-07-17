@@ -1,130 +1,249 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// DES-BOMS (Delivered Engineering Solutions - Batch Order Management System)
+// Manufacturing-focused database schema for order management, routing, and quality control
 
 // Prisma Client Configuration
-// Generates TypeScript client in custom directory for better organization
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
 // Database Configuration
-// PostgreSQL database connection
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Customer Model
-// Represents business customers who rent/use assets
+// =============================================================================
+// 1. CUSTOMER & ORDER MANAGEMENT
+// =============================================================================
+
+// Customer Model - Manufacturing customers who place orders
 model Customer {
-  id              String         @id @default(cuid())
-  name            String         // Customer or company name
-  contact         String?        // Primary contact person name
-  email           String?        @unique // Primary email for communications
-  phone           String?        // Primary phone number
-  company         String?        // Company name if different from contact name
-  billingAddress  String?        // Address for billing purposes
-  shippingAddress String?        // Address for asset delivery/pickup
-  notes           String?        // Additional notes about the customer
+  id              String    @id @default(cuid())
+  name            String    // Customer/Company name
+  contactName     String?   // Primary contact person
+  email           String?   @unique
+  phone           String?
+  billingAddress  String?
+  shippingAddress String?
+  notes           String?   // General customer notes
   
   // Relations
-  assets          Asset[]        // Assets currently assigned to this customer
-  history         AssetHistory[] @relation("CustomerHistory") // Historical asset assignments
+  purchaseOrders  PurchaseOrder[]
   
   // Timestamps
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  relationStart   DateTime       @default(now()) // When business relationship started
-  relationStatus  RelationStatus @default(ONBOARDING) // Current relationship status
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
-// Asset Model  
-// Represents physical items/equipment managed by the system
-model Asset {
-  id          String         @id @default(cuid())
-  name        String         // Asset name/identifier
-  category    Category       @relation(fields: [categoryId], references: [id])
-  categoryId  String         // Category classification
-  serial      String?        @unique // Serial number or unique identifier
-  location    Location?      @relation(fields: [locationId], references: [id])
-  locationId  String?        // Current physical location
-  customer    Customer?      @relation(fields: [customerId], references: [id])
-  customerId  String?        // Currently assigned customer (if any)
-  status      AssetStatus    @default(AVAILABLE) // Current operational status
-  description String?        // Detailed description of the asset
-  
-  // Timestamps
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+// Purchase Order Header
+model PurchaseOrder {
+  id          String        @id @default(cuid())
+  systemOrderId String      @unique @default(cuid()) // System-generated unique ID
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  customerId  String
+  poNumber    String        // Customer-provided PO number
+  dueDate     DateTime      // Order-level due date
+  priority    OrderPriority @default(STANDARD)
+  notes       String?       // Order-level notes/shipping details
   
   // Relations
-  history     AssetHistory[] // Complete history of asset movements/assignments
+  lineItems   OrderLineItem[]
+  
+  // Timestamps
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
-// Category Model
-// Classification system for assets (e.g., "Computers", "Furniture", "Vehicles")
-model Category {
-  id     String  @id @default(cuid())
-  name   String  @unique // Category name
-  assets Asset[] // Assets in this category
+// Order Line Items - Individual parts within a PO
+model OrderLineItem {
+  id            String        @id @default(cuid())
+  purchaseOrder PurchaseOrder @relation(fields: [orderId], references: [id])
+  orderId       String
+  partNumber    String        // Part identifier
+  partName      String        // Descriptive part name
+  drawingNumber String?       // Engineering drawing number
+  revisionLevel String?       // Drawing revision (A, B, C, etc.)
+  quantity      Int           // Ordered quantity
+  dueDate       DateTime?     // Line item due date (overrides PO due date)
+  notes         String?       // Line item specific notes
+  
+  // Relations
+  fileAttachments FileAttachment[]
+  batches         Batch[]
+  
+  // Timestamps
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
-// Location Model
-// Physical locations where assets can be stored or deployed
-model Location {
-  id      String  @id @default(cuid())
-  name    String  @unique // Location name (e.g., "Warehouse A", "Customer Site")
-  address String? // Physical address of the location
-  assets  Asset[] // Assets currently at this location
+// File Attachments - Drawings, CAD models, specs per line item
+model FileAttachment {
+  id           String        @id @default(cuid())
+  lineItem     OrderLineItem @relation(fields: [lineItemId], references: [id])
+  lineItemId   String
+  fileName     String        // Original file name
+  fileType     String        // File extension/type
+  fileUrl      String        // Storage path/URL
+  uploadedBy   String        // User who uploaded
+  description  String?       // File description
+  
+  // Timestamps
+  createdAt    DateTime      @default(now())
 }
 
-// Asset History Model
-// Tracks all movements and status changes of assets over time
-model AssetHistory {
-  id         String    @id @default(cuid())
-  asset      Asset     @relation(fields: [assetId], references: [id])
-  assetId    String    // Asset this history entry relates to
-  action     String    // Description of action taken (e.g., "Assigned to Customer", "Returned")
-  details    String?   // Additional details about the action
-  customer   Customer? @relation("CustomerHistory", fields: [customerId], references: [id])
-  customerId String?   // Customer involved in this action (if applicable)
-  timestamp  DateTime  @default(now()) // When this action occurred
-}
+// =============================================================================
+// 2. BATCH & ROUTING MANAGEMENT
+// =============================================================================
 
-// Batch Model
-// Groups of assets for batch operations (future feature)
+// Batch - Manufacturing batch tied to a line item
 model Batch {
-  id          String      @id @default(cuid())
-  name        String      // Batch identifier/name
-  description String?     // Description of the batch purpose
-  status      BatchStatus @default(ACTIVE) // Current batch status
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                  String        @id @default(cuid())
+  batchId             String        @unique // Format: DES-YYYY-MMDD-###
+  lineItem            OrderLineItem @relation(fields: [lineItemId], references: [id])
+  lineItemId          String
+  quantity            Int           // Quantity in this batch
+  startDate           DateTime?     // Actual start date
+  estimatedCompletion DateTime?     // Estimated completion
+  actualCompletion    DateTime?     // Actual completion
+  priority            BatchPriority @default(STANDARD)
+  status              BatchStatus   @default(QUEUED)
+  notes               String?       // Batch-specific notes
+  
+  // Relations
+  routingSteps        RoutingStep[]
+  qcRecords          QCRecord[]
+  
+  // Timestamps
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 }
 
-// Enums - Define possible values for status fields
-
-// Asset operational status
-enum AssetStatus {
-  AVAILABLE   // Ready for assignment
-  ASSIGNED    // Currently assigned to a customer
-  MAINTENANCE // Under maintenance/repair
-  LOST        // Asset is missing/lost
-  RETIRED     // Asset is no longer in service
+// Routing Steps - Sequential workstation steps for each batch
+model RoutingStep {
+  id            String           @id @default(cuid())
+  batch         Batch            @relation(fields: [batchId], references: [id])
+  batchId       String
+  stepNumber    Int              // Sequence in route (1, 2, 3...)
+  workstation   Workstation      @relation(fields: [workstationId], references: [id])
+  workstationId String
+  description   String           // Task description
+  required      Boolean          @default(true) // Is this step required?
+  estimatedTime Int?             // Estimated time in minutes
+  notes         String?          // Operator instructions
+  status        StepStatus       @default(PENDING)
+  
+  // Relations
+  confirmations StepConfirmation[]
+  
+  // Timestamps
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  
+  @@unique([batchId, stepNumber]) // Ensure unique step numbers per batch
 }
 
-// Customer relationship status
-enum RelationStatus {
-  ACTIVE      // Active ongoing relationship
-  STRATEGIC   // Strategic/high-value customer
-  ONBOARDING  // New customer being onboarded
-  RETIRED     // Relationship has ended
+// Workstations - Manufacturing workstations/machines
+model Workstation {
+  id           String        @id @default(cuid())
+  name         String        @unique // e.g., "LATHE-1", "MILL-2"
+  description  String?       // Workstation description
+  active       Boolean       @default(true)
+  
+  // Relations
+  routingSteps RoutingStep[]
+  confirmations StepConfirmation[]
+  
+  // Timestamps
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
-// Batch processing status
+// =============================================================================
+// 3. OPERATOR CONFIRMATION SYSTEM
+// =============================================================================
+
+// Step Confirmations - Operator actions at workstations
+model StepConfirmation {
+  id            String       @id @default(cuid())
+  routingStep   RoutingStep  @relation(fields: [stepId], references: [id])
+  stepId        String
+  workstation   Workstation  @relation(fields: [workstationId], references: [id])
+  workstationId String
+  operatorName  String       // Logged-in operator
+  operatorId    String?      // Optional operator ID/badge number
+  startTime     DateTime?    // When operator started step
+  endTime       DateTime?    // When operator completed step
+  notes         String?      // Operator comments/issues
+  photoUrl      String?      // Optional photo upload
+  flagged       Boolean      @default(false) // Issue flagged?
+  status        ConfirmationStatus @default(STARTED)
+  
+  // Timestamps
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+// =============================================================================
+// 4. INSPECTION & QUALITY CONTROL
+// =============================================================================
+
+// QC Records - Quality control inspections per batch
+model QCRecord {
+  id          String    @id @default(cuid())
+  batch       Batch     @relation(fields: [batchId], references: [id])
+  batchId     String
+  inspector   String    // Inspector name/ID
+  inspectionDate DateTime @default(now())
+  result      QCResult  // Pass/Fail/Rework
+  notes       String?   // Inspection notes
+  
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// =============================================================================
+// 5. ENUMS - STATUS DEFINITIONS
+// =============================================================================
+
+enum OrderPriority {
+  RUSH
+  STANDARD
+  HOLD
+}
+
+enum BatchPriority {
+  RUSH
+  STANDARD
+  HOLD
+}
+
 enum BatchStatus {
-  ACTIVE      // Batch is currently active
-  COMPLETED   // Batch processing completed
-  CANCELLED   // Batch was cancelled
+  QUEUED      // Waiting to start
+  IN_PROGRESS // Currently being worked
+  COMPLETED   // All steps finished
+  ON_HOLD     // Temporarily paused
+  CANCELLED   // Cancelled batch
+}
+
+enum StepStatus {
+  PENDING     // Not started
+  IN_PROGRESS // Currently being worked
+  COMPLETED   // Step finished
+  SKIPPED     // Step was skipped
+  FAILED      // Step failed/flagged
+}
+
+enum ConfirmationStatus {
+  STARTED     // Operator started step
+  COMPLETED   // Operator completed step
+  PAUSED      // Step paused
+  FLAGGED     // Issue reported
+}
+
+enum QCResult {
+  PASS
+  FAIL
+  REWORK_REQUIRED
 }

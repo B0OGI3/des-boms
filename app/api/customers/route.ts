@@ -60,7 +60,7 @@ export async function POST(req: Request) {
   try {
     // Create new customer record
     const newCustomer = await prisma.customer.create({
-      data: { name, contact, email, phone, billingAddress, shippingAddress },
+      data: { name, contactName: contact, email, phone, billingAddress, shippingAddress },
     });
 
     return NextResponse.json(newCustomer, { status: 201 });

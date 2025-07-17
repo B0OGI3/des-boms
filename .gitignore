@@ -107,3 +107,11 @@ Thumbs.db
 
 # Local development files
 *.local
+
+# Temporary Prisma files
+*.dll.node.tmp*
+generated/prisma/query_engine-windows.dll.node.tmp*
+
+# Backup files
+*.bak
+*.backup
