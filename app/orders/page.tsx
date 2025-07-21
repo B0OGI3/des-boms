@@ -10,6 +10,20 @@
 import { Title, Text, Card, Badge, Group, Stack, Loader, Alert, Button, Table, TextInput, Select, Modal, Textarea } from "@mantine/core";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
+import { 
+  getDaysUntilDue, 
+  isOverdue, 
+  getUrgencyColor, 
+  getStatusColor, 
+  getPriorityColor, 
+  formatCurrency, 
+  calculateProgress, 
+  fetchWithTimeout,
+  isValidEmail,
+  isValidPhoneNumber
+} from "../../lib/orderUtils";
+import styles from "./orders.module.css";
 
 // Types based on Prisma schema
 interface Customer {
@@ -53,6 +67,7 @@ interface PurchaseOrder {
 
 // UI-friendly order interface
 interface Order {
+  id: string; // Database UUID for API operations
   orderId: string;
   customerName: string;
   orderNumber: string;
@@ -115,6 +130,7 @@ const convertPurchaseOrderToOrder = (purchaseOrder: PurchaseOrder): Order => {
   }, 0);
 
   return {
+    id: purchaseOrder.id, // Database UUID
     orderId: purchaseOrder.systemOrderId,
     customerName: purchaseOrder.customer.name,
     orderNumber: purchaseOrder.poNumber,
@@ -142,6 +158,11 @@ export default function CustomerOrdersPage() {
   const [stats, setStats] = useState<OrderStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Individual operation loading states
+  const [editLoading, setEditLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [priorityFilter, setPriorityFilter] = useState<string>("ALL");
@@ -149,7 +170,13 @@ export default function CustomerOrdersPage() {
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
   const [showNewCustomerModal, setShowNewCustomerModal] = useState(false);
+  const [showEditOrderModal, setShowEditOrderModal] = useState(false);
   const [sortBy, setSortBy] = useState<'all' | 'pending' | 'inProgress' | 'completed' | 'rush'>('all');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   // New order form state
   const [newOrderForm, setNewOrderForm] = useState({
@@ -212,6 +239,36 @@ export default function CustomerOrdersPage() {
     notes: "",
   });
 
+  // Edit order form state
+  const [editOrderForm, setEditOrderForm] = useState({
+    id: "",
+    poNumber: "",
+    priority: "STANDARD" as PurchaseOrder['priority'],
+    dueDate: "",
+    notes: "",
+    lineItems: [{
+      id: "",
+      partNumber: "",
+      partName: "",
+      drawingNumber: "",
+      revisionLevel: "",
+      quantity: 1,
+      dueDate: "",
+      notes: "",
+    }],
+  });
+
+  // Edit form validation state
+  const [editFormErrors, setEditFormErrors] = useState({
+    poNumber: "",
+    dueDate: "",
+    lineItems: [{
+      partNumber: "",
+      partName: "",
+      quantity: "",
+    }],
+  });
+
   // Add CSS animations
   useEffect(() => {
     if (typeof window !== 'undefined' && !document.getElementById('orderPageStyles')) {
@@ -243,6 +300,11 @@ export default function CustomerOrdersPage() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
         
         .animate-fade-in-up {
@@ -277,12 +339,27 @@ export default function CustomerOrdersPage() {
         
         @media (max-width: 768px) {
           .responsive-table {
+            font-size: 0.75rem;
+          }
+          
+          .responsive-table th,
+          .responsive-table td {
+            padding: 8px 10px;
+          }
+          
+          .responsive-table .mobile-hide {
+            display: none;
+          }
+        }
+        
+        @media (max-width: 1200px) {
+          .responsive-table {
             font-size: 0.8rem;
           }
           
           .responsive-table th,
           .responsive-table td {
-            padding: 8px 12px;
+            padding: 10px 12px;
           }
         }
       `;
@@ -296,11 +373,11 @@ export default function CustomerOrdersPage() {
       try {
         setLoading(true);
         
-        // Fetch orders, customers, and stats in parallel
+        // Fetch orders, customers, and stats in parallel with timeout
         const [ordersResponse, customersResponse, statsResponse] = await Promise.all([
-          fetch('/api/orders'),
-          fetch('/api/customers'),
-          fetch('/api/orders/stats')
+          fetchWithTimeout('/api/orders'),
+          fetchWithTimeout('/api/customers'),
+          fetchWithTimeout('/api/orders/stats')
         ]);
 
         if (!ordersResponse.ok || !customersResponse.ok || !statsResponse.ok) {
@@ -320,7 +397,10 @@ export default function CustomerOrdersPage() {
         setStats(statsData.data);
         
       } catch (err) {
-        console.error('Error fetching data:', err);
+        // Log error for debugging in development only
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching data:', err);
+        }
         setError(err instanceof Error ? err.message : 'Failed to load order data');
       } finally {
         setLoading(false);
@@ -329,53 +409,6 @@ export default function CustomerOrdersPage() {
 
     fetchOrderData();
   }, []);
-
-  const getStatusColor = (status: string, dueDate?: string) => {
-    // Check if order is overdue
-    if (dueDate && new Date(dueDate) < new Date()) {
-      return 'red';
-    }
-    
-    switch (status) {
-      case 'PENDING': return 'orange';
-      case 'IN_PROGRESS': return 'blue';
-      case 'COMPLETED': return 'green';
-      case 'ON_HOLD': return 'yellow';
-      case 'CANCELLED': return 'red';
-      default: return 'gray';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'LOW': return 'gray';
-      case 'NORMAL': return 'blue';
-      case 'HIGH': return 'orange';
-      case 'RUSH': return 'red';
-      default: return 'gray';
-    }
-  };
-
-  const isOverdue = (dueDate: string) => {
-    return new Date(dueDate) < new Date();
-  };
-
-  // Calculate days until due date
-  const getDaysUntilDue = (dueDate: string) => {
-    const today = new Date();
-    const due = new Date(dueDate);
-    const diffTime = due.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
-  // Get urgency color based on days until due
-  const getUrgencyColor = (daysUntilDue: number) => {
-    if (daysUntilDue < 0) return "#ef4444"; // Red - overdue
-    if (daysUntilDue <= 2) return "#f59e0b"; // Amber - critical
-    if (daysUntilDue <= 7) return "#eab308"; // Yellow - urgent
-    return "#10b981"; // Green - normal
-  };
 
   // Format line items summary
   const formatLineItemsSummary = (order: Order) => {
@@ -410,15 +443,96 @@ export default function CustomerOrdersPage() {
     return matchesSearch && matchesStatus && matchesPriority && matchesSort;
   });
 
+  // Calculate pagination
+  const totalFilteredOrders = filteredOrders.length;
+  const calculatedTotalPages = Math.ceil(totalFilteredOrders / itemsPerPage);
+  
+  // Update total pages when filters change
+  useEffect(() => {
+    const newTotalPages = Math.ceil(totalFilteredOrders / itemsPerPage);
+    setTotalPages(newTotalPages);
+    
+    // Reset to page 1 if current page is beyond available pages
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [totalFilteredOrders, itemsPerPage, currentPage]);
+
+  // Get current page orders
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+  // Pagination handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (items: string | null) => {
+    if (items) {
+      setItemsPerPage(parseInt(items));
+      setCurrentPage(1); // Reset to first page when changing items per page
+    }
+  };
+
   const handleViewOrder = (order: Order) => {
     setSelectedOrder(order);
     setShowOrderModal(true);
   };
 
   const handleEditOrder = (order: Order) => {
-    // For now, just show the view modal - in a real app this would open an edit form
+    // Map the priority values to match PurchaseOrder schema
+    const mapPriority = (priority: Order['priority']): PurchaseOrder['priority'] => {
+      switch (priority) {
+        case 'RUSH': return 'RUSH';
+        case 'HIGH': return 'STANDARD'; // Map HIGH to STANDARD
+        case 'NORMAL': return 'STANDARD';
+        case 'LOW': return 'STANDARD'; // Map LOW to STANDARD
+        default: return 'STANDARD';
+      }
+    };
+
+    // Populate the edit form with current order data
+    setEditOrderForm({
+      id: order.id, // Use database UUID instead of display orderId
+      poNumber: order.orderNumber,
+      priority: mapPriority(order.priority),
+      dueDate: new Date(order.dueDate).toISOString().split('T')[0], // Format for date input
+      notes: "", // Default to empty since Order interface doesn't have notes
+      lineItems: order.lineItems ? order.lineItems.map(item => ({
+        id: "", // LineItems from Order interface don't have id, will be handled server-side
+        partNumber: item.partNumber,
+        partName: item.partName,
+        drawingNumber: item.drawingNumber || "",
+        revisionLevel: item.revisionLevel || "",
+        quantity: item.quantity,
+        dueDate: "", // LineItems from Order interface don't have dueDate
+        notes: "", // LineItems from Order interface don't have notes
+      })) : [{
+        id: "",
+        partNumber: "",
+        partName: "",
+        drawingNumber: "",
+        revisionLevel: "",
+        quantity: 1,
+        dueDate: "",
+        notes: "",
+      }],
+    });
+    
+    // Reset form errors
+    setEditFormErrors({
+      poNumber: "",
+      dueDate: "",
+      lineItems: (order.lineItems || []).map(() => ({
+        partNumber: "",
+        partName: "",
+        quantity: "",
+      })),
+    });
+    
     setSelectedOrder(order);
-    setShowOrderModal(true);
+    setShowEditOrderModal(true);
   };
 
   const handleNewOrder = () => {
@@ -490,6 +604,161 @@ export default function CustomerOrdersPage() {
 
   const handleOpenNewCustomerModal = () => {
     setShowNewCustomerModal(true);
+  };
+
+  const handleCloseEditOrderModal = () => {
+    setShowEditOrderModal(false);
+    setSelectedOrder(null);
+    setEditOrderForm({
+      id: "",
+      poNumber: "",
+      priority: "STANDARD",
+      dueDate: "",
+      notes: "",
+      lineItems: [{
+        id: "",
+        partNumber: "",
+        partName: "",
+        drawingNumber: "",
+        revisionLevel: "",
+        quantity: 1,
+        dueDate: "",
+        notes: "",
+      }],
+    });
+    setEditFormErrors({
+      poNumber: "",
+      dueDate: "",
+      lineItems: [{
+        partNumber: "",
+        partName: "",
+        quantity: "",
+      }],
+    });
+    setEditLoading(false);
+  };
+
+  const handleSaveOrderEdit = async () => {
+    // Validate form
+    const errors = {
+      poNumber: "",
+      dueDate: "",
+      lineItems: editOrderForm.lineItems.map(() => ({
+        partNumber: "",
+        partName: "",
+        quantity: "",
+      })),
+    };
+
+    let isValid = true;
+
+    // Validate PO number
+    if (!editOrderForm.poNumber.trim()) {
+      errors.poNumber = "Order number is required";
+      isValid = false;
+    }
+
+    // Validate due date
+    if (!editOrderForm.dueDate) {
+      errors.dueDate = "Due date is required";
+      isValid = false;
+    }
+
+    // Validate line items
+    editOrderForm.lineItems.forEach((item, index) => {
+      if (!item.partNumber.trim()) {
+        errors.lineItems[index].partNumber = "Part number is required";
+        isValid = false;
+      }
+      if (!item.partName.trim()) {
+        errors.lineItems[index].partName = "Part name is required";
+        isValid = false;
+      }
+      if (item.quantity <= 0) {
+        errors.lineItems[index].quantity = "Quantity must be greater than 0";
+        isValid = false;
+      }
+    });
+
+    setEditFormErrors(errors);
+
+    if (!isValid) return;
+
+    setEditLoading(true);
+
+    try {
+      console.log('Edit form data:', editOrderForm);
+      console.log('API URL:', `/api/orders/${editOrderForm.id}`);
+      
+      const response = await fetch(`/api/orders/${editOrderForm.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          poNumber: editOrderForm.poNumber,
+          dueDate: editOrderForm.dueDate,
+          priority: editOrderForm.priority,
+          notes: editOrderForm.notes,
+          lineItems: editOrderForm.lineItems.filter(item => 
+            item.partNumber.trim() && item.partName.trim()
+          ).map(item => ({
+            id: item.id || undefined, // Only include ID if it exists (for existing items)
+            partNumber: item.partNumber.trim(),
+            partName: item.partName.trim(),
+            drawingNumber: item.drawingNumber?.trim() || undefined,
+            revisionLevel: item.revisionLevel?.trim() || undefined,
+            quantity: item.quantity,
+            dueDate: item.dueDate || undefined,
+            notes: item.notes?.trim() || undefined,
+          })),
+        }),
+      });
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
+      const result = await response.json();
+      console.log('Response result:', result);
+
+      if (result.success) {
+        // Refresh the orders data
+        const fetchOrderData = async () => {
+          try {
+            const [ordersResponse, statsResponse] = await Promise.all([
+              fetch('/api/orders'),
+              fetch('/api/orders/stats')
+            ]);
+
+            if (ordersResponse.ok && statsResponse.ok) {
+              const ordersData = await ordersResponse.json();
+              const statsData = await statsResponse.json();
+              
+              const ordersArray = ordersData.data || ordersData || [];
+              const convertedOrders = Array.isArray(ordersArray) ? ordersArray.map(convertPurchaseOrderToOrder) : [];
+              setOrders(convertedOrders);
+              setStats(statsData.data);
+            }
+          } catch (error) {
+            console.error('Error refreshing data:', error);
+          }
+        };
+        
+        await fetchOrderData();
+        handleCloseEditOrderModal();
+        
+        // Show success message (you can replace this with a toast notification)
+        alert('Order updated successfully!');
+      } else {
+        console.error('Error updating order:', result.error);
+        alert(`Error updating order: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating order:', error);
+      alert('Error updating order. Please try again.');
+    } finally {
+      setEditLoading(false);
+    }
   };
 
   const validateCustomerForm = () => {
@@ -779,84 +1048,23 @@ export default function CustomerOrdersPage() {
   };
 
   return (
-    <main
-      style={{
-        background: "linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%)",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1400,
-          margin: "0 auto",
-          position: "relative",
-          minHeight: "100vh",
-        }}
-      >
+    <main className={styles.main}>
+      <div className={styles.container}>
         {/* Header */}
-        <div
-          style={{
-            marginBottom: 40,
-            paddingTop: 20,
-            position: "relative",
-          }}
-        >
+        <div className={styles.header}>
           {/* Subtle background gradient accent */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "120px",
-              background: "radial-gradient(ellipse at top, rgba(59, 130, 246, 0.02) 0%, transparent 70%)",
-              borderRadius: "20px",
-              pointerEvents: "none",
-            }}
-          />
+          <div className={styles.headerAccent} />
           
           <Group justify="space-between" align="center" style={{ marginBottom: 20, position: "relative" }}>
             <div>
               <Group gap="md" align="center" style={{ marginBottom: 12 }}>
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "12px",
-                    background: "linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "20px",
-                    boxShadow: "0 4px 16px rgba(30, 64, 175, 0.15)",
-                    border: "1px solid rgba(255, 255, 255, 0.05)",
-                  }}
-                >
+                <div className={styles.iconBox}>
                 </div>
                 <div>
-                  <Title
-                    order={1}
-                    style={{
-                      color: "#e2e8f0",
-                      fontSize: "2rem",
-                      fontWeight: 700,
-                      textShadow: "0 2px 8px rgba(0,0,0,0.5)",
-                      margin: 0,
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
+                  <Title order={1} className={styles.title}>
                     Customer Orders
                   </Title>
-                  <Text
-                    size="md"
-                    style={{
-                      color: "#64748b",
-                      fontSize: "1rem",
-                      marginTop: 4,
-                      fontWeight: 400,
-                    }}
-                  >
+                  <Text size="md" className={styles.subtitle}>
                     Manage customer purchase orders, line items, and due dates
                   </Text>
                 </div>
@@ -890,18 +1098,9 @@ export default function CustomerOrdersPage() {
 
         {/* Loading State */}
         {loading && (
-          <div style={{ 
-            textAlign: "center", 
-            padding: "40px 20px",
-            background: "rgba(15, 23, 42, 0.8)",
-            borderRadius: "12px",
-            margin: "20px auto",
-            maxWidth: "350px",
-            backdropFilter: "blur(12px)",
-            border: "1px solid rgba(30, 41, 59, 0.6)",
-          }}>
+          <div className={styles.loadingContainer}>
             <Loader size="lg" color="#1e40af" />
-            <Text size="md" style={{ color: "#94a3b8", marginTop: 16, fontWeight: 500 }}>
+            <Text size="md" className={styles.loadingText}>
               Loading order data...
             </Text>
           </div>
@@ -1312,20 +1511,21 @@ export default function CustomerOrdersPage() {
         </Card>
 
         {/* Orders Table */}
-        <Card
-          padding="xl"
-          style={{
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))",
-            border: "1px solid rgba(51, 65, 85, 0.4)",
-            borderRadius: "12px",
-            backdropFilter: "blur(16px)",
-            overflow: "hidden",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-            position: "relative",
-            zIndex: 1,
-            marginTop: "24px",
-          }}
-        >
+        <ErrorBoundary>
+          <Card
+            padding="xl"
+            style={{
+              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))",
+              border: "1px solid rgba(51, 65, 85, 0.4)",
+              borderRadius: "12px",
+              backdropFilter: "blur(16px)",
+              overflow: "hidden",
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+              position: "relative",
+              zIndex: 1,
+              marginTop: "24px",
+            }}
+          >
           {/* Subtle background pattern */}
           <div
             style={{
@@ -1348,8 +1548,8 @@ export default function CustomerOrdersPage() {
                   color: "#cbd5e1",
                   fontWeight: 600,
                   border: "1px solid rgba(51, 65, 85, 0.4)",
-                  padding: "16px 20px",
-                  fontSize: "0.9rem",
+                  padding: "12px 16px",
+                  fontSize: "0.8rem",
                   borderRadius: "0",
                   position: "sticky",
                   top: 0,
@@ -1363,8 +1563,8 @@ export default function CustomerOrdersPage() {
                   color: "#94a3b8",
                   border: "1px solid rgba(51, 65, 85, 0.2)",
                   backgroundColor: "rgba(15, 23, 42, 0.6)",
-                  padding: "16px 20px",
-                  fontSize: "0.9rem",
+                  padding: "12px 16px",
+                  fontSize: "0.85rem",
                   borderRadius: "0",
                   fontWeight: 500,
                   transition: "all 0.2s ease",
@@ -1377,21 +1577,18 @@ export default function CustomerOrdersPage() {
             >
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>Order ID</Table.Th>
+                  <Table.Th>Order</Table.Th>
                   <Table.Th>Customer</Table.Th>
-                  <Table.Th>Order Date</Table.Th>
                   <Table.Th>Status</Table.Th>
-                  <Table.Th>Priority</Table.Th>
-                  <Table.Th>Days Until Due</Table.Th>
                   <Table.Th>Due Date</Table.Th>
-                  <Table.Th>Line Items</Table.Th>
+                  <Table.Th>Items</Table.Th>
                   <Table.Th>Value</Table.Th>
                   <Table.Th>Progress</Table.Th>
                   <Table.Th>Actions</Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {filteredOrders.map((order) => (
+                {paginatedOrders.map((order) => (
                   <Table.Tr 
                     key={order.orderId} 
                     className="table-row-hover"
@@ -1401,33 +1598,50 @@ export default function CustomerOrdersPage() {
                     } : {}}
                   >
                     <Table.Td>
-                      <Text fw={700} style={{ color: "#cbd5e1", fontSize: "0.9rem" }}>
-                        {order.orderId}
-                      </Text>
-                      <Text size="xs" style={{ color: "#64748b", marginTop: 2 }}>
-                        {order.orderNumber}
-                      </Text>
+                      <div>
+                        <Text fw={700} style={{ color: "#cbd5e1", fontSize: "0.85rem", lineHeight: 1.2 }}>
+                          {order.orderId}
+                        </Text>
+                        <Text size="xs" style={{ color: "#64748b", marginTop: 1 }}>
+                          PO: {order.orderNumber}
+                        </Text>
+                        <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: 2 }}>
+                          <Badge
+                            color={getPriorityColor(order.priority)}
+                            variant="filled"
+                            size="xs"
+                            style={{
+                              fontSize: "0.6rem",
+                              padding: "2px 6px",
+                              height: "16px",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {order.priority}
+                          </Badge>
+                        </div>
+                      </div>
                     </Table.Td>
                     <Table.Td>
-                      <Text style={{ color: "#94a3b8", fontWeight: 500 }}>
-                        {order.customerName}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text style={{ color: "#64748b", fontWeight: 500 }}>
-                        {new Date(order.orderDate).toLocaleDateString()}
-                      </Text>
+                      <div>
+                        <Text style={{ color: "#94a3b8", fontWeight: 500, fontSize: "0.85rem", lineHeight: 1.2 }}>
+                          {order.customerName}
+                        </Text>
+                        <Text size="xs" style={{ color: "#64748b", marginTop: 1 }}>
+                          {new Date(order.orderDate).toLocaleDateString()}
+                        </Text>
+                      </div>
                     </Table.Td>
                     <Table.Td>
                       <Badge
                         color={getStatusColor(order.status, order.dueDate)}
                         variant="light"
-                        size="md"
+                        size="sm"
                         style={{
                           fontWeight: 600,
-                          fontSize: "0.8rem",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
+                          fontSize: "0.7rem",
+                          padding: "4px 8px",
+                          borderRadius: "4px",
                           textTransform: "uppercase",
                           letterSpacing: "0.05em",
                         }}
@@ -1436,105 +1650,87 @@ export default function CustomerOrdersPage() {
                       </Badge>
                     </Table.Td>
                     <Table.Td>
-                      <Badge
-                        color={getPriorityColor(order.priority)}
-                        variant="filled"
-                        size="md"
-                        style={{
-                          fontWeight: 600,
-                          fontSize: "0.8rem",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.05em",
-                        }}
-                      >
-                        {order.priority}
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
                       {(() => {
                         const daysUntilDue = getDaysUntilDue(order.dueDate);
                         const urgencyColor = getUrgencyColor(daysUntilDue);
                         return (
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            <div
-                              style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: "50%",
-                                backgroundColor: urgencyColor,
-                                boxShadow: `0 0 8px ${urgencyColor}40`,
-                              }}
-                            />
-                            <Text
-                              fw={daysUntilDue <= 2 ? 700 : 500}
-                              style={{ 
-                                color: urgencyColor,
-                                fontSize: "0.9rem",
-                              }}
-                            >
-                              {daysUntilDue < 0 
-                                ? `${Math.abs(daysUntilDue)}d overdue`
-                                : daysUntilDue === 0
-                                ? "Due today"
-                                : `${daysUntilDue}d`
-                              }
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: 2 }}>
+                              <div
+                                style={{
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: "50%",
+                                  backgroundColor: urgencyColor,
+                                  boxShadow: `0 0 6px ${urgencyColor}40`,
+                                }}
+                              />
+                              <Text
+                                fw={daysUntilDue <= 2 ? 700 : 500}
+                                style={{ 
+                                  color: urgencyColor,
+                                  fontSize: "0.8rem",
+                                  lineHeight: 1,
+                                }}
+                              >
+                                {daysUntilDue < 0 
+                                  ? `${Math.abs(daysUntilDue)}d late`
+                                  : daysUntilDue === 0
+                                  ? "Today"
+                                  : `${daysUntilDue}d`
+                                }
+                              </Text>
+                            </div>
+                            <Text size="xs" style={{ 
+                              color: isOverdue(order.dueDate) ? "#f87171" : "#64748b", 
+                              fontWeight: isOverdue(order.dueDate) ? 600 : 400,
+                            }}>
+                              {new Date(order.dueDate).toLocaleDateString()}
                             </Text>
                           </div>
                         );
                       })()}
                     </Table.Td>
                     <Table.Td>
-                      <Text style={{ 
-                        color: isOverdue(order.dueDate) ? "#f87171" : "#64748b", 
-                        fontWeight: isOverdue(order.dueDate) ? 700 : 500,
-                        fontSize: "0.85rem",
-                      }}>
-                        {new Date(order.dueDate).toLocaleDateString()}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
                       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         <div
                           style={{
-                            width: 20,
-                            height: 20,
-                            borderRadius: "4px",
+                            width: 18,
+                            height: 18,
+                            borderRadius: "3px",
                             background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: "0.7rem",
+                            fontSize: "0.65rem",
                             color: "white",
-                            fontWeight: 600,
+                            fontWeight: 700,
                           }}
                         >
                           {order.itemCount}
                         </div>
-                        <Text style={{ color: "#94a3b8", fontWeight: 500, fontSize: "0.85rem" }}>
-                          {formatLineItemsSummary(order)}
+                        <Text style={{ color: "#94a3b8", fontWeight: 500, fontSize: "0.75rem" }}>
+                          items
                         </Text>
                       </div>
                     </Table.Td>
                     <Table.Td>
-                      <Text fw={700} style={{ color: "#047857", fontSize: "0.9rem" }}>
-                        ${order.totalValue.toLocaleString()}
+                      <Text fw={700} style={{ color: "#047857", fontSize: "0.85rem" }}>
+                        ${(order.totalValue / 1000).toFixed(0)}K
                       </Text>
                     </Table.Td>
                     <Table.Td>
-                      <Group gap="sm">
-                        <Text size="sm" style={{ color: "#94a3b8", fontWeight: 600 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <Text size="xs" style={{ color: "#94a3b8", fontWeight: 600, minWidth: "32px" }}>
                           {order.completedBatches}/{order.assignedBatches}
                         </Text>
                         <div
                           style={{
-                            width: 60,
-                            height: 6,
+                            width: 40,
+                            height: 4,
                             background: "rgba(51, 65, 85, 0.4)",
-                            borderRadius: 3,
+                            borderRadius: 2,
                             overflow: "hidden",
-                            border: "1px solid rgba(51, 65, 85, 0.3)",
                           }}
                         >
                           <div
@@ -1542,47 +1738,42 @@ export default function CustomerOrdersPage() {
                               width: `${(order.completedBatches / order.assignedBatches) * 100}%`,
                               height: "100%",
                               background: "linear-gradient(90deg, #047857, #065f46)",
-                              borderRadius: 3,
-                              boxShadow: "0 0 6px rgba(4, 120, 87, 0.2)",
+                              borderRadius: 2,
                             }}
                           />
                         </div>
-                      </Group>
+                      </div>
                     </Table.Td>
                     <Table.Td>
-                      <Group gap="sm">
+                      <Group gap="xs">
                         <Button 
-                          size="sm" 
+                          size="xs" 
                           variant="light" 
                           color="blue"
                           onClick={() => handleViewOrder(order)}
                           style={{
-                            fontSize: "0.8rem",
-                            height: "32px",
-                            borderRadius: "6px",
+                            fontSize: "0.7rem",
+                            height: "24px",
+                            borderRadius: "4px",
                             fontWeight: 600,
-                            paddingLeft: "12px",
-                            paddingRight: "12px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
                           }}
                         >
                           View
                         </Button>
                         <Button 
-                          size="sm" 
+                          size="xs" 
                           variant="light" 
                           color="orange"
                           onClick={() => handleEditOrder(order)}
                           style={{
-                            fontSize: "0.8rem",
-                            height: "32px",
-                            borderRadius: "6px",
+                            fontSize: "0.7rem",
+                            height: "24px",
+                            borderRadius: "4px",
                             fontWeight: 600,
-                            paddingLeft: "12px",
-                            paddingRight: "12px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
                           }}
                         >
                           Edit
@@ -1595,7 +1786,7 @@ export default function CustomerOrdersPage() {
             </Table>
           </div>
           
-          {filteredOrders.length === 0 && (
+          {totalFilteredOrders === 0 && (
             <div style={{ textAlign: "center", padding: "48px 20px" }}>
               <div
                 style={{
@@ -1620,249 +1811,917 @@ export default function CustomerOrdersPage() {
               </Text>
             </div>
           )}
-        </Card>
 
-        {/* Order Details Modal */}
-        <Modal
-          opened={showOrderModal}
-          onClose={handleCloseModal}
-          title={
-            <Group gap="sm" align="center">
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: "8px",
-                  background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "14px",
-                  boxShadow: "0 2px 8px rgba(30, 64, 175, 0.15)",
-                }}
-              >
+          {/* Pagination Controls */}
+          {totalFilteredOrders > 0 && (
+            <div className={styles.paginationContainer}>
+              <div className={styles.paginationInfo}>
+                Showing {startIndex + 1}-{Math.min(endIndex, totalFilteredOrders)} of {totalFilteredOrders} orders
               </div>
-              <Text fw={600} size="lg" style={{ color: "#cbd5e1" }}>
-                Order Details
-              </Text>
-            </Group>
-          }
-          size="lg"
-          styles={{
-            content: {
-              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))",
-              border: "1px solid rgba(51, 65, 85, 0.4)",
-              borderRadius: "12px",
-              backdropFilter: "blur(16px)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-            },
-            header: {
-              background: "transparent",
-              borderBottom: "1px solid rgba(51, 65, 85, 0.2)",
-              paddingBottom: "16px",
-            },
-            body: {
-              paddingTop: "20px",
-            },
-          }}
-        >
-          {selectedOrder && (
-            <Stack gap="lg">
-              {/* Order Header Info */}
-              <Group justify="space-between" align="center">
-                <div>
-                  <Text fw={600} size="xl" style={{ color: "#cbd5e1", marginBottom: 4 }}>
-                    {selectedOrder.orderId}
-                  </Text>
-                  <Text size="sm" style={{ color: "#64748b" }}>
-                    Order Number: {selectedOrder.orderNumber}
-                  </Text>
+              
+              <div className={styles.paginationControls}>
+                {/* Items per page selector */}
+                <div className={styles.itemsPerPageContainer}>
+                  <Text className={styles.itemsPerPageLabel}>Show:</Text>
+                  <Select
+                    value={itemsPerPage.toString()}
+                    onChange={handleItemsPerPageChange}
+                    size="sm"
+                    data={[
+                      { value: "5", label: "5" },
+                      { value: "10", label: "10" },
+                      { value: "25", label: "25" },
+                      { value: "50", label: "50" },
+                    ]}
+                    withCheckIcon={false}
+                    rightSection={<div style={{ display: "none" }} />}
+                    styles={{
+                      input: {
+                        background: "rgba(30, 41, 59, 0.7)",
+                        border: "1px solid rgba(51, 65, 85, 0.4)",
+                        color: "#cbd5e1",
+                        height: "32px",
+                        fontSize: "0.85rem",
+                        borderRadius: "6px",
+                        minWidth: "60px",
+                        fontWeight: 500,
+                      },
+                      dropdown: {
+                        background: "rgba(15, 23, 42, 0.98)",
+                        border: "1px solid rgba(51, 65, 85, 0.4)",
+                        backdropFilter: "blur(16px)",
+                        borderRadius: "6px",
+                      },
+                      option: {
+                        color: "#cbd5e1",
+                        fontSize: "0.85rem",
+                        "&:hover": {
+                          backgroundColor: "rgba(59, 130, 246, 0.1)",
+                        },
+                      },
+                    }}
+                  />
                 </div>
-                <Group gap="sm">
-                  <Badge
-                    color={getStatusColor(selectedOrder.status)}
-                    variant="light"
-                    size="md"
-                  >
-                    {selectedOrder.status.replace('_', ' ')}
-                  </Badge>
-                  <Badge
-                    color={getPriorityColor(selectedOrder.priority)}
-                    variant="filled"
-                    size="md"
-                  >
-                    {selectedOrder.priority}
-                  </Badge>
-                </Group>
-              </Group>
 
-              {/* Order Details Grid */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                  gap: 16,
-                  marginBottom: 24,
-                }}
-              >
-                {[
-                  { label: "Customer", value: selectedOrder.customerName },
-                  { label: "Order Date", value: new Date(selectedOrder.orderDate).toLocaleDateString() },
-                  { label: "Due Date", value: new Date(selectedOrder.dueDate).toLocaleDateString() },
-                  { label: "Days Until Due", value: (() => {
-                    const days = getDaysUntilDue(selectedOrder.dueDate);
-                    return days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? "Due today" : `${days} days`;
-                  })(), isDays: true },
-                  { label: "Total Value", value: `$${selectedOrder.totalValue.toLocaleString()}`, isPrice: true },
-                  { label: "Line Items", value: `${selectedOrder.itemCount} items` },
-                  { label: "Batch Progress", value: `${selectedOrder.completedBatches}/${selectedOrder.assignedBatches}`, isProgress: true },
-                ].map((item, index) => (
-                  <Card
-                    key={index}
-                    padding="md"
+                {/* Page navigation buttons */}
+                <div className={styles.paginationButtons}>
+                  {/* Previous button */}
+                  <button
+                    className={styles.pageButton}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                  >
+                    ←
+                  </button>
+
+                  {/* Page numbers */}
+                  {(() => {
+                    const pages = [];
+                    const showPages = 5; // Show 5 page numbers at most
+                    
+                    let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
+                    let endPage = Math.min(totalPages, startPage + showPages - 1);
+                    
+                    // Adjust start page if we're near the end
+                    if (endPage - startPage < showPages - 1) {
+                      startPage = Math.max(1, endPage - showPages + 1);
+                    }
+
+                    // Add first page if there's a gap
+                    if (startPage > 1) {
+                      pages.push(
+                        <button
+                          key={1}
+                          className={`${styles.pageButton} ${currentPage === 1 ? styles.active : ''}`}
+                          onClick={() => handlePageChange(1)}
+                        >
+                          1
+                        </button>
+                      );
+                      if (startPage > 2) {
+                        pages.push(<span key="ellipsis1" className={styles.ellipsis}>...</span>);
+                      }
+                    }
+
+                    // Add visible page numbers
+                    for (let i = startPage; i <= endPage; i++) {
+                      pages.push(
+                        <button
+                          key={i}
+                          className={`${styles.pageButton} ${currentPage === i ? styles.active : ''}`}
+                          onClick={() => handlePageChange(i)}
+                        >
+                          {i}
+                        </button>
+                      );
+                    }
+
+                    // Add last page if there's a gap
+                    if (endPage < totalPages) {
+                      if (endPage < totalPages - 1) {
+                        pages.push(<span key="ellipsis2" className={styles.ellipsis}>...</span>);
+                      }
+                      pages.push(
+                        <button
+                          key={totalPages}
+                          className={`${styles.pageButton} ${currentPage === totalPages ? styles.active : ''}`}
+                          onClick={() => handlePageChange(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      );
+                    }
+
+                    return pages;
+                  })()}
+
+                  {/* Next button */}
+                  <button
+                    className={styles.pageButton}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </Card>
+        </ErrorBoundary>
+
+        {/* Order Details Modal - Custom Implementation */}
+        {showOrderModal && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 9999,
+            }}
+            onClick={handleCloseModal}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))",
+                border: "1px solid rgba(51, 65, 85, 0.4)",
+                borderRadius: "12px",
+                backdropFilter: "blur(16px)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+                padding: "24px",
+                width: "90%",
+                maxWidth: "800px",
+                maxHeight: "80vh",
+                overflow: "auto",
+                color: "#cbd5e1",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(51, 65, 85, 0.2)", paddingBottom: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div
                     style={{
-                      background: "rgba(30, 41, 59, 0.4)",
-                      border: "1px solid rgba(51, 65, 85, 0.2)",
+                      width: 32,
+                      height: 32,
                       borderRadius: "8px",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+                      background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      boxShadow: "0 2px 8px rgba(30, 64, 175, 0.15)",
                     }}
                   >
-                    <Text size="xs" style={{ color: "#64748b", marginBottom: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                      {item.label}
-                    </Text>
-                    <Text fw={item.isPrice ? 600 : 500} size={item.isPrice ? "md" : "sm"} style={{ 
-                      color: item.isPrice ? "#047857" : item.isDays ? getUrgencyColor(getDaysUntilDue(selectedOrder.dueDate)) : "#cbd5e1",
-                    }}>
-                      {item.value}
-                    </Text>
-                    {item.isProgress && (
-                      <div
-                        style={{
-                          width: "100%",
-                          height: 6,
-                          background: "rgba(51, 65, 85, 0.3)",
-                          borderRadius: 3,
-                          overflow: "hidden",
-                          marginTop: 8,
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${(selectedOrder.completedBatches / selectedOrder.assignedBatches) * 100}%`,
-                            height: "100%",
-                            background: "linear-gradient(90deg, #047857, #065f46)",
-                            borderRadius: 3,
-                            boxShadow: "0 0 6px rgba(4, 120, 87, 0.2)",
-                          }}
-                        />
-                      </div>
-                    )}
-                  </Card>
-                ))}
+                    📋
+                  </div>
+                  <h3 style={{ margin: 0, color: "#cbd5e1", fontSize: "1.25rem", fontWeight: "600" }}>
+                    Order Details
+                  </h3>
+                </div>
+                <button 
+                  onClick={handleCloseModal}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    color: "#94a3b8", 
+                    cursor: "pointer", 
+                    fontSize: "24px",
+                    padding: "0",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                  onMouseEnter={(e) => (e.target as HTMLElement).style.background = "rgba(51, 65, 85, 0.3)"}
+                  onMouseLeave={(e) => (e.target as HTMLElement).style.background = "none"}
+                >
+                  ×
+                </button>
               </div>
-
-              {/* Line Items Details */}
-              {selectedOrder.lineItems && selectedOrder.lineItems.length > 0 && (
+              
+              {selectedOrder && (
                 <div>
-                  <Text size="lg" fw={600} style={{ color: "#cbd5e1", marginBottom: 16 }}>
-                    Line Items
-                  </Text>
-                  <div style={{ display: "grid", gap: 12 }}>
-                    {selectedOrder.lineItems.map((item, index) => (
-                      <Card
+                  {/* Order Header */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+                    <div>
+                      <h4 style={{ margin: "0 0 4px 0", color: "#cbd5e1", fontSize: "1.5rem", fontWeight: "600" }}>
+                        {selectedOrder.orderId}
+                      </h4>
+                      <p style={{ margin: 0, color: "#64748b", fontSize: "0.9rem" }}>
+                        Order Number: {selectedOrder.orderNumber}
+                      </p>
+                    </div>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <span style={{
+                        padding: "4px 12px",
+                        borderRadius: "6px",
+                        fontSize: "0.8rem",
+                        fontWeight: "600",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        backgroundColor: selectedOrder.status === 'COMPLETED' ? 'rgba(34, 197, 94, 0.2)' : selectedOrder.status === 'IN_PROGRESS' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(249, 115, 22, 0.2)',
+                        color: selectedOrder.status === 'COMPLETED' ? '#22c55e' : selectedOrder.status === 'IN_PROGRESS' ? '#3b82f6' : '#f97316'
+                      }}>
+                        {selectedOrder.status.replace('_', ' ')}
+                      </span>
+                      <span style={{
+                        padding: "4px 12px",
+                        borderRadius: "6px",
+                        fontSize: "0.8rem",
+                        fontWeight: "600",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        backgroundColor: selectedOrder.priority === 'RUSH' ? 'rgba(239, 68, 68, 0.9)' : selectedOrder.priority === 'HIGH' ? 'rgba(249, 115, 22, 0.9)' : 'rgba(59, 130, 246, 0.9)',
+                        color: 'white'
+                      }}>
+                        {selectedOrder.priority}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Order Details Grid */}
+                  <div style={{ 
+                    display: "grid", 
+                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", 
+                    gap: "16px", 
+                    marginBottom: "24px" 
+                  }}>
+                    {[
+                      { label: "Customer", value: selectedOrder.customerName },
+                      { label: "Order Date", value: new Date(selectedOrder.orderDate).toLocaleDateString() },
+                      { label: "Due Date", value: new Date(selectedOrder.dueDate).toLocaleDateString() },
+                      { label: "Total Value", value: `$${selectedOrder.totalValue.toLocaleString()}` },
+                      { label: "Line Items", value: `${selectedOrder.itemCount} items` },
+                      { label: "Progress", value: `${selectedOrder.completedBatches}/${selectedOrder.assignedBatches} batches` },
+                    ].map((item, index) => (
+                      <div
                         key={index}
-                        padding="md"
                         style={{
-                          background: "rgba(30, 41, 59, 0.3)",
+                          background: "rgba(30, 41, 59, 0.4)",
                           border: "1px solid rgba(51, 65, 85, 0.2)",
                           borderRadius: "8px",
-                          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                          padding: "16px",
+                          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
                         }}
                       >
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
-                          <div>
-                            <Text size="xs" style={{ color: "#64748b", marginBottom: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                              Part Number
-                            </Text>
-                            <Text fw={600} style={{ color: "#cbd5e1", fontSize: "0.9rem" }}>
-                              {item.partNumber}
-                            </Text>
-                          </div>
-                          <div>
-                            <Text size="xs" style={{ color: "#64748b", marginBottom: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                              Part Name
-                            </Text>
-                            <Text style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
-                              {item.partName}
-                            </Text>
-                          </div>
-                          <div>
-                            <Text size="xs" style={{ color: "#64748b", marginBottom: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                              Drawing
-                            </Text>
-                            <Text style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
-                              {item.drawingNumber ? `${item.drawingNumber} ${item.revisionLevel ? `Rev ${item.revisionLevel}` : ''}` : 'N/A'}
-                            </Text>
-                          </div>
-                          <div style={{ textAlign: "center" }}>
-                            <Text size="xs" style={{ color: "#64748b", marginBottom: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                              Qty
-                            </Text>
-                            <div
-                              style={{
-                                background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
-                                color: "white",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                fontSize: "0.9rem",
-                                fontWeight: 600,
-                                minWidth: "40px",
-                              }}
-                            >
-                              {item.quantity}
+                        <div style={{ color: "#64748b", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
+                          {item.label}
+                        </div>
+                        <div style={{ color: "#cbd5e1", fontSize: "1rem", fontWeight: "600" }}>
+                          {item.value}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Line Items Details */}
+                  {selectedOrder.lineItems && selectedOrder.lineItems.length > 0 && (
+                    <div style={{ marginBottom: "24px" }}>
+                      <h5 style={{ margin: "0 0 16px 0", color: "#cbd5e1", fontSize: "1.1rem", fontWeight: "600" }}>
+                        Line Items
+                      </h5>
+                      <div style={{ display: "grid", gap: "12px" }}>
+                        {selectedOrder.lineItems.map((item, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              background: "rgba(30, 41, 59, 0.3)",
+                              border: "1px solid rgba(51, 65, 85, 0.2)",
+                              borderRadius: "8px",
+                              padding: "16px",
+                              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                            }}
+                          >
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: "16px", alignItems: "center" }}>
+                              <div>
+                                <div style={{ color: "#64748b", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
+                                  Part Number
+                                </div>
+                                <div style={{ color: "#cbd5e1", fontSize: "0.9rem", fontWeight: "600" }}>
+                                  {item.partNumber}
+                                </div>
+                              </div>
+                              <div>
+                                <div style={{ color: "#64748b", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
+                                  Part Name
+                                </div>
+                                <div style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                                  {item.partName}
+                                </div>
+                              </div>
+                              <div>
+                                <div style={{ color: "#64748b", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
+                                  Drawing
+                                </div>
+                                <div style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                                  {item.drawingNumber ? `${item.drawingNumber} ${item.revisionLevel ? `Rev ${item.revisionLevel}` : ''}` : 'N/A'}
+                                </div>
+                              </div>
+                              <div style={{ textAlign: "center" }}>
+                                <div style={{ color: "#64748b", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
+                                  Qty
+                                </div>
+                                <div
+                                  style={{
+                                    background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
+                                    color: "white",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    fontSize: "0.9rem",
+                                    fontWeight: "600",
+                                    minWidth: "40px",
+                                    display: "inline-block",
+                                  }}
+                                >
+                                  {item.quantity}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Card>
-                    ))}
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "24px" }}>
+                    <button
+                      onClick={handleCloseModal}
+                      style={{
+                        padding: "10px 20px",
+                        background: "#6b7280",
+                        border: "none",
+                        borderRadius: "6px",
+                        color: "white",
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleCloseModal();
+                        if (selectedOrder) {
+                          handleEditOrder(selectedOrder);
+                        }
+                      }}
+                      style={{
+                        padding: "10px 20px",
+                        background: "#2563eb",
+                        border: "none",
+                        borderRadius: "6px",
+                        color: "white",
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      Edit Order
+                    </button>
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        background: "#059669",
+                        border: "none",
+                        borderRadius: "6px",
+                        color: "white",
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      View Batches
+                    </button>
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
 
-              {/* Action Buttons */}
-              <Group justify="flex-end" gap="sm" style={{ marginTop: 16 }}>
-                <Button
-                  variant="light"
-                  color="gray"
-                  onClick={handleCloseModal}
-                  style={{
-                    borderRadius: "8px",
+        {/* Edit Order Modal - Custom Implementation */}
+        {showEditOrderModal && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 9999,
+            }}
+            onClick={handleCloseEditOrderModal}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))",
+                border: "1px solid rgba(51, 65, 85, 0.4)",
+                borderRadius: "12px",
+                backdropFilter: "blur(16px)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+                padding: "24px",
+                width: "90%",
+                maxWidth: "900px",
+                maxHeight: "90vh",
+                overflow: "auto",
+                color: "#cbd5e1",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(51, 65, 85, 0.2)", paddingBottom: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "8px",
+                      background: "linear-gradient(135deg, #f97316, #ea580c)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      boxShadow: "0 2px 8px rgba(249, 115, 22, 0.15)",
+                    }}
+                  >
+                    ✏️
+                  </div>
+                  <h3 style={{ margin: 0, color: "#cbd5e1", fontSize: "1.25rem", fontWeight: "600" }}>
+                    Edit Order
+                  </h3>
+                </div>
+                <button 
+                  onClick={handleCloseEditOrderModal}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    color: "#94a3b8", 
+                    cursor: "pointer", 
+                    fontSize: "24px",
+                    padding: "0",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
                   }}
+                  onMouseEnter={(e) => (e.target as HTMLElement).style.background = "rgba(51, 65, 85, 0.3)"}
+                  onMouseLeave={(e) => (e.target as HTMLElement).style.background = "none"}
                 >
-                  Close
-                </Button>
-                <Button
-                  variant="light"
-                  color="blue"
-                  style={{
-                    borderRadius: "8px",
-                  }}
-                >
-                  Edit Order
-                </Button>
-                <Button
-                  variant="light"
-                  color="green"
-                  style={{
-                    borderRadius: "8px",
-                  }}
-                >
-                  View Batches
-                </Button>
-              </Group>
-            </Stack>
-          )}
-        </Modal>
+                  ×
+                </button>
+              </div>
+              
+              {/* Order Form */}
+              <div>
+                {/* Basic Order Info */}
+                <div style={{ marginBottom: "24px" }}>
+                  <h4 style={{ margin: "0 0 16px 0", color: "#cbd5e1", fontSize: "1.1rem", fontWeight: "600" }}>
+                    Order Information
+                  </h4>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ display: "block", color: "#94a3b8", fontSize: "0.9rem", fontWeight: "600", marginBottom: "8px" }}>
+                        Order Number
+                      </label>
+                      <input
+                        type="text"
+                        value={editOrderForm.poNumber}
+                        onChange={(e) => setEditOrderForm(prev => ({ ...prev, poNumber: e.target.value }))}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          background: "rgba(30, 41, 59, 0.7)",
+                          border: editFormErrors.poNumber ? "1px solid #ef4444" : "1px solid rgba(51, 65, 85, 0.4)",
+                          borderRadius: "8px",
+                          color: "#cbd5e1",
+                          fontSize: "0.9rem",
+                          fontWeight: "500",
+                          outline: "none",
+                          boxSizing: "border-box",
+                        }}
+                        placeholder="Enter order number"
+                      />
+                      {editFormErrors.poNumber && (
+                        <div style={{ color: "#ef4444", fontSize: "0.8rem", marginTop: "4px" }}>
+                          {editFormErrors.poNumber}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <label style={{ display: "block", color: "#94a3b8", fontSize: "0.9rem", fontWeight: "600", marginBottom: "8px" }}>
+                        Due Date
+                      </label>
+                      <input
+                        type="date"
+                        value={editOrderForm.dueDate}
+                        onChange={(e) => setEditOrderForm(prev => ({ ...prev, dueDate: e.target.value }))}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          background: "rgba(30, 41, 59, 0.7)",
+                          border: editFormErrors.dueDate ? "1px solid #ef4444" : "1px solid rgba(51, 65, 85, 0.4)",
+                          borderRadius: "8px",
+                          color: "#cbd5e1",
+                          fontSize: "0.9rem",
+                          fontWeight: "500",
+                          outline: "none",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                      {editFormErrors.dueDate && (
+                        <div style={{ color: "#ef4444", fontSize: "0.8rem", marginTop: "4px" }}>
+                          {editFormErrors.dueDate}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "16px", marginTop: "16px" }}>
+                    <div>
+                      <label style={{ display: "block", color: "#94a3b8", fontSize: "0.9rem", fontWeight: "600", marginBottom: "8px" }}>
+                        Priority
+                      </label>
+                      <select
+                        value={editOrderForm.priority}
+                        onChange={(e) => setEditOrderForm(prev => ({ ...prev, priority: e.target.value as PurchaseOrder['priority'] }))}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          background: "rgba(30, 41, 59, 0.7)",
+                          border: "1px solid rgba(51, 65, 85, 0.4)",
+                          borderRadius: "8px",
+                          color: "#cbd5e1",
+                          fontSize: "0.9rem",
+                          fontWeight: "500",
+                          outline: "none",
+                          boxSizing: "border-box",
+                        }}
+                      >
+                        <option value="STANDARD">Standard</option>
+                        <option value="RUSH">Rush</option>
+                        <option value="HOLD">Hold</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: "block", color: "#94a3b8", fontSize: "0.9rem", fontWeight: "600", marginBottom: "8px" }}>
+                        Notes
+                      </label>
+                      <input
+                        type="text"
+                        value={editOrderForm.notes}
+                        onChange={(e) => setEditOrderForm(prev => ({ ...prev, notes: e.target.value }))}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          background: "rgba(30, 41, 59, 0.7)",
+                          border: "1px solid rgba(51, 65, 85, 0.4)",
+                          borderRadius: "8px",
+                          color: "#cbd5e1",
+                          fontSize: "0.9rem",
+                          fontWeight: "500",
+                          outline: "none",
+                          boxSizing: "border-box",
+                        }}
+                        placeholder="Optional notes"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Line Items */}
+                <div style={{ marginBottom: "24px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                    <h4 style={{ margin: 0, color: "#cbd5e1", fontSize: "1.1rem", fontWeight: "600" }}>
+                      Line Items
+                    </h4>
+                    <button
+                      onClick={() => {
+                        setEditOrderForm(prev => ({
+                          ...prev,
+                          lineItems: [...prev.lineItems, {
+                            id: "",
+                            partNumber: "",
+                            partName: "",
+                            drawingNumber: "",
+                            revisionLevel: "",
+                            quantity: 1,
+                            dueDate: "",
+                            notes: "",
+                          }]
+                        }));
+                        setEditFormErrors(prev => ({
+                          ...prev,
+                          lineItems: [...prev.lineItems, {
+                            partNumber: "",
+                            partName: "",
+                            quantity: "",
+                          }]
+                        }));
+                      }}
+                      style={{
+                        padding: "8px 16px",
+                        background: "linear-gradient(135deg, #10b981, #047857)",
+                        border: "none",
+                        borderRadius: "6px",
+                        color: "white",
+                        cursor: "pointer",
+                        fontSize: "0.8rem",
+                        fontWeight: "600",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      + Add Item
+                    </button>
+                  </div>
+                  
+                  <div style={{ display: "grid", gap: "16px" }}>
+                    {editOrderForm.lineItems.map((item, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          background: "rgba(30, 41, 59, 0.4)",
+                          border: "1px solid rgba(51, 65, 85, 0.2)",
+                          borderRadius: "8px",
+                          padding: "16px",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                          <h5 style={{ margin: 0, color: "#cbd5e1", fontSize: "1rem", fontWeight: "600" }}>
+                            Item {index + 1}
+                          </h5>
+                          {editOrderForm.lineItems.length > 1 && (
+                            <button
+                              onClick={() => {
+                                setEditOrderForm(prev => ({
+                                  ...prev,
+                                  lineItems: prev.lineItems.filter((_, i) => i !== index)
+                                }));
+                                setEditFormErrors(prev => ({
+                                  ...prev,
+                                  lineItems: prev.lineItems.filter((_, i) => i !== index)
+                                }));
+                              }}
+                              style={{
+                                padding: "4px 8px",
+                                background: "rgba(239, 68, 68, 0.8)",
+                                border: "none",
+                                borderRadius: "4px",
+                                color: "white",
+                                cursor: "pointer",
+                                fontSize: "0.8rem",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", color: "#94a3b8", fontSize: "0.8rem", fontWeight: "600", marginBottom: "4px" }}>
+                              Part Number *
+                            </label>
+                            <input
+                              type="text"
+                              value={item.partNumber}
+                              onChange={(e) => {
+                                const newLineItems = [...editOrderForm.lineItems];
+                                newLineItems[index].partNumber = e.target.value;
+                                setEditOrderForm(prev => ({ ...prev, lineItems: newLineItems }));
+                              }}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                background: "rgba(15, 23, 42, 0.6)",
+                                border: editFormErrors.lineItems[index]?.partNumber ? "1px solid #ef4444" : "1px solid rgba(51, 65, 85, 0.4)",
+                                borderRadius: "6px",
+                                color: "#cbd5e1",
+                                fontSize: "0.9rem",
+                                outline: "none",
+                                boxSizing: "border-box",
+                              }}
+                              placeholder="Part number"
+                            />
+                            {editFormErrors.lineItems[index]?.partNumber && (
+                              <div style={{ color: "#ef4444", fontSize: "0.7rem", marginTop: "2px" }}>
+                                {editFormErrors.lineItems[index].partNumber}
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <label style={{ display: "block", color: "#94a3b8", fontSize: "0.8rem", fontWeight: "600", marginBottom: "4px" }}>
+                              Part Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={item.partName}
+                              onChange={(e) => {
+                                const newLineItems = [...editOrderForm.lineItems];
+                                newLineItems[index].partName = e.target.value;
+                                setEditOrderForm(prev => ({ ...prev, lineItems: newLineItems }));
+                              }}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                background: "rgba(15, 23, 42, 0.6)",
+                                border: editFormErrors.lineItems[index]?.partName ? "1px solid #ef4444" : "1px solid rgba(51, 65, 85, 0.4)",
+                                borderRadius: "6px",
+                                color: "#cbd5e1",
+                                fontSize: "0.9rem",
+                                outline: "none",
+                                boxSizing: "border-box",
+                              }}
+                              placeholder="Part name"
+                            />
+                            {editFormErrors.lineItems[index]?.partName && (
+                              <div style={{ color: "#ef4444", fontSize: "0.7rem", marginTop: "2px" }}>
+                                {editFormErrors.lineItems[index].partName}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", color: "#94a3b8", fontSize: "0.8rem", fontWeight: "600", marginBottom: "4px" }}>
+                              Drawing Number
+                            </label>
+                            <input
+                              type="text"
+                              value={item.drawingNumber}
+                              onChange={(e) => {
+                                const newLineItems = [...editOrderForm.lineItems];
+                                newLineItems[index].drawingNumber = e.target.value;
+                                setEditOrderForm(prev => ({ ...prev, lineItems: newLineItems }));
+                              }}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                background: "rgba(15, 23, 42, 0.6)",
+                                border: "1px solid rgba(51, 65, 85, 0.4)",
+                                borderRadius: "6px",
+                                color: "#cbd5e1",
+                                fontSize: "0.9rem",
+                                outline: "none",
+                                boxSizing: "border-box",
+                              }}
+                              placeholder="Drawing number"
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: "block", color: "#94a3b8", fontSize: "0.8rem", fontWeight: "600", marginBottom: "4px" }}>
+                              Revision
+                            </label>
+                            <input
+                              type="text"
+                              value={item.revisionLevel}
+                              onChange={(e) => {
+                                const newLineItems = [...editOrderForm.lineItems];
+                                newLineItems[index].revisionLevel = e.target.value;
+                                setEditOrderForm(prev => ({ ...prev, lineItems: newLineItems }));
+                              }}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                background: "rgba(15, 23, 42, 0.6)",
+                                border: "1px solid rgba(51, 65, 85, 0.4)",
+                                borderRadius: "6px",
+                                color: "#cbd5e1",
+                                fontSize: "0.9rem",
+                                outline: "none",
+                                boxSizing: "border-box",
+                              }}
+                              placeholder="Rev level"
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: "block", color: "#94a3b8", fontSize: "0.8rem", fontWeight: "600", marginBottom: "4px" }}>
+                              Quantity *
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const newLineItems = [...editOrderForm.lineItems];
+                                newLineItems[index].quantity = parseInt(e.target.value) || 1;
+                                setEditOrderForm(prev => ({ ...prev, lineItems: newLineItems }));
+                              }}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                background: "rgba(15, 23, 42, 0.6)",
+                                border: editFormErrors.lineItems[index]?.quantity ? "1px solid #ef4444" : "1px solid rgba(51, 65, 85, 0.4)",
+                                borderRadius: "6px",
+                                color: "#cbd5e1",
+                                fontSize: "0.9rem",
+                                outline: "none",
+                                boxSizing: "border-box",
+                              }}
+                            />
+                            {editFormErrors.lineItems[index]?.quantity && (
+                              <div style={{ color: "#ef4444", fontSize: "0.7rem", marginTop: "2px" }}>
+                                {editFormErrors.lineItems[index].quantity}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "24px", paddingTop: "24px", borderTop: "1px solid rgba(51, 65, 85, 0.2)" }}>
+                  <button
+                    onClick={handleCloseEditOrderModal}
+                    disabled={editLoading}
+                    style={{
+                      padding: "12px 20px",
+                      background: "#6b7280",
+                      border: "none",
+                      borderRadius: "6px",
+                      color: "white",
+                      cursor: editLoading ? "not-allowed" : "pointer",
+                      fontWeight: "500",
+                      fontSize: "0.9rem",
+                      opacity: editLoading ? 0.6 : 1,
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveOrderEdit}
+                    disabled={editLoading}
+                    style={{
+                      padding: "12px 20px",
+                      background: editLoading ? "#6b7280" : "linear-gradient(135deg, #f97316, #ea580c)",
+                      border: "none",
+                      borderRadius: "6px",
+                      color: "white",
+                      cursor: editLoading ? "not-allowed" : "pointer",
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    {editLoading && (
+                      <div style={{
+                        width: "16px",
+                        height: "16px",
+                        border: "2px solid rgba(255,255,255,0.3)",
+                        borderTop: "2px solid white",
+                        borderRadius: "50%",
+                        animation: "spin 1s linear infinite"
+                      }} />
+                    )}
+                    {editLoading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* New Order Modal - Custom Implementation */}
         {showNewOrderModal && (
