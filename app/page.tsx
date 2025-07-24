@@ -92,6 +92,17 @@ export default function HomePage() {
     }
   };
 
+  const getWorkstationStatusGradient = (status: string) => {
+    switch (status) {
+      case 'ACTIVE':
+        return "linear-gradient(90deg, #10b981, #059669)";
+      case 'QUEUED':
+        return "linear-gradient(90deg, #f59e0b, #d97706)";
+      default:
+        return "linear-gradient(90deg, #6b7280, #4b5563)";
+    }
+  };
+
   return (
     <main
       style={{
@@ -308,6 +319,16 @@ export default function HomePage() {
               e.currentTarget.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.4)";
             }}
             onMouseOut={(e) => {
+              e.currentTarget.style.background = "rgba(30, 41, 59, 0.85)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.background = "rgba(51, 65, 85, 0.9)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.4)";
+            }}
+            onBlur={(e) => {
               e.currentTarget.style.background = "rgba(30, 41, 59, 0.85)";
               e.currentTarget.style.transform = "translateY(0)";
               e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
@@ -617,11 +638,7 @@ export default function HomePage() {
                       left: 0,
                       right: 0,
                       height: "4px",
-                      background: ws.status === 'ACTIVE' ? 
-                        "linear-gradient(90deg, #10b981, #059669)" : 
-                        ws.status === 'QUEUED' ? 
-                        "linear-gradient(90deg, #f59e0b, #d97706)" : 
-                        "linear-gradient(90deg, #6b7280, #4b5563)",
+                      background: getWorkstationStatusGradient(ws.status),
                     }}
                   />
                 </Card>
@@ -656,7 +673,8 @@ export default function HomePage() {
               key={action.title}
               style={{ textDecoration: "none" }}
             >
-              <div
+              <button
+                type="button"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -671,6 +689,8 @@ export default function HomePage() {
                   backdropFilter: "blur(12px)",
                   position: "relative",
                   overflow: "hidden",
+                  fontSize: "inherit",
+                  fontFamily: "inherit",
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.3)";
@@ -684,6 +704,22 @@ export default function HomePage() {
                   e.currentTarget.style.background = "rgba(30, 41, 59, 0.85)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.3)";
+                  e.currentTarget.style.borderColor = action.color;
+                  e.currentTarget.style.background = "rgba(51, 65, 85, 0.9)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
+                  e.currentTarget.style.borderColor = "rgba(51, 65, 85, 0.7)";
+                  e.currentTarget.style.background = "rgba(30, 41, 59, 0.85)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+                onClick={() => {
+                  // Removed window.location.href to prevent router conflicts
+                  // Navigation is handled by the Link component
+                }}
               >
                 <span style={{ fontSize: "18px" }}>{action.icon}</span>
                 <Text
@@ -693,7 +729,7 @@ export default function HomePage() {
                 >
                   {action.title}
                 </Text>
-              </div>
+              </button>
             </Link>
           ))}
         </div>

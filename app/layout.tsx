@@ -1,18 +1,14 @@
 // app/layout.tsx
+import "@mantine/core/styles.css";
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ColorSchemeScript } from "@mantine/core";
-import ColorSchemeProviderWrapper from "../components/ColorSchemeProvider";
+import { Inter } from "next/font/google";
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import type { Metadata } from "next";
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -22,19 +18,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <ColorSchemeScript defaultColorScheme="dark" />
+        <ColorSchemeScript />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
+        className={`${inter.variable} antialiased`}
       >
-        <ColorSchemeProviderWrapper>{children}</ColorSchemeProviderWrapper>
+        <MantineProvider>
+          <ModalsProvider>
+            {children}
+          </ModalsProvider>
+        </MantineProvider>
       </body>
     </html>
   );

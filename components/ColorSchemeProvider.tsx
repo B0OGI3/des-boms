@@ -1,69 +1,69 @@
 "use client";
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
-import Cookies from "js-cookie";
-import { MantineProvider } from "@mantine/core";
+
+import { MantineProvider, createTheme } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
+import { createContext, useContext, useState, useEffect, useMemo, ReactNode } from "react";
 
-type ColorSchemeContextType = {
+// Create the theme
+const theme = createTheme({
+  primaryColor: "blue",
+  fontFamily: "var(--font-geist-sans)",
+  fontFamilyMonospace: "var(--font-geist-mono)",
+});
+
+// Color scheme context
+interface ColorSchemeContextType {
   colorScheme: "light" | "dark";
-  toggleColorScheme: (value?: "light" | "dark") => void;
-};
-
-export const ColorSchemeContext = createContext<
-  ColorSchemeContextType | undefined
->(undefined);
-
-export function useColorScheme() {
-  const context = useContext(ColorSchemeContext);
-  if (!context) {
-    throw new Error(
-      "useColorScheme must be used within ColorSchemeProviderWrapper",
-    );
-  }
-  return context;
+  toggleColorScheme: () => void;
 }
 
-function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
-  // Always start with "dark" to match SSR
+const ColorSchemeContext = createContext<ColorSchemeContextType | undefined>(undefined);
+
+export const useColorScheme = () => {
+  const context = useContext(ColorSchemeContext);
+  if (!context) {
+    throw new Error("useColorScheme must be used within a ColorSchemeProvider");
+  }
+  return context;
+};
+
+interface ColorSchemeProviderProps {
+  readonly children: ReactNode;
+}
+
+export default function ColorSchemeProviderWrapper({ children }: ColorSchemeProviderProps) {
   const [colorScheme, setColorScheme] = useState<"light" | "dark">("dark");
   const [mounted, setMounted] = useState(false);
 
-  // Hydrate from cookie after component mounts
+  // Only run on client side
   useEffect(() => {
     setMounted(true);
-    const savedScheme = Cookies.get("mantine-color-scheme") as "light" | "dark";
-    if (savedScheme && savedScheme !== colorScheme) {
+    
+    // Get color scheme from localStorage or default to dark
+    const savedScheme = localStorage.getItem("mantine-color-scheme");
+    if (savedScheme === "light" || savedScheme === "dark") {
       setColorScheme(savedScheme);
     }
-  }, [colorScheme]);
+  }, []);
 
-  // Update cookie when colorScheme changes (but only after mounting)
-  useEffect(() => {
-    if (mounted) {
-      Cookies.set("mantine-color-scheme", colorScheme, { expires: 365 });
-    }
-  }, [colorScheme, mounted]);
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    colorScheme,
+    toggleColorScheme: () => {
+      const newScheme = colorScheme === "dark" ? "light" : "dark";
+      setColorScheme(newScheme);
+      localStorage.setItem("mantine-color-scheme", newScheme);
+    },
+  }), [colorScheme]);
 
-  const toggleColorScheme = (value?: "light" | "dark") => {
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-  };
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <ColorSchemeContext.Provider value={{ colorScheme, toggleColorScheme }}>
-      <MantineProvider
-        theme={{
-          fontFamily: "var(--font-geist-sans)",
-          fontFamilyMonospace: "var(--font-geist-mono)",
-          primaryColor: "blue",
-        }}
-        forceColorScheme="dark"
-      >
+    <ColorSchemeContext.Provider value={contextValue}>
+      <MantineProvider theme={theme} forceColorScheme={colorScheme}>
         <ModalsProvider>
           {children}
         </ModalsProvider>
@@ -71,5 +71,3 @@ function ColorSchemeProviderWrapper({ children }: { children: ReactNode }) {
     </ColorSchemeContext.Provider>
   );
 }
-
-export default ColorSchemeProviderWrapper;

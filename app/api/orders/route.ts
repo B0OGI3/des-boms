@@ -15,14 +15,104 @@ interface LineItemInput {
 
 // GET /api/orders - Get all purchase orders with optional filtering
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const customerId = searchParams.get('customerId');
+  const priority = searchParams.get('priority');
+  const search = searchParams.get('search');
+  // Note: Status filtering is handled in the application layer since it's calculated from batch data
+  
   try {
-    const { searchParams } = new URL(request.url);
-    const customerId = searchParams.get('customerId');
-    const priority = searchParams.get('priority');
-    
     const where: Prisma.PurchaseOrderWhereInput = {};
+    
+    // Filter by customer
     if (customerId) where.customerId = customerId;
-    if (priority) where.priority = priority as Prisma.PurchaseOrderWhereInput['priority'];
+    
+    // Filter by priority
+    if (priority && priority !== 'ALL') {
+      where.priority = priority as Prisma.PurchaseOrderWhereInput['priority'];
+    }
+    
+    // Search functionality - search across multiple fields
+    if (search?.trim()) {
+      const searchTerm = search.trim();
+      where.OR = [
+        // Search by PO number
+        {
+          poNumber: {
+            contains: searchTerm,
+            mode: 'insensitive' as Prisma.QueryMode,
+          },
+        },
+        // Search by system order ID
+        {
+          systemOrderId: {
+            contains: searchTerm,
+            mode: 'insensitive' as Prisma.QueryMode,
+          },
+        },
+        // Search by customer name
+        {
+          customer: {
+            name: {
+              contains: searchTerm,
+              mode: 'insensitive' as Prisma.QueryMode,
+            },
+          },
+        },
+        // Search by customer contact name
+        {
+          customer: {
+            contactName: {
+              not: null,
+              contains: searchTerm,
+              mode: 'insensitive' as Prisma.QueryMode,
+            },
+          },
+        },
+        // Search by line item part number
+        {
+          lineItems: {
+            some: {
+              partNumber: {
+                contains: searchTerm,
+                mode: 'insensitive' as Prisma.QueryMode,
+              },
+            },
+          },
+        },
+        // Search by line item part name
+        {
+          lineItems: {
+            some: {
+              partName: {
+                contains: searchTerm,
+                mode: 'insensitive' as Prisma.QueryMode,
+              },
+            },
+          },
+        },
+        // Search by line item drawing number
+        {
+          lineItems: {
+            some: {
+              drawingNumber: {
+                not: null,
+                contains: searchTerm,
+                mode: 'insensitive' as Prisma.QueryMode,
+              },
+            },
+          },
+        },
+        // Search by notes
+        {
+          notes: {
+            not: null,
+            contains: searchTerm,
+            mode: 'insensitive' as Prisma.QueryMode,
+          },
+        },
+      ];
+    }
 
     const orders = await prisma.purchaseOrder.findMany({
       where,
@@ -57,6 +147,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching orders:', error);
+    console.error('Search params:', { customerId, priority, search });
+    
+    // More detailed error logging
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.error('Prisma error code:', error.code);
+      console.error('Prisma error message:', error.message);
+    }
+    
     return NextResponse.json(
       {
         success: false,
@@ -76,10 +174,23 @@ export async function POST(request: NextRequest) {
       customerId,
       poNumber,
       dueDate,
-      priority = 'STANDARD',
+      priority = 'NORMAL',
       notes,
       lineItems = [],
     } = body;
+
+    // Map frontend priority values to database enum values (DES-BOMS spec: Rush / Standard / Hold)
+    const priorityMapping: Record<string, 'RUSH' | 'STANDARD' | 'HOLD'> = {
+      'RUSH': 'RUSH',
+      'STANDARD': 'STANDARD',
+      'HOLD': 'HOLD',
+      // Legacy mappings for backwards compatibility
+      'LOW': 'HOLD',
+      'NORMAL': 'STANDARD',
+      'HIGH': 'RUSH'
+    };
+
+    const dbPriority = priorityMapping[priority] || 'STANDARD';
 
     // Validate required fields
     if (!customerId || !poNumber || !dueDate) {
@@ -105,7 +216,7 @@ export async function POST(request: NextRequest) {
         customerId,
         poNumber,
         dueDate: new Date(dueDate),
-        priority,
+        priority: dbPriority,
         notes,
         lineItems: {
           create: lineItems.map((item: LineItemInput) => ({

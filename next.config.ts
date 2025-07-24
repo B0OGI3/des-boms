@@ -10,6 +10,33 @@ const nextConfig: NextConfig = {
   
   // Performance optimizations
   compress: true,
+  trailingSlash: false,
+  
+  // Webpack configuration to resolve case sensitivity issues
+  webpack: (config, { dev, isServer }) => {
+    // Ensure case-sensitive module resolution
+    config.resolve.symlinks = false;
+    
+    // Add case-sensitive handling for Windows filesystem
+    config.resolve.cache = false;
+    
+    // Suppress case sensitivity warnings in development
+    if (dev && !isServer) {
+      config.infrastructureLogging = {
+        level: 'error',
+      };
+      
+      // Ignore case sensitivity warnings
+      config.ignoreWarnings = [
+        {
+          module: /node_modules/,
+          message: /names that only differ in casing/,
+        },
+      ];
+    }
+    
+    return config;
+  },
   
   // Security headers
   async headers() {
