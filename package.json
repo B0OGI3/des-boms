@@ -26,12 +26,18 @@
 		"@mantine/core": "^8.2.1",
 		"@mantine/hooks": "^8.2.1",
 		"@mantine/modals": "^8.2.1",
+		"@mantine/notifications": "^8.2.1",
 		"@prisma/client": "^6.12.0",
 		"@tabler/icons-react": "^3.34.1",
+		"@types/pdfkit": "^0.17.2",
+		"@types/qrcode": "^1.5.5",
 		"js-cookie": "^3.0.5",
 		"next": "^15.4.3",
+		"pdfkit": "^0.17.1",
+		"qrcode": "^1.5.4",
 		"react": "^18.3.1",
-		"react-dom": "^18.3.1"
+		"react-dom": "^18.3.1",
+		"react-qr-code": "^2.0.18"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.1",

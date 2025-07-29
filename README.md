@@ -2,7 +2,45 @@
 
 ## 🎯 What is DES-BOMS?
 
+# DES-BOMS (Delivered Engineering Solutions - Batch Order Management System)
+
+## 🎯 What is DES-BOMS?
+
 **DES-BOMS** is a comprehensive **Batch Order Management System** designed specifically for **Delivered Engineering Solutions (DES)** manufacturing operations. The system manages customer orders, batch routing, workstation confirmations, and inspection processes in a modern manufacturing environment.
+
+### ⚙️ Perfect For Manufacturing Operations:
+- **Order Management** - Complete purchase order lifecycle from receipt to delivery
+- **Batch Routing** - Sequential workstation routing with real-time tracking
+- **Workstation Control** - Operator confirmations and step-by-step processing
+- **Quality Control** - Built-in inspection and QC record management
+- **Production Monitoring** - Real-time shop floor dashboards and status tracking
+- **Document Management** - Drawing files, CAD models, and specification handling
+
+### 🌟 Key Manufacturing Features:
+- **Purchase Order Processing** - Customer POs with line items and file attachments
+- **Batch Management** - System-generated batch IDs with quantity tracking
+- **Sequential Routing** - Step-by-step workstation routing with time estimates
+- **Operator Interface** - Login, job queue, and step confirmation system
+- **Quality Control** - Inspector records with Pass/Fail/Rework tracking
+- **Real-time Dashboards** - Live status monitoring across all workstations
+- **Work Travelers** - Printable job routing documentation
+
+## ✨ Latest Features (v0.2.0)
+
+### 🔄 Complete Batch Management System
+- **Enhanced Search & Filtering** - Database-driven autocomplete with smart suggestions
+- **Bulk Operations** - Multi-select batches for priority updates, status changes, and deletion
+- **Real-time Updates** - Live batch status monitoring with smart notifications
+- **Work Traveler Generation** - Print-optimized routing documents with QR codes
+- **Progress Tracking** - Visual completion percentages and step-by-step routing
+- **Priority Management** - Rush / Standard / Hold classifications with color coding
+
+### 🎨 Modern UI/UX
+- **Dark Theme** - Glass-morphism design optimized for manufacturing environments  
+- **Mobile Responsive** - Full functionality on tablets and mobile devices
+- **Loading States** - Skeleton screens for smooth user experience
+- **Error Handling** - Comprehensive error boundaries with retry logic
+- **Accessibility** - WCAG 2.1 AA compliant for all users
 
 ### � Perfect For Manufacturing Operations:
 - **Order Management** - Complete purchase order lifecycle from receipt to delivery

@@ -20,6 +20,23 @@ const nextConfig: NextConfig = {
     // Add case-sensitive handling for Windows filesystem
     config.resolve.cache = false;
     
+    // Handle PDFKit font files properly
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        canvas: false, // Disable canvas for server-side
+      };
+      
+      // Copy PDFKit font files to the build
+      config.module.rules.push({
+        test: /\.(afm)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/fonts/[name][ext]',
+        },
+      });
+    }
+    
     // Suppress case sensitivity warnings in development
     if (dev && !isServer) {
       config.infrastructureLogging = {

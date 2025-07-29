@@ -1,0 +1,183 @@
+/* Batches Module Styles */
+
+.main {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  position: relative;
+  margin-bottom: 32px;
+  padding: 24px 0;
+}
+
+.headerAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #14b8a6, #0d9488, #0f766e);
+  border-radius: 2px;
+}
+
+.iconBox {
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+  backdrop-filter: blur(12px);
+}
+
+.title {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  color: #cbd5e1;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  background: rgba(30, 41, 59, 0.85);
+  border-radius: 16px;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  backdrop-filter: blur(12px);
+  margin-bottom: 32px;
+}
+
+.loadingText {
+  color: #cbd5e1;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+/* Batch specific styles */
+.batchCard {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.batchCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  border-color: rgba(20, 184, 166, 0.5);
+}
+
+.progressBar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(71, 85, 105, 0.5);
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #14b8a6, #0d9488);
+  transition: width 0.3s ease;
+}
+
+.stepCard {
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.stepCard.active {
+  border-color: #14b8a6;
+  background: rgba(20, 184, 166, 0.1);
+}
+
+.stepCard.completed {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.stepCard.failed {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Modal styles */
+.modalContent {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  backdrop-filter: blur(16px);
+}
+
+.modalHeader {
+  background: rgba(30, 41, 59, 0.8);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  padding: 20px 24px;
+}
+
+.modalBody {
+  padding: 24px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formLabel {
+  color: #f1f5f9;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.formInput {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(51, 65, 85, 0.7) !important;
+  color: #f1f5f9 !important;
+  border-radius: 8px !important;
+}
+
+.formInput:focus {
+  border-color: #14b8a6 !important;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .main {
+    padding: 16px;
+  }
+}

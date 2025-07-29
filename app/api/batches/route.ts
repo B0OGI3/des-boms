@@ -17,10 +17,41 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const workstationId = searchParams.get('workstationId');
     const priority = searchParams.get('priority');
+    const overdue = searchParams.get('overdue') === 'true';
+    const search = searchParams.get('search');
     
     const where: Prisma.BatchWhereInput = {};
     if (status) where.status = status as Prisma.BatchWhereInput['status'];
     if (priority) where.priority = priority as Prisma.BatchWhereInput['priority'];
+    
+    // Handle overdue filtering
+    if (overdue) {
+      where.AND = [
+        {
+          estimatedCompletion: {
+            lt: new Date()
+          }
+        },
+        {
+          status: {
+            in: ['QUEUED', 'IN_PROGRESS']
+          }
+        }
+      ];
+    }
+    
+    // Handle search across multiple fields
+    if (search?.trim()) {
+      const searchTerm = search.trim();
+      where.OR = [
+        { batchId: { contains: searchTerm, mode: 'insensitive' } },
+        { notes: { contains: searchTerm, mode: 'insensitive' } },
+        { lineItem: { partNumber: { contains: searchTerm, mode: 'insensitive' } } },
+        { lineItem: { partName: { contains: searchTerm, mode: 'insensitive' } } },
+        { lineItem: { purchaseOrder: { customer: { name: { contains: searchTerm, mode: 'insensitive' } } } } },
+        { lineItem: { purchaseOrder: { systemOrderId: { contains: searchTerm, mode: 'insensitive' } } } }
+      ];
+    }
 
     // If filtering by workstation, we need to join through routing steps
     let batches;
