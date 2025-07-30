@@ -1,3 +1,24 @@
+# Local Development: Exposing Your Local Server with ngrok
+
+If you are integrating with QuickBooks Online or any external service that requires a public callback URL (such as OAuth redirects or webhooks), you will need to expose your local development server to the internet. The recommended tool for this is [ngrok](https://ngrok.com/).
+
+## Why ngrok?
+- QuickBooks Online and similar services require a publicly accessible URL for OAuth2 callbacks and webhooks.
+- ngrok creates a secure tunnel from a public URL to your local machine, making local development and testing much easier.
+
+## How to Use ngrok
+1. Install ngrok from https://ngrok.com/download
+2. Start your local development server (e.g., `pnpm dev` or `npm run dev`).
+3. In a separate terminal, run:
+   ```sh
+   ngrok http 3000
+   ```
+   Replace `3000` with your local server port if different.
+4. Use the HTTPS forwarding URL provided by ngrok as your callback/redirect URI in QuickBooks Online app settings and `.env` variables (e.g., `https://<random-id>.ngrok.io/api/quickbooks/callback`).
+
+## Notes
+- Each time you restart ngrok, the public URL will change unless you have a paid ngrok account with reserved domains.
+- Update your QuickBooks app settings and environment variables accordingly when the URL changes.
 # DES-BOMS (Delivered Engineering Solutions - Batch Order Management System)
 
 ## 🎯 What is DES-BOMS?
