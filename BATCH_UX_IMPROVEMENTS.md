@@ -1,3 +1,15 @@
+# QuickBooks Customer Sync: Automatic Cleanup on Orders Page Load
+
+**Improvement:**
+On loading the Orders page, the system now automatically synchronizes customers with QuickBooks Online. Any local customers that no longer exist in QuickBooks are deleted from the local database. This ensures that the customer list is always up-to-date and prevents confusion from stale or orphaned customer records.
+
+**User Experience Impact:**
+- No manual intervention is required to keep customer data in sync with QuickBooks.
+- Reduces risk of errors when creating or managing orders for customers that have been deleted in QuickBooks.
+- Users can trust that the Orders page always reflects the current state of customer data from QuickBooks.
+
+**Technical Note:**
+This sync and cleanup is triggered automatically via a POST to `/api/quickbooks/sync-customers` on Orders page load. There is no grace period; deletions are immediate if a customer is not found in QuickBooks.
 # 🎯 DES-BOMS Batch Management - User Experience Issues & QOL Improvements
 
 ## ✅ **ALL ISSUES RESOLVED - COMPREHENSIVE IMPLEMENTATION COMPLETE**

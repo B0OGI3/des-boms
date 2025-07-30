@@ -113,6 +113,16 @@ export const ConfirmationStatus: {
 export type ConfirmationStatus = (typeof ConfirmationStatus)[keyof typeof ConfirmationStatus]
 
 
+export const SyncStatus: {
+  PENDING: 'PENDING',
+  SYNCED: 'SYNCED',
+  FAILED: 'FAILED',
+  UPDATING: 'UPDATING'
+};
+
+export type SyncStatus = (typeof SyncStatus)[keyof typeof SyncStatus]
+
+
 export const QCResult: {
   PASS: 'PASS',
   FAIL: 'FAIL',
@@ -142,6 +152,10 @@ export const StepStatus: typeof $Enums.StepStatus
 export type ConfirmationStatus = $Enums.ConfirmationStatus
 
 export const ConfirmationStatus: typeof $Enums.ConfirmationStatus
+
+export type SyncStatus = $Enums.SyncStatus
+
+export const SyncStatus: typeof $Enums.SyncStatus
 
 export type QCResult = $Enums.QCResult
 
@@ -1916,6 +1930,10 @@ export namespace Prisma {
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
+    quickbooksId: string | null
+    syncStatus: $Enums.SyncStatus | null
+    lastSyncedAt: Date | null
+    syncError: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1929,6 +1947,10 @@ export namespace Prisma {
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
+    quickbooksId: string | null
+    syncStatus: $Enums.SyncStatus | null
+    lastSyncedAt: Date | null
+    syncError: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1942,6 +1964,10 @@ export namespace Prisma {
     billingAddress: number
     shippingAddress: number
     notes: number
+    quickbooksId: number
+    syncStatus: number
+    lastSyncedAt: number
+    syncError: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1957,6 +1983,10 @@ export namespace Prisma {
     billingAddress?: true
     shippingAddress?: true
     notes?: true
+    quickbooksId?: true
+    syncStatus?: true
+    lastSyncedAt?: true
+    syncError?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1970,6 +2000,10 @@ export namespace Prisma {
     billingAddress?: true
     shippingAddress?: true
     notes?: true
+    quickbooksId?: true
+    syncStatus?: true
+    lastSyncedAt?: true
+    syncError?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1983,6 +2017,10 @@ export namespace Prisma {
     billingAddress?: true
     shippingAddress?: true
     notes?: true
+    quickbooksId?: true
+    syncStatus?: true
+    lastSyncedAt?: true
+    syncError?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2069,6 +2107,10 @@ export namespace Prisma {
     billingAddress: string | null
     shippingAddress: string | null
     notes: string | null
+    quickbooksId: string | null
+    syncStatus: $Enums.SyncStatus
+    lastSyncedAt: Date | null
+    syncError: string | null
     createdAt: Date
     updatedAt: Date
     _count: CustomerCountAggregateOutputType | null
@@ -2099,6 +2141,10 @@ export namespace Prisma {
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
+    quickbooksId?: boolean
+    syncStatus?: boolean
+    lastSyncedAt?: boolean
+    syncError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrders?: boolean | Customer$purchaseOrdersArgs<ExtArgs>
@@ -2114,6 +2160,10 @@ export namespace Prisma {
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
+    quickbooksId?: boolean
+    syncStatus?: boolean
+    lastSyncedAt?: boolean
+    syncError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["customer"]>
@@ -2127,6 +2177,10 @@ export namespace Prisma {
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
+    quickbooksId?: boolean
+    syncStatus?: boolean
+    lastSyncedAt?: boolean
+    syncError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["customer"]>
@@ -2140,11 +2194,15 @@ export namespace Prisma {
     billingAddress?: boolean
     shippingAddress?: boolean
     notes?: boolean
+    quickbooksId?: boolean
+    syncStatus?: boolean
+    lastSyncedAt?: boolean
+    syncError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contactName" | "email" | "phone" | "billingAddress" | "shippingAddress" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contactName" | "email" | "phone" | "billingAddress" | "shippingAddress" | "notes" | "quickbooksId" | "syncStatus" | "lastSyncedAt" | "syncError" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
   export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrders?: boolean | Customer$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
@@ -2166,6 +2224,10 @@ export namespace Prisma {
       billingAddress: string | null
       shippingAddress: string | null
       notes: string | null
+      quickbooksId: string | null
+      syncStatus: $Enums.SyncStatus
+      lastSyncedAt: Date | null
+      syncError: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["customer"]>
@@ -2600,6 +2662,10 @@ export namespace Prisma {
     readonly billingAddress: FieldRef<"Customer", 'String'>
     readonly shippingAddress: FieldRef<"Customer", 'String'>
     readonly notes: FieldRef<"Customer", 'String'>
+    readonly quickbooksId: FieldRef<"Customer", 'String'>
+    readonly syncStatus: FieldRef<"Customer", 'SyncStatus'>
+    readonly lastSyncedAt: FieldRef<"Customer", 'DateTime'>
+    readonly syncError: FieldRef<"Customer", 'String'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
   }
@@ -12351,6 +12417,10 @@ export namespace Prisma {
     billingAddress: 'billingAddress',
     shippingAddress: 'shippingAddress',
     notes: 'notes',
+    quickbooksId: 'quickbooksId',
+    syncStatus: 'syncStatus',
+    lastSyncedAt: 'lastSyncedAt',
+    syncError: 'syncError',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12528,6 +12598,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SyncStatus'
+   */
+  export type EnumSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SyncStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SyncStatus[]'
+   */
+  export type ListEnumSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SyncStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -12675,6 +12759,10 @@ export namespace Prisma {
     billingAddress?: StringNullableFilter<"Customer"> | string | null
     shippingAddress?: StringNullableFilter<"Customer"> | string | null
     notes?: StringNullableFilter<"Customer"> | string | null
+    quickbooksId?: StringNullableFilter<"Customer"> | string | null
+    syncStatus?: EnumSyncStatusFilter<"Customer"> | $Enums.SyncStatus
+    lastSyncedAt?: DateTimeNullableFilter<"Customer"> | Date | string | null
+    syncError?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     purchaseOrders?: PurchaseOrderListRelationFilter
@@ -12689,6 +12777,10 @@ export namespace Prisma {
     billingAddress?: SortOrderInput | SortOrder
     shippingAddress?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    quickbooksId?: SortOrderInput | SortOrder
+    syncStatus?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    syncError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     purchaseOrders?: PurchaseOrderOrderByRelationAggregateInput
@@ -12706,6 +12798,10 @@ export namespace Prisma {
     billingAddress?: StringNullableFilter<"Customer"> | string | null
     shippingAddress?: StringNullableFilter<"Customer"> | string | null
     notes?: StringNullableFilter<"Customer"> | string | null
+    quickbooksId?: StringNullableFilter<"Customer"> | string | null
+    syncStatus?: EnumSyncStatusFilter<"Customer"> | $Enums.SyncStatus
+    lastSyncedAt?: DateTimeNullableFilter<"Customer"> | Date | string | null
+    syncError?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     purchaseOrders?: PurchaseOrderListRelationFilter
@@ -12720,6 +12816,10 @@ export namespace Prisma {
     billingAddress?: SortOrderInput | SortOrder
     shippingAddress?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    quickbooksId?: SortOrderInput | SortOrder
+    syncStatus?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    syncError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
@@ -12739,6 +12839,10 @@ export namespace Prisma {
     billingAddress?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     shippingAddress?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    quickbooksId?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    syncStatus?: EnumSyncStatusWithAggregatesFilter<"Customer"> | $Enums.SyncStatus
+    lastSyncedAt?: DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
+    syncError?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
   }
@@ -13416,6 +13520,10 @@ export namespace Prisma {
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
+    quickbooksId?: string | null
+    syncStatus?: $Enums.SyncStatus
+    lastSyncedAt?: Date | string | null
+    syncError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCustomerInput
@@ -13430,6 +13538,10 @@ export namespace Prisma {
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
+    quickbooksId?: string | null
+    syncStatus?: $Enums.SyncStatus
+    lastSyncedAt?: Date | string | null
+    syncError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCustomerInput
@@ -13444,6 +13556,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCustomerNestedInput
@@ -13458,6 +13574,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCustomerNestedInput
@@ -13472,6 +13592,10 @@ export namespace Prisma {
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
+    quickbooksId?: string | null
+    syncStatus?: $Enums.SyncStatus
+    lastSyncedAt?: Date | string | null
+    syncError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13485,6 +13609,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13498,6 +13626,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14269,6 +14401,24 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type EnumSyncStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SyncStatus | EnumSyncStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSyncStatusFilter<$PrismaModel> | $Enums.SyncStatus
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -14304,6 +14454,10 @@ export namespace Prisma {
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
+    quickbooksId?: SortOrder
+    syncStatus?: SortOrder
+    lastSyncedAt?: SortOrder
+    syncError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14317,6 +14471,10 @@ export namespace Prisma {
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
+    quickbooksId?: SortOrder
+    syncStatus?: SortOrder
+    lastSyncedAt?: SortOrder
+    syncError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14330,6 +14488,10 @@ export namespace Prisma {
     billingAddress?: SortOrder
     shippingAddress?: SortOrder
     notes?: SortOrder
+    quickbooksId?: SortOrder
+    syncStatus?: SortOrder
+    lastSyncedAt?: SortOrder
+    syncError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14368,6 +14530,30 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumSyncStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SyncStatus | EnumSyncStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSyncStatusWithAggregatesFilter<$PrismaModel> | $Enums.SyncStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSyncStatusFilter<$PrismaModel>
+    _max?: NestedEnumSyncStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14463,17 +14649,6 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type PurchaseOrderScalarRelationFilter = {
     is?: PurchaseOrderWhereInput
     isNot?: PurchaseOrderWhereInput
@@ -14563,20 +14738,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type OrderLineItemScalarRelationFilter = {
@@ -15027,6 +15188,14 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type EnumSyncStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SyncStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -15159,10 +15328,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput = {
@@ -15597,6 +15762,24 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedEnumSyncStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SyncStatus | EnumSyncStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSyncStatusFilter<$PrismaModel> | $Enums.SyncStatus
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15664,6 +15847,30 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumSyncStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SyncStatus | EnumSyncStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SyncStatus[] | ListEnumSyncStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSyncStatusWithAggregatesFilter<$PrismaModel> | $Enums.SyncStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSyncStatusFilter<$PrismaModel>
+    _max?: NestedEnumSyncStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15695,17 +15902,6 @@ export namespace Prisma {
     _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -15731,20 +15927,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumBatchPriorityFilter<$PrismaModel = never> = {
@@ -15946,6 +16128,10 @@ export namespace Prisma {
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
+    quickbooksId?: string | null
+    syncStatus?: $Enums.SyncStatus
+    lastSyncedAt?: Date | string | null
+    syncError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15959,6 +16145,10 @@ export namespace Prisma {
     billingAddress?: string | null
     shippingAddress?: string | null
     notes?: string | null
+    quickbooksId?: string | null
+    syncStatus?: $Enums.SyncStatus
+    lastSyncedAt?: Date | string | null
+    syncError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16028,6 +16218,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16041,6 +16235,10 @@ export namespace Prisma {
     billingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    quickbooksId?: NullableStringFieldUpdateOperationsInput | string | null
+    syncStatus?: EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    syncError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

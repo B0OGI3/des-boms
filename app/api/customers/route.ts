@@ -3,9 +3,11 @@
  * 
  * Handles CRUD operations for customer data in the DES-BOMS system.
  * Provides RESTful endpoints for customer management functionality.
+ * Includes QuickBooks Online integration for bidirectional sync.
  */
 
 import { prisma } from "@/lib/prisma";
+import { getQuickBooksService } from "@/lib/quickbooks";
 import { NextResponse } from "next/server";
 
 /**
@@ -39,7 +41,7 @@ export async function GET() {
 /**
  * POST /api/customers
  * 
- * Creates a new customer record in the database.
+ * Creates a new customer record in the database and syncs to QuickBooks.
  * Validates required fields and handles database constraints.
  * 
  * @param req - Request object containing customer data
@@ -58,9 +60,22 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Create new customer record
+    // Create new customer record with sync status PENDING
     const newCustomer = await prisma.customer.create({
-      data: { name, contactName: contact, email, phone, billingAddress, shippingAddress },
+      data: { 
+        name, 
+        contactName: contact, 
+        email, 
+        phone, 
+        billingAddress, 
+        shippingAddress,
+        syncStatus: 'PENDING', // QuickBooks sync will be attempted
+      },
+    });
+
+    // Attempt QuickBooks sync in background (non-blocking)
+    syncCustomerToQuickBooks(newCustomer.id).catch(error => {
+      console.error(`Background QuickBooks sync failed for customer ${newCustomer.id}:`, error);
     });
 
     return NextResponse.json(newCustomer, { status: 201 });
@@ -71,5 +86,31 @@ export async function POST(req: Request) {
       { error: "Failed to create customer. Email may already exist." },
       { status: 500 }
     );
+  }
+}
+
+/**
+ * Background function to sync customer to QuickBooks
+ * Runs asynchronously to avoid blocking the API response
+ */
+async function syncCustomerToQuickBooks(customerId: string): Promise<void> {
+  try {
+    const qbService = await getQuickBooksService();
+    if (qbService) {
+      await qbService.syncCustomerToQuickBooks(customerId);
+      console.log(`Customer ${customerId} queued for QuickBooks sync`);
+    } else {
+      console.warn(`QuickBooks not configured - customer ${customerId} not synced`);
+      // Update sync status to indicate QB not configured
+      await prisma.customer.update({
+        where: { id: customerId },
+        data: { 
+          syncStatus: 'FAILED',
+          syncError: 'QuickBooks not configured'
+        },
+      });
+    }
+  } catch (error) {
+    console.error(`Failed to sync customer ${customerId} to QuickBooks:`, error);
   }
 }

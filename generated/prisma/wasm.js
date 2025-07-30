@@ -129,6 +129,10 @@ exports.Prisma.CustomerScalarFieldEnum = {
   billingAddress: 'billingAddress',
   shippingAddress: 'shippingAddress',
   notes: 'notes',
+  quickbooksId: 'quickbooksId',
+  syncStatus: 'syncStatus',
+  lastSyncedAt: 'lastSyncedAt',
+  syncError: 'syncError',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -249,6 +253,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.SyncStatus = exports.$Enums.SyncStatus = {
+  PENDING: 'PENDING',
+  SYNCED: 'SYNCED',
+  FAILED: 'FAILED',
+  UPDATING: 'UPDATING'
+};
+
 exports.OrderPriority = exports.$Enums.OrderPriority = {
   RUSH: 'RUSH',
   STANDARD: 'STANDARD',

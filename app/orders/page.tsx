@@ -20,7 +20,9 @@
 
 "use client";
 
-import { Title, Text, Group, Loader, Alert, Button } from "@mantine/core";
+import { Title, Text, Group, Loader, Alert, Button, Badge } from "@mantine/core";
+// Helper to check QuickBooks connection (client-side, so use a public env var or fallback to a fetch if needed)
+const isQuickBooksConnected = typeof process !== 'undefined' && process.env && process.env.NEXT_PUBLIC_QB_CONNECTED === 'true';
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -61,8 +63,21 @@ export default function CustomerOrdersPage() {
   const orderSearch = useOrderSearch();
   
   // Ensure component is mounted before rendering
+
+  // On mount, import customers from QuickBooks and then refresh orders
   useEffect(() => {
     setMounted(true);
+    // Only run in browser
+    if (typeof window !== 'undefined') {
+      fetch('/api/quickbooks/sync-customers', { method: 'POST' })
+        .then(() => {
+          // Optionally, you could show a toast or notification here
+          orderSearch.refetch();
+        })
+        .catch(() => {
+          // Optionally, handle error
+        });
+    }
   }, []);
 
   // Shared hooks for functionality
@@ -213,6 +228,12 @@ export default function CustomerOrdersPage() {
                   <Text size="md" className={styles.subtitle}>
                     Customer Orders • Line Items • Manufacturing Tracking • Priority Management (Rush/Standard/Hold)
                   </Text>
+                  {/* QuickBooks Connected Badge */}
+                  {typeof window !== 'undefined' && process.env.NEXT_PUBLIC_QB_CONNECTED === 'true' && (
+                    <Badge color="green" variant="filled" style={{ marginTop: 8 }}>
+                      QuickBooks Connected
+                    </Badge>
+                  )}
                 </div>
               </Group>
             </div>

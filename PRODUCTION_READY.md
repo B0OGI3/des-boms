@@ -1,3 +1,14 @@
+# QuickBooks Customer Sync & Data Integrity
+
+## Automatic Customer Cleanup on Orders Page
+
+On every Orders page load, the system automatically synchronizes customers with QuickBooks Online by POSTing to `/api/quickbooks/sync-customers`. Any local customers not present in QuickBooks are deleted immediately. This ensures:
+
+- The local customer database always matches QuickBooks.
+- No orphaned or stale customer records remain.
+- Data integrity is maintained for all order operations.
+
+**Note:** There is no grace period for deletion; removals are immediate if a customer is not found in QuickBooks.
 # 🎉 DES-BOMS - Ready for Production!
 
 ## ✅ Completion Summary

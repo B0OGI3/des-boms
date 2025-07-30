@@ -1,3 +1,11 @@
+# QuickBooks Customer Sync & Local Deletion (Orders Page)
+
+On every Orders page load, the application POSTs to `/api/quickbooks/sync-customers` to synchronize customers with QuickBooks Online. Any local customers not present in QuickBooks are deleted immediately. This ensures the local database only contains customers that exist in QuickBooks, improving data integrity and reducing manual cleanup.
+
+**Key Points:**
+- Triggered automatically on Orders page mount.
+- No grace period for deletion; removals are immediate.
+- Keeps customer data consistent between QuickBooks and the local system.
 # Build Notes and Status
 
 ## ✅ Completed Tasks

@@ -28,6 +28,12 @@ model Customer {
   shippingAddress String?
   notes           String?   // General customer notes
   
+  // QuickBooks Integration Fields
+  quickbooksId    String?   // QuickBooks Customer ID for sync
+  syncStatus      SyncStatus @default(PENDING) // Sync state tracking
+  lastSyncedAt    DateTime? // Last successful sync timestamp
+  syncError       String?   // Last sync error message if any
+  
   // Relations
   purchaseOrders  PurchaseOrder[]
   
@@ -240,6 +246,13 @@ enum ConfirmationStatus {
   COMPLETED   // Operator completed step
   PAUSED      // Step paused
   FLAGGED     // Issue reported
+}
+
+enum SyncStatus {
+  PENDING     // Not yet synced to QuickBooks
+  SYNCED      // Successfully synced
+  FAILED      // Sync failed
+  UPDATING    // Sync in progress
 }
 
 enum QCResult {
