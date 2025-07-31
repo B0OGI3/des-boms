@@ -1,3 +1,19 @@
+# 🔒 Robust QuickBooks Token Refresh & Error Handling
+
+**DES-BOMS** implements a production-grade QuickBooks Online integration with:
+
+- **Automatic Token Refresh:** If the QuickBooks access token expires, the backend will automatically refresh it using the stored refresh token. No manual intervention is required during normal operation.
+- **Retry Logic:** API requests that receive a 401 Unauthorized error will trigger a token refresh and retry once, ensuring seamless operation even if tokens expire during use.
+- **Error Logging:** All errors from QuickBooks API calls and token refresh attempts are logged with detailed context, making debugging and support easier.
+- **Environment Variable Updates:** When tokens are refreshed, the new values are updated in the running process. For persistent storage, update your `.env.local` file as needed.
+- **Manual Recovery:** If both the access and refresh tokens become invalid (e.g., revoked in QuickBooks), you must re-authorize the app and update your `.env.local` with new tokens.
+
+### Troubleshooting QuickBooks Integration
+
+- If you see repeated 401 errors or token refresh failures, check that your `.env.local` contains valid, up-to-date tokens.
+- For local development, use [ngrok](https://ngrok.com/) to expose your server for OAuth callbacks (see below).
+- All token refresh and API errors are logged to the server console for easy diagnosis.
+
 # Local Development: Exposing Your Local Server with ngrok
 
 If you are integrating with QuickBooks Online or any external service that requires a public callback URL (such as OAuth redirects or webhooks), you will need to expose your local development server to the internet. The recommended tool for this is [ngrok](https://ngrok.com/).

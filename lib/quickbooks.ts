@@ -1,3 +1,27 @@
+// --- Internal Helper: Refresh QuickBooks OAuth2 Token ---
+async function refreshQuickBooksToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+  const params = new URLSearchParams();
+  params.append('grant_type', 'refresh_token');
+  params.append('refresh_token', refreshToken);
+  const basicAuth = Buffer.from(`${QB_CONFIG.clientId}:${QB_CONFIG.clientSecret}`).toString('base64');
+  const resp = await axios.post(
+    'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
+    params,
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${basicAuth}`,
+      },
+    }
+  );
+  const accessToken = resp.data.access_token;
+  const newRefreshToken = resp.data.refresh_token;
+  if (!accessToken || !newRefreshToken) {
+    throw new Error('QuickBooks token refresh did not return new tokens.');
+  }
+  return { accessToken, refreshToken: newRefreshToken };
+}
+
 /**
  * QuickBooks Online Integration Service
  * 
@@ -9,6 +33,13 @@
 import OAuthClient from 'intuit-oauth';
 import axios, { AxiosResponse } from 'axios';
 import { prisma } from './prisma';
+
+// Helper to update process.env at runtime (for dev only)
+function updateEnvTokens(newAccessToken: string, newRefreshToken: string) {
+  process.env.QB_ACCESS_TOKEN = newAccessToken;
+  process.env.QB_REFRESH_TOKEN = newRefreshToken;
+  // Optionally, persist to .env.local (not implemented here for safety)
+}
 
 // DEBUG: Log env variables for troubleshooting
 console.log('[QB DEBUG] QB_SANDBOX:', process.env.QB_SANDBOX, '| QB_CLIENT_ID:', process.env.QB_CLIENT_ID);
@@ -74,44 +105,69 @@ interface DESCustomer {
  * Handles all QuickBooks operations and data synchronization
  */
 export class QuickBooksService {
-  private readonly accessToken: string;
+  private accessToken: string;
+  private refreshToken: string;
   private readonly companyId: string;
   private readonly oauthClient: OAuthClient;
 
-  constructor(accessToken: string, companyId: string) {
+  constructor(accessToken: string, refreshToken: string, companyId: string) {
     this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
     this.companyId = companyId;
-    
     this.oauthClient = new OAuthClient({
       clientId: QB_CONFIG.clientId,
       clientSecret: QB_CONFIG.clientSecret,
       environment: QB_CONFIG.sandbox ? 'sandbox' : 'production',
       redirectUri: QB_CONFIG.redirectUri,
     });
+    // Set the refresh token on the OAuth client for refresh() compatibility
+    (this.oauthClient as any).token = { refresh_token: this.refreshToken };
   }
 
   /**
-   * Make authenticated API request to QuickBooks
+   * Make authenticated API request to QuickBooks, with robust token refresh and retry logic.
    */
   private async makeQBRequest(method: 'GET' | 'POST', endpoint: string, data?: any): Promise<AxiosResponse> {
     const url = `${QB_BASE_URL}/v3/company/${this.companyId}/${endpoint}`;
-    
-    const headers = {
+    let headers = {
       'Authorization': `Bearer ${this.accessToken}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     };
-
     try {
-      if (method === 'GET') {
-        return await axios.get(url, { headers });
-      } else {
-        return await axios.post(url, data, { headers });
+      return await this._doQBRequest(url, method, headers, data);
+    } catch (error: any) {
+      if (this._is401(error) && this.refreshToken) {
+        console.warn('[QB] Access token expired, attempting refresh...');
+        try {
+          const tokens = await refreshQuickBooksToken(this.refreshToken);
+          this.accessToken = tokens.accessToken;
+          this.refreshToken = tokens.refreshToken;
+          updateEnvTokens(tokens.accessToken, tokens.refreshToken);
+          headers['Authorization'] = `Bearer ${this.accessToken}`;
+          // Retry once after refresh
+          return await this._doQBRequest(url, method, headers, data);
+        } catch (refreshError) {
+          console.error('[QB] Failed to refresh token:', refreshError);
+          throw refreshError;
+        }
       }
-    } catch (error) {
+      // Not a 401, or already retried
       console.error(`QuickBooks API ${method} error:`, error);
       throw error;
     }
+  }
+
+  private async _doQBRequest(url: string, method: string, headers: Record<string, string>, data?: any): Promise<AxiosResponse> {
+    if (method === 'GET') {
+      return await axios.get(url, { headers });
+    } else {
+      return await axios.post(url, data, { headers });
+    }
+  }
+
+  private _is401(error: any): boolean {
+    return error?.response?.status === 401;
   }
 
   /**
@@ -311,14 +367,15 @@ export async function getQuickBooksService(): Promise<QuickBooksService | null> 
   try {
     // Get tokens from environment variables (set after OAuth flow)
     const accessToken = process.env.QB_ACCESS_TOKEN || '';
+    const refreshToken = process.env.QB_REFRESH_TOKEN || '';
     const companyId = process.env.QB_COMPANY_ID || '';
 
-    if (!accessToken || !companyId) {
+    if (!accessToken || !refreshToken || !companyId) {
       console.warn('QuickBooks credentials not configured - OAuth setup required');
       return null;
     }
 
-    return new QuickBooksService(accessToken, companyId);
+    return new QuickBooksService(accessToken, refreshToken, companyId);
   } catch (error) {
     console.error('Failed to initialize QuickBooks service:', error);
     return null;
