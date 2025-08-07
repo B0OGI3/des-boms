@@ -159,7 +159,7 @@ export function WorkTravelerModal({
             color: "#93c5fd",
             marginRight: "auto"
           }}>
-            💡 Print Tip: For single-sided printing, select "Print on one side" in your browser's print dialog
+            💡 Print Tip: For single-sided printing, select &quot;Print on one side&quot; in your browser&apos;s print dialog
           </div>
           <Button
             variant="subtle"

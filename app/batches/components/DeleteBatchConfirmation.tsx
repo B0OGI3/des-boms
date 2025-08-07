@@ -153,7 +153,7 @@ export function DeleteBatchConfirmation({
 
         {!canDelete && (
           <Alert color="red" title="Cannot Delete">
-            This batch cannot be deleted while it's in progress. Please complete the batch or put it on hold first.
+            This batch cannot be deleted while it&apos;s in progress. Please complete the batch or put it on hold first.
           </Alert>
         )}
 

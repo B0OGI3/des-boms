@@ -100,6 +100,8 @@ async function updateBatch(
     }
 
     // Prepare update data
+    // Using any due to complex Prisma type unions for update operations
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {};
     
     if (status !== undefined) {

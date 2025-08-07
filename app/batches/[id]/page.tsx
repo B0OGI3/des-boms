@@ -77,7 +77,7 @@ export default function BatchDetailPage() {
           Batch Not Found
         </Title>
         <Text size="lg" style={{ marginBottom: '24px' }}>
-          The batch with ID "{batchId}" could not be found.
+          The batch with ID &quot;{batchId}&quot; could not be found.
         </Text>
         <Button 
           onClick={() => router.push('/batches')}

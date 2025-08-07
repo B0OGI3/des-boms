@@ -199,8 +199,6 @@ export const useOrderSearch = (): UseOrderSearchReturn => {
       const queryString = queryParams.toString();
       const url = queryString ? `/api/orders?${queryString}` : '/api/orders';
       
-      console.log('Fetching orders from:', url); // Debug log
-      
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -217,7 +215,6 @@ export const useOrderSearch = (): UseOrderSearchReturn => {
       }
       
       const ordersData = result.data || [];
-      console.log('Received orders data:', ordersData.length, 'orders'); // Debug log
       
       const convertedOrders = ordersData.map(convertPurchaseOrderToOrder);
       
@@ -225,7 +222,6 @@ export const useOrderSearch = (): UseOrderSearchReturn => {
       let filteredOrders = convertedOrders;
       if (statusFilter !== 'ALL') {
         filteredOrders = convertedOrders.filter((order: Order) => order.status === statusFilter);
-        console.log('Filtered to', filteredOrders.length, 'orders with status:', statusFilter); // Debug log
       }
       
       setOrders(filteredOrders);

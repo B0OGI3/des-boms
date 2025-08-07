@@ -4,13 +4,13 @@
  * Redirects users to QuickBooks for OAuth authorization.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createOAuthClient } from '@/lib/quickbooks';
 
 /**
  * GET /api/quickbooks/auth - Initiate OAuth flow with QuickBooks
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Create OAuth client
     const oauthClient = createOAuthClient();

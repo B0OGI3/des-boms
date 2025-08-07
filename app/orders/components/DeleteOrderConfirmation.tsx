@@ -72,27 +72,22 @@ export const DeleteOrderConfirmation: React.FC<DeleteOrderConfirmationProps> = (
       setLoading(true);
       setError(null);
 
-      console.log('Deleting order:', order.id); // Debug log
-
       const response = await fetch(`/api/orders/${order.id}`, {
         method: 'DELETE',
       });
 
-      console.log('Delete response status:', response.status); // Debug log
-
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Delete error response:', errorData); // Debug log
+        console.error('Delete error response:', errorData);
         throw new Error(errorData.error || 'Failed to delete order');
       }
 
-      const result = await response.json();
-      console.log('Delete success result:', result); // Debug log
+      await response.json(); // Consume response
 
       onOrderDeleted?.();
       onClose();
     } catch (err) {
-      console.error('Delete error:', err); // Debug log
+      console.error('Delete error:', err);
       setError(err instanceof Error ? err.message : 'Failed to delete order');
     } finally {
       setLoading(false);

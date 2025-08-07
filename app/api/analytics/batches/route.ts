@@ -33,8 +33,6 @@ export async function GET(request: NextRequest) {
       completedBatches,
       overdueBatches,
       inProgressBatches,
-      avgCompletionTime,
-      workstationUtilization,
       priorityDistribution,
       recentActivity,
       completionTrends
@@ -69,31 +67,6 @@ export async function GET(request: NextRequest) {
         }
       }),
 
-      // Average completion time for completed batches
-      prisma.batch.aggregate({
-        where: {
-          status: 'COMPLETED',
-          actualCompletion: { gte: startDate },
-          startDate: { not: null }
-        },
-        _avg: {
-          quantity: true // Placeholder for now
-        }
-      }),
-
-      // Workstation utilization
-      prisma.routingStep.groupBy({
-        by: ['workstationId'],
-        where: {
-          batch: {
-            createdAt: { gte: startDate }
-          }
-        },
-        _count: {
-          id: true
-        }
-      }),
-
       // Priority distribution
       prisma.batch.groupBy({
         by: ['priority'],
@@ -117,17 +90,29 @@ export async function GET(request: NextRequest) {
       }),
 
       // Completion trends (batches completed each day)
-      prisma.batch.groupBy({
-        by: ['actualCompletion'],
+      prisma.batch.findMany({
         where: {
           status: 'COMPLETED',
           actualCompletion: { gte: startDate }
         },
-        _count: {
-          id: true
+        select: {
+          actualCompletion: true
         }
       })
     ]);
+
+    // Get workstation utilization data separately
+    const workstationUtilization = await prisma.routingStep.groupBy({
+      by: ['workstationId'],
+      where: {
+        batch: {
+          createdAt: { gte: startDate }
+        }
+      },
+      _count: {
+        id: true
+      }
+    });
 
     // Get workstation names for utilization data
     const workstationIds = workstationUtilization.map(w => w.workstationId);
@@ -155,7 +140,7 @@ export async function GET(request: NextRequest) {
     const trendsData = completionTrends.reduce((acc, trend) => {
       if (trend.actualCompletion) {
         const date = trend.actualCompletion.toISOString().split('T')[0];
-        acc[date] = (acc[date] || 0) + trend._count.id;
+        acc[date] = (acc[date] || 0) + 1;
       }
       return acc;
     }, {} as Record<string, number>);

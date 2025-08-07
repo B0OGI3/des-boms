@@ -185,12 +185,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log('PUT /api/orders/[id] - Starting request processing');
     const { id } = await params;
-    console.log('Order ID from params:', id);
     
     const body = await request.json();
-    console.log('Request body:', JSON.stringify(body, null, 2));
     
     const { 
       poNumber, 
@@ -214,25 +211,20 @@ export async function PUT(
     const dbPriority = priorityMapping[priority] || 'STANDARD';
 
     // Check if order exists
-    console.log('Checking if order exists...');
     const existingOrder = await prisma.purchaseOrder.findUnique({
       where: { id },
       include: { lineItems: true },
     });
 
-    console.log('Existing order found:', existingOrder ? 'Yes' : 'No');
     if (!existingOrder) {
-      console.log('Order not found with ID:', id);
       return NextResponse.json(
         { success: false, error: 'Order not found' },
         { status: 404 }
       );
     }
 
-    console.log('Starting transaction to update order...');
     // Start a transaction to update order and line items
     const updatedOrder = await prisma.$transaction(async (prisma) => {
-      console.log('Updating purchase order...');
       // Update the purchase order
       await prisma.purchaseOrder.update({
         where: { id },

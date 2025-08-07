@@ -3,10 +3,10 @@
  * GET /api/orders/line-items?status=active
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get line items that have available quantity for batching
     const lineItems = await prisma.orderLineItem.findMany({

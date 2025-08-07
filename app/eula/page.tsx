@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'End User License Agreement - DES-BOMS',
@@ -40,7 +41,7 @@ export default function EULAPage() {
             </h2>
             <p className="text-gray-700 mb-4">
               DES-BOMS integrates with QuickBooks Online to synchronize customer data. 
-              By using this integration, you agree to QuickBooks' terms of service and 
+              By using this integration, you agree to QuickBooks&apos; terms of service and 
               authorize the application to access your QuickBooks data for synchronization purposes.
             </p>
             
@@ -57,7 +58,7 @@ export default function EULAPage() {
               5. Limitation of Liability
             </h2>
             <p className="text-gray-700 mb-4">
-              DES-BOMS is provided "as is" without warranty of any kind. 
+              DES-BOMS is provided &quot;as is&quot; without warranty of any kind. 
               We shall not be liable for any damages arising from the use of this software.
             </p>
             
@@ -70,12 +71,12 @@ export default function EULAPage() {
           </div>
           
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <a 
+            <Link 
               href="/"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               ← Back to Application
-            </a>
+            </Link>
           </div>
         </div>
       </div>

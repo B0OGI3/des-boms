@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // Simple analytics dashboard route
-export async function GET(request: NextRequest) {
+export async function GET() {
   const analytics = {
     message: 'Advanced Batch Analytics Dashboard',
     features: [

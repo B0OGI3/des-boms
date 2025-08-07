@@ -50,7 +50,7 @@ export default function QuickBooksErrorPage() {
               QuickBooks Connection Failed
             </Title>
             <Text size="lg">
-              We couldn't connect your DES-BOMS application to QuickBooks.
+              We couldn&apos;t connect your DES-BOMS application to QuickBooks.
             </Text>
           </Stack>
         </Card>

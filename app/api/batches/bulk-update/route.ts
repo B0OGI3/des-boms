@@ -19,11 +19,6 @@ export async function PATCH(request: NextRequest) {
     const body: BulkUpdateRequest = await request.json();
     const { batchIds, updates } = body;
 
-    console.log('Bulk updating batches:', {
-      batchIds,
-      updates,
-    });
-
     if (!batchIds || batchIds.length === 0) {
       return NextResponse.json(
         { error: 'No batch IDs provided' },
@@ -40,6 +35,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Prepare update data for Prisma
+    // Using any due to complex Prisma type unions for update operations
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {};
     
     if (updates.priority) {
@@ -62,8 +59,6 @@ export async function PATCH(request: NextRequest) {
       },
       data: updateData
     });
-
-    console.log(`Successfully updated ${result.count} batches`);
 
     return NextResponse.json({
       success: true,

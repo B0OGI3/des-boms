@@ -21,7 +21,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Mock implementation - in real app would use Prisma
-    console.log(`Bulk deleting ${batchIds.length} batches:`, batchIds);
 
     // Simulate database deletion
     await new Promise(resolve => setTimeout(resolve, 500));

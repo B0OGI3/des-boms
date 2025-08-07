@@ -3,9 +3,9 @@
  * GET /api/routing-templates
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Mock routing templates since they don't exist in schema yet
     // In a real implementation, these would be stored in database

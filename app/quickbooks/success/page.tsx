@@ -54,8 +54,8 @@ QB_COMPANY_ID="${companyId}"`;
               <Stack gap="xs">
                 <Text fw={500}>Environment Variables:</Text>
                 <Code block style={{ padding: '12px', fontSize: '14px' }}>
-                  QB_ACCESS_TOKEN="{accessToken}"<br/>
-                  QB_COMPANY_ID="{companyId}"
+                  QB_ACCESS_TOKEN=&quot;{accessToken}&quot;<br/>
+                  QB_COMPANY_ID=&quot;{companyId}&quot;
                 </Code>
                 
                 <Group justify="center" mt="md">

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - DES-BOMS',
@@ -56,7 +57,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 text-gray-700 mb-4">
               <li>We access customer data from your QuickBooks account</li>
               <li>Customer information is synchronized between both systems</li>
-              <li>We comply with Intuit's privacy and security requirements</li>
+              <li>We comply with Intuit&apos;s privacy and security requirements</li>
               <li>You can disconnect the integration at any time</li>
             </ul>
             
@@ -128,12 +129,12 @@ export default function PrivacyPage() {
           </div>
           
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <a 
+            <Link 
               href="/"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               ← Back to Application
-            </a>
+            </Link>
           </div>
         </div>
       </div>
