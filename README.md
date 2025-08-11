@@ -82,6 +82,9 @@ If you are integrating with QuickBooks Online or any external service that requi
 - **Loading States** - Skeleton screens for smooth user experience
 - **Error Handling** - Comprehensive error boundaries with retry logic
 - **Accessibility** - WCAG 2.1 AA compliant for all users
+- **Enhanced Form Validation** - Real-time feedback with detailed error messages
+- **Smart Part Selection** - Dual-mode part selector (dropdown/search) with visual feedback
+- **Order Creation UX** - Status indicators and form validation prevent submission errors
 
 ---
 
