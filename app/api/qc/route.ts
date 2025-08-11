@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
           include: {
             lineItem: {
               include: {
+                part: true, // Include Parts Master data
                 purchaseOrder: {
                   include: {
                     customer: true,
@@ -110,6 +111,7 @@ export async function POST(request: NextRequest) {
           include: {
             lineItem: {
               include: {
+                part: true, // Include Parts Master data
                 purchaseOrder: {
                   include: {
                     customer: true,
@@ -197,6 +199,7 @@ export async function PUT(request: NextRequest) {
           include: {
             lineItem: {
               include: {
+                part: true, // Include Parts Master data
                 purchaseOrder: {
                   include: {
                     customer: true,

@@ -1,3 +1,37 @@
+/**
+ * QuickBooks Online Integration Service
+ * 
+ * Handles customer synchronization between DES-BOMS and QuickBooks Online.
+ * Uses the official Intuit OAuth and direct API calls for better compatibility.
+ */
+
+import OAuthClient from 'intuit-oauth';
+import axios, { AxiosResponse } from 'axios';
+import { prisma } from './prisma';
+
+// DEBUG: Log env variables for troubleshooting
+console.log('[QB DEBUG] QB_SANDBOX:', process.env.QB_SANDBOX, '| QB_CLIENT_ID:', process.env.QB_CLIENT_ID);
+
+// QuickBooks configuration
+const QB_CONFIG = {
+  clientId: process.env.QB_CLIENT_ID || '',
+  clientSecret: process.env.QB_CLIENT_SECRET || '',
+  sandbox: process.env.QB_SANDBOX === 'true',
+  redirectUri: process.env.QB_REDIRECT_URI || ''
+};
+
+// QuickBooks API base URLs
+const QB_BASE_URL = QB_CONFIG.sandbox 
+  ? 'https://sandbox-quickbooks.api.intuit.com'
+  : 'https://quickbooks.api.intuit.com';
+
+// Helper to update process.env at runtime (for dev only)
+function updateEnvTokens(newAccessToken: string, newRefreshToken: string) {
+  process.env.QB_ACCESS_TOKEN = newAccessToken;
+  process.env.QB_REFRESH_TOKEN = newRefreshToken;
+  // Optionally, persist to .env.local (not implemented here for safety)
+}
+
 // --- Internal Helper: Refresh QuickBooks OAuth2 Token ---
 async function refreshQuickBooksToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
   const params = new URLSearchParams();
@@ -21,41 +55,6 @@ async function refreshQuickBooksToken(refreshToken: string): Promise<{ accessTok
   }
   return { accessToken, refreshToken: newRefreshToken };
 }
-
-/**
- * QuickBooks Online Integration Service
- * 
- * Handles customer synchronization between DES-BOMS and QuickBooks Online.
- * Uses the official Intuit OAuth and direct API calls for better compatibility.
- */
-
-
-import OAuthClient from 'intuit-oauth';
-import axios, { AxiosResponse } from 'axios';
-import { prisma } from './prisma';
-
-// Helper to update process.env at runtime (for dev only)
-function updateEnvTokens(newAccessToken: string, newRefreshToken: string) {
-  process.env.QB_ACCESS_TOKEN = newAccessToken;
-  process.env.QB_REFRESH_TOKEN = newRefreshToken;
-  // Optionally, persist to .env.local (not implemented here for safety)
-}
-
-// DEBUG: Log env variables for troubleshooting
-console.log('[QB DEBUG] QB_SANDBOX:', process.env.QB_SANDBOX, '| QB_CLIENT_ID:', process.env.QB_CLIENT_ID);
-
-// QuickBooks configuration
-const QB_CONFIG = {
-  clientId: process.env.QB_CLIENT_ID || '',
-  clientSecret: process.env.QB_CLIENT_SECRET || '',
-  sandbox: process.env.QB_SANDBOX === 'true',
-  redirectUri: process.env.QB_REDIRECT_URI || ''
-};
-
-// QuickBooks API base URLs
-const QB_BASE_URL = QB_CONFIG.sandbox 
-  ? 'https://sandbox-quickbooks.api.intuit.com'
-  : 'https://quickbooks.api.intuit.com';
 
 // Types for QuickBooks Customer
 interface QBCustomer {
@@ -129,14 +128,19 @@ export class QuickBooksService {
    */
   private async makeQBRequest(method: 'GET' | 'POST', endpoint: string, data?: any): Promise<AxiosResponse> {
     const url = `${QB_BASE_URL}/v3/company/${this.companyId}/${endpoint}`;
+    console.log('[QB] Making request to:', url);
     let headers = {
       'Authorization': `Bearer ${this.accessToken}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     };
     try {
-      return await this._doQBRequest(url, method, headers, data);
+      const response = await this._doQBRequest(url, method, headers, data);
+      console.log('[QB] Request successful, status:', response.status);
+      return response;
     } catch (error: any) {
+      console.log('[QB] Request failed:', error.response?.status, error.response?.statusText);
+      console.log('[QB] Error response data:', error.response?.data);
       if (this._is401(error) && this.refreshToken) {
         console.warn('[QB] Access token expired, attempting refresh...');
         try {
@@ -354,7 +358,8 @@ export class QuickBooksService {
    * Get all customers from QuickBooks
    */
   async getAllCustomers(): Promise<QBCustomer[]> {
-    const response = await this.makeQBRequest('GET', 'query?query=SELECT * FROM Customer');
+    const query = encodeURIComponent("SELECT * FROM Customer");
+    const response = await this.makeQBRequest('GET', `query?query=${query}`);
     return response.data.QueryResponse?.Customer || [];
   }
 }

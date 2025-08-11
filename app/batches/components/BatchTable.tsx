@@ -231,16 +231,34 @@ export function BatchTable({
                   
                   <Table.Td>
                     <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Text fw={500} style={{ color: "#2563eb", fontFamily: "monospace" }}>
+                          {batch.lineItem.part.partNumber}
+                        </Text>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          (() => {
+                            switch (batch.lineItem.part.partType) {
+                              case 'FINISHED': return 'bg-green-100 text-green-800';
+                              case 'SEMI_FINISHED': return 'bg-yellow-100 text-yellow-800';
+                              default: return 'bg-blue-100 text-blue-800';
+                            }
+                          })()
+                        }`}>
+                          {batch.lineItem.part.partType.replace('_', ' ')}
+                        </span>
+                      </div>
                       <Text fw={500} style={{ color: "#111827" }}>
-                        {batch.lineItem.partNumber}
+                        {batch.lineItem.part.partName}
                       </Text>
-                      <Text size="sm" style={{ color: "#6b7280" }}>
-                        {batch.lineItem.partName}
-                      </Text>
-                      {batch.lineItem.drawingNumber && (
+                      {batch.lineItem.part.description && (
+                        <Text size="sm" style={{ color: "#6b7280" }}>
+                          {batch.lineItem.part.description}
+                        </Text>
+                      )}
+                      {batch.lineItem.part.drawingNumber && (
                         <Text size="xs" style={{ color: "#9ca3af" }}>
-                          Dwg: {batch.lineItem.drawingNumber}
-                          {batch.lineItem.revisionLevel && ` Rev ${batch.lineItem.revisionLevel}`}
+                          Dwg: {batch.lineItem.part.drawingNumber}
+                          {batch.lineItem.part.revisionLevel && ` Rev ${batch.lineItem.part.revisionLevel}`}
                         </Text>
                       )}
                     </div>

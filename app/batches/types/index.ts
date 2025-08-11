@@ -19,11 +19,21 @@ export interface Batch {
   // Relations
   lineItem: {
     id: string;
-    partNumber: string;
-    partName: string;
-    drawingNumber: string | null;
-    revisionLevel: string | null;
+    partId: string;
     quantity: number;
+    part: {
+      id: string;
+      partNumber: string;
+      partName: string;
+      partType: 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+      drawingNumber: string | null;
+      revisionLevel: string | null;
+      description: string | null;
+      materialSpec: string | null;
+      unitOfMeasure: string | null;
+      standardCost: string | null;
+      leadTime: number | null;
+    };
     purchaseOrder: {
       id: string;
       systemOrderId: string;

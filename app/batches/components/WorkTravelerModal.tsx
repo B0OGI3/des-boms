@@ -273,15 +273,15 @@ export function WorkTravelerModal({
               </div>
               <div>
                 <strong>Part Number:</strong><br/>
-                {batch.lineItem.partNumber}
+                {batch.lineItem.part.partNumber}
               </div>
               <div>
                 <strong>Part Name:</strong><br/>
-                {batch.lineItem.partName}
+                {batch.lineItem.part.partName}
               </div>
               <div>
                 <strong>Drawing #:</strong><br/>
-                {batch.lineItem.drawingNumber || 'N/A'}
+                {batch.lineItem.part.drawingNumber || 'N/A'}
               </div>
               <div>
                 <strong>Order:</strong><br/>

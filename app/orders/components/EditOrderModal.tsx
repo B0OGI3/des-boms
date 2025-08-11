@@ -77,10 +77,10 @@ export const EditOrderModal: React.FC<EditOrderModalProps> = ({
         priority: order.priority,
         notes: '', // Would need to be added to the Order type if available
         lineItems: order.lineItems?.map(item => ({
-          partNumber: item.partNumber,
-          partName: item.partName,
-          drawingNumber: item.drawingNumber || '',
-          revisionLevel: item.revisionLevel || '',
+          partNumber: item.part.partNumber,
+          partName: item.part.partName,
+          drawingNumber: item.part.drawingNumber || '',
+          revisionLevel: item.part.revisionLevel || '',
           quantity: item.quantity
         })) || []
       });

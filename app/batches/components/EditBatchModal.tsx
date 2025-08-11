@@ -67,6 +67,48 @@ export function EditBatchModal({
     }
   }, [batch]);
 
+  // Validation helper
+  const validateForm = (): string | null => {
+    if (!formData.quantity || formData.quantity <= 0) {
+      return 'Quantity must be greater than 0';
+    }
+    return null;
+  };
+
+  // Changes detection helper
+  const getChanges = (): Partial<EditBatchInput> => {
+    if (!batch) return {};
+    
+    const changes: Partial<EditBatchInput> = {};
+    if (formData.quantity !== batch.quantity) changes.quantity = formData.quantity;
+    if (formData.priority !== batch.priority) changes.priority = formData.priority;
+    if (formData.notes !== (batch.notes || '')) changes.notes = formData.notes;
+    if (formData.estimatedCompletion !== (batch.estimatedCompletion || '')) {
+      changes.estimatedCompletion = formData.estimatedCompletion;
+    }
+    return changes;
+  };
+
+  // Error handling helper
+  const handleApiError = async (response: Response): Promise<never> => {
+    let errorMessage = `Server responded with status: ${response.status}`;
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.error || errorMessage;
+    } catch (parseError) {
+      console.error('Could not parse error response:', parseError);
+      // Use status-based error messages if JSON parsing fails
+      if (response.status === 405) {
+        errorMessage = 'Method not allowed - please try again';
+      } else if (response.status === 404) {
+        errorMessage = 'Batch not found';
+      } else if (response.status >= 500) {
+        errorMessage = 'Server error - please try again later';
+      }
+    }
+    throw new Error(errorMessage);
+  };
+
   const handleSubmit = async () => {
     if (!batch) return;
 
@@ -74,22 +116,15 @@ export function EditBatchModal({
       setLoading(true);
       setError(null);
 
-      // Validate required fields
-      if (!formData.quantity || formData.quantity <= 0) {
-        setError('Quantity must be greater than 0');
+      // Validate form
+      const validationError = validateForm();
+      if (validationError) {
+        setError(validationError);
         return;
       }
 
-      // Only send changed fields
-      const changes: Partial<EditBatchInput> = {};
-      if (formData.quantity !== batch.quantity) changes.quantity = formData.quantity;
-      if (formData.priority !== batch.priority) changes.priority = formData.priority;
-      if (formData.notes !== (batch.notes || '')) changes.notes = formData.notes;
-      if (formData.estimatedCompletion !== (batch.estimatedCompletion || '')) {
-        changes.estimatedCompletion = formData.estimatedCompletion;
-      }
-
-      // If no changes, just close
+      // Get changes
+      const changes = getChanges();
       if (Object.keys(changes).length === 0) {
         onClose();
         return;
@@ -105,22 +140,7 @@ export function EditBatchModal({
       });
 
       if (!response.ok) {
-        let errorMessage = `Server responded with status: ${response.status}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (parseError) {
-          console.error('Could not parse error response:', parseError);
-          // Use status-based error messages if JSON parsing fails
-          if (response.status === 405) {
-            errorMessage = 'Method not allowed - please try again';
-          } else if (response.status === 404) {
-            errorMessage = 'Batch not found';
-          } else if (response.status >= 500) {
-            errorMessage = 'Server error - please try again later';
-          }
-        }
-        throw new Error(errorMessage);
+        await handleApiError(response);
       }
 
       // Parse the response
@@ -214,7 +234,7 @@ export function EditBatchModal({
                 Part Number
               </Text>
               <Text fw={500} style={{ color: "#f1f5f9" }}>
-                {batch.lineItem.partNumber}
+                {batch.lineItem.part.partNumber}
               </Text>
             </div>
             <div>

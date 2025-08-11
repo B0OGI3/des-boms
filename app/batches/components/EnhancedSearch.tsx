@@ -15,13 +15,6 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
   }) as T;
 }
 
-interface SearchSuggestion {
-  value: string;
-  label: string;
-  category: 'batch' | 'part' | 'customer' | 'order';
-  description?: string;
-}
-
 interface EnhancedSearchProps {
   value: string;
   onChange: (value: string) => void;
@@ -41,26 +34,29 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
+  // Function to fetch suggestions
+  const fetchSuggestionsImpl = useCallback(async (searchTerm: string) => {
+    if (searchTerm.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(searchTerm)}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSuggestions(data.suggestions || []);
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+    }
+  }, []);
+
   // Debounced function to fetch suggestions
   const fetchSuggestions = useCallback(
-    debounce(async (searchTerm: string) => {
-      if (searchTerm.length < 2) {
-        setSuggestions([]);
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(searchTerm)}`);
-        if (response.ok) {
-          const data = await response.json();
-          setSuggestions(data.suggestions || []);
-        }
-      } catch (error) {
-        console.error('Error fetching suggestions:', error);
-        setSuggestions([]);
-      }
-    }, 300),
-    []
+    debounce(fetchSuggestionsImpl, 300),
+    [fetchSuggestionsImpl]
   );
 
   // Fetch suggestions when search term changes

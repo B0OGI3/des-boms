@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-interface ControllerWithCleanup extends ReadableStreamDefaultController {
-  cleanup?: () => void;
-}
-
 // Server-Sent Events implementation for real-time updates - PERMANENTLY DISABLED
-export async function GET(request: NextRequest) {
+
+// Simple WebSocket-like endpoint for batch updates
+export async function GET() {
   // Return 404 to stop browser from retrying
   return new Response('Not Found', {
     status: 404,

@@ -1,18 +1,21 @@
 /**
  * DES-BOMS Database Seed Script
  * Seeds the database with sample manufacturing data for demonstration
+ * Includes Parts Master, BOM structures, and unique part IDs
  */
 
 import { PrismaClient } from '../generated/prisma';
+import { generatePartNumber } from '../lib/partNumberGenerator';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding DES-BOMS database with manufacturing data...');
 
-  // Clean existing data
+  // Clean existing data in dependency order
   await prisma.stepConfirmation.deleteMany();
   await prisma.qCRecord.deleteMany();
+  await prisma.materialConsumption.deleteMany();
   await prisma.routingStep.deleteMany();
   await prisma.batch.deleteMany();
   await prisma.fileAttachment.deleteMany();
@@ -20,7 +23,204 @@ async function main() {
   await prisma.purchaseOrder.deleteMany();
   await prisma.customer.deleteMany();
   await prisma.workstation.deleteMany();
+  await prisma.bOMComponent.deleteMany();
+  await prisma.part.deleteMany();
 
+  // Create Parts Master - Raw Materials
+  console.log('📦 Creating Raw Materials...');
+  const rawMaterials = await Promise.all([
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'RAW_MATERIAL' }),
+        partName: 'Ti-6Al-4V Round Bar Stock',
+        partType: 'RAW_MATERIAL',
+        description: 'Titanium alloy round bar, aerospace grade',
+        materialSpec: 'Ti-6Al-4V, AMS 4928',
+        unitOfMeasure: 'ft',
+        standardCost: 125.50,
+        leadTime: 14,
+        notes: 'Aerospace grade titanium for high-stress applications',
+      },
+    }),
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'RAW_MATERIAL' }),
+        partName: '6061-T6 Aluminum Plate',
+        partType: 'RAW_MATERIAL',
+        description: 'Aluminum plate stock for machining',
+        materialSpec: '6061-T6, 0.25" thick',
+        unitOfMeasure: 'sq ft',
+        standardCost: 8.75,
+        leadTime: 7,
+        notes: 'Standard aluminum plate for general machining',
+      },
+    }),
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'RAW_MATERIAL' }),
+        partName: '316L Stainless Steel Rod',
+        partType: 'RAW_MATERIAL',
+        description: 'Stainless steel rod for medical applications',
+        materialSpec: '316L SS, 0.5" diameter',
+        unitOfMeasure: 'ft',
+        standardCost: 22.30,
+        leadTime: 10,
+        notes: 'Medical grade stainless steel, biocompatible',
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${rawMaterials.length} raw materials`);
+
+  // Create Semi-Finished Parts
+  console.log('⚙️ Creating Semi-Finished Parts...');
+  const semiFinishedParts = await Promise.all([
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'SEMI_FINISHED' }),
+        partName: 'Machined Titanium Shaft (Rough)',
+        partType: 'SEMI_FINISHED',
+        description: 'Rough machined shaft, ready for finish operations',
+        materialSpec: 'Ti-6Al-4V',
+        unitOfMeasure: 'each',
+        standardCost: 245.75,
+        leadTime: 5,
+        notes: 'Rough turned, 0.010" oversize for finish grinding',
+      },
+    }),
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'SEMI_FINISHED' }),
+        partName: 'Aluminum Housing (Machined)',
+        partType: 'SEMI_FINISHED',
+        description: 'Machined housing ready for anodizing',
+        materialSpec: '6061-T6',
+        unitOfMeasure: 'each',
+        standardCost: 58.20,
+        leadTime: 3,
+        notes: 'Fully machined, ready for surface treatment',
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${semiFinishedParts.length} semi-finished parts`);
+
+  // Create Finished Parts
+  console.log('🎯 Creating Finished Parts...');
+  const finishedParts = await Promise.all([
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'FINISHED' }),
+        partName: 'Titanium Drive Shaft Assembly',
+        partType: 'FINISHED',
+        drawingNumber: 'DWG-AERO-001-A',
+        revisionLevel: 'C',
+        description: 'Complete drive shaft assembly for aerospace applications',
+        materialSpec: 'Ti-6Al-4V with keyway',
+        unitOfMeasure: 'each',
+        standardCost: 485.90,
+        leadTime: 12,
+        notes: 'Final assembly with keyway, surface finish Ra 0.8',
+      },
+    }),
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'FINISHED' }),
+        partName: 'Aluminum Housing Assembly',
+        partType: 'FINISHED',
+        drawingNumber: 'DWG-AERO-002-B',
+        revisionLevel: 'B',
+        description: 'Complete anodized housing assembly',
+        materialSpec: '6061-T6 with Type II anodizing',
+        unitOfMeasure: 'each',
+        standardCost: 125.40,
+        leadTime: 8,
+        notes: 'Anodized finish, all mounting holes tapped',
+      },
+    }),
+    prisma.part.create({
+      data: {
+        partNumber: await generatePartNumber({ partType: 'FINISHED' }),
+        partName: 'Surgical Steel Pin',
+        partType: 'FINISHED',
+        drawingNumber: 'DWG-MED-001',
+        revisionLevel: 'D',
+        description: 'Medical grade surgical pin',
+        materialSpec: '316L SS, biocompatible finish',
+        unitOfMeasure: 'each',
+        standardCost: 45.25,
+        leadTime: 6,
+        notes: 'FDA compliant, sterile packaging required',
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${finishedParts.length} finished parts`);
+
+  // Create BOM relationships
+  console.log('🔗 Creating BOM relationships...');
+  const bomComponents = await Promise.all([
+    // Titanium Drive Shaft Assembly BOM
+    prisma.bOMComponent.create({
+      data: {
+        parentPartId: finishedParts[0].id, // Titanium Drive Shaft Assembly
+        childPartId: semiFinishedParts[0].id, // Machined Titanium Shaft (Rough)
+        quantity: 1.0,
+        unitOfMeasure: 'each',
+        operation: 'Finish machining and grinding',
+        notes: 'Final grinding to Ra 0.8 surface finish',
+      },
+    }),
+    prisma.bOMComponent.create({
+      data: {
+        parentPartId: semiFinishedParts[0].id, // Machined Titanium Shaft (Rough)
+        childPartId: rawMaterials[0].id, // Ti-6Al-4V Round Bar Stock
+        quantity: 2.5,
+        unitOfMeasure: 'ft',
+        scrapFactor: 0.15, // 15% scrap allowance
+        operation: 'Rough turning operations',
+        notes: 'Cut to length and rough turn to oversize',
+      },
+    }),
+    // Aluminum Housing Assembly BOM
+    prisma.bOMComponent.create({
+      data: {
+        parentPartId: finishedParts[1].id, // Aluminum Housing Assembly
+        childPartId: semiFinishedParts[1].id, // Aluminum Housing (Machined)
+        quantity: 1.0,
+        unitOfMeasure: 'each',
+        operation: 'Anodizing and final inspection',
+        notes: 'Type II anodizing, clear finish',
+      },
+    }),
+    prisma.bOMComponent.create({
+      data: {
+        parentPartId: semiFinishedParts[1].id, // Aluminum Housing (Machined)
+        childPartId: rawMaterials[1].id, // 6061-T6 Aluminum Plate
+        quantity: 0.75,
+        unitOfMeasure: 'sq ft',
+        scrapFactor: 0.08, // 8% scrap allowance
+        operation: 'CNC machining operations',
+        notes: 'Multiple machining operations from plate stock',
+      },
+    }),
+    // Surgical Steel Pin BOM
+    prisma.bOMComponent.create({
+      data: {
+        parentPartId: finishedParts[2].id, // Surgical Steel Pin
+        childPartId: rawMaterials[2].id, // 316L Stainless Steel Rod
+        quantity: 0.25,
+        unitOfMeasure: 'ft',
+        scrapFactor: 0.05, // 5% scrap allowance
+        operation: 'Precision turning and polishing',
+        notes: 'Turn to final dimensions, electropolish finish',
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${bomComponents.length} BOM relationships`);
+
+  // Continue with rest of seed data (customers, orders, etc.)
   // Create Customers
   const customers = await Promise.all([
     prisma.customer.create({
@@ -59,6 +259,90 @@ async function main() {
   ]);
 
   console.log(`✅ Created ${customers.length} customers`);
+
+  // Create Purchase Orders with Line Items (using Parts Master)
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  // Order 1 - AeroDyne Systems (Rush Order) - Titanium parts
+  const order1 = await prisma.purchaseOrder.create({
+    data: {
+      systemOrderId: 'DES-2025-001',
+      customerId: customers[0].id,
+      poNumber: 'AERO-2025-001',
+      dueDate: tomorrow,
+      priority: 'RUSH',
+      notes: 'Rush order for aerospace assembly - expedite processing',
+      lineItems: {
+        create: [
+          {
+            partId: finishedParts[0].id, // Titanium Drive Shaft Assembly
+            quantity: 12,
+            unitPrice: 485.90,
+            dueDate: tomorrow,
+            notes: 'Ti-6Al-4V material, surface finish Ra 0.8',
+          },
+          {
+            partId: finishedParts[1].id, // Aluminum Housing Assembly
+            quantity: 6,
+            unitPrice: 125.40,
+            dueDate: tomorrow,
+            notes: '6061-T6 aluminum, anodized finish required',
+          },
+        ],
+      },
+    },
+    include: { lineItems: { include: { part: true } } },
+  });
+
+  // Order 2 - TechFlow Industries (Standard) - Steel brackets
+  const order2 = await prisma.purchaseOrder.create({
+    data: {
+      systemOrderId: 'DES-2025-002',
+      customerId: customers[1].id,
+      poNumber: 'TECH-2025-047',
+      dueDate: nextWeek,
+      priority: 'STANDARD',
+      notes: 'Standard electronics components for Q1 production',
+      lineItems: {
+        create: [
+          {
+            partId: rawMaterials[1].id, // 6061-T6 Aluminum Plate (as a standard part)
+            quantity: 50,
+            unitPrice: 8.75,
+            notes: 'Standard aluminum plate for brackets',
+          },
+        ],
+      },
+    },
+    include: { lineItems: { include: { part: true } } },
+  });
+
+  // Order 3 - Precision Parts Corp (Medical) - Surgical pins
+  await prisma.purchaseOrder.create({
+    data: {
+      systemOrderId: 'DES-2025-003',
+      customerId: customers[2].id,
+      poNumber: 'PREC-2025-012',
+      dueDate: nextWeek,
+      priority: 'STANDARD',
+      notes: 'Medical device components - FDA documentation required',
+      lineItems: {
+        create: [
+          {
+            partId: finishedParts[2].id, // Surgical Steel Pin
+            quantity: 100,
+            unitPrice: 45.25,
+            notes: '316L stainless steel, biocompatible finish',
+          },
+        ],
+      },
+    },
+    include: { lineItems: { include: { part: true } } },
+  });
+
+  console.log(`✅ Created 3 purchase orders with line items`);
 
   // Create Workstations
   const workstations = await Promise.all([
@@ -114,106 +398,6 @@ async function main() {
   ]);
 
   console.log(`✅ Created ${workstations.length} workstations`);
-
-  // Create Purchase Orders with Line Items
-  const now = new Date();
-  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-  // Order 1 - AeroDyne Systems (Rush Order)
-  const order1 = await prisma.purchaseOrder.create({
-    data: {
-      systemOrderId: 'DES-2025-001',
-      customerId: customers[0].id,
-      poNumber: 'AERO-2025-001',
-      dueDate: tomorrow,
-      priority: 'RUSH',
-      notes: 'Rush order for aerospace assembly - expedite processing',
-      lineItems: {
-        create: [
-          {
-            partNumber: 'AERO-SHAFT-001',
-            partName: 'Titanium Drive Shaft',
-            drawingNumber: 'DWG-AERO-001-A',
-            revisionLevel: 'C',
-            quantity: 12,
-            dueDate: tomorrow,
-            notes: 'Ti-6Al-4V material, surface finish Ra 0.8',
-          },
-          {
-            partNumber: 'AERO-HOUSING-002',
-            partName: 'Aluminum Housing Assembly',
-            drawingNumber: 'DWG-AERO-002-B',
-            revisionLevel: 'B',
-            quantity: 6,
-            dueDate: tomorrow,
-            notes: '6061-T6 aluminum, anodized finish required',
-          },
-        ],
-      },
-    },
-    include: { lineItems: true },
-  });
-
-  // Order 2 - TechFlow Industries (Standard)
-  const order2 = await prisma.purchaseOrder.create({
-    data: {
-      systemOrderId: 'DES-2025-002',
-      customerId: customers[1].id,
-      poNumber: 'TECH-2025-047',
-      dueDate: nextWeek,
-      priority: 'STANDARD',
-      notes: 'Standard electronics components for Q1 production',
-      lineItems: {
-        create: [
-          {
-            partNumber: 'TECH-BRACKET-001',
-            partName: 'Steel Mounting Bracket',
-            drawingNumber: 'DWG-TECH-001',
-            revisionLevel: 'A',
-            quantity: 50,
-            notes: 'Cold rolled steel, powder coated black',
-          },
-          {
-            partNumber: 'TECH-PLATE-002',
-            partName: 'Aluminum Base Plate',
-            drawingNumber: 'DWG-TECH-002',
-            revisionLevel: 'A',
-            quantity: 25,
-            notes: '5052 aluminum, clear anodized',
-          },
-        ],
-      },
-    },
-    include: { lineItems: true },
-  });
-
-  // Order 3 - Precision Parts Corp (Standard)
-  const order3 = await prisma.purchaseOrder.create({
-    data: {
-      systemOrderId: 'DES-2025-003',
-      customerId: customers[2].id,
-      poNumber: 'PREC-2025-012',
-      dueDate: nextWeek,
-      priority: 'STANDARD',
-      notes: 'Medical device components - FDA documentation required',
-      lineItems: {
-        create: [
-          {
-            partNumber: 'MED-PIN-001',
-            partName: 'Surgical Steel Pin',
-            drawingNumber: 'DWG-MED-001',
-            revisionLevel: 'D',
-            quantity: 100,
-            notes: '316L stainless steel, biocompatible finish',
-          },
-        ],
-      },
-    },
-    include: { lineItems: true },
-  });
-
-  console.log(`✅ Created 3 purchase orders with line items`);
 
   // Create Batches with Routing Steps
   const batches = [];

@@ -20,6 +20,7 @@ export async function GET() {
         }
       },
       include: {
+        part: true,
         purchaseOrder: {
           include: {
             customer: true
@@ -39,17 +40,17 @@ export async function GET() {
     });
 
     // Calculate available quantities
-    const availableLineItems = lineItems.map((lineItem: any) => {
+    const availableLineItems = lineItems.map((lineItem) => {
       const batchedQuantity = lineItem.batches
-        .filter((batch: any) => batch.status !== 'CANCELLED')
-        .reduce((sum: number, batch: any) => sum + batch.quantity, 0);
+        .filter((batch) => batch.status !== 'CANCELLED')
+        .reduce((sum: number, batch) => sum + batch.quantity, 0);
       
       const availableQuantity = lineItem.quantity - batchedQuantity;
       
       return {
         id: lineItem.id,
-        partNumber: lineItem.partNumber,
-        partName: lineItem.partName,
+        partNumber: lineItem.part?.partNumber || '',
+        partName: lineItem.part?.partName || '',
         quantity: lineItem.quantity,
         availableQuantity,
         batchedQuantity,

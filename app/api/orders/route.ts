@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '../../../generated/prisma';
+import { generatePartNumber } from '@/lib/partNumberGenerator';
 
 interface LineItemInput {
-  partNumber: string;
-  partName: string;
+  partId?: string; // Reference to existing Parts Master record
+  // For creating new parts on-the-fly (fallback)
+  partNumber?: string;
+  partName?: string;
   drawingNumber?: string;
   revisionLevel?: string;
+  // Line item specific fields
   quantity: number;
   unitPrice?: number;
   dueDate?: string;
@@ -73,9 +77,11 @@ export async function GET(request: NextRequest) {
         {
           lineItems: {
             some: {
-              partNumber: {
-                contains: searchTerm,
-                mode: 'insensitive' as Prisma.QueryMode,
+              part: {
+                partNumber: {
+                  contains: searchTerm,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
               },
             },
           },
@@ -84,9 +90,11 @@ export async function GET(request: NextRequest) {
         {
           lineItems: {
             some: {
-              partName: {
-                contains: searchTerm,
-                mode: 'insensitive' as Prisma.QueryMode,
+              part: {
+                partName: {
+                  contains: searchTerm,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
               },
             },
           },
@@ -95,10 +103,12 @@ export async function GET(request: NextRequest) {
         {
           lineItems: {
             some: {
-              drawingNumber: {
-                not: null,
-                contains: searchTerm,
-                mode: 'insensitive' as Prisma.QueryMode,
+              part: {
+                drawingNumber: {
+                  not: null,
+                  contains: searchTerm,
+                  mode: 'insensitive' as Prisma.QueryMode,
+                },
               },
             },
           },
@@ -120,6 +130,7 @@ export async function GET(request: NextRequest) {
         customer: true,
         lineItems: {
           include: {
+            part: true, // Include Parts Master data
             fileAttachments: true,
             batches: {
               include: {
@@ -209,6 +220,42 @@ export async function POST(request: NextRequest) {
     const orderNumber = (orderCount + 1).toString().padStart(3, '0');
     const systemOrderId = `DES-${currentYear}-${orderNumber}`;
 
+    // Process line items - create parts if needed
+    const processedLineItems = await Promise.all(
+      lineItems.map(async (item: LineItemInput) => {
+        let partId = item.partId;
+        
+        // If no partId provided, create a new part
+        if (!partId && item.partName) {
+          // Use provided part number or generate one
+          const partNumber = item.partNumber || await generatePartNumber({ partType: 'FINISHED' });
+          
+          const newPart = await prisma.part.create({
+            data: {
+              partNumber,
+              partName: item.partName,
+              partType: 'FINISHED', // Default to finished goods
+              drawingNumber: item.drawingNumber,
+              revisionLevel: item.revisionLevel,
+            },
+          });
+          partId = newPart.id;
+        }
+        
+        if (!partId) {
+          throw new Error('Either partId or partName must be provided for each line item');
+        }
+        
+        return {
+          partId,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          dueDate: item.dueDate ? new Date(item.dueDate) : null,
+          notes: item.notes,
+        };
+      })
+    );
+
     // Create the purchase order with line items
     const order = await prisma.purchaseOrder.create({
       data: {
@@ -219,20 +266,16 @@ export async function POST(request: NextRequest) {
         priority: dbPriority,
         notes,
         lineItems: {
-          create: lineItems.map((item: LineItemInput) => ({
-            partNumber: item.partNumber,
-            partName: item.partName,
-            drawingNumber: item.drawingNumber,
-            revisionLevel: item.revisionLevel,
-            quantity: item.quantity,
-            dueDate: item.dueDate ? new Date(item.dueDate) : null,
-            notes: item.notes,
-          })),
+          create: processedLineItems,
         },
       },
       include: {
         customer: true,
-        lineItems: true,
+        lineItems: {
+          include: {
+            part: true, // Include Parts Master data
+          },
+        },
       },
     });
 

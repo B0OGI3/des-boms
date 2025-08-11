@@ -20,9 +20,7 @@
 
 "use client";
 
-import { Title, Text, Group, Loader, Alert, Button, Badge } from "@mantine/core";
-// Helper to check QuickBooks connection (client-side, so use a public env var or fallback to a fetch if needed)
-const isQuickBooksConnected = typeof process !== 'undefined' && process.env && process.env.NEXT_PUBLIC_QB_CONNECTED === 'true';
+import { Title, Text, Group, Loader, Alert, Button } from "@mantine/core";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -33,6 +31,7 @@ import { useModal } from "../../hooks/useModal";
 import { StatisticsCards } from "../components/ui/StatisticsCards";
 import { FilterBar } from "../components/ui/FilterBar";
 import { Pagination } from "../components/ui/Pagination";
+import { QuickBooksStatus } from "../components/ui/QuickBooksStatus";
 import { OrdersTable } from "./components/OrdersTable";
 import { NewOrderModal } from "./components/NewOrderModal";
 import { OrderDetailsModal } from "./components/OrderDetailsModal";
@@ -55,30 +54,140 @@ interface OrderStats {
   avgOrderValue: number;
 }
 
+// Types for stat filtering
+type StatType = 'all' | 'pending' | 'inProgress' | 'completed' | 'rush';
+
+// Helper function to calculate order statistics (moved outside component)
+const calculateOrderStats = (orders: Order[]): OrderStats => {
+  const pendingOrders = orders.filter(order => order.status === 'PENDING').length;
+  const inProgressOrders = orders.filter(order => order.status === 'IN_PROGRESS').length;
+  const completedOrders = orders.filter(order => order.status === 'COMPLETED').length;
+  const rushOrders = orders.filter(order => order.priority === 'RUSH').length;
+  const overdueOrders = orders.filter(order => 
+    new Date(order.dueDate) < new Date() && order.status !== 'COMPLETED'
+  ).length;
+  const totalValue = orders.reduce((sum, order) => sum + order.totalValue, 0);
+  const avgOrderValue = orders.length > 0 ? totalValue / orders.length : 0;
+  
+  return {
+    totalOrders: orders.length,
+    pendingOrders,
+    inProgressOrders,
+    completedOrders,
+    rushOrders,
+    overdueOrders,
+    totalValue,
+    avgOrderValue,
+  };
+};
+
+// Helper function for handling stat click filters (moved outside component)
+const handleStatFiltering = (statType: StatType, orderSearch: any) => {
+  switch (statType) {
+    case 'all':
+      orderSearch.setStatusFilter('ALL');
+      orderSearch.setPriorityFilter('ALL');
+      break;
+    case 'pending':
+      orderSearch.setStatusFilter('PENDING');
+      orderSearch.setPriorityFilter('ALL');
+      break;
+    case 'inProgress':
+      orderSearch.setStatusFilter('IN_PROGRESS');
+      orderSearch.setPriorityFilter('ALL');
+      break;
+    case 'completed':
+      orderSearch.setStatusFilter('COMPLETED');
+      orderSearch.setPriorityFilter('ALL');
+      break;
+    case 'rush':
+      orderSearch.setStatusFilter('ALL');
+      orderSearch.setPriorityFilter('RUSH');
+      break;
+  }
+};
+
+// Initialization helpers (moved outside component)
+const createDelayedStateUpdate = (delay: number = 100) => {
+  return (updateFn: () => void): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        updateFn();
+        resolve();
+      }, delay);
+    });
+  };
+};
+
+const createPreloadParts = (updateInitializationState: (updates: any) => void) => async () => {
+  try {
+    await fetch('/api/parts');
+  } catch (error) {
+    console.warn('Parts preload failed:', error);
+  }
+  updateInitializationState({ parts: true });
+};
+
+const createSyncCustomers = (updateInitializationState: (updates: any) => void) => async () => {
+  try {
+    await fetch('/api/quickbooks/sync-customers', { method: 'POST' });
+  } catch (error) {
+    console.warn('QuickBooks sync failed:', error);
+  }
+  updateInitializationState({ customers: true, quickbooks: true });
+};
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function CustomerOrdersPage() {
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState<OrderStats | null>(null);
+  const [isPageReady, setIsPageReady] = useState(false);
+  const [pageInitialization, setPageInitialization] = useState({
+    orders: false,
+    parts: false,
+    customers: false,
+    quickbooks: false
+  });
 
   // Use database search instead of client-side filtering
   const orderSearch = useOrderSearch();
-  
-  // Ensure component is mounted before rendering
 
-  // On mount, import customers from QuickBooks and then refresh orders
+  // Helper functions for initialization
+  const updateInitializationState = (updates: Partial<typeof pageInitialization>) => {
+    setPageInitialization(prev => ({ ...prev, ...updates }));
+  };
+
+  const delayedStateUpdate = createDelayedStateUpdate();
+
+  // Preload critical data before rendering components
   useEffect(() => {
-    setMounted(true);
-    // Only run in browser
-    if (typeof window !== 'undefined') {
-      fetch('/api/quickbooks/sync-customers', { method: 'POST' })
-        .then(() => {
-          // Optionally, you could show a toast or notification here
-          orderSearch.refetch();
-        })
-        .catch(() => {
-          // Optionally, handle error
-        });
-    }
+    if (typeof window === 'undefined') return;
+
+    const preloadParts = createPreloadParts(updateInitializationState);
+    const syncCustomers = createSyncCustomers(updateInitializationState);
+    const initializeOrders = async () => {
+      orderSearch.refetch();
+      return delayedStateUpdate(() => updateInitializationState({ orders: true }));
+    };
+
+    const initializePage = async () => {
+      setMounted(true);
+      await Promise.allSettled([preloadParts(), syncCustomers(), initializeOrders()]);
+      return delayedStateUpdate(() => setIsPageReady(true));
+    };
+
+    initializePage().catch(error => {
+      console.error('Page initialization error:', error);
+      delayedStateUpdate(() => setIsPageReady(true));
+    });
   }, []);
+
+  // Calculate stats when orders change
+  useEffect(() => {
+    if (orderSearch.orders.length > 0) {
+      setStats(calculateOrderStats(orderSearch.orders));
+    }
+  }, [orderSearch.orders]);
 
   // Shared hooks for functionality
   const pagination = usePagination(orderSearch.orders, { 
@@ -95,66 +204,12 @@ export default function CustomerOrdersPage() {
   // Selected order for modals
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  // Helper function to calculate order statistics
-  const calculateOrderStats = (orders: Order[]): OrderStats => {
-    const pendingOrders = orders.filter(order => order.status === 'PENDING').length;
-    const inProgressOrders = orders.filter(order => order.status === 'IN_PROGRESS').length;
-    const completedOrders = orders.filter(order => order.status === 'COMPLETED').length;
-    const rushOrders = orders.filter(order => order.priority === 'RUSH').length;
-    const overdueOrders = orders.filter(order => 
-      new Date(order.dueDate) < new Date() && order.status !== 'COMPLETED'
-    ).length;
-    const totalValue = orders.reduce((sum, order) => sum + order.totalValue, 0);
-    const avgOrderValue = orders.length > 0 ? totalValue / orders.length : 0;
-    
-    return {
-      totalOrders: orders.length,
-      pendingOrders,
-      inProgressOrders,
-      completedOrders,
-      rushOrders,
-      overdueOrders,
-      totalValue,
-      avgOrderValue,
-    };
-  };
-
-  // Update stats when orders change
-  useEffect(() => {
-    if (orderSearch.orders.length > 0) {
-      setStats(calculateOrderStats(orderSearch.orders));
-    }
-  }, [orderSearch.orders]);
-
   const handleNewOrder = () => {
     newOrderModal.open();
   };
 
-  const handleStatClick = (statType: 'all' | 'pending' | 'inProgress' | 'completed' | 'rush') => {
-    // Map stat types to database status filters
-    switch (statType) {
-      case 'all':
-        orderSearch.setStatusFilter('ALL');
-        orderSearch.setPriorityFilter('ALL');
-        break;
-      case 'pending':
-        orderSearch.setStatusFilter('PENDING');
-        orderSearch.setPriorityFilter('ALL');
-        break;
-      case 'inProgress':
-        orderSearch.setStatusFilter('IN_PROGRESS');
-        orderSearch.setPriorityFilter('ALL');
-        break;
-      case 'completed':
-        orderSearch.setStatusFilter('COMPLETED');
-        orderSearch.setPriorityFilter('ALL');
-        break;
-      case 'rush':
-        // For rush orders, we need to filter by priority, not status
-        orderSearch.setStatusFilter('ALL');
-        orderSearch.setPriorityFilter('RUSH');
-        break;
-    }
+  const handleStatClick = (statType: StatType) => {
+    handleStatFiltering(statType, orderSearch);
   };
 
   const handleViewOrder = (order: Order) => {
@@ -193,17 +248,122 @@ export default function CustomerOrdersPage() {
     }
   };
 
-  // Don't render until mounted to prevent hydration issues
-  if (!mounted) {
+  // Enhanced loading screen with initialization progress
+  if (!mounted || !isPageReady) {
+    const completedTasks = Object.values(pageInitialization).filter(Boolean).length;
+    const totalTasks = Object.keys(pageInitialization).length;
+    const progress = (completedTasks / totalTasks) * 100;
+
     return (
       <div style={{ 
         display: 'flex', 
+        flexDirection: 'column',
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh',
-        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))'
+        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))',
+        color: '#cbd5e1'
       }}>
-        <Loader size="lg" color="#1e40af" />
+        <div style={{ textAlign: 'center', maxWidth: '400px' }}>
+          <div style={{ 
+            marginBottom: '24px',
+            fontSize: '3rem',
+            filter: 'drop-shadow(0 4px 8px rgba(30, 64, 175, 0.3))'
+          }}>
+            📋
+          </div>
+          
+          <Title order={2} style={{ 
+            color: '#f1f5f9', 
+            marginBottom: '16px',
+            fontWeight: 600
+          }}>
+            Loading DES-BOMS Orders
+          </Title>
+          
+          <Text size="md" style={{ 
+            color: '#94a3b8', 
+            marginBottom: '32px',
+            lineHeight: 1.5
+          }}>
+            Initializing order management system...
+          </Text>
+
+          <div style={{ marginBottom: '24px' }}>
+            <Loader size="lg" color="#1e40af" />
+          </div>
+
+          {/* Progress indicator */}
+          <div style={{ 
+            width: '100%', 
+            height: '4px', 
+            backgroundColor: 'rgba(51, 65, 85, 0.5)',
+            borderRadius: '2px',
+            marginBottom: '16px',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              width: `${progress}%`,
+              height: '100%',
+              backgroundColor: '#1e40af',
+              borderRadius: '2px',
+              transition: 'width 0.3s ease-in-out'
+            }} />
+          </div>
+
+          {/* Status indicators */}
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '8px',
+            fontSize: '0.875rem'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              color: pageInitialization.parts ? '#10b981' : '#64748b'
+            }}>
+              <span>Loading parts database</span>
+              <span>{pageInitialization.parts ? '✓' : '⋯'}</span>
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              color: pageInitialization.customers ? '#10b981' : '#64748b'
+            }}>
+              <span>Syncing customer data</span>
+              <span>{pageInitialization.customers ? '✓' : '⋯'}</span>
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              color: pageInitialization.quickbooks ? '#10b981' : '#64748b'
+            }}>
+              <span>QuickBooks integration</span>
+              <span>{pageInitialization.quickbooks ? '✓' : '⋯'}</span>
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              color: pageInitialization.orders ? '#10b981' : '#64748b'
+            }}>
+              <span>Loading order data</span>
+              <span>{pageInitialization.orders ? '✓' : '⋯'}</span>
+            </div>
+          </div>
+
+          <Text size="xs" style={{ 
+            color: '#64748b', 
+            marginTop: '24px',
+            fontStyle: 'italic'
+          }}>
+            Ensuring all components are ready for optimal performance
+          </Text>
+        </div>
       </div>
     );
   }
@@ -228,12 +388,20 @@ export default function CustomerOrdersPage() {
                   <Text size="md" className={styles.subtitle}>
                     Customer Orders • Line Items • Manufacturing Tracking • Priority Management (Rush/Standard/Hold)
                   </Text>
-                  {/* QuickBooks Connected Badge */}
-                  {typeof window !== 'undefined' && process.env.NEXT_PUBLIC_QB_CONNECTED === 'true' && (
-                    <Badge color="green" variant="filled" style={{ marginTop: 8 }}>
-                      QuickBooks Connected
-                    </Badge>
-                  )}
+                  {/* QuickBooks Connection Status */}
+                  <div style={{ marginTop: 8 }}>
+                    <QuickBooksStatus 
+                      compact={true}
+                      showActions={false}
+                      onConnectionChange={(connected) => {
+                        // Optional: Handle connection status changes
+                        if (connected) {
+                          // Optionally refresh customer data when connected
+                          orderSearch.refetch();
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </Group>
             </div>
@@ -400,6 +568,7 @@ export default function CustomerOrdersPage() {
             // Refresh the orders data when a new order is created
             orderSearch.refetch();
           }}
+          isPageReady={isPageReady}
         />
         
         <OrderDetailsModal

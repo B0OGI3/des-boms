@@ -25,11 +25,18 @@ export interface Order extends BaseEntity {
   assignedBatches: number;
   completedBatches: number;
   lineItems?: Array<{
-    partNumber: string;
-    partName: string;
-    drawingNumber?: string;
-    revisionLevel?: string;
+    part: {
+      id: string;
+      partNumber: string;
+      partName: string;
+      partType: 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+      drawingNumber?: string;
+      revisionLevel?: string;
+      description?: string;
+    };
     quantity: number;
+    unitPrice?: number;
+    notes?: string;
   }>;
 }
 
@@ -124,19 +131,33 @@ const convertPurchaseOrderToOrder = (purchaseOrder: {
       assignedBatches: allBatches.length,
       completedBatches,
       lineItems: (purchaseOrder.lineItems || []).map((item: {
-        partNumber?: string;
-        partName?: string;
-        drawingNumber?: string;
-        revisionLevel?: string;
+        part?: {
+          id?: string;
+          partNumber?: string;
+          partName?: string;
+          partType?: string;
+          drawingNumber?: string;
+          revisionLevel?: string;
+          description?: string;
+        };
         quantity?: number;
+        unitPrice?: number;
+        notes?: string;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
       }) => ({
-        partNumber: item.partNumber || '',
-        partName: item.partName || '',
-        drawingNumber: item.drawingNumber || undefined,
-        revisionLevel: item.revisionLevel || undefined,
+        part: {
+          id: item.part?.id || '',
+          partNumber: item.part?.partNumber || '',
+          partName: item.part?.partName || '',
+          partType: (item.part?.partType as 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL') || 'FINISHED_GOOD',
+          drawingNumber: item.part?.drawingNumber || undefined,
+          revisionLevel: item.part?.revisionLevel || undefined,
+          description: item.part?.description || undefined,
+        },
         quantity: item.quantity || 0,
+        unitPrice: item.unitPrice || undefined,
+        notes: item.notes || undefined,
       })),
     };
   } catch (error) {

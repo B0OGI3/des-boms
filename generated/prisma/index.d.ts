@@ -24,6 +24,16 @@ export type Customer = $Result.DefaultSelection<Prisma.$CustomerPayload>
  */
 export type PurchaseOrder = $Result.DefaultSelection<Prisma.$PurchaseOrderPayload>
 /**
+ * Model Part
+ * 
+ */
+export type Part = $Result.DefaultSelection<Prisma.$PartPayload>
+/**
+ * Model BOMComponent
+ * 
+ */
+export type BOMComponent = $Result.DefaultSelection<Prisma.$BOMComponentPayload>
+/**
  * Model OrderLineItem
  * 
  */
@@ -38,6 +48,11 @@ export type FileAttachment = $Result.DefaultSelection<Prisma.$FileAttachmentPayl
  * 
  */
 export type Batch = $Result.DefaultSelection<Prisma.$BatchPayload>
+/**
+ * Model MaterialConsumption
+ * 
+ */
+export type MaterialConsumption = $Result.DefaultSelection<Prisma.$MaterialConsumptionPayload>
 /**
  * Model RoutingStep
  * 
@@ -63,7 +78,16 @@ export type QCRecord = $Result.DefaultSelection<Prisma.$QCRecordPayload>
  * Enums
  */
 export namespace $Enums {
-  export const OrderPriority: {
+  export const PartType: {
+  FINISHED: 'FINISHED',
+  SEMI_FINISHED: 'SEMI_FINISHED',
+  RAW_MATERIAL: 'RAW_MATERIAL'
+};
+
+export type PartType = (typeof PartType)[keyof typeof PartType]
+
+
+export const OrderPriority: {
   RUSH: 'RUSH',
   STANDARD: 'STANDARD',
   HOLD: 'HOLD'
@@ -132,6 +156,10 @@ export const QCResult: {
 export type QCResult = (typeof QCResult)[keyof typeof QCResult]
 
 }
+
+export type PartType = $Enums.PartType
+
+export const PartType: typeof $Enums.PartType
 
 export type OrderPriority = $Enums.OrderPriority
 
@@ -307,6 +335,26 @@ export class PrismaClient<
   get purchaseOrder(): Prisma.PurchaseOrderDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.part`: Exposes CRUD operations for the **Part** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Parts
+    * const parts = await prisma.part.findMany()
+    * ```
+    */
+  get part(): Prisma.PartDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bOMComponent`: Exposes CRUD operations for the **BOMComponent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BOMComponents
+    * const bOMComponents = await prisma.bOMComponent.findMany()
+    * ```
+    */
+  get bOMComponent(): Prisma.BOMComponentDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.orderLineItem`: Exposes CRUD operations for the **OrderLineItem** model.
     * Example usage:
     * ```ts
@@ -335,6 +383,16 @@ export class PrismaClient<
     * ```
     */
   get batch(): Prisma.BatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.materialConsumption`: Exposes CRUD operations for the **MaterialConsumption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MaterialConsumptions
+    * const materialConsumptions = await prisma.materialConsumption.findMany()
+    * ```
+    */
+  get materialConsumption(): Prisma.MaterialConsumptionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.routingStep`: Exposes CRUD operations for the **RoutingStep** model.
@@ -817,9 +875,12 @@ export namespace Prisma {
   export const ModelName: {
     Customer: 'Customer',
     PurchaseOrder: 'PurchaseOrder',
+    Part: 'Part',
+    BOMComponent: 'BOMComponent',
     OrderLineItem: 'OrderLineItem',
     FileAttachment: 'FileAttachment',
     Batch: 'Batch',
+    MaterialConsumption: 'MaterialConsumption',
     RoutingStep: 'RoutingStep',
     Workstation: 'Workstation',
     StepConfirmation: 'StepConfirmation',
@@ -842,7 +903,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "customer" | "purchaseOrder" | "orderLineItem" | "fileAttachment" | "batch" | "routingStep" | "workstation" | "stepConfirmation" | "qCRecord"
+      modelProps: "customer" | "purchaseOrder" | "part" | "bOMComponent" | "orderLineItem" | "fileAttachment" | "batch" | "materialConsumption" | "routingStep" | "workstation" | "stepConfirmation" | "qCRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -991,6 +1052,154 @@ export namespace Prisma {
           count: {
             args: Prisma.PurchaseOrderCountArgs<ExtArgs>
             result: $Utils.Optional<PurchaseOrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      Part: {
+        payload: Prisma.$PartPayload<ExtArgs>
+        fields: Prisma.PartFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PartFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PartFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          findFirst: {
+            args: Prisma.PartFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PartFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          findMany: {
+            args: Prisma.PartFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>[]
+          }
+          create: {
+            args: Prisma.PartCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          createMany: {
+            args: Prisma.PartCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PartCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>[]
+          }
+          delete: {
+            args: Prisma.PartDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          update: {
+            args: Prisma.PartUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          deleteMany: {
+            args: Prisma.PartDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PartUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PartUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>[]
+          }
+          upsert: {
+            args: Prisma.PartUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          aggregate: {
+            args: Prisma.PartAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePart>
+          }
+          groupBy: {
+            args: Prisma.PartGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PartGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PartCountArgs<ExtArgs>
+            result: $Utils.Optional<PartCountAggregateOutputType> | number
+          }
+        }
+      }
+      BOMComponent: {
+        payload: Prisma.$BOMComponentPayload<ExtArgs>
+        fields: Prisma.BOMComponentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BOMComponentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BOMComponentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          findFirst: {
+            args: Prisma.BOMComponentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BOMComponentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          findMany: {
+            args: Prisma.BOMComponentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>[]
+          }
+          create: {
+            args: Prisma.BOMComponentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          createMany: {
+            args: Prisma.BOMComponentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BOMComponentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>[]
+          }
+          delete: {
+            args: Prisma.BOMComponentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          update: {
+            args: Prisma.BOMComponentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          deleteMany: {
+            args: Prisma.BOMComponentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BOMComponentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BOMComponentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>[]
+          }
+          upsert: {
+            args: Prisma.BOMComponentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMComponentPayload>
+          }
+          aggregate: {
+            args: Prisma.BOMComponentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBOMComponent>
+          }
+          groupBy: {
+            args: Prisma.BOMComponentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BOMComponentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BOMComponentCountArgs<ExtArgs>
+            result: $Utils.Optional<BOMComponentCountAggregateOutputType> | number
           }
         }
       }
@@ -1213,6 +1422,80 @@ export namespace Prisma {
           count: {
             args: Prisma.BatchCountArgs<ExtArgs>
             result: $Utils.Optional<BatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      MaterialConsumption: {
+        payload: Prisma.$MaterialConsumptionPayload<ExtArgs>
+        fields: Prisma.MaterialConsumptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaterialConsumptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaterialConsumptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          findFirst: {
+            args: Prisma.MaterialConsumptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaterialConsumptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          findMany: {
+            args: Prisma.MaterialConsumptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>[]
+          }
+          create: {
+            args: Prisma.MaterialConsumptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          createMany: {
+            args: Prisma.MaterialConsumptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaterialConsumptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>[]
+          }
+          delete: {
+            args: Prisma.MaterialConsumptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          update: {
+            args: Prisma.MaterialConsumptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaterialConsumptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaterialConsumptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaterialConsumptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.MaterialConsumptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialConsumptionPayload>
+          }
+          aggregate: {
+            args: Prisma.MaterialConsumptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaterialConsumption>
+          }
+          groupBy: {
+            args: Prisma.MaterialConsumptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaterialConsumptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaterialConsumptionCountArgs<ExtArgs>
+            result: $Utils.Optional<MaterialConsumptionCountAggregateOutputType> | number
           }
         }
       }
@@ -1598,9 +1881,12 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     customer?: CustomerOmit
     purchaseOrder?: PurchaseOrderOmit
+    part?: PartOmit
+    bOMComponent?: BOMComponentOmit
     orderLineItem?: OrderLineItemOmit
     fileAttachment?: FileAttachmentOmit
     batch?: BatchOmit
+    materialConsumption?: MaterialConsumptionOmit
     routingStep?: RoutingStepOmit
     workstation?: WorkstationOmit
     stepConfirmation?: StepConfirmationOmit
@@ -1757,6 +2043,64 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PartCountOutputType
+   */
+
+  export type PartCountOutputType = {
+    parentBOMs: number
+    childBOMs: number
+    orderLineItems: number
+    materialConsumptions: number
+  }
+
+  export type PartCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentBOMs?: boolean | PartCountOutputTypeCountParentBOMsArgs
+    childBOMs?: boolean | PartCountOutputTypeCountChildBOMsArgs
+    orderLineItems?: boolean | PartCountOutputTypeCountOrderLineItemsArgs
+    materialConsumptions?: boolean | PartCountOutputTypeCountMaterialConsumptionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartCountOutputType
+     */
+    select?: PartCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeCountParentBOMsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMComponentWhereInput
+  }
+
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeCountChildBOMsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMComponentWhereInput
+  }
+
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeCountOrderLineItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderLineItemWhereInput
+  }
+
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeCountMaterialConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialConsumptionWhereInput
+  }
+
+
+  /**
    * Count Type OrderLineItemCountOutputType
    */
 
@@ -1803,11 +2147,13 @@ export namespace Prisma {
   export type BatchCountOutputType = {
     routingSteps: number
     qcRecords: number
+    materialConsumption: number
   }
 
   export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingSteps?: boolean | BatchCountOutputTypeCountRoutingStepsArgs
     qcRecords?: boolean | BatchCountOutputTypeCountQcRecordsArgs
+    materialConsumption?: boolean | BatchCountOutputTypeCountMaterialConsumptionArgs
   }
 
   // Custom InputTypes
@@ -1833,6 +2179,13 @@ export namespace Prisma {
    */
   export type BatchCountOutputTypeCountQcRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QCRecordWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountMaterialConsumptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialConsumptionWhereInput
   }
 
 
@@ -4239,6 +4592,2497 @@ export namespace Prisma {
 
 
   /**
+   * Model Part
+   */
+
+  export type AggregatePart = {
+    _count: PartCountAggregateOutputType | null
+    _avg: PartAvgAggregateOutputType | null
+    _sum: PartSumAggregateOutputType | null
+    _min: PartMinAggregateOutputType | null
+    _max: PartMaxAggregateOutputType | null
+  }
+
+  export type PartAvgAggregateOutputType = {
+    standardCost: Decimal | null
+    leadTime: number | null
+  }
+
+  export type PartSumAggregateOutputType = {
+    standardCost: Decimal | null
+    leadTime: number | null
+  }
+
+  export type PartMinAggregateOutputType = {
+    id: string | null
+    partNumber: string | null
+    partName: string | null
+    partType: $Enums.PartType | null
+    drawingNumber: string | null
+    revisionLevel: string | null
+    description: string | null
+    materialSpec: string | null
+    unitOfMeasure: string | null
+    standardCost: Decimal | null
+    leadTime: number | null
+    active: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartMaxAggregateOutputType = {
+    id: string | null
+    partNumber: string | null
+    partName: string | null
+    partType: $Enums.PartType | null
+    drawingNumber: string | null
+    revisionLevel: string | null
+    description: string | null
+    materialSpec: string | null
+    unitOfMeasure: string | null
+    standardCost: Decimal | null
+    leadTime: number | null
+    active: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartCountAggregateOutputType = {
+    id: number
+    partNumber: number
+    partName: number
+    partType: number
+    drawingNumber: number
+    revisionLevel: number
+    description: number
+    materialSpec: number
+    unitOfMeasure: number
+    standardCost: number
+    leadTime: number
+    active: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PartAvgAggregateInputType = {
+    standardCost?: true
+    leadTime?: true
+  }
+
+  export type PartSumAggregateInputType = {
+    standardCost?: true
+    leadTime?: true
+  }
+
+  export type PartMinAggregateInputType = {
+    id?: true
+    partNumber?: true
+    partName?: true
+    partType?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    description?: true
+    materialSpec?: true
+    unitOfMeasure?: true
+    standardCost?: true
+    leadTime?: true
+    active?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartMaxAggregateInputType = {
+    id?: true
+    partNumber?: true
+    partName?: true
+    partType?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    description?: true
+    materialSpec?: true
+    unitOfMeasure?: true
+    standardCost?: true
+    leadTime?: true
+    active?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartCountAggregateInputType = {
+    id?: true
+    partNumber?: true
+    partName?: true
+    partType?: true
+    drawingNumber?: true
+    revisionLevel?: true
+    description?: true
+    materialSpec?: true
+    unitOfMeasure?: true
+    standardCost?: true
+    leadTime?: true
+    active?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PartAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Part to aggregate.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Parts
+    **/
+    _count?: true | PartCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PartAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PartSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PartMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PartMaxAggregateInputType
+  }
+
+  export type GetPartAggregateType<T extends PartAggregateArgs> = {
+        [P in keyof T & keyof AggregatePart]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePart[P]>
+      : GetScalarType<T[P], AggregatePart[P]>
+  }
+
+
+
+
+  export type PartGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartWhereInput
+    orderBy?: PartOrderByWithAggregationInput | PartOrderByWithAggregationInput[]
+    by: PartScalarFieldEnum[] | PartScalarFieldEnum
+    having?: PartScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PartCountAggregateInputType | true
+    _avg?: PartAvgAggregateInputType
+    _sum?: PartSumAggregateInputType
+    _min?: PartMinAggregateInputType
+    _max?: PartMaxAggregateInputType
+  }
+
+  export type PartGroupByOutputType = {
+    id: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber: string | null
+    revisionLevel: string | null
+    description: string | null
+    materialSpec: string | null
+    unitOfMeasure: string | null
+    standardCost: Decimal | null
+    leadTime: number | null
+    active: boolean
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PartCountAggregateOutputType | null
+    _avg: PartAvgAggregateOutputType | null
+    _sum: PartSumAggregateOutputType | null
+    _min: PartMinAggregateOutputType | null
+    _max: PartMaxAggregateOutputType | null
+  }
+
+  type GetPartGroupByPayload<T extends PartGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PartGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PartGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PartGroupByOutputType[P]>
+            : GetScalarType<T[P], PartGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PartSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    partType?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    description?: boolean
+    materialSpec?: boolean
+    unitOfMeasure?: boolean
+    standardCost?: boolean
+    leadTime?: boolean
+    active?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parentBOMs?: boolean | Part$parentBOMsArgs<ExtArgs>
+    childBOMs?: boolean | Part$childBOMsArgs<ExtArgs>
+    orderLineItems?: boolean | Part$orderLineItemsArgs<ExtArgs>
+    materialConsumptions?: boolean | Part$materialConsumptionsArgs<ExtArgs>
+    _count?: boolean | PartCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["part"]>
+
+  export type PartSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    partType?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    description?: boolean
+    materialSpec?: boolean
+    unitOfMeasure?: boolean
+    standardCost?: boolean
+    leadTime?: boolean
+    active?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["part"]>
+
+  export type PartSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    partType?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    description?: boolean
+    materialSpec?: boolean
+    unitOfMeasure?: boolean
+    standardCost?: boolean
+    leadTime?: boolean
+    active?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["part"]>
+
+  export type PartSelectScalar = {
+    id?: boolean
+    partNumber?: boolean
+    partName?: boolean
+    partType?: boolean
+    drawingNumber?: boolean
+    revisionLevel?: boolean
+    description?: boolean
+    materialSpec?: boolean
+    unitOfMeasure?: boolean
+    standardCost?: boolean
+    leadTime?: boolean
+    active?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "partNumber" | "partName" | "partType" | "drawingNumber" | "revisionLevel" | "description" | "materialSpec" | "unitOfMeasure" | "standardCost" | "leadTime" | "active" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["part"]>
+  export type PartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentBOMs?: boolean | Part$parentBOMsArgs<ExtArgs>
+    childBOMs?: boolean | Part$childBOMsArgs<ExtArgs>
+    orderLineItems?: boolean | Part$orderLineItemsArgs<ExtArgs>
+    materialConsumptions?: boolean | Part$materialConsumptionsArgs<ExtArgs>
+    _count?: boolean | PartCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PartIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PartIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PartPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Part"
+    objects: {
+      parentBOMs: Prisma.$BOMComponentPayload<ExtArgs>[]
+      childBOMs: Prisma.$BOMComponentPayload<ExtArgs>[]
+      orderLineItems: Prisma.$OrderLineItemPayload<ExtArgs>[]
+      materialConsumptions: Prisma.$MaterialConsumptionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      partNumber: string
+      partName: string
+      partType: $Enums.PartType
+      drawingNumber: string | null
+      revisionLevel: string | null
+      description: string | null
+      materialSpec: string | null
+      unitOfMeasure: string | null
+      standardCost: Prisma.Decimal | null
+      leadTime: number | null
+      active: boolean
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["part"]>
+    composites: {}
+  }
+
+  type PartGetPayload<S extends boolean | null | undefined | PartDefaultArgs> = $Result.GetResult<Prisma.$PartPayload, S>
+
+  type PartCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PartFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PartCountAggregateInputType | true
+    }
+
+  export interface PartDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Part'], meta: { name: 'Part' } }
+    /**
+     * Find zero or one Part that matches the filter.
+     * @param {PartFindUniqueArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PartFindUniqueArgs>(args: SelectSubset<T, PartFindUniqueArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Part that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PartFindUniqueOrThrowArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PartFindUniqueOrThrowArgs>(args: SelectSubset<T, PartFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Part that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindFirstArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PartFindFirstArgs>(args?: SelectSubset<T, PartFindFirstArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Part that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindFirstOrThrowArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PartFindFirstOrThrowArgs>(args?: SelectSubset<T, PartFindFirstOrThrowArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Parts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Parts
+     * const parts = await prisma.part.findMany()
+     * 
+     * // Get first 10 Parts
+     * const parts = await prisma.part.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const partWithIdOnly = await prisma.part.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PartFindManyArgs>(args?: SelectSubset<T, PartFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Part.
+     * @param {PartCreateArgs} args - Arguments to create a Part.
+     * @example
+     * // Create one Part
+     * const Part = await prisma.part.create({
+     *   data: {
+     *     // ... data to create a Part
+     *   }
+     * })
+     * 
+     */
+    create<T extends PartCreateArgs>(args: SelectSubset<T, PartCreateArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Parts.
+     * @param {PartCreateManyArgs} args - Arguments to create many Parts.
+     * @example
+     * // Create many Parts
+     * const part = await prisma.part.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PartCreateManyArgs>(args?: SelectSubset<T, PartCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Parts and returns the data saved in the database.
+     * @param {PartCreateManyAndReturnArgs} args - Arguments to create many Parts.
+     * @example
+     * // Create many Parts
+     * const part = await prisma.part.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Parts and only return the `id`
+     * const partWithIdOnly = await prisma.part.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PartCreateManyAndReturnArgs>(args?: SelectSubset<T, PartCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Part.
+     * @param {PartDeleteArgs} args - Arguments to delete one Part.
+     * @example
+     * // Delete one Part
+     * const Part = await prisma.part.delete({
+     *   where: {
+     *     // ... filter to delete one Part
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PartDeleteArgs>(args: SelectSubset<T, PartDeleteArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Part.
+     * @param {PartUpdateArgs} args - Arguments to update one Part.
+     * @example
+     * // Update one Part
+     * const part = await prisma.part.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PartUpdateArgs>(args: SelectSubset<T, PartUpdateArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Parts.
+     * @param {PartDeleteManyArgs} args - Arguments to filter Parts to delete.
+     * @example
+     * // Delete a few Parts
+     * const { count } = await prisma.part.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PartDeleteManyArgs>(args?: SelectSubset<T, PartDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Parts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Parts
+     * const part = await prisma.part.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PartUpdateManyArgs>(args: SelectSubset<T, PartUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Parts and returns the data updated in the database.
+     * @param {PartUpdateManyAndReturnArgs} args - Arguments to update many Parts.
+     * @example
+     * // Update many Parts
+     * const part = await prisma.part.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Parts and only return the `id`
+     * const partWithIdOnly = await prisma.part.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PartUpdateManyAndReturnArgs>(args: SelectSubset<T, PartUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Part.
+     * @param {PartUpsertArgs} args - Arguments to update or create a Part.
+     * @example
+     * // Update or create a Part
+     * const part = await prisma.part.upsert({
+     *   create: {
+     *     // ... data to create a Part
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Part we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PartUpsertArgs>(args: SelectSubset<T, PartUpsertArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Parts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartCountArgs} args - Arguments to filter Parts to count.
+     * @example
+     * // Count the number of Parts
+     * const count = await prisma.part.count({
+     *   where: {
+     *     // ... the filter for the Parts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PartCountArgs>(
+      args?: Subset<T, PartCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PartCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Part.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PartAggregateArgs>(args: Subset<T, PartAggregateArgs>): Prisma.PrismaPromise<GetPartAggregateType<T>>
+
+    /**
+     * Group by Part.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PartGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PartGroupByArgs['orderBy'] }
+        : { orderBy?: PartGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PartGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPartGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Part model
+   */
+  readonly fields: PartFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Part.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PartClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    parentBOMs<T extends Part$parentBOMsArgs<ExtArgs> = {}>(args?: Subset<T, Part$parentBOMsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    childBOMs<T extends Part$childBOMsArgs<ExtArgs> = {}>(args?: Subset<T, Part$childBOMsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    orderLineItems<T extends Part$orderLineItemsArgs<ExtArgs> = {}>(args?: Subset<T, Part$orderLineItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    materialConsumptions<T extends Part$materialConsumptionsArgs<ExtArgs> = {}>(args?: Subset<T, Part$materialConsumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Part model
+   */
+  interface PartFieldRefs {
+    readonly id: FieldRef<"Part", 'String'>
+    readonly partNumber: FieldRef<"Part", 'String'>
+    readonly partName: FieldRef<"Part", 'String'>
+    readonly partType: FieldRef<"Part", 'PartType'>
+    readonly drawingNumber: FieldRef<"Part", 'String'>
+    readonly revisionLevel: FieldRef<"Part", 'String'>
+    readonly description: FieldRef<"Part", 'String'>
+    readonly materialSpec: FieldRef<"Part", 'String'>
+    readonly unitOfMeasure: FieldRef<"Part", 'String'>
+    readonly standardCost: FieldRef<"Part", 'Decimal'>
+    readonly leadTime: FieldRef<"Part", 'Int'>
+    readonly active: FieldRef<"Part", 'Boolean'>
+    readonly notes: FieldRef<"Part", 'String'>
+    readonly createdAt: FieldRef<"Part", 'DateTime'>
+    readonly updatedAt: FieldRef<"Part", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Part findUnique
+   */
+  export type PartFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part findUniqueOrThrow
+   */
+  export type PartFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part findFirst
+   */
+  export type PartFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Parts.
+     */
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part findFirstOrThrow
+   */
+  export type PartFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Parts.
+     */
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part findMany
+   */
+  export type PartFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Parts to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part create
+   */
+  export type PartCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Part.
+     */
+    data: XOR<PartCreateInput, PartUncheckedCreateInput>
+  }
+
+  /**
+   * Part createMany
+   */
+  export type PartCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Parts.
+     */
+    data: PartCreateManyInput | PartCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Part createManyAndReturn
+   */
+  export type PartCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * The data used to create many Parts.
+     */
+    data: PartCreateManyInput | PartCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Part update
+   */
+  export type PartUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Part.
+     */
+    data: XOR<PartUpdateInput, PartUncheckedUpdateInput>
+    /**
+     * Choose, which Part to update.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part updateMany
+   */
+  export type PartUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Parts.
+     */
+    data: XOR<PartUpdateManyMutationInput, PartUncheckedUpdateManyInput>
+    /**
+     * Filter which Parts to update
+     */
+    where?: PartWhereInput
+    /**
+     * Limit how many Parts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Part updateManyAndReturn
+   */
+  export type PartUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * The data used to update Parts.
+     */
+    data: XOR<PartUpdateManyMutationInput, PartUncheckedUpdateManyInput>
+    /**
+     * Filter which Parts to update
+     */
+    where?: PartWhereInput
+    /**
+     * Limit how many Parts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Part upsert
+   */
+  export type PartUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Part to update in case it exists.
+     */
+    where: PartWhereUniqueInput
+    /**
+     * In case the Part found by the `where` argument doesn't exist, create a new Part with this data.
+     */
+    create: XOR<PartCreateInput, PartUncheckedCreateInput>
+    /**
+     * In case the Part was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PartUpdateInput, PartUncheckedUpdateInput>
+  }
+
+  /**
+   * Part delete
+   */
+  export type PartDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter which Part to delete.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part deleteMany
+   */
+  export type PartDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Parts to delete
+     */
+    where?: PartWhereInput
+    /**
+     * Limit how many Parts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Part.parentBOMs
+   */
+  export type Part$parentBOMsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    where?: BOMComponentWhereInput
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    cursor?: BOMComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BOMComponentScalarFieldEnum | BOMComponentScalarFieldEnum[]
+  }
+
+  /**
+   * Part.childBOMs
+   */
+  export type Part$childBOMsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    where?: BOMComponentWhereInput
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    cursor?: BOMComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BOMComponentScalarFieldEnum | BOMComponentScalarFieldEnum[]
+  }
+
+  /**
+   * Part.orderLineItems
+   */
+  export type Part$orderLineItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderLineItem
+     */
+    select?: OrderLineItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderLineItem
+     */
+    omit?: OrderLineItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderLineItemInclude<ExtArgs> | null
+    where?: OrderLineItemWhereInput
+    orderBy?: OrderLineItemOrderByWithRelationInput | OrderLineItemOrderByWithRelationInput[]
+    cursor?: OrderLineItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderLineItemScalarFieldEnum | OrderLineItemScalarFieldEnum[]
+  }
+
+  /**
+   * Part.materialConsumptions
+   */
+  export type Part$materialConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    where?: MaterialConsumptionWhereInput
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    cursor?: MaterialConsumptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * Part without action
+   */
+  export type PartDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Part
+     */
+    omit?: PartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BOMComponent
+   */
+
+  export type AggregateBOMComponent = {
+    _count: BOMComponentCountAggregateOutputType | null
+    _avg: BOMComponentAvgAggregateOutputType | null
+    _sum: BOMComponentSumAggregateOutputType | null
+    _min: BOMComponentMinAggregateOutputType | null
+    _max: BOMComponentMaxAggregateOutputType | null
+  }
+
+  export type BOMComponentAvgAggregateOutputType = {
+    quantity: Decimal | null
+    scrapFactor: Decimal | null
+  }
+
+  export type BOMComponentSumAggregateOutputType = {
+    quantity: Decimal | null
+    scrapFactor: Decimal | null
+  }
+
+  export type BOMComponentMinAggregateOutputType = {
+    id: string | null
+    parentPartId: string | null
+    childPartId: string | null
+    quantity: Decimal | null
+    unitOfMeasure: string | null
+    scrapFactor: Decimal | null
+    operation: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BOMComponentMaxAggregateOutputType = {
+    id: string | null
+    parentPartId: string | null
+    childPartId: string | null
+    quantity: Decimal | null
+    unitOfMeasure: string | null
+    scrapFactor: Decimal | null
+    operation: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BOMComponentCountAggregateOutputType = {
+    id: number
+    parentPartId: number
+    childPartId: number
+    quantity: number
+    unitOfMeasure: number
+    scrapFactor: number
+    operation: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BOMComponentAvgAggregateInputType = {
+    quantity?: true
+    scrapFactor?: true
+  }
+
+  export type BOMComponentSumAggregateInputType = {
+    quantity?: true
+    scrapFactor?: true
+  }
+
+  export type BOMComponentMinAggregateInputType = {
+    id?: true
+    parentPartId?: true
+    childPartId?: true
+    quantity?: true
+    unitOfMeasure?: true
+    scrapFactor?: true
+    operation?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BOMComponentMaxAggregateInputType = {
+    id?: true
+    parentPartId?: true
+    childPartId?: true
+    quantity?: true
+    unitOfMeasure?: true
+    scrapFactor?: true
+    operation?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BOMComponentCountAggregateInputType = {
+    id?: true
+    parentPartId?: true
+    childPartId?: true
+    quantity?: true
+    unitOfMeasure?: true
+    scrapFactor?: true
+    operation?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BOMComponentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BOMComponent to aggregate.
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMComponents to fetch.
+     */
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BOMComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BOMComponents
+    **/
+    _count?: true | BOMComponentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BOMComponentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BOMComponentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BOMComponentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BOMComponentMaxAggregateInputType
+  }
+
+  export type GetBOMComponentAggregateType<T extends BOMComponentAggregateArgs> = {
+        [P in keyof T & keyof AggregateBOMComponent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBOMComponent[P]>
+      : GetScalarType<T[P], AggregateBOMComponent[P]>
+  }
+
+
+
+
+  export type BOMComponentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMComponentWhereInput
+    orderBy?: BOMComponentOrderByWithAggregationInput | BOMComponentOrderByWithAggregationInput[]
+    by: BOMComponentScalarFieldEnum[] | BOMComponentScalarFieldEnum
+    having?: BOMComponentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BOMComponentCountAggregateInputType | true
+    _avg?: BOMComponentAvgAggregateInputType
+    _sum?: BOMComponentSumAggregateInputType
+    _min?: BOMComponentMinAggregateInputType
+    _max?: BOMComponentMaxAggregateInputType
+  }
+
+  export type BOMComponentGroupByOutputType = {
+    id: string
+    parentPartId: string
+    childPartId: string
+    quantity: Decimal
+    unitOfMeasure: string | null
+    scrapFactor: Decimal | null
+    operation: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BOMComponentCountAggregateOutputType | null
+    _avg: BOMComponentAvgAggregateOutputType | null
+    _sum: BOMComponentSumAggregateOutputType | null
+    _min: BOMComponentMinAggregateOutputType | null
+    _max: BOMComponentMaxAggregateOutputType | null
+  }
+
+  type GetBOMComponentGroupByPayload<T extends BOMComponentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BOMComponentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BOMComponentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BOMComponentGroupByOutputType[P]>
+            : GetScalarType<T[P], BOMComponentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BOMComponentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    parentPartId?: boolean
+    childPartId?: boolean
+    quantity?: boolean
+    unitOfMeasure?: boolean
+    scrapFactor?: boolean
+    operation?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMComponent"]>
+
+  export type BOMComponentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    parentPartId?: boolean
+    childPartId?: boolean
+    quantity?: boolean
+    unitOfMeasure?: boolean
+    scrapFactor?: boolean
+    operation?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMComponent"]>
+
+  export type BOMComponentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    parentPartId?: boolean
+    childPartId?: boolean
+    quantity?: boolean
+    unitOfMeasure?: boolean
+    scrapFactor?: boolean
+    operation?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMComponent"]>
+
+  export type BOMComponentSelectScalar = {
+    id?: boolean
+    parentPartId?: boolean
+    childPartId?: boolean
+    quantity?: boolean
+    unitOfMeasure?: boolean
+    scrapFactor?: boolean
+    operation?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BOMComponentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "parentPartId" | "childPartId" | "quantity" | "unitOfMeasure" | "scrapFactor" | "operation" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["bOMComponent"]>
+  export type BOMComponentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+  export type BOMComponentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+  export type BOMComponentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentPart?: boolean | PartDefaultArgs<ExtArgs>
+    childPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+
+  export type $BOMComponentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BOMComponent"
+    objects: {
+      parentPart: Prisma.$PartPayload<ExtArgs>
+      childPart: Prisma.$PartPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      parentPartId: string
+      childPartId: string
+      quantity: Prisma.Decimal
+      unitOfMeasure: string | null
+      scrapFactor: Prisma.Decimal | null
+      operation: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bOMComponent"]>
+    composites: {}
+  }
+
+  type BOMComponentGetPayload<S extends boolean | null | undefined | BOMComponentDefaultArgs> = $Result.GetResult<Prisma.$BOMComponentPayload, S>
+
+  type BOMComponentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BOMComponentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BOMComponentCountAggregateInputType | true
+    }
+
+  export interface BOMComponentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BOMComponent'], meta: { name: 'BOMComponent' } }
+    /**
+     * Find zero or one BOMComponent that matches the filter.
+     * @param {BOMComponentFindUniqueArgs} args - Arguments to find a BOMComponent
+     * @example
+     * // Get one BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BOMComponentFindUniqueArgs>(args: SelectSubset<T, BOMComponentFindUniqueArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BOMComponent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BOMComponentFindUniqueOrThrowArgs} args - Arguments to find a BOMComponent
+     * @example
+     * // Get one BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BOMComponentFindUniqueOrThrowArgs>(args: SelectSubset<T, BOMComponentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BOMComponent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentFindFirstArgs} args - Arguments to find a BOMComponent
+     * @example
+     * // Get one BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BOMComponentFindFirstArgs>(args?: SelectSubset<T, BOMComponentFindFirstArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BOMComponent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentFindFirstOrThrowArgs} args - Arguments to find a BOMComponent
+     * @example
+     * // Get one BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BOMComponentFindFirstOrThrowArgs>(args?: SelectSubset<T, BOMComponentFindFirstOrThrowArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BOMComponents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BOMComponents
+     * const bOMComponents = await prisma.bOMComponent.findMany()
+     * 
+     * // Get first 10 BOMComponents
+     * const bOMComponents = await prisma.bOMComponent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bOMComponentWithIdOnly = await prisma.bOMComponent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BOMComponentFindManyArgs>(args?: SelectSubset<T, BOMComponentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BOMComponent.
+     * @param {BOMComponentCreateArgs} args - Arguments to create a BOMComponent.
+     * @example
+     * // Create one BOMComponent
+     * const BOMComponent = await prisma.bOMComponent.create({
+     *   data: {
+     *     // ... data to create a BOMComponent
+     *   }
+     * })
+     * 
+     */
+    create<T extends BOMComponentCreateArgs>(args: SelectSubset<T, BOMComponentCreateArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BOMComponents.
+     * @param {BOMComponentCreateManyArgs} args - Arguments to create many BOMComponents.
+     * @example
+     * // Create many BOMComponents
+     * const bOMComponent = await prisma.bOMComponent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BOMComponentCreateManyArgs>(args?: SelectSubset<T, BOMComponentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BOMComponents and returns the data saved in the database.
+     * @param {BOMComponentCreateManyAndReturnArgs} args - Arguments to create many BOMComponents.
+     * @example
+     * // Create many BOMComponents
+     * const bOMComponent = await prisma.bOMComponent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BOMComponents and only return the `id`
+     * const bOMComponentWithIdOnly = await prisma.bOMComponent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BOMComponentCreateManyAndReturnArgs>(args?: SelectSubset<T, BOMComponentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BOMComponent.
+     * @param {BOMComponentDeleteArgs} args - Arguments to delete one BOMComponent.
+     * @example
+     * // Delete one BOMComponent
+     * const BOMComponent = await prisma.bOMComponent.delete({
+     *   where: {
+     *     // ... filter to delete one BOMComponent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BOMComponentDeleteArgs>(args: SelectSubset<T, BOMComponentDeleteArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BOMComponent.
+     * @param {BOMComponentUpdateArgs} args - Arguments to update one BOMComponent.
+     * @example
+     * // Update one BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BOMComponentUpdateArgs>(args: SelectSubset<T, BOMComponentUpdateArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BOMComponents.
+     * @param {BOMComponentDeleteManyArgs} args - Arguments to filter BOMComponents to delete.
+     * @example
+     * // Delete a few BOMComponents
+     * const { count } = await prisma.bOMComponent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BOMComponentDeleteManyArgs>(args?: SelectSubset<T, BOMComponentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BOMComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BOMComponents
+     * const bOMComponent = await prisma.bOMComponent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BOMComponentUpdateManyArgs>(args: SelectSubset<T, BOMComponentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BOMComponents and returns the data updated in the database.
+     * @param {BOMComponentUpdateManyAndReturnArgs} args - Arguments to update many BOMComponents.
+     * @example
+     * // Update many BOMComponents
+     * const bOMComponent = await prisma.bOMComponent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BOMComponents and only return the `id`
+     * const bOMComponentWithIdOnly = await prisma.bOMComponent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BOMComponentUpdateManyAndReturnArgs>(args: SelectSubset<T, BOMComponentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BOMComponent.
+     * @param {BOMComponentUpsertArgs} args - Arguments to update or create a BOMComponent.
+     * @example
+     * // Update or create a BOMComponent
+     * const bOMComponent = await prisma.bOMComponent.upsert({
+     *   create: {
+     *     // ... data to create a BOMComponent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BOMComponent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BOMComponentUpsertArgs>(args: SelectSubset<T, BOMComponentUpsertArgs<ExtArgs>>): Prisma__BOMComponentClient<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BOMComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentCountArgs} args - Arguments to filter BOMComponents to count.
+     * @example
+     * // Count the number of BOMComponents
+     * const count = await prisma.bOMComponent.count({
+     *   where: {
+     *     // ... the filter for the BOMComponents we want to count
+     *   }
+     * })
+    **/
+    count<T extends BOMComponentCountArgs>(
+      args?: Subset<T, BOMComponentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BOMComponentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BOMComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BOMComponentAggregateArgs>(args: Subset<T, BOMComponentAggregateArgs>): Prisma.PrismaPromise<GetBOMComponentAggregateType<T>>
+
+    /**
+     * Group by BOMComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMComponentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BOMComponentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BOMComponentGroupByArgs['orderBy'] }
+        : { orderBy?: BOMComponentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BOMComponentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBOMComponentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BOMComponent model
+   */
+  readonly fields: BOMComponentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BOMComponent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BOMComponentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    parentPart<T extends PartDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartDefaultArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    childPart<T extends PartDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartDefaultArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BOMComponent model
+   */
+  interface BOMComponentFieldRefs {
+    readonly id: FieldRef<"BOMComponent", 'String'>
+    readonly parentPartId: FieldRef<"BOMComponent", 'String'>
+    readonly childPartId: FieldRef<"BOMComponent", 'String'>
+    readonly quantity: FieldRef<"BOMComponent", 'Decimal'>
+    readonly unitOfMeasure: FieldRef<"BOMComponent", 'String'>
+    readonly scrapFactor: FieldRef<"BOMComponent", 'Decimal'>
+    readonly operation: FieldRef<"BOMComponent", 'String'>
+    readonly notes: FieldRef<"BOMComponent", 'String'>
+    readonly createdAt: FieldRef<"BOMComponent", 'DateTime'>
+    readonly updatedAt: FieldRef<"BOMComponent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BOMComponent findUnique
+   */
+  export type BOMComponentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMComponent to fetch.
+     */
+    where: BOMComponentWhereUniqueInput
+  }
+
+  /**
+   * BOMComponent findUniqueOrThrow
+   */
+  export type BOMComponentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMComponent to fetch.
+     */
+    where: BOMComponentWhereUniqueInput
+  }
+
+  /**
+   * BOMComponent findFirst
+   */
+  export type BOMComponentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMComponent to fetch.
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMComponents to fetch.
+     */
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BOMComponents.
+     */
+    cursor?: BOMComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BOMComponents.
+     */
+    distinct?: BOMComponentScalarFieldEnum | BOMComponentScalarFieldEnum[]
+  }
+
+  /**
+   * BOMComponent findFirstOrThrow
+   */
+  export type BOMComponentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMComponent to fetch.
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMComponents to fetch.
+     */
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BOMComponents.
+     */
+    cursor?: BOMComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BOMComponents.
+     */
+    distinct?: BOMComponentScalarFieldEnum | BOMComponentScalarFieldEnum[]
+  }
+
+  /**
+   * BOMComponent findMany
+   */
+  export type BOMComponentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMComponents to fetch.
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMComponents to fetch.
+     */
+    orderBy?: BOMComponentOrderByWithRelationInput | BOMComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BOMComponents.
+     */
+    cursor?: BOMComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMComponents.
+     */
+    skip?: number
+    distinct?: BOMComponentScalarFieldEnum | BOMComponentScalarFieldEnum[]
+  }
+
+  /**
+   * BOMComponent create
+   */
+  export type BOMComponentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BOMComponent.
+     */
+    data: XOR<BOMComponentCreateInput, BOMComponentUncheckedCreateInput>
+  }
+
+  /**
+   * BOMComponent createMany
+   */
+  export type BOMComponentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BOMComponents.
+     */
+    data: BOMComponentCreateManyInput | BOMComponentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BOMComponent createManyAndReturn
+   */
+  export type BOMComponentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * The data used to create many BOMComponents.
+     */
+    data: BOMComponentCreateManyInput | BOMComponentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BOMComponent update
+   */
+  export type BOMComponentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BOMComponent.
+     */
+    data: XOR<BOMComponentUpdateInput, BOMComponentUncheckedUpdateInput>
+    /**
+     * Choose, which BOMComponent to update.
+     */
+    where: BOMComponentWhereUniqueInput
+  }
+
+  /**
+   * BOMComponent updateMany
+   */
+  export type BOMComponentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BOMComponents.
+     */
+    data: XOR<BOMComponentUpdateManyMutationInput, BOMComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which BOMComponents to update
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * Limit how many BOMComponents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BOMComponent updateManyAndReturn
+   */
+  export type BOMComponentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * The data used to update BOMComponents.
+     */
+    data: XOR<BOMComponentUpdateManyMutationInput, BOMComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which BOMComponents to update
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * Limit how many BOMComponents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BOMComponent upsert
+   */
+  export type BOMComponentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BOMComponent to update in case it exists.
+     */
+    where: BOMComponentWhereUniqueInput
+    /**
+     * In case the BOMComponent found by the `where` argument doesn't exist, create a new BOMComponent with this data.
+     */
+    create: XOR<BOMComponentCreateInput, BOMComponentUncheckedCreateInput>
+    /**
+     * In case the BOMComponent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BOMComponentUpdateInput, BOMComponentUncheckedUpdateInput>
+  }
+
+  /**
+   * BOMComponent delete
+   */
+  export type BOMComponentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+    /**
+     * Filter which BOMComponent to delete.
+     */
+    where: BOMComponentWhereUniqueInput
+  }
+
+  /**
+   * BOMComponent deleteMany
+   */
+  export type BOMComponentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BOMComponents to delete
+     */
+    where?: BOMComponentWhereInput
+    /**
+     * Limit how many BOMComponents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BOMComponent without action
+   */
+  export type BOMComponentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMComponent
+     */
+    select?: BOMComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMComponent
+     */
+    omit?: BOMComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMComponentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model OrderLineItem
    */
 
@@ -4252,20 +7096,20 @@ export namespace Prisma {
 
   export type OrderLineItemAvgAggregateOutputType = {
     quantity: number | null
+    unitPrice: Decimal | null
   }
 
   export type OrderLineItemSumAggregateOutputType = {
     quantity: number | null
+    unitPrice: Decimal | null
   }
 
   export type OrderLineItemMinAggregateOutputType = {
     id: string | null
     orderId: string | null
-    partNumber: string | null
-    partName: string | null
-    drawingNumber: string | null
-    revisionLevel: string | null
+    partId: string | null
     quantity: number | null
+    unitPrice: Decimal | null
     dueDate: Date | null
     notes: string | null
     createdAt: Date | null
@@ -4275,11 +7119,9 @@ export namespace Prisma {
   export type OrderLineItemMaxAggregateOutputType = {
     id: string | null
     orderId: string | null
-    partNumber: string | null
-    partName: string | null
-    drawingNumber: string | null
-    revisionLevel: string | null
+    partId: string | null
     quantity: number | null
+    unitPrice: Decimal | null
     dueDate: Date | null
     notes: string | null
     createdAt: Date | null
@@ -4289,11 +7131,9 @@ export namespace Prisma {
   export type OrderLineItemCountAggregateOutputType = {
     id: number
     orderId: number
-    partNumber: number
-    partName: number
-    drawingNumber: number
-    revisionLevel: number
+    partId: number
     quantity: number
+    unitPrice: number
     dueDate: number
     notes: number
     createdAt: number
@@ -4304,20 +7144,20 @@ export namespace Prisma {
 
   export type OrderLineItemAvgAggregateInputType = {
     quantity?: true
+    unitPrice?: true
   }
 
   export type OrderLineItemSumAggregateInputType = {
     quantity?: true
+    unitPrice?: true
   }
 
   export type OrderLineItemMinAggregateInputType = {
     id?: true
     orderId?: true
-    partNumber?: true
-    partName?: true
-    drawingNumber?: true
-    revisionLevel?: true
+    partId?: true
     quantity?: true
+    unitPrice?: true
     dueDate?: true
     notes?: true
     createdAt?: true
@@ -4327,11 +7167,9 @@ export namespace Prisma {
   export type OrderLineItemMaxAggregateInputType = {
     id?: true
     orderId?: true
-    partNumber?: true
-    partName?: true
-    drawingNumber?: true
-    revisionLevel?: true
+    partId?: true
     quantity?: true
+    unitPrice?: true
     dueDate?: true
     notes?: true
     createdAt?: true
@@ -4341,11 +7179,9 @@ export namespace Prisma {
   export type OrderLineItemCountAggregateInputType = {
     id?: true
     orderId?: true
-    partNumber?: true
-    partName?: true
-    drawingNumber?: true
-    revisionLevel?: true
+    partId?: true
     quantity?: true
+    unitPrice?: true
     dueDate?: true
     notes?: true
     createdAt?: true
@@ -4442,11 +7278,9 @@ export namespace Prisma {
   export type OrderLineItemGroupByOutputType = {
     id: string
     orderId: string
-    partNumber: string
-    partName: string
-    drawingNumber: string | null
-    revisionLevel: string | null
+    partId: string
     quantity: number
+    unitPrice: Decimal | null
     dueDate: Date | null
     notes: string | null
     createdAt: Date
@@ -4475,16 +7309,15 @@ export namespace Prisma {
   export type OrderLineItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    partNumber?: boolean
-    partName?: boolean
-    drawingNumber?: boolean
-    revisionLevel?: boolean
+    partId?: boolean
     quantity?: boolean
+    unitPrice?: boolean
     dueDate?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
     fileAttachments?: boolean | OrderLineItem$fileAttachmentsArgs<ExtArgs>
     batches?: boolean | OrderLineItem$batchesArgs<ExtArgs>
     _count?: boolean | OrderLineItemCountOutputTypeDefaultArgs<ExtArgs>
@@ -4493,76 +7326,74 @@ export namespace Prisma {
   export type OrderLineItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    partNumber?: boolean
-    partName?: boolean
-    drawingNumber?: boolean
-    revisionLevel?: boolean
+    partId?: boolean
     quantity?: boolean
+    unitPrice?: boolean
     dueDate?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderLineItem"]>
 
   export type OrderLineItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    partNumber?: boolean
-    partName?: boolean
-    drawingNumber?: boolean
-    revisionLevel?: boolean
+    partId?: boolean
     quantity?: boolean
+    unitPrice?: boolean
     dueDate?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderLineItem"]>
 
   export type OrderLineItemSelectScalar = {
     id?: boolean
     orderId?: boolean
-    partNumber?: boolean
-    partName?: boolean
-    drawingNumber?: boolean
-    revisionLevel?: boolean
+    partId?: boolean
     quantity?: boolean
+    unitPrice?: boolean
     dueDate?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OrderLineItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "partNumber" | "partName" | "drawingNumber" | "revisionLevel" | "quantity" | "dueDate" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["orderLineItem"]>
+  export type OrderLineItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "partId" | "quantity" | "unitPrice" | "dueDate" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["orderLineItem"]>
   export type OrderLineItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
     fileAttachments?: boolean | OrderLineItem$fileAttachmentsArgs<ExtArgs>
     batches?: boolean | OrderLineItem$batchesArgs<ExtArgs>
     _count?: boolean | OrderLineItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrderLineItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
   }
   export type OrderLineItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    part?: boolean | PartDefaultArgs<ExtArgs>
   }
 
   export type $OrderLineItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OrderLineItem"
     objects: {
       purchaseOrder: Prisma.$PurchaseOrderPayload<ExtArgs>
+      part: Prisma.$PartPayload<ExtArgs>
       fileAttachments: Prisma.$FileAttachmentPayload<ExtArgs>[]
       batches: Prisma.$BatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       orderId: string
-      partNumber: string
-      partName: string
-      drawingNumber: string | null
-      revisionLevel: string | null
+      partId: string
       quantity: number
+      unitPrice: Prisma.Decimal | null
       dueDate: Date | null
       notes: string | null
       createdAt: Date
@@ -4962,6 +7793,7 @@ export namespace Prisma {
   export interface Prisma__OrderLineItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     purchaseOrder<T extends PurchaseOrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    part<T extends PartDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartDefaultArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     fileAttachments<T extends OrderLineItem$fileAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItem$fileAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FileAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends OrderLineItem$batchesArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItem$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4995,11 +7827,9 @@ export namespace Prisma {
   interface OrderLineItemFieldRefs {
     readonly id: FieldRef<"OrderLineItem", 'String'>
     readonly orderId: FieldRef<"OrderLineItem", 'String'>
-    readonly partNumber: FieldRef<"OrderLineItem", 'String'>
-    readonly partName: FieldRef<"OrderLineItem", 'String'>
-    readonly drawingNumber: FieldRef<"OrderLineItem", 'String'>
-    readonly revisionLevel: FieldRef<"OrderLineItem", 'String'>
+    readonly partId: FieldRef<"OrderLineItem", 'String'>
     readonly quantity: FieldRef<"OrderLineItem", 'Int'>
+    readonly unitPrice: FieldRef<"OrderLineItem", 'Decimal'>
     readonly dueDate: FieldRef<"OrderLineItem", 'DateTime'>
     readonly notes: FieldRef<"OrderLineItem", 'String'>
     readonly createdAt: FieldRef<"OrderLineItem", 'DateTime'>
@@ -5472,16 +8302,29 @@ export namespace Prisma {
 
   export type AggregateFileAttachment = {
     _count: FileAttachmentCountAggregateOutputType | null
+    _avg: FileAttachmentAvgAggregateOutputType | null
+    _sum: FileAttachmentSumAggregateOutputType | null
     _min: FileAttachmentMinAggregateOutputType | null
     _max: FileAttachmentMaxAggregateOutputType | null
+  }
+
+  export type FileAttachmentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type FileAttachmentSumAggregateOutputType = {
+    fileSize: number | null
   }
 
   export type FileAttachmentMinAggregateOutputType = {
     id: string | null
     lineItemId: string | null
     fileName: string | null
+    storedFileName: string | null
+    filePath: string | null
     fileType: string | null
-    fileUrl: string | null
+    mimeType: string | null
+    fileSize: number | null
     uploadedBy: string | null
     description: string | null
     createdAt: Date | null
@@ -5491,8 +8334,11 @@ export namespace Prisma {
     id: string | null
     lineItemId: string | null
     fileName: string | null
+    storedFileName: string | null
+    filePath: string | null
     fileType: string | null
-    fileUrl: string | null
+    mimeType: string | null
+    fileSize: number | null
     uploadedBy: string | null
     description: string | null
     createdAt: Date | null
@@ -5502,8 +8348,11 @@ export namespace Prisma {
     id: number
     lineItemId: number
     fileName: number
+    storedFileName: number
+    filePath: number
     fileType: number
-    fileUrl: number
+    mimeType: number
+    fileSize: number
     uploadedBy: number
     description: number
     createdAt: number
@@ -5511,12 +8360,23 @@ export namespace Prisma {
   }
 
 
+  export type FileAttachmentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type FileAttachmentSumAggregateInputType = {
+    fileSize?: true
+  }
+
   export type FileAttachmentMinAggregateInputType = {
     id?: true
     lineItemId?: true
     fileName?: true
+    storedFileName?: true
+    filePath?: true
     fileType?: true
-    fileUrl?: true
+    mimeType?: true
+    fileSize?: true
     uploadedBy?: true
     description?: true
     createdAt?: true
@@ -5526,8 +8386,11 @@ export namespace Prisma {
     id?: true
     lineItemId?: true
     fileName?: true
+    storedFileName?: true
+    filePath?: true
     fileType?: true
-    fileUrl?: true
+    mimeType?: true
+    fileSize?: true
     uploadedBy?: true
     description?: true
     createdAt?: true
@@ -5537,8 +8400,11 @@ export namespace Prisma {
     id?: true
     lineItemId?: true
     fileName?: true
+    storedFileName?: true
+    filePath?: true
     fileType?: true
-    fileUrl?: true
+    mimeType?: true
+    fileSize?: true
     uploadedBy?: true
     description?: true
     createdAt?: true
@@ -5583,6 +8449,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: FileAttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FileAttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: FileAttachmentMinAggregateInputType
@@ -5613,6 +8491,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: FileAttachmentCountAggregateInputType | true
+    _avg?: FileAttachmentAvgAggregateInputType
+    _sum?: FileAttachmentSumAggregateInputType
     _min?: FileAttachmentMinAggregateInputType
     _max?: FileAttachmentMaxAggregateInputType
   }
@@ -5621,12 +8501,17 @@ export namespace Prisma {
     id: string
     lineItemId: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description: string | null
     createdAt: Date
     _count: FileAttachmentCountAggregateOutputType | null
+    _avg: FileAttachmentAvgAggregateOutputType | null
+    _sum: FileAttachmentSumAggregateOutputType | null
     _min: FileAttachmentMinAggregateOutputType | null
     _max: FileAttachmentMaxAggregateOutputType | null
   }
@@ -5649,8 +8534,11 @@ export namespace Prisma {
     id?: boolean
     lineItemId?: boolean
     fileName?: boolean
+    storedFileName?: boolean
+    filePath?: boolean
     fileType?: boolean
-    fileUrl?: boolean
+    mimeType?: boolean
+    fileSize?: boolean
     uploadedBy?: boolean
     description?: boolean
     createdAt?: boolean
@@ -5661,8 +8549,11 @@ export namespace Prisma {
     id?: boolean
     lineItemId?: boolean
     fileName?: boolean
+    storedFileName?: boolean
+    filePath?: boolean
     fileType?: boolean
-    fileUrl?: boolean
+    mimeType?: boolean
+    fileSize?: boolean
     uploadedBy?: boolean
     description?: boolean
     createdAt?: boolean
@@ -5673,8 +8564,11 @@ export namespace Prisma {
     id?: boolean
     lineItemId?: boolean
     fileName?: boolean
+    storedFileName?: boolean
+    filePath?: boolean
     fileType?: boolean
-    fileUrl?: boolean
+    mimeType?: boolean
+    fileSize?: boolean
     uploadedBy?: boolean
     description?: boolean
     createdAt?: boolean
@@ -5685,14 +8579,17 @@ export namespace Prisma {
     id?: boolean
     lineItemId?: boolean
     fileName?: boolean
+    storedFileName?: boolean
+    filePath?: boolean
     fileType?: boolean
-    fileUrl?: boolean
+    mimeType?: boolean
+    fileSize?: boolean
     uploadedBy?: boolean
     description?: boolean
     createdAt?: boolean
   }
 
-  export type FileAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lineItemId" | "fileName" | "fileType" | "fileUrl" | "uploadedBy" | "description" | "createdAt", ExtArgs["result"]["fileAttachment"]>
+  export type FileAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lineItemId" | "fileName" | "storedFileName" | "filePath" | "fileType" | "mimeType" | "fileSize" | "uploadedBy" | "description" | "createdAt", ExtArgs["result"]["fileAttachment"]>
   export type FileAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
   }
@@ -5712,8 +8609,11 @@ export namespace Prisma {
       id: string
       lineItemId: string
       fileName: string
+      storedFileName: string
+      filePath: string
       fileType: string
-      fileUrl: string
+      mimeType: string
+      fileSize: number
       uploadedBy: string
       description: string | null
       createdAt: Date
@@ -6144,8 +9044,11 @@ export namespace Prisma {
     readonly id: FieldRef<"FileAttachment", 'String'>
     readonly lineItemId: FieldRef<"FileAttachment", 'String'>
     readonly fileName: FieldRef<"FileAttachment", 'String'>
+    readonly storedFileName: FieldRef<"FileAttachment", 'String'>
+    readonly filePath: FieldRef<"FileAttachment", 'String'>
     readonly fileType: FieldRef<"FileAttachment", 'String'>
-    readonly fileUrl: FieldRef<"FileAttachment", 'String'>
+    readonly mimeType: FieldRef<"FileAttachment", 'String'>
+    readonly fileSize: FieldRef<"FileAttachment", 'Int'>
     readonly uploadedBy: FieldRef<"FileAttachment", 'String'>
     readonly description: FieldRef<"FileAttachment", 'String'>
     readonly createdAt: FieldRef<"FileAttachment", 'DateTime'>
@@ -6820,6 +9723,7 @@ export namespace Prisma {
     lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
     routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
     qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
+    materialConsumption?: boolean | Batch$materialConsumptionArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
@@ -6875,6 +9779,7 @@ export namespace Prisma {
     lineItem?: boolean | OrderLineItemDefaultArgs<ExtArgs>
     routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
     qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
+    materialConsumption?: boolean | Batch$materialConsumptionArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6890,6 +9795,7 @@ export namespace Prisma {
       lineItem: Prisma.$OrderLineItemPayload<ExtArgs>
       routingSteps: Prisma.$RoutingStepPayload<ExtArgs>[]
       qcRecords: Prisma.$QCRecordPayload<ExtArgs>[]
+      materialConsumption: Prisma.$MaterialConsumptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7301,6 +10207,7 @@ export namespace Prisma {
     lineItem<T extends OrderLineItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderLineItemDefaultArgs<ExtArgs>>): Prisma__OrderLineItemClient<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     routingSteps<T extends Batch$routingStepsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$routingStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     qcRecords<T extends Batch$qcRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$qcRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    materialConsumption<T extends Batch$materialConsumptionArgs<ExtArgs> = {}>(args?: Subset<T, Batch$materialConsumptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7786,6 +10693,30 @@ export namespace Prisma {
   }
 
   /**
+   * Batch.materialConsumption
+   */
+  export type Batch$materialConsumptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    where?: MaterialConsumptionWhereInput
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    cursor?: MaterialConsumptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
    * Batch without action
    */
   export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7801,6 +10732,1175 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MaterialConsumption
+   */
+
+  export type AggregateMaterialConsumption = {
+    _count: MaterialConsumptionCountAggregateOutputType | null
+    _avg: MaterialConsumptionAvgAggregateOutputType | null
+    _sum: MaterialConsumptionSumAggregateOutputType | null
+    _min: MaterialConsumptionMinAggregateOutputType | null
+    _max: MaterialConsumptionMaxAggregateOutputType | null
+  }
+
+  export type MaterialConsumptionAvgAggregateOutputType = {
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+  }
+
+  export type MaterialConsumptionSumAggregateOutputType = {
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+  }
+
+  export type MaterialConsumptionMinAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    materialPartId: string | null
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+    consumedAt: Date | null
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialConsumptionMaxAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    materialPartId: string | null
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+    consumedAt: Date | null
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialConsumptionCountAggregateOutputType = {
+    id: number
+    batchId: number
+    materialPartId: number
+    quantityUsed: number
+    unitCost: number
+    consumedAt: number
+    operatorId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MaterialConsumptionAvgAggregateInputType = {
+    quantityUsed?: true
+    unitCost?: true
+  }
+
+  export type MaterialConsumptionSumAggregateInputType = {
+    quantityUsed?: true
+    unitCost?: true
+  }
+
+  export type MaterialConsumptionMinAggregateInputType = {
+    id?: true
+    batchId?: true
+    materialPartId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialConsumptionMaxAggregateInputType = {
+    id?: true
+    batchId?: true
+    materialPartId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialConsumptionCountAggregateInputType = {
+    id?: true
+    batchId?: true
+    materialPartId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MaterialConsumptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialConsumption to aggregate.
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialConsumptions to fetch.
+     */
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaterialConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MaterialConsumptions
+    **/
+    _count?: true | MaterialConsumptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MaterialConsumptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MaterialConsumptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaterialConsumptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaterialConsumptionMaxAggregateInputType
+  }
+
+  export type GetMaterialConsumptionAggregateType<T extends MaterialConsumptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaterialConsumption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaterialConsumption[P]>
+      : GetScalarType<T[P], AggregateMaterialConsumption[P]>
+  }
+
+
+
+
+  export type MaterialConsumptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialConsumptionWhereInput
+    orderBy?: MaterialConsumptionOrderByWithAggregationInput | MaterialConsumptionOrderByWithAggregationInput[]
+    by: MaterialConsumptionScalarFieldEnum[] | MaterialConsumptionScalarFieldEnum
+    having?: MaterialConsumptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaterialConsumptionCountAggregateInputType | true
+    _avg?: MaterialConsumptionAvgAggregateInputType
+    _sum?: MaterialConsumptionSumAggregateInputType
+    _min?: MaterialConsumptionMinAggregateInputType
+    _max?: MaterialConsumptionMaxAggregateInputType
+  }
+
+  export type MaterialConsumptionGroupByOutputType = {
+    id: string
+    batchId: string
+    materialPartId: string
+    quantityUsed: Decimal
+    unitCost: Decimal | null
+    consumedAt: Date
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MaterialConsumptionCountAggregateOutputType | null
+    _avg: MaterialConsumptionAvgAggregateOutputType | null
+    _sum: MaterialConsumptionSumAggregateOutputType | null
+    _min: MaterialConsumptionMinAggregateOutputType | null
+    _max: MaterialConsumptionMaxAggregateOutputType | null
+  }
+
+  type GetMaterialConsumptionGroupByPayload<T extends MaterialConsumptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaterialConsumptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaterialConsumptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaterialConsumptionGroupByOutputType[P]>
+            : GetScalarType<T[P], MaterialConsumptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaterialConsumptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    materialPartId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialConsumption"]>
+
+  export type MaterialConsumptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    materialPartId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialConsumption"]>
+
+  export type MaterialConsumptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    materialPartId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialConsumption"]>
+
+  export type MaterialConsumptionSelectScalar = {
+    id?: boolean
+    batchId?: boolean
+    materialPartId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MaterialConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "materialPartId" | "quantityUsed" | "unitCost" | "consumedAt" | "operatorId" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["materialConsumption"]>
+  export type MaterialConsumptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+  export type MaterialConsumptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+  export type MaterialConsumptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+  }
+
+  export type $MaterialConsumptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MaterialConsumption"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      materialPart: Prisma.$PartPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchId: string
+      materialPartId: string
+      quantityUsed: Prisma.Decimal
+      unitCost: Prisma.Decimal | null
+      consumedAt: Date
+      operatorId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["materialConsumption"]>
+    composites: {}
+  }
+
+  type MaterialConsumptionGetPayload<S extends boolean | null | undefined | MaterialConsumptionDefaultArgs> = $Result.GetResult<Prisma.$MaterialConsumptionPayload, S>
+
+  type MaterialConsumptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MaterialConsumptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MaterialConsumptionCountAggregateInputType | true
+    }
+
+  export interface MaterialConsumptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaterialConsumption'], meta: { name: 'MaterialConsumption' } }
+    /**
+     * Find zero or one MaterialConsumption that matches the filter.
+     * @param {MaterialConsumptionFindUniqueArgs} args - Arguments to find a MaterialConsumption
+     * @example
+     * // Get one MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaterialConsumptionFindUniqueArgs>(args: SelectSubset<T, MaterialConsumptionFindUniqueArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MaterialConsumption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaterialConsumptionFindUniqueOrThrowArgs} args - Arguments to find a MaterialConsumption
+     * @example
+     * // Get one MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaterialConsumptionFindUniqueOrThrowArgs>(args: SelectSubset<T, MaterialConsumptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialConsumption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionFindFirstArgs} args - Arguments to find a MaterialConsumption
+     * @example
+     * // Get one MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaterialConsumptionFindFirstArgs>(args?: SelectSubset<T, MaterialConsumptionFindFirstArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialConsumption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionFindFirstOrThrowArgs} args - Arguments to find a MaterialConsumption
+     * @example
+     * // Get one MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaterialConsumptionFindFirstOrThrowArgs>(args?: SelectSubset<T, MaterialConsumptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaterialConsumptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaterialConsumptions
+     * const materialConsumptions = await prisma.materialConsumption.findMany()
+     * 
+     * // Get first 10 MaterialConsumptions
+     * const materialConsumptions = await prisma.materialConsumption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const materialConsumptionWithIdOnly = await prisma.materialConsumption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaterialConsumptionFindManyArgs>(args?: SelectSubset<T, MaterialConsumptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MaterialConsumption.
+     * @param {MaterialConsumptionCreateArgs} args - Arguments to create a MaterialConsumption.
+     * @example
+     * // Create one MaterialConsumption
+     * const MaterialConsumption = await prisma.materialConsumption.create({
+     *   data: {
+     *     // ... data to create a MaterialConsumption
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaterialConsumptionCreateArgs>(args: SelectSubset<T, MaterialConsumptionCreateArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MaterialConsumptions.
+     * @param {MaterialConsumptionCreateManyArgs} args - Arguments to create many MaterialConsumptions.
+     * @example
+     * // Create many MaterialConsumptions
+     * const materialConsumption = await prisma.materialConsumption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaterialConsumptionCreateManyArgs>(args?: SelectSubset<T, MaterialConsumptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaterialConsumptions and returns the data saved in the database.
+     * @param {MaterialConsumptionCreateManyAndReturnArgs} args - Arguments to create many MaterialConsumptions.
+     * @example
+     * // Create many MaterialConsumptions
+     * const materialConsumption = await prisma.materialConsumption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MaterialConsumptions and only return the `id`
+     * const materialConsumptionWithIdOnly = await prisma.materialConsumption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MaterialConsumptionCreateManyAndReturnArgs>(args?: SelectSubset<T, MaterialConsumptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MaterialConsumption.
+     * @param {MaterialConsumptionDeleteArgs} args - Arguments to delete one MaterialConsumption.
+     * @example
+     * // Delete one MaterialConsumption
+     * const MaterialConsumption = await prisma.materialConsumption.delete({
+     *   where: {
+     *     // ... filter to delete one MaterialConsumption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaterialConsumptionDeleteArgs>(args: SelectSubset<T, MaterialConsumptionDeleteArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MaterialConsumption.
+     * @param {MaterialConsumptionUpdateArgs} args - Arguments to update one MaterialConsumption.
+     * @example
+     * // Update one MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaterialConsumptionUpdateArgs>(args: SelectSubset<T, MaterialConsumptionUpdateArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MaterialConsumptions.
+     * @param {MaterialConsumptionDeleteManyArgs} args - Arguments to filter MaterialConsumptions to delete.
+     * @example
+     * // Delete a few MaterialConsumptions
+     * const { count } = await prisma.materialConsumption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaterialConsumptionDeleteManyArgs>(args?: SelectSubset<T, MaterialConsumptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaterialConsumptions
+     * const materialConsumption = await prisma.materialConsumption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaterialConsumptionUpdateManyArgs>(args: SelectSubset<T, MaterialConsumptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialConsumptions and returns the data updated in the database.
+     * @param {MaterialConsumptionUpdateManyAndReturnArgs} args - Arguments to update many MaterialConsumptions.
+     * @example
+     * // Update many MaterialConsumptions
+     * const materialConsumption = await prisma.materialConsumption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MaterialConsumptions and only return the `id`
+     * const materialConsumptionWithIdOnly = await prisma.materialConsumption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MaterialConsumptionUpdateManyAndReturnArgs>(args: SelectSubset<T, MaterialConsumptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MaterialConsumption.
+     * @param {MaterialConsumptionUpsertArgs} args - Arguments to update or create a MaterialConsumption.
+     * @example
+     * // Update or create a MaterialConsumption
+     * const materialConsumption = await prisma.materialConsumption.upsert({
+     *   create: {
+     *     // ... data to create a MaterialConsumption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaterialConsumption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaterialConsumptionUpsertArgs>(args: SelectSubset<T, MaterialConsumptionUpsertArgs<ExtArgs>>): Prisma__MaterialConsumptionClient<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MaterialConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionCountArgs} args - Arguments to filter MaterialConsumptions to count.
+     * @example
+     * // Count the number of MaterialConsumptions
+     * const count = await prisma.materialConsumption.count({
+     *   where: {
+     *     // ... the filter for the MaterialConsumptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaterialConsumptionCountArgs>(
+      args?: Subset<T, MaterialConsumptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaterialConsumptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaterialConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaterialConsumptionAggregateArgs>(args: Subset<T, MaterialConsumptionAggregateArgs>): Prisma.PrismaPromise<GetMaterialConsumptionAggregateType<T>>
+
+    /**
+     * Group by MaterialConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialConsumptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaterialConsumptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaterialConsumptionGroupByArgs['orderBy'] }
+        : { orderBy?: MaterialConsumptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaterialConsumptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaterialConsumptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MaterialConsumption model
+   */
+  readonly fields: MaterialConsumptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaterialConsumption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaterialConsumptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    materialPart<T extends PartDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartDefaultArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MaterialConsumption model
+   */
+  interface MaterialConsumptionFieldRefs {
+    readonly id: FieldRef<"MaterialConsumption", 'String'>
+    readonly batchId: FieldRef<"MaterialConsumption", 'String'>
+    readonly materialPartId: FieldRef<"MaterialConsumption", 'String'>
+    readonly quantityUsed: FieldRef<"MaterialConsumption", 'Decimal'>
+    readonly unitCost: FieldRef<"MaterialConsumption", 'Decimal'>
+    readonly consumedAt: FieldRef<"MaterialConsumption", 'DateTime'>
+    readonly operatorId: FieldRef<"MaterialConsumption", 'String'>
+    readonly notes: FieldRef<"MaterialConsumption", 'String'>
+    readonly createdAt: FieldRef<"MaterialConsumption", 'DateTime'>
+    readonly updatedAt: FieldRef<"MaterialConsumption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MaterialConsumption findUnique
+   */
+  export type MaterialConsumptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialConsumption to fetch.
+     */
+    where: MaterialConsumptionWhereUniqueInput
+  }
+
+  /**
+   * MaterialConsumption findUniqueOrThrow
+   */
+  export type MaterialConsumptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialConsumption to fetch.
+     */
+    where: MaterialConsumptionWhereUniqueInput
+  }
+
+  /**
+   * MaterialConsumption findFirst
+   */
+  export type MaterialConsumptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialConsumption to fetch.
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialConsumptions to fetch.
+     */
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialConsumptions.
+     */
+    cursor?: MaterialConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialConsumptions.
+     */
+    distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialConsumption findFirstOrThrow
+   */
+  export type MaterialConsumptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialConsumption to fetch.
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialConsumptions to fetch.
+     */
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialConsumptions.
+     */
+    cursor?: MaterialConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialConsumptions.
+     */
+    distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialConsumption findMany
+   */
+  export type MaterialConsumptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialConsumptions to fetch.
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialConsumptions to fetch.
+     */
+    orderBy?: MaterialConsumptionOrderByWithRelationInput | MaterialConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MaterialConsumptions.
+     */
+    cursor?: MaterialConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialConsumptions.
+     */
+    skip?: number
+    distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialConsumption create
+   */
+  export type MaterialConsumptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaterialConsumption.
+     */
+    data: XOR<MaterialConsumptionCreateInput, MaterialConsumptionUncheckedCreateInput>
+  }
+
+  /**
+   * MaterialConsumption createMany
+   */
+  export type MaterialConsumptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MaterialConsumptions.
+     */
+    data: MaterialConsumptionCreateManyInput | MaterialConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaterialConsumption createManyAndReturn
+   */
+  export type MaterialConsumptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaterialConsumptions.
+     */
+    data: MaterialConsumptionCreateManyInput | MaterialConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialConsumption update
+   */
+  export type MaterialConsumptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaterialConsumption.
+     */
+    data: XOR<MaterialConsumptionUpdateInput, MaterialConsumptionUncheckedUpdateInput>
+    /**
+     * Choose, which MaterialConsumption to update.
+     */
+    where: MaterialConsumptionWhereUniqueInput
+  }
+
+  /**
+   * MaterialConsumption updateMany
+   */
+  export type MaterialConsumptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MaterialConsumptions.
+     */
+    data: XOR<MaterialConsumptionUpdateManyMutationInput, MaterialConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialConsumptions to update
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * Limit how many MaterialConsumptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialConsumption updateManyAndReturn
+   */
+  export type MaterialConsumptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to update MaterialConsumptions.
+     */
+    data: XOR<MaterialConsumptionUpdateManyMutationInput, MaterialConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialConsumptions to update
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * Limit how many MaterialConsumptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialConsumption upsert
+   */
+  export type MaterialConsumptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaterialConsumption to update in case it exists.
+     */
+    where: MaterialConsumptionWhereUniqueInput
+    /**
+     * In case the MaterialConsumption found by the `where` argument doesn't exist, create a new MaterialConsumption with this data.
+     */
+    create: XOR<MaterialConsumptionCreateInput, MaterialConsumptionUncheckedCreateInput>
+    /**
+     * In case the MaterialConsumption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaterialConsumptionUpdateInput, MaterialConsumptionUncheckedUpdateInput>
+  }
+
+  /**
+   * MaterialConsumption delete
+   */
+  export type MaterialConsumptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter which MaterialConsumption to delete.
+     */
+    where: MaterialConsumptionWhereUniqueInput
+  }
+
+  /**
+   * MaterialConsumption deleteMany
+   */
+  export type MaterialConsumptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialConsumptions to delete
+     */
+    where?: MaterialConsumptionWhereInput
+    /**
+     * Limit how many MaterialConsumptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialConsumption without action
+   */
+  export type MaterialConsumptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialConsumption
+     */
+    select?: MaterialConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialConsumption
+     */
+    omit?: MaterialConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialConsumptionInclude<ExtArgs> | null
   }
 
 
@@ -12443,14 +16543,49 @@ export namespace Prisma {
   export type PurchaseOrderScalarFieldEnum = (typeof PurchaseOrderScalarFieldEnum)[keyof typeof PurchaseOrderScalarFieldEnum]
 
 
+  export const PartScalarFieldEnum: {
+    id: 'id',
+    partNumber: 'partNumber',
+    partName: 'partName',
+    partType: 'partType',
+    drawingNumber: 'drawingNumber',
+    revisionLevel: 'revisionLevel',
+    description: 'description',
+    materialSpec: 'materialSpec',
+    unitOfMeasure: 'unitOfMeasure',
+    standardCost: 'standardCost',
+    leadTime: 'leadTime',
+    active: 'active',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PartScalarFieldEnum = (typeof PartScalarFieldEnum)[keyof typeof PartScalarFieldEnum]
+
+
+  export const BOMComponentScalarFieldEnum: {
+    id: 'id',
+    parentPartId: 'parentPartId',
+    childPartId: 'childPartId',
+    quantity: 'quantity',
+    unitOfMeasure: 'unitOfMeasure',
+    scrapFactor: 'scrapFactor',
+    operation: 'operation',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BOMComponentScalarFieldEnum = (typeof BOMComponentScalarFieldEnum)[keyof typeof BOMComponentScalarFieldEnum]
+
+
   export const OrderLineItemScalarFieldEnum: {
     id: 'id',
     orderId: 'orderId',
-    partNumber: 'partNumber',
-    partName: 'partName',
-    drawingNumber: 'drawingNumber',
-    revisionLevel: 'revisionLevel',
+    partId: 'partId',
     quantity: 'quantity',
+    unitPrice: 'unitPrice',
     dueDate: 'dueDate',
     notes: 'notes',
     createdAt: 'createdAt',
@@ -12464,8 +16599,11 @@ export namespace Prisma {
     id: 'id',
     lineItemId: 'lineItemId',
     fileName: 'fileName',
+    storedFileName: 'storedFileName',
+    filePath: 'filePath',
     fileType: 'fileType',
-    fileUrl: 'fileUrl',
+    mimeType: 'mimeType',
+    fileSize: 'fileSize',
     uploadedBy: 'uploadedBy',
     description: 'description',
     createdAt: 'createdAt'
@@ -12490,6 +16628,22 @@ export namespace Prisma {
   };
 
   export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+  export const MaterialConsumptionScalarFieldEnum: {
+    id: 'id',
+    batchId: 'batchId',
+    materialPartId: 'materialPartId',
+    quantityUsed: 'quantityUsed',
+    unitCost: 'unitCost',
+    consumedAt: 'consumedAt',
+    operatorId: 'operatorId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MaterialConsumptionScalarFieldEnum = (typeof MaterialConsumptionScalarFieldEnum)[keyof typeof MaterialConsumptionScalarFieldEnum]
 
 
   export const RoutingStepScalarFieldEnum: {
@@ -12640,6 +16794,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PartType'
+   */
+  export type EnumPartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PartType[]'
+   */
+  export type ListEnumPartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -12650,6 +16832,13 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -12678,13 +16867,6 @@ export namespace Prisma {
    * Reference to a field of type 'BatchStatus[]'
    */
   export type ListEnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -12925,22 +17107,223 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
   }
 
+  export type PartWhereInput = {
+    AND?: PartWhereInput | PartWhereInput[]
+    OR?: PartWhereInput[]
+    NOT?: PartWhereInput | PartWhereInput[]
+    id?: StringFilter<"Part"> | string
+    partNumber?: StringFilter<"Part"> | string
+    partName?: StringFilter<"Part"> | string
+    partType?: EnumPartTypeFilter<"Part"> | $Enums.PartType
+    drawingNumber?: StringNullableFilter<"Part"> | string | null
+    revisionLevel?: StringNullableFilter<"Part"> | string | null
+    description?: StringNullableFilter<"Part"> | string | null
+    materialSpec?: StringNullableFilter<"Part"> | string | null
+    unitOfMeasure?: StringNullableFilter<"Part"> | string | null
+    standardCost?: DecimalNullableFilter<"Part"> | Decimal | DecimalJsLike | number | string | null
+    leadTime?: IntNullableFilter<"Part"> | number | null
+    active?: BoolFilter<"Part"> | boolean
+    notes?: StringNullableFilter<"Part"> | string | null
+    createdAt?: DateTimeFilter<"Part"> | Date | string
+    updatedAt?: DateTimeFilter<"Part"> | Date | string
+    parentBOMs?: BOMComponentListRelationFilter
+    childBOMs?: BOMComponentListRelationFilter
+    orderLineItems?: OrderLineItemListRelationFilter
+    materialConsumptions?: MaterialConsumptionListRelationFilter
+  }
+
+  export type PartOrderByWithRelationInput = {
+    id?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    partType?: SortOrder
+    drawingNumber?: SortOrderInput | SortOrder
+    revisionLevel?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    materialSpec?: SortOrderInput | SortOrder
+    unitOfMeasure?: SortOrderInput | SortOrder
+    standardCost?: SortOrderInput | SortOrder
+    leadTime?: SortOrderInput | SortOrder
+    active?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    parentBOMs?: BOMComponentOrderByRelationAggregateInput
+    childBOMs?: BOMComponentOrderByRelationAggregateInput
+    orderLineItems?: OrderLineItemOrderByRelationAggregateInput
+    materialConsumptions?: MaterialConsumptionOrderByRelationAggregateInput
+  }
+
+  export type PartWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    partNumber?: string
+    AND?: PartWhereInput | PartWhereInput[]
+    OR?: PartWhereInput[]
+    NOT?: PartWhereInput | PartWhereInput[]
+    partName?: StringFilter<"Part"> | string
+    partType?: EnumPartTypeFilter<"Part"> | $Enums.PartType
+    drawingNumber?: StringNullableFilter<"Part"> | string | null
+    revisionLevel?: StringNullableFilter<"Part"> | string | null
+    description?: StringNullableFilter<"Part"> | string | null
+    materialSpec?: StringNullableFilter<"Part"> | string | null
+    unitOfMeasure?: StringNullableFilter<"Part"> | string | null
+    standardCost?: DecimalNullableFilter<"Part"> | Decimal | DecimalJsLike | number | string | null
+    leadTime?: IntNullableFilter<"Part"> | number | null
+    active?: BoolFilter<"Part"> | boolean
+    notes?: StringNullableFilter<"Part"> | string | null
+    createdAt?: DateTimeFilter<"Part"> | Date | string
+    updatedAt?: DateTimeFilter<"Part"> | Date | string
+    parentBOMs?: BOMComponentListRelationFilter
+    childBOMs?: BOMComponentListRelationFilter
+    orderLineItems?: OrderLineItemListRelationFilter
+    materialConsumptions?: MaterialConsumptionListRelationFilter
+  }, "id" | "partNumber">
+
+  export type PartOrderByWithAggregationInput = {
+    id?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    partType?: SortOrder
+    drawingNumber?: SortOrderInput | SortOrder
+    revisionLevel?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    materialSpec?: SortOrderInput | SortOrder
+    unitOfMeasure?: SortOrderInput | SortOrder
+    standardCost?: SortOrderInput | SortOrder
+    leadTime?: SortOrderInput | SortOrder
+    active?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PartCountOrderByAggregateInput
+    _avg?: PartAvgOrderByAggregateInput
+    _max?: PartMaxOrderByAggregateInput
+    _min?: PartMinOrderByAggregateInput
+    _sum?: PartSumOrderByAggregateInput
+  }
+
+  export type PartScalarWhereWithAggregatesInput = {
+    AND?: PartScalarWhereWithAggregatesInput | PartScalarWhereWithAggregatesInput[]
+    OR?: PartScalarWhereWithAggregatesInput[]
+    NOT?: PartScalarWhereWithAggregatesInput | PartScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Part"> | string
+    partNumber?: StringWithAggregatesFilter<"Part"> | string
+    partName?: StringWithAggregatesFilter<"Part"> | string
+    partType?: EnumPartTypeWithAggregatesFilter<"Part"> | $Enums.PartType
+    drawingNumber?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    revisionLevel?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    materialSpec?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    unitOfMeasure?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    standardCost?: DecimalNullableWithAggregatesFilter<"Part"> | Decimal | DecimalJsLike | number | string | null
+    leadTime?: IntNullableWithAggregatesFilter<"Part"> | number | null
+    active?: BoolWithAggregatesFilter<"Part"> | boolean
+    notes?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
+  }
+
+  export type BOMComponentWhereInput = {
+    AND?: BOMComponentWhereInput | BOMComponentWhereInput[]
+    OR?: BOMComponentWhereInput[]
+    NOT?: BOMComponentWhereInput | BOMComponentWhereInput[]
+    id?: StringFilter<"BOMComponent"> | string
+    parentPartId?: StringFilter<"BOMComponent"> | string
+    childPartId?: StringFilter<"BOMComponent"> | string
+    quantity?: DecimalFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: StringNullableFilter<"BOMComponent"> | string | null
+    scrapFactor?: DecimalNullableFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string | null
+    operation?: StringNullableFilter<"BOMComponent"> | string | null
+    notes?: StringNullableFilter<"BOMComponent"> | string | null
+    createdAt?: DateTimeFilter<"BOMComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMComponent"> | Date | string
+    parentPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+    childPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+  }
+
+  export type BOMComponentOrderByWithRelationInput = {
+    id?: SortOrder
+    parentPartId?: SortOrder
+    childPartId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasure?: SortOrderInput | SortOrder
+    scrapFactor?: SortOrderInput | SortOrder
+    operation?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    parentPart?: PartOrderByWithRelationInput
+    childPart?: PartOrderByWithRelationInput
+  }
+
+  export type BOMComponentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    parentPartId_childPartId?: BOMComponentParentPartIdChildPartIdCompoundUniqueInput
+    AND?: BOMComponentWhereInput | BOMComponentWhereInput[]
+    OR?: BOMComponentWhereInput[]
+    NOT?: BOMComponentWhereInput | BOMComponentWhereInput[]
+    parentPartId?: StringFilter<"BOMComponent"> | string
+    childPartId?: StringFilter<"BOMComponent"> | string
+    quantity?: DecimalFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: StringNullableFilter<"BOMComponent"> | string | null
+    scrapFactor?: DecimalNullableFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string | null
+    operation?: StringNullableFilter<"BOMComponent"> | string | null
+    notes?: StringNullableFilter<"BOMComponent"> | string | null
+    createdAt?: DateTimeFilter<"BOMComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMComponent"> | Date | string
+    parentPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+    childPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+  }, "id" | "parentPartId_childPartId">
+
+  export type BOMComponentOrderByWithAggregationInput = {
+    id?: SortOrder
+    parentPartId?: SortOrder
+    childPartId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasure?: SortOrderInput | SortOrder
+    scrapFactor?: SortOrderInput | SortOrder
+    operation?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BOMComponentCountOrderByAggregateInput
+    _avg?: BOMComponentAvgOrderByAggregateInput
+    _max?: BOMComponentMaxOrderByAggregateInput
+    _min?: BOMComponentMinOrderByAggregateInput
+    _sum?: BOMComponentSumOrderByAggregateInput
+  }
+
+  export type BOMComponentScalarWhereWithAggregatesInput = {
+    AND?: BOMComponentScalarWhereWithAggregatesInput | BOMComponentScalarWhereWithAggregatesInput[]
+    OR?: BOMComponentScalarWhereWithAggregatesInput[]
+    NOT?: BOMComponentScalarWhereWithAggregatesInput | BOMComponentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BOMComponent"> | string
+    parentPartId?: StringWithAggregatesFilter<"BOMComponent"> | string
+    childPartId?: StringWithAggregatesFilter<"BOMComponent"> | string
+    quantity?: DecimalWithAggregatesFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: StringNullableWithAggregatesFilter<"BOMComponent"> | string | null
+    scrapFactor?: DecimalNullableWithAggregatesFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string | null
+    operation?: StringNullableWithAggregatesFilter<"BOMComponent"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"BOMComponent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BOMComponent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BOMComponent"> | Date | string
+  }
+
   export type OrderLineItemWhereInput = {
     AND?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
     OR?: OrderLineItemWhereInput[]
     NOT?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
     id?: StringFilter<"OrderLineItem"> | string
     orderId?: StringFilter<"OrderLineItem"> | string
-    partNumber?: StringFilter<"OrderLineItem"> | string
-    partName?: StringFilter<"OrderLineItem"> | string
-    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
-    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    partId?: StringFilter<"OrderLineItem"> | string
     quantity?: IntFilter<"OrderLineItem"> | number
+    unitPrice?: DecimalNullableFilter<"OrderLineItem"> | Decimal | DecimalJsLike | number | string | null
     dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
     notes?: StringNullableFilter<"OrderLineItem"> | string | null
     createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
     updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    part?: XOR<PartScalarRelationFilter, PartWhereInput>
     fileAttachments?: FileAttachmentListRelationFilter
     batches?: BatchListRelationFilter
   }
@@ -12948,16 +17331,15 @@ export namespace Prisma {
   export type OrderLineItemOrderByWithRelationInput = {
     id?: SortOrder
     orderId?: SortOrder
-    partNumber?: SortOrder
-    partName?: SortOrder
-    drawingNumber?: SortOrderInput | SortOrder
-    revisionLevel?: SortOrderInput | SortOrder
+    partId?: SortOrder
     quantity?: SortOrder
+    unitPrice?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     purchaseOrder?: PurchaseOrderOrderByWithRelationInput
+    part?: PartOrderByWithRelationInput
     fileAttachments?: FileAttachmentOrderByRelationAggregateInput
     batches?: BatchOrderByRelationAggregateInput
   }
@@ -12968,16 +17350,15 @@ export namespace Prisma {
     OR?: OrderLineItemWhereInput[]
     NOT?: OrderLineItemWhereInput | OrderLineItemWhereInput[]
     orderId?: StringFilter<"OrderLineItem"> | string
-    partNumber?: StringFilter<"OrderLineItem"> | string
-    partName?: StringFilter<"OrderLineItem"> | string
-    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
-    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    partId?: StringFilter<"OrderLineItem"> | string
     quantity?: IntFilter<"OrderLineItem"> | number
+    unitPrice?: DecimalNullableFilter<"OrderLineItem"> | Decimal | DecimalJsLike | number | string | null
     dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
     notes?: StringNullableFilter<"OrderLineItem"> | string | null
     createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
     updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    part?: XOR<PartScalarRelationFilter, PartWhereInput>
     fileAttachments?: FileAttachmentListRelationFilter
     batches?: BatchListRelationFilter
   }, "id">
@@ -12985,11 +17366,9 @@ export namespace Prisma {
   export type OrderLineItemOrderByWithAggregationInput = {
     id?: SortOrder
     orderId?: SortOrder
-    partNumber?: SortOrder
-    partName?: SortOrder
-    drawingNumber?: SortOrderInput | SortOrder
-    revisionLevel?: SortOrderInput | SortOrder
+    partId?: SortOrder
     quantity?: SortOrder
+    unitPrice?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13007,11 +17386,9 @@ export namespace Prisma {
     NOT?: OrderLineItemScalarWhereWithAggregatesInput | OrderLineItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"OrderLineItem"> | string
     orderId?: StringWithAggregatesFilter<"OrderLineItem"> | string
-    partNumber?: StringWithAggregatesFilter<"OrderLineItem"> | string
-    partName?: StringWithAggregatesFilter<"OrderLineItem"> | string
-    drawingNumber?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
-    revisionLevel?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
+    partId?: StringWithAggregatesFilter<"OrderLineItem"> | string
     quantity?: IntWithAggregatesFilter<"OrderLineItem"> | number
+    unitPrice?: DecimalNullableWithAggregatesFilter<"OrderLineItem"> | Decimal | DecimalJsLike | number | string | null
     dueDate?: DateTimeNullableWithAggregatesFilter<"OrderLineItem"> | Date | string | null
     notes?: StringNullableWithAggregatesFilter<"OrderLineItem"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"OrderLineItem"> | Date | string
@@ -13025,8 +17402,11 @@ export namespace Prisma {
     id?: StringFilter<"FileAttachment"> | string
     lineItemId?: StringFilter<"FileAttachment"> | string
     fileName?: StringFilter<"FileAttachment"> | string
+    storedFileName?: StringFilter<"FileAttachment"> | string
+    filePath?: StringFilter<"FileAttachment"> | string
     fileType?: StringFilter<"FileAttachment"> | string
-    fileUrl?: StringFilter<"FileAttachment"> | string
+    mimeType?: StringFilter<"FileAttachment"> | string
+    fileSize?: IntFilter<"FileAttachment"> | number
     uploadedBy?: StringFilter<"FileAttachment"> | string
     description?: StringNullableFilter<"FileAttachment"> | string | null
     createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
@@ -13037,8 +17417,11 @@ export namespace Prisma {
     id?: SortOrder
     lineItemId?: SortOrder
     fileName?: SortOrder
+    storedFileName?: SortOrder
+    filePath?: SortOrder
     fileType?: SortOrder
-    fileUrl?: SortOrder
+    mimeType?: SortOrder
+    fileSize?: SortOrder
     uploadedBy?: SortOrder
     description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13052,8 +17435,11 @@ export namespace Prisma {
     NOT?: FileAttachmentWhereInput | FileAttachmentWhereInput[]
     lineItemId?: StringFilter<"FileAttachment"> | string
     fileName?: StringFilter<"FileAttachment"> | string
+    storedFileName?: StringFilter<"FileAttachment"> | string
+    filePath?: StringFilter<"FileAttachment"> | string
     fileType?: StringFilter<"FileAttachment"> | string
-    fileUrl?: StringFilter<"FileAttachment"> | string
+    mimeType?: StringFilter<"FileAttachment"> | string
+    fileSize?: IntFilter<"FileAttachment"> | number
     uploadedBy?: StringFilter<"FileAttachment"> | string
     description?: StringNullableFilter<"FileAttachment"> | string | null
     createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
@@ -13064,14 +17450,19 @@ export namespace Prisma {
     id?: SortOrder
     lineItemId?: SortOrder
     fileName?: SortOrder
+    storedFileName?: SortOrder
+    filePath?: SortOrder
     fileType?: SortOrder
-    fileUrl?: SortOrder
+    mimeType?: SortOrder
+    fileSize?: SortOrder
     uploadedBy?: SortOrder
     description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FileAttachmentCountOrderByAggregateInput
+    _avg?: FileAttachmentAvgOrderByAggregateInput
     _max?: FileAttachmentMaxOrderByAggregateInput
     _min?: FileAttachmentMinOrderByAggregateInput
+    _sum?: FileAttachmentSumOrderByAggregateInput
   }
 
   export type FileAttachmentScalarWhereWithAggregatesInput = {
@@ -13081,8 +17472,11 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"FileAttachment"> | string
     lineItemId?: StringWithAggregatesFilter<"FileAttachment"> | string
     fileName?: StringWithAggregatesFilter<"FileAttachment"> | string
+    storedFileName?: StringWithAggregatesFilter<"FileAttachment"> | string
+    filePath?: StringWithAggregatesFilter<"FileAttachment"> | string
     fileType?: StringWithAggregatesFilter<"FileAttachment"> | string
-    fileUrl?: StringWithAggregatesFilter<"FileAttachment"> | string
+    mimeType?: StringWithAggregatesFilter<"FileAttachment"> | string
+    fileSize?: IntWithAggregatesFilter<"FileAttachment"> | number
     uploadedBy?: StringWithAggregatesFilter<"FileAttachment"> | string
     description?: StringNullableWithAggregatesFilter<"FileAttachment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FileAttachment"> | Date | string
@@ -13107,6 +17501,7 @@ export namespace Prisma {
     lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
     routingSteps?: RoutingStepListRelationFilter
     qcRecords?: QCRecordListRelationFilter
+    materialConsumption?: MaterialConsumptionListRelationFilter
   }
 
   export type BatchOrderByWithRelationInput = {
@@ -13125,6 +17520,7 @@ export namespace Prisma {
     lineItem?: OrderLineItemOrderByWithRelationInput
     routingSteps?: RoutingStepOrderByRelationAggregateInput
     qcRecords?: QCRecordOrderByRelationAggregateInput
+    materialConsumption?: MaterialConsumptionOrderByRelationAggregateInput
   }
 
   export type BatchWhereUniqueInput = Prisma.AtLeast<{
@@ -13146,6 +17542,7 @@ export namespace Prisma {
     lineItem?: XOR<OrderLineItemScalarRelationFilter, OrderLineItemWhereInput>
     routingSteps?: RoutingStepListRelationFilter
     qcRecords?: QCRecordListRelationFilter
+    materialConsumption?: MaterialConsumptionListRelationFilter
   }, "id" | "batchId">
 
   export type BatchOrderByWithAggregationInput = {
@@ -13184,6 +17581,92 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+  }
+
+  export type MaterialConsumptionWhereInput = {
+    AND?: MaterialConsumptionWhereInput | MaterialConsumptionWhereInput[]
+    OR?: MaterialConsumptionWhereInput[]
+    NOT?: MaterialConsumptionWhereInput | MaterialConsumptionWhereInput[]
+    id?: StringFilter<"MaterialConsumption"> | string
+    batchId?: StringFilter<"MaterialConsumption"> | string
+    materialPartId?: StringFilter<"MaterialConsumption"> | string
+    quantityUsed?: DecimalFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    operatorId?: StringNullableFilter<"MaterialConsumption"> | string | null
+    notes?: StringNullableFilter<"MaterialConsumption"> | string | null
+    createdAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    materialPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+  }
+
+  export type MaterialConsumptionOrderByWithRelationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    materialPartId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrderInput | SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    materialPart?: PartOrderByWithRelationInput
+  }
+
+  export type MaterialConsumptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batchId_materialPartId?: MaterialConsumptionBatchIdMaterialPartIdCompoundUniqueInput
+    AND?: MaterialConsumptionWhereInput | MaterialConsumptionWhereInput[]
+    OR?: MaterialConsumptionWhereInput[]
+    NOT?: MaterialConsumptionWhereInput | MaterialConsumptionWhereInput[]
+    batchId?: StringFilter<"MaterialConsumption"> | string
+    materialPartId?: StringFilter<"MaterialConsumption"> | string
+    quantityUsed?: DecimalFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    operatorId?: StringNullableFilter<"MaterialConsumption"> | string | null
+    notes?: StringNullableFilter<"MaterialConsumption"> | string | null
+    createdAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    materialPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+  }, "id" | "batchId_materialPartId">
+
+  export type MaterialConsumptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    materialPartId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrderInput | SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MaterialConsumptionCountOrderByAggregateInput
+    _avg?: MaterialConsumptionAvgOrderByAggregateInput
+    _max?: MaterialConsumptionMaxOrderByAggregateInput
+    _min?: MaterialConsumptionMinOrderByAggregateInput
+    _sum?: MaterialConsumptionSumOrderByAggregateInput
+  }
+
+  export type MaterialConsumptionScalarWhereWithAggregatesInput = {
+    AND?: MaterialConsumptionScalarWhereWithAggregatesInput | MaterialConsumptionScalarWhereWithAggregatesInput[]
+    OR?: MaterialConsumptionScalarWhereWithAggregatesInput[]
+    NOT?: MaterialConsumptionScalarWhereWithAggregatesInput | MaterialConsumptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaterialConsumption"> | string
+    batchId?: StringWithAggregatesFilter<"MaterialConsumption"> | string
+    materialPartId?: StringWithAggregatesFilter<"MaterialConsumption"> | string
+    quantityUsed?: DecimalWithAggregatesFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableWithAggregatesFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeWithAggregatesFilter<"MaterialConsumption"> | Date | string
+    operatorId?: StringNullableWithAggregatesFilter<"MaterialConsumption"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"MaterialConsumption"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MaterialConsumption"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MaterialConsumption"> | Date | string
   }
 
   export type RoutingStepWhereInput = {
@@ -13721,18 +18204,247 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type OrderLineItemCreateInput = {
+  export type PartCreateInput = {
     id?: string
     partNumber: string
     partName: string
+    partType: $Enums.PartType
     drawingNumber?: string | null
     revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUncheckedCreateInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartCreateManyInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentCreateInput = {
+    id?: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentPart: PartCreateNestedOneWithoutParentBOMsInput
+    childPart: PartCreateNestedOneWithoutChildBOMsInput
+  }
+
+  export type BOMComponentUncheckedCreateInput = {
+    id?: string
+    parentPartId: string
+    childPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentPart?: PartUpdateOneRequiredWithoutParentBOMsNestedInput
+    childPart?: PartUpdateOneRequiredWithoutChildBOMsNestedInput
+  }
+
+  export type BOMComponentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parentPartId?: StringFieldUpdateOperationsInput | string
+    childPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentCreateManyInput = {
+    id?: string
+    parentPartId: string
+    childPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parentPartId?: StringFieldUpdateOperationsInput | string
+    childPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderLineItemCreateInput = {
+    id?: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    part: PartCreateNestedOneWithoutOrderLineItemsInput
     fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
     batches?: BatchCreateNestedManyWithoutLineItemInput
   }
@@ -13740,11 +18452,9 @@ export namespace Prisma {
   export type OrderLineItemUncheckedCreateInput = {
     id?: string
     orderId: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -13755,16 +18465,14 @@ export namespace Prisma {
 
   export type OrderLineItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    part?: PartUpdateOneRequiredWithoutOrderLineItemsNestedInput
     fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
     batches?: BatchUpdateManyWithoutLineItemNestedInput
   }
@@ -13772,11 +18480,9 @@ export namespace Prisma {
   export type OrderLineItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13788,11 +18494,9 @@ export namespace Prisma {
   export type OrderLineItemCreateManyInput = {
     id?: string
     orderId: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -13801,11 +18505,8 @@ export namespace Prisma {
 
   export type OrderLineItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13815,11 +18516,9 @@ export namespace Prisma {
   export type OrderLineItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13829,8 +18528,11 @@ export namespace Prisma {
   export type FileAttachmentCreateInput = {
     id?: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -13841,8 +18543,11 @@ export namespace Prisma {
     id?: string
     lineItemId: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -13851,8 +18556,11 @@ export namespace Prisma {
   export type FileAttachmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13863,8 +18571,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     lineItemId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13874,8 +18585,11 @@ export namespace Prisma {
     id?: string
     lineItemId: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -13884,8 +18598,11 @@ export namespace Prisma {
   export type FileAttachmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13895,8 +18612,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     lineItemId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13917,6 +18637,7 @@ export namespace Prisma {
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateInput = {
@@ -13934,6 +18655,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUpdateInput = {
@@ -13951,6 +18673,7 @@ export namespace Prisma {
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateInput = {
@@ -13968,6 +18691,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchCreateManyInput = {
@@ -14009,6 +18733,95 @@ export namespace Prisma {
     actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
     status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionCreateInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutMaterialConsumptionInput
+    materialPart: PartCreateNestedOneWithoutMaterialConsumptionsInput
+  }
+
+  export type MaterialConsumptionUncheckedCreateInput = {
+    id?: string
+    batchId: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutMaterialConsumptionNestedInput
+    materialPart?: PartUpdateOneRequiredWithoutMaterialConsumptionsNestedInput
+  }
+
+  export type MaterialConsumptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionCreateManyInput = {
+    id?: string
+    batchId: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14638,6 +19451,260 @@ export namespace Prisma {
     _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
   }
 
+  export type EnumPartTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartType | EnumPartTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartTypeFilter<$PrismaModel> | $Enums.PartType
+  }
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type BOMComponentListRelationFilter = {
+    every?: BOMComponentWhereInput
+    some?: BOMComponentWhereInput
+    none?: BOMComponentWhereInput
+  }
+
+  export type MaterialConsumptionListRelationFilter = {
+    every?: MaterialConsumptionWhereInput
+    some?: MaterialConsumptionWhereInput
+    none?: MaterialConsumptionWhereInput
+  }
+
+  export type BOMComponentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaterialConsumptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PartCountOrderByAggregateInput = {
+    id?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    partType?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    description?: SortOrder
+    materialSpec?: SortOrder
+    unitOfMeasure?: SortOrder
+    standardCost?: SortOrder
+    leadTime?: SortOrder
+    active?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartAvgOrderByAggregateInput = {
+    standardCost?: SortOrder
+    leadTime?: SortOrder
+  }
+
+  export type PartMaxOrderByAggregateInput = {
+    id?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    partType?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    description?: SortOrder
+    materialSpec?: SortOrder
+    unitOfMeasure?: SortOrder
+    standardCost?: SortOrder
+    leadTime?: SortOrder
+    active?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartMinOrderByAggregateInput = {
+    id?: SortOrder
+    partNumber?: SortOrder
+    partName?: SortOrder
+    partType?: SortOrder
+    drawingNumber?: SortOrder
+    revisionLevel?: SortOrder
+    description?: SortOrder
+    materialSpec?: SortOrder
+    unitOfMeasure?: SortOrder
+    standardCost?: SortOrder
+    leadTime?: SortOrder
+    active?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartSumOrderByAggregateInput = {
+    standardCost?: SortOrder
+    leadTime?: SortOrder
+  }
+
+  export type EnumPartTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartType | EnumPartTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartTypeWithAggregatesFilter<$PrismaModel> | $Enums.PartType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPartTypeFilter<$PrismaModel>
+    _max?: NestedEnumPartTypeFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type PartScalarRelationFilter = {
+    is?: PartWhereInput
+    isNot?: PartWhereInput
+  }
+
+  export type BOMComponentParentPartIdChildPartIdCompoundUniqueInput = {
+    parentPartId: string
+    childPartId: string
+  }
+
+  export type BOMComponentCountOrderByAggregateInput = {
+    id?: SortOrder
+    parentPartId?: SortOrder
+    childPartId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasure?: SortOrder
+    scrapFactor?: SortOrder
+    operation?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMComponentAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    scrapFactor?: SortOrder
+  }
+
+  export type BOMComponentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    parentPartId?: SortOrder
+    childPartId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasure?: SortOrder
+    scrapFactor?: SortOrder
+    operation?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMComponentMinOrderByAggregateInput = {
+    id?: SortOrder
+    parentPartId?: SortOrder
+    childPartId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasure?: SortOrder
+    scrapFactor?: SortOrder
+    operation?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMComponentSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    scrapFactor?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -14677,11 +19744,9 @@ export namespace Prisma {
   export type OrderLineItemCountOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    partNumber?: SortOrder
-    partName?: SortOrder
-    drawingNumber?: SortOrder
-    revisionLevel?: SortOrder
+    partId?: SortOrder
     quantity?: SortOrder
+    unitPrice?: SortOrder
     dueDate?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -14690,16 +19755,15 @@ export namespace Prisma {
 
   export type OrderLineItemAvgOrderByAggregateInput = {
     quantity?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type OrderLineItemMaxOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    partNumber?: SortOrder
-    partName?: SortOrder
-    drawingNumber?: SortOrder
-    revisionLevel?: SortOrder
+    partId?: SortOrder
     quantity?: SortOrder
+    unitPrice?: SortOrder
     dueDate?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -14709,11 +19773,9 @@ export namespace Prisma {
   export type OrderLineItemMinOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    partNumber?: SortOrder
-    partName?: SortOrder
-    drawingNumber?: SortOrder
-    revisionLevel?: SortOrder
+    partId?: SortOrder
     quantity?: SortOrder
+    unitPrice?: SortOrder
     dueDate?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -14722,6 +19784,7 @@ export namespace Prisma {
 
   export type OrderLineItemSumOrderByAggregateInput = {
     quantity?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -14749,19 +19812,29 @@ export namespace Prisma {
     id?: SortOrder
     lineItemId?: SortOrder
     fileName?: SortOrder
+    storedFileName?: SortOrder
+    filePath?: SortOrder
     fileType?: SortOrder
-    fileUrl?: SortOrder
+    mimeType?: SortOrder
+    fileSize?: SortOrder
     uploadedBy?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type FileAttachmentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
   }
 
   export type FileAttachmentMaxOrderByAggregateInput = {
     id?: SortOrder
     lineItemId?: SortOrder
     fileName?: SortOrder
+    storedFileName?: SortOrder
+    filePath?: SortOrder
     fileType?: SortOrder
-    fileUrl?: SortOrder
+    mimeType?: SortOrder
+    fileSize?: SortOrder
     uploadedBy?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
@@ -14771,11 +19844,18 @@ export namespace Prisma {
     id?: SortOrder
     lineItemId?: SortOrder
     fileName?: SortOrder
+    storedFileName?: SortOrder
+    filePath?: SortOrder
     fileType?: SortOrder
-    fileUrl?: SortOrder
+    mimeType?: SortOrder
+    fileSize?: SortOrder
     uploadedBy?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type FileAttachmentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
   }
 
   export type EnumBatchPriorityFilter<$PrismaModel = never> = {
@@ -14885,20 +19965,63 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type BatchScalarRelationFilter = {
+    is?: BatchWhereInput
+    isNot?: BatchWhereInput
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type MaterialConsumptionBatchIdMaterialPartIdCompoundUniqueInput = {
+    batchId: string
+    materialPartId: string
+  }
+
+  export type MaterialConsumptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    materialPartId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialConsumptionAvgOrderByAggregateInput = {
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+  }
+
+  export type MaterialConsumptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    materialPartId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialConsumptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    materialPartId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialConsumptionSumOrderByAggregateInput = {
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
   }
 
   export type EnumStepStatusFilter<$PrismaModel = never> = {
@@ -14906,11 +20029,6 @@ export namespace Prisma {
     in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
-  }
-
-  export type BatchScalarRelationFilter = {
-    is?: BatchWhereInput
-    isNot?: BatchWhereInput
   }
 
   export type WorkstationScalarRelationFilter = {
@@ -14983,30 +20101,6 @@ export namespace Prisma {
   export type RoutingStepSumOrderByAggregateInput = {
     stepNumber?: SortOrder
     estimatedTime?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -15288,10 +20382,244 @@ export namespace Prisma {
     deleteMany?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
   }
 
+  export type BOMComponentCreateNestedManyWithoutParentPartInput = {
+    create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
+    createMany?: BOMComponentCreateManyParentPartInputEnvelope
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+  }
+
+  export type BOMComponentCreateNestedManyWithoutChildPartInput = {
+    create?: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput> | BOMComponentCreateWithoutChildPartInput[] | BOMComponentUncheckedCreateWithoutChildPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutChildPartInput | BOMComponentCreateOrConnectWithoutChildPartInput[]
+    createMany?: BOMComponentCreateManyChildPartInputEnvelope
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+  }
+
+  export type OrderLineItemCreateNestedManyWithoutPartInput = {
+    create?: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput> | OrderLineItemCreateWithoutPartInput[] | OrderLineItemUncheckedCreateWithoutPartInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPartInput | OrderLineItemCreateOrConnectWithoutPartInput[]
+    createMany?: OrderLineItemCreateManyPartInputEnvelope
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+  }
+
+  export type MaterialConsumptionCreateNestedManyWithoutMaterialPartInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput> | MaterialConsumptionCreateWithoutMaterialPartInput[] | MaterialConsumptionUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutMaterialPartInput | MaterialConsumptionCreateOrConnectWithoutMaterialPartInput[]
+    createMany?: MaterialConsumptionCreateManyMaterialPartInputEnvelope
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+  }
+
+  export type BOMComponentUncheckedCreateNestedManyWithoutParentPartInput = {
+    create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
+    createMany?: BOMComponentCreateManyParentPartInputEnvelope
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+  }
+
+  export type BOMComponentUncheckedCreateNestedManyWithoutChildPartInput = {
+    create?: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput> | BOMComponentCreateWithoutChildPartInput[] | BOMComponentUncheckedCreateWithoutChildPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutChildPartInput | BOMComponentCreateOrConnectWithoutChildPartInput[]
+    createMany?: BOMComponentCreateManyChildPartInputEnvelope
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+  }
+
+  export type OrderLineItemUncheckedCreateNestedManyWithoutPartInput = {
+    create?: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput> | OrderLineItemCreateWithoutPartInput[] | OrderLineItemUncheckedCreateWithoutPartInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPartInput | OrderLineItemCreateOrConnectWithoutPartInput[]
+    createMany?: OrderLineItemCreateManyPartInputEnvelope
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+  }
+
+  export type MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput> | MaterialConsumptionCreateWithoutMaterialPartInput[] | MaterialConsumptionUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutMaterialPartInput | MaterialConsumptionCreateOrConnectWithoutMaterialPartInput[]
+    createMany?: MaterialConsumptionCreateManyMaterialPartInputEnvelope
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+  }
+
+  export type EnumPartTypeFieldUpdateOperationsInput = {
+    set?: $Enums.PartType
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type BOMComponentUpdateManyWithoutParentPartNestedInput = {
+    create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
+    upsert?: BOMComponentUpsertWithWhereUniqueWithoutParentPartInput | BOMComponentUpsertWithWhereUniqueWithoutParentPartInput[]
+    createMany?: BOMComponentCreateManyParentPartInputEnvelope
+    set?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    disconnect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    delete?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    update?: BOMComponentUpdateWithWhereUniqueWithoutParentPartInput | BOMComponentUpdateWithWhereUniqueWithoutParentPartInput[]
+    updateMany?: BOMComponentUpdateManyWithWhereWithoutParentPartInput | BOMComponentUpdateManyWithWhereWithoutParentPartInput[]
+    deleteMany?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+  }
+
+  export type BOMComponentUpdateManyWithoutChildPartNestedInput = {
+    create?: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput> | BOMComponentCreateWithoutChildPartInput[] | BOMComponentUncheckedCreateWithoutChildPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutChildPartInput | BOMComponentCreateOrConnectWithoutChildPartInput[]
+    upsert?: BOMComponentUpsertWithWhereUniqueWithoutChildPartInput | BOMComponentUpsertWithWhereUniqueWithoutChildPartInput[]
+    createMany?: BOMComponentCreateManyChildPartInputEnvelope
+    set?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    disconnect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    delete?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    update?: BOMComponentUpdateWithWhereUniqueWithoutChildPartInput | BOMComponentUpdateWithWhereUniqueWithoutChildPartInput[]
+    updateMany?: BOMComponentUpdateManyWithWhereWithoutChildPartInput | BOMComponentUpdateManyWithWhereWithoutChildPartInput[]
+    deleteMany?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+  }
+
+  export type OrderLineItemUpdateManyWithoutPartNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput> | OrderLineItemCreateWithoutPartInput[] | OrderLineItemUncheckedCreateWithoutPartInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPartInput | OrderLineItemCreateOrConnectWithoutPartInput[]
+    upsert?: OrderLineItemUpsertWithWhereUniqueWithoutPartInput | OrderLineItemUpsertWithWhereUniqueWithoutPartInput[]
+    createMany?: OrderLineItemCreateManyPartInputEnvelope
+    set?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    disconnect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    delete?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    update?: OrderLineItemUpdateWithWhereUniqueWithoutPartInput | OrderLineItemUpdateWithWhereUniqueWithoutPartInput[]
+    updateMany?: OrderLineItemUpdateManyWithWhereWithoutPartInput | OrderLineItemUpdateManyWithWhereWithoutPartInput[]
+    deleteMany?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
+  }
+
+  export type MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput> | MaterialConsumptionCreateWithoutMaterialPartInput[] | MaterialConsumptionUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutMaterialPartInput | MaterialConsumptionCreateOrConnectWithoutMaterialPartInput[]
+    upsert?: MaterialConsumptionUpsertWithWhereUniqueWithoutMaterialPartInput | MaterialConsumptionUpsertWithWhereUniqueWithoutMaterialPartInput[]
+    createMany?: MaterialConsumptionCreateManyMaterialPartInputEnvelope
+    set?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    disconnect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    delete?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    update?: MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput | MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput[]
+    updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput | MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput[]
+    deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
+  export type BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput = {
+    create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
+    upsert?: BOMComponentUpsertWithWhereUniqueWithoutParentPartInput | BOMComponentUpsertWithWhereUniqueWithoutParentPartInput[]
+    createMany?: BOMComponentCreateManyParentPartInputEnvelope
+    set?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    disconnect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    delete?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    update?: BOMComponentUpdateWithWhereUniqueWithoutParentPartInput | BOMComponentUpdateWithWhereUniqueWithoutParentPartInput[]
+    updateMany?: BOMComponentUpdateManyWithWhereWithoutParentPartInput | BOMComponentUpdateManyWithWhereWithoutParentPartInput[]
+    deleteMany?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+  }
+
+  export type BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput = {
+    create?: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput> | BOMComponentCreateWithoutChildPartInput[] | BOMComponentUncheckedCreateWithoutChildPartInput[]
+    connectOrCreate?: BOMComponentCreateOrConnectWithoutChildPartInput | BOMComponentCreateOrConnectWithoutChildPartInput[]
+    upsert?: BOMComponentUpsertWithWhereUniqueWithoutChildPartInput | BOMComponentUpsertWithWhereUniqueWithoutChildPartInput[]
+    createMany?: BOMComponentCreateManyChildPartInputEnvelope
+    set?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    disconnect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    delete?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    connect?: BOMComponentWhereUniqueInput | BOMComponentWhereUniqueInput[]
+    update?: BOMComponentUpdateWithWhereUniqueWithoutChildPartInput | BOMComponentUpdateWithWhereUniqueWithoutChildPartInput[]
+    updateMany?: BOMComponentUpdateManyWithWhereWithoutChildPartInput | BOMComponentUpdateManyWithWhereWithoutChildPartInput[]
+    deleteMany?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+  }
+
+  export type OrderLineItemUncheckedUpdateManyWithoutPartNestedInput = {
+    create?: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput> | OrderLineItemCreateWithoutPartInput[] | OrderLineItemUncheckedCreateWithoutPartInput[]
+    connectOrCreate?: OrderLineItemCreateOrConnectWithoutPartInput | OrderLineItemCreateOrConnectWithoutPartInput[]
+    upsert?: OrderLineItemUpsertWithWhereUniqueWithoutPartInput | OrderLineItemUpsertWithWhereUniqueWithoutPartInput[]
+    createMany?: OrderLineItemCreateManyPartInputEnvelope
+    set?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    disconnect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    delete?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    connect?: OrderLineItemWhereUniqueInput | OrderLineItemWhereUniqueInput[]
+    update?: OrderLineItemUpdateWithWhereUniqueWithoutPartInput | OrderLineItemUpdateWithWhereUniqueWithoutPartInput[]
+    updateMany?: OrderLineItemUpdateManyWithWhereWithoutPartInput | OrderLineItemUpdateManyWithWhereWithoutPartInput[]
+    deleteMany?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
+  }
+
+  export type MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput> | MaterialConsumptionCreateWithoutMaterialPartInput[] | MaterialConsumptionUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutMaterialPartInput | MaterialConsumptionCreateOrConnectWithoutMaterialPartInput[]
+    upsert?: MaterialConsumptionUpsertWithWhereUniqueWithoutMaterialPartInput | MaterialConsumptionUpsertWithWhereUniqueWithoutMaterialPartInput[]
+    createMany?: MaterialConsumptionCreateManyMaterialPartInputEnvelope
+    set?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    disconnect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    delete?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    update?: MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput | MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput[]
+    updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput | MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput[]
+    deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
+  export type PartCreateNestedOneWithoutParentBOMsInput = {
+    create?: XOR<PartCreateWithoutParentBOMsInput, PartUncheckedCreateWithoutParentBOMsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutParentBOMsInput
+    connect?: PartWhereUniqueInput
+  }
+
+  export type PartCreateNestedOneWithoutChildBOMsInput = {
+    create?: XOR<PartCreateWithoutChildBOMsInput, PartUncheckedCreateWithoutChildBOMsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutChildBOMsInput
+    connect?: PartWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type PartUpdateOneRequiredWithoutParentBOMsNestedInput = {
+    create?: XOR<PartCreateWithoutParentBOMsInput, PartUncheckedCreateWithoutParentBOMsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutParentBOMsInput
+    upsert?: PartUpsertWithoutParentBOMsInput
+    connect?: PartWhereUniqueInput
+    update?: XOR<XOR<PartUpdateToOneWithWhereWithoutParentBOMsInput, PartUpdateWithoutParentBOMsInput>, PartUncheckedUpdateWithoutParentBOMsInput>
+  }
+
+  export type PartUpdateOneRequiredWithoutChildBOMsNestedInput = {
+    create?: XOR<PartCreateWithoutChildBOMsInput, PartUncheckedCreateWithoutChildBOMsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutChildBOMsInput
+    upsert?: PartUpsertWithoutChildBOMsInput
+    connect?: PartWhereUniqueInput
+    update?: XOR<XOR<PartUpdateToOneWithWhereWithoutChildBOMsInput, PartUpdateWithoutChildBOMsInput>, PartUncheckedUpdateWithoutChildBOMsInput>
+  }
+
   export type PurchaseOrderCreateNestedOneWithoutLineItemsInput = {
     create?: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
     connectOrCreate?: PurchaseOrderCreateOrConnectWithoutLineItemsInput
     connect?: PurchaseOrderWhereUniqueInput
+  }
+
+  export type PartCreateNestedOneWithoutOrderLineItemsInput = {
+    create?: XOR<PartCreateWithoutOrderLineItemsInput, PartUncheckedCreateWithoutOrderLineItemsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutOrderLineItemsInput
+    connect?: PartWhereUniqueInput
   }
 
   export type FileAttachmentCreateNestedManyWithoutLineItemInput = {
@@ -15336,6 +20664,14 @@ export namespace Prisma {
     upsert?: PurchaseOrderUpsertWithoutLineItemsInput
     connect?: PurchaseOrderWhereUniqueInput
     update?: XOR<XOR<PurchaseOrderUpdateToOneWithWhereWithoutLineItemsInput, PurchaseOrderUpdateWithoutLineItemsInput>, PurchaseOrderUncheckedUpdateWithoutLineItemsInput>
+  }
+
+  export type PartUpdateOneRequiredWithoutOrderLineItemsNestedInput = {
+    create?: XOR<PartCreateWithoutOrderLineItemsInput, PartUncheckedCreateWithoutOrderLineItemsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutOrderLineItemsInput
+    upsert?: PartUpsertWithoutOrderLineItemsInput
+    connect?: PartWhereUniqueInput
+    update?: XOR<XOR<PartUpdateToOneWithWhereWithoutOrderLineItemsInput, PartUpdateWithoutOrderLineItemsInput>, PartUncheckedUpdateWithoutOrderLineItemsInput>
   }
 
   export type FileAttachmentUpdateManyWithoutLineItemNestedInput = {
@@ -15428,6 +20764,13 @@ export namespace Prisma {
     connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
   }
 
+  export type MaterialConsumptionCreateNestedManyWithoutBatchInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput> | MaterialConsumptionCreateWithoutBatchInput[] | MaterialConsumptionUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutBatchInput | MaterialConsumptionCreateOrConnectWithoutBatchInput[]
+    createMany?: MaterialConsumptionCreateManyBatchInputEnvelope
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+  }
+
   export type RoutingStepUncheckedCreateNestedManyWithoutBatchInput = {
     create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
@@ -15440,6 +20783,13 @@ export namespace Prisma {
     connectOrCreate?: QCRecordCreateOrConnectWithoutBatchInput | QCRecordCreateOrConnectWithoutBatchInput[]
     createMany?: QCRecordCreateManyBatchInputEnvelope
     connect?: QCRecordWhereUniqueInput | QCRecordWhereUniqueInput[]
+  }
+
+  export type MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput> | MaterialConsumptionCreateWithoutBatchInput[] | MaterialConsumptionUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutBatchInput | MaterialConsumptionCreateOrConnectWithoutBatchInput[]
+    createMany?: MaterialConsumptionCreateManyBatchInputEnvelope
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
   }
 
   export type EnumBatchPriorityFieldUpdateOperationsInput = {
@@ -15486,6 +20836,20 @@ export namespace Prisma {
     deleteMany?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
   }
 
+  export type MaterialConsumptionUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput> | MaterialConsumptionCreateWithoutBatchInput[] | MaterialConsumptionUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutBatchInput | MaterialConsumptionCreateOrConnectWithoutBatchInput[]
+    upsert?: MaterialConsumptionUpsertWithWhereUniqueWithoutBatchInput | MaterialConsumptionUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: MaterialConsumptionCreateManyBatchInputEnvelope
+    set?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    disconnect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    delete?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    update?: MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput | MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutBatchInput | MaterialConsumptionUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
   export type RoutingStepUncheckedUpdateManyWithoutBatchNestedInput = {
     create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
@@ -15514,6 +20878,48 @@ export namespace Prisma {
     deleteMany?: QCRecordScalarWhereInput | QCRecordScalarWhereInput[]
   }
 
+  export type MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput> | MaterialConsumptionCreateWithoutBatchInput[] | MaterialConsumptionUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutBatchInput | MaterialConsumptionCreateOrConnectWithoutBatchInput[]
+    upsert?: MaterialConsumptionUpsertWithWhereUniqueWithoutBatchInput | MaterialConsumptionUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: MaterialConsumptionCreateManyBatchInputEnvelope
+    set?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    disconnect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    delete?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+    update?: MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput | MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutBatchInput | MaterialConsumptionUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
+  export type BatchCreateNestedOneWithoutMaterialConsumptionInput = {
+    create?: XOR<BatchCreateWithoutMaterialConsumptionInput, BatchUncheckedCreateWithoutMaterialConsumptionInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutMaterialConsumptionInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type PartCreateNestedOneWithoutMaterialConsumptionsInput = {
+    create?: XOR<PartCreateWithoutMaterialConsumptionsInput, PartUncheckedCreateWithoutMaterialConsumptionsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutMaterialConsumptionsInput
+    connect?: PartWhereUniqueInput
+  }
+
+  export type BatchUpdateOneRequiredWithoutMaterialConsumptionNestedInput = {
+    create?: XOR<BatchCreateWithoutMaterialConsumptionInput, BatchUncheckedCreateWithoutMaterialConsumptionInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutMaterialConsumptionInput
+    upsert?: BatchUpsertWithoutMaterialConsumptionInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutMaterialConsumptionInput, BatchUpdateWithoutMaterialConsumptionInput>, BatchUncheckedUpdateWithoutMaterialConsumptionInput>
+  }
+
+  export type PartUpdateOneRequiredWithoutMaterialConsumptionsNestedInput = {
+    create?: XOR<PartCreateWithoutMaterialConsumptionsInput, PartUncheckedCreateWithoutMaterialConsumptionsInput>
+    connectOrCreate?: PartCreateOrConnectWithoutMaterialConsumptionsInput
+    upsert?: PartUpsertWithoutMaterialConsumptionsInput
+    connect?: PartWhereUniqueInput
+    update?: XOR<XOR<PartUpdateToOneWithWhereWithoutMaterialConsumptionsInput, PartUpdateWithoutMaterialConsumptionsInput>, PartUncheckedUpdateWithoutMaterialConsumptionsInput>
+  }
+
   export type BatchCreateNestedOneWithoutRoutingStepsInput = {
     create?: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
     connectOrCreate?: BatchCreateOrConnectWithoutRoutingStepsInput
@@ -15538,18 +20944,6 @@ export namespace Prisma {
     connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
     createMany?: StepConfirmationCreateManyRoutingStepInputEnvelope
     connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumStepStatusFieldUpdateOperationsInput = {
@@ -15902,6 +21296,117 @@ export namespace Prisma {
     _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
   }
 
+  export type NestedEnumPartTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartType | EnumPartTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartTypeFilter<$PrismaModel> | $Enums.PartType
+  }
+
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumPartTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartType | EnumPartTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartType[] | ListEnumPartTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartTypeWithAggregatesFilter<$PrismaModel> | $Enums.PartType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPartTypeFilter<$PrismaModel>
+    _max?: NestedEnumPartTypeFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -15963,51 +21468,11 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumStepStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
     in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -16160,26 +21625,22 @@ export namespace Prisma {
 
   export type OrderLineItemCreateWithoutPurchaseOrderInput = {
     id?: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    part: PartCreateNestedOneWithoutOrderLineItemsInput
     fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
     batches?: BatchCreateNestedManyWithoutLineItemInput
   }
 
   export type OrderLineItemUncheckedCreateWithoutPurchaseOrderInput = {
     id?: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -16265,15 +21726,447 @@ export namespace Prisma {
     NOT?: OrderLineItemScalarWhereInput | OrderLineItemScalarWhereInput[]
     id?: StringFilter<"OrderLineItem"> | string
     orderId?: StringFilter<"OrderLineItem"> | string
-    partNumber?: StringFilter<"OrderLineItem"> | string
-    partName?: StringFilter<"OrderLineItem"> | string
-    drawingNumber?: StringNullableFilter<"OrderLineItem"> | string | null
-    revisionLevel?: StringNullableFilter<"OrderLineItem"> | string | null
+    partId?: StringFilter<"OrderLineItem"> | string
     quantity?: IntFilter<"OrderLineItem"> | number
+    unitPrice?: DecimalNullableFilter<"OrderLineItem"> | Decimal | DecimalJsLike | number | string | null
     dueDate?: DateTimeNullableFilter<"OrderLineItem"> | Date | string | null
     notes?: StringNullableFilter<"OrderLineItem"> | string | null
     createdAt?: DateTimeFilter<"OrderLineItem"> | Date | string
     updatedAt?: DateTimeFilter<"OrderLineItem"> | Date | string
+  }
+
+  export type BOMComponentCreateWithoutParentPartInput = {
+    id?: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childPart: PartCreateNestedOneWithoutChildBOMsInput
+  }
+
+  export type BOMComponentUncheckedCreateWithoutParentPartInput = {
+    id?: string
+    childPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentCreateOrConnectWithoutParentPartInput = {
+    where: BOMComponentWhereUniqueInput
+    create: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput>
+  }
+
+  export type BOMComponentCreateManyParentPartInputEnvelope = {
+    data: BOMComponentCreateManyParentPartInput | BOMComponentCreateManyParentPartInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BOMComponentCreateWithoutChildPartInput = {
+    id?: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentPart: PartCreateNestedOneWithoutParentBOMsInput
+  }
+
+  export type BOMComponentUncheckedCreateWithoutChildPartInput = {
+    id?: string
+    parentPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentCreateOrConnectWithoutChildPartInput = {
+    where: BOMComponentWhereUniqueInput
+    create: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput>
+  }
+
+  export type BOMComponentCreateManyChildPartInputEnvelope = {
+    data: BOMComponentCreateManyChildPartInput | BOMComponentCreateManyChildPartInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderLineItemCreateWithoutPartInput = {
+    id?: string
+    quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
+    batches?: BatchCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemUncheckedCreateWithoutPartInput = {
+    id?: string
+    orderId: string
+    quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fileAttachments?: FileAttachmentUncheckedCreateNestedManyWithoutLineItemInput
+    batches?: BatchUncheckedCreateNestedManyWithoutLineItemInput
+  }
+
+  export type OrderLineItemCreateOrConnectWithoutPartInput = {
+    where: OrderLineItemWhereUniqueInput
+    create: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput>
+  }
+
+  export type OrderLineItemCreateManyPartInputEnvelope = {
+    data: OrderLineItemCreateManyPartInput | OrderLineItemCreateManyPartInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaterialConsumptionCreateWithoutMaterialPartInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutMaterialConsumptionInput
+  }
+
+  export type MaterialConsumptionUncheckedCreateWithoutMaterialPartInput = {
+    id?: string
+    batchId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionCreateOrConnectWithoutMaterialPartInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    create: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput>
+  }
+
+  export type MaterialConsumptionCreateManyMaterialPartInputEnvelope = {
+    data: MaterialConsumptionCreateManyMaterialPartInput | MaterialConsumptionCreateManyMaterialPartInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BOMComponentUpsertWithWhereUniqueWithoutParentPartInput = {
+    where: BOMComponentWhereUniqueInput
+    update: XOR<BOMComponentUpdateWithoutParentPartInput, BOMComponentUncheckedUpdateWithoutParentPartInput>
+    create: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput>
+  }
+
+  export type BOMComponentUpdateWithWhereUniqueWithoutParentPartInput = {
+    where: BOMComponentWhereUniqueInput
+    data: XOR<BOMComponentUpdateWithoutParentPartInput, BOMComponentUncheckedUpdateWithoutParentPartInput>
+  }
+
+  export type BOMComponentUpdateManyWithWhereWithoutParentPartInput = {
+    where: BOMComponentScalarWhereInput
+    data: XOR<BOMComponentUpdateManyMutationInput, BOMComponentUncheckedUpdateManyWithoutParentPartInput>
+  }
+
+  export type BOMComponentScalarWhereInput = {
+    AND?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+    OR?: BOMComponentScalarWhereInput[]
+    NOT?: BOMComponentScalarWhereInput | BOMComponentScalarWhereInput[]
+    id?: StringFilter<"BOMComponent"> | string
+    parentPartId?: StringFilter<"BOMComponent"> | string
+    childPartId?: StringFilter<"BOMComponent"> | string
+    quantity?: DecimalFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: StringNullableFilter<"BOMComponent"> | string | null
+    scrapFactor?: DecimalNullableFilter<"BOMComponent"> | Decimal | DecimalJsLike | number | string | null
+    operation?: StringNullableFilter<"BOMComponent"> | string | null
+    notes?: StringNullableFilter<"BOMComponent"> | string | null
+    createdAt?: DateTimeFilter<"BOMComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMComponent"> | Date | string
+  }
+
+  export type BOMComponentUpsertWithWhereUniqueWithoutChildPartInput = {
+    where: BOMComponentWhereUniqueInput
+    update: XOR<BOMComponentUpdateWithoutChildPartInput, BOMComponentUncheckedUpdateWithoutChildPartInput>
+    create: XOR<BOMComponentCreateWithoutChildPartInput, BOMComponentUncheckedCreateWithoutChildPartInput>
+  }
+
+  export type BOMComponentUpdateWithWhereUniqueWithoutChildPartInput = {
+    where: BOMComponentWhereUniqueInput
+    data: XOR<BOMComponentUpdateWithoutChildPartInput, BOMComponentUncheckedUpdateWithoutChildPartInput>
+  }
+
+  export type BOMComponentUpdateManyWithWhereWithoutChildPartInput = {
+    where: BOMComponentScalarWhereInput
+    data: XOR<BOMComponentUpdateManyMutationInput, BOMComponentUncheckedUpdateManyWithoutChildPartInput>
+  }
+
+  export type OrderLineItemUpsertWithWhereUniqueWithoutPartInput = {
+    where: OrderLineItemWhereUniqueInput
+    update: XOR<OrderLineItemUpdateWithoutPartInput, OrderLineItemUncheckedUpdateWithoutPartInput>
+    create: XOR<OrderLineItemCreateWithoutPartInput, OrderLineItemUncheckedCreateWithoutPartInput>
+  }
+
+  export type OrderLineItemUpdateWithWhereUniqueWithoutPartInput = {
+    where: OrderLineItemWhereUniqueInput
+    data: XOR<OrderLineItemUpdateWithoutPartInput, OrderLineItemUncheckedUpdateWithoutPartInput>
+  }
+
+  export type OrderLineItemUpdateManyWithWhereWithoutPartInput = {
+    where: OrderLineItemScalarWhereInput
+    data: XOR<OrderLineItemUpdateManyMutationInput, OrderLineItemUncheckedUpdateManyWithoutPartInput>
+  }
+
+  export type MaterialConsumptionUpsertWithWhereUniqueWithoutMaterialPartInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    update: XOR<MaterialConsumptionUpdateWithoutMaterialPartInput, MaterialConsumptionUncheckedUpdateWithoutMaterialPartInput>
+    create: XOR<MaterialConsumptionCreateWithoutMaterialPartInput, MaterialConsumptionUncheckedCreateWithoutMaterialPartInput>
+  }
+
+  export type MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    data: XOR<MaterialConsumptionUpdateWithoutMaterialPartInput, MaterialConsumptionUncheckedUpdateWithoutMaterialPartInput>
+  }
+
+  export type MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput = {
+    where: MaterialConsumptionScalarWhereInput
+    data: XOR<MaterialConsumptionUpdateManyMutationInput, MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartInput>
+  }
+
+  export type MaterialConsumptionScalarWhereInput = {
+    AND?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+    OR?: MaterialConsumptionScalarWhereInput[]
+    NOT?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+    id?: StringFilter<"MaterialConsumption"> | string
+    batchId?: StringFilter<"MaterialConsumption"> | string
+    materialPartId?: StringFilter<"MaterialConsumption"> | string
+    quantityUsed?: DecimalFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"MaterialConsumption"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    operatorId?: StringNullableFilter<"MaterialConsumption"> | string | null
+    notes?: StringNullableFilter<"MaterialConsumption"> | string | null
+    createdAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
+  }
+
+  export type PartCreateWithoutParentBOMsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUncheckedCreateWithoutParentBOMsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartCreateOrConnectWithoutParentBOMsInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutParentBOMsInput, PartUncheckedCreateWithoutParentBOMsInput>
+  }
+
+  export type PartCreateWithoutChildBOMsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
+    orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUncheckedCreateWithoutChildBOMsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
+    orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartCreateOrConnectWithoutChildBOMsInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutChildBOMsInput, PartUncheckedCreateWithoutChildBOMsInput>
+  }
+
+  export type PartUpsertWithoutParentBOMsInput = {
+    update: XOR<PartUpdateWithoutParentBOMsInput, PartUncheckedUpdateWithoutParentBOMsInput>
+    create: XOR<PartCreateWithoutParentBOMsInput, PartUncheckedCreateWithoutParentBOMsInput>
+    where?: PartWhereInput
+  }
+
+  export type PartUpdateToOneWithWhereWithoutParentBOMsInput = {
+    where?: PartWhereInput
+    data: XOR<PartUpdateWithoutParentBOMsInput, PartUncheckedUpdateWithoutParentBOMsInput>
+  }
+
+  export type PartUpdateWithoutParentBOMsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUncheckedUpdateWithoutParentBOMsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUpsertWithoutChildBOMsInput = {
+    update: XOR<PartUpdateWithoutChildBOMsInput, PartUncheckedUpdateWithoutChildBOMsInput>
+    create: XOR<PartCreateWithoutChildBOMsInput, PartUncheckedCreateWithoutChildBOMsInput>
+    where?: PartWhereInput
+  }
+
+  export type PartUpdateToOneWithWhereWithoutChildBOMsInput = {
+    where?: PartWhereInput
+    data: XOR<PartUpdateWithoutChildBOMsInput, PartUncheckedUpdateWithoutChildBOMsInput>
+  }
+
+  export type PartUpdateWithoutChildBOMsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
+    orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUncheckedUpdateWithoutChildBOMsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
+    orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PurchaseOrderCreateWithoutLineItemsInput = {
@@ -16305,11 +22198,61 @@ export namespace Prisma {
     create: XOR<PurchaseOrderCreateWithoutLineItemsInput, PurchaseOrderUncheckedCreateWithoutLineItemsInput>
   }
 
+  export type PartCreateWithoutOrderLineItemsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
+    materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUncheckedCreateWithoutOrderLineItemsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
+    materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartCreateOrConnectWithoutOrderLineItemsInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutOrderLineItemsInput, PartUncheckedCreateWithoutOrderLineItemsInput>
+  }
+
   export type FileAttachmentCreateWithoutLineItemInput = {
     id?: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -16318,8 +22261,11 @@ export namespace Prisma {
   export type FileAttachmentUncheckedCreateWithoutLineItemInput = {
     id?: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -16349,6 +22295,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutLineItemInput = {
@@ -16365,6 +22312,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutLineItemInput = {
@@ -16412,6 +22360,59 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PartUpsertWithoutOrderLineItemsInput = {
+    update: XOR<PartUpdateWithoutOrderLineItemsInput, PartUncheckedUpdateWithoutOrderLineItemsInput>
+    create: XOR<PartCreateWithoutOrderLineItemsInput, PartUncheckedCreateWithoutOrderLineItemsInput>
+    where?: PartWhereInput
+  }
+
+  export type PartUpdateToOneWithWhereWithoutOrderLineItemsInput = {
+    where?: PartWhereInput
+    data: XOR<PartUpdateWithoutOrderLineItemsInput, PartUncheckedUpdateWithoutOrderLineItemsInput>
+  }
+
+  export type PartUpdateWithoutOrderLineItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
+    materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUncheckedUpdateWithoutOrderLineItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
+    materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+  }
+
   export type FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput = {
     where: FileAttachmentWhereUniqueInput
     update: XOR<FileAttachmentUpdateWithoutLineItemInput, FileAttachmentUncheckedUpdateWithoutLineItemInput>
@@ -16435,8 +22436,11 @@ export namespace Prisma {
     id?: StringFilter<"FileAttachment"> | string
     lineItemId?: StringFilter<"FileAttachment"> | string
     fileName?: StringFilter<"FileAttachment"> | string
+    storedFileName?: StringFilter<"FileAttachment"> | string
+    filePath?: StringFilter<"FileAttachment"> | string
     fileType?: StringFilter<"FileAttachment"> | string
-    fileUrl?: StringFilter<"FileAttachment"> | string
+    mimeType?: StringFilter<"FileAttachment"> | string
+    fileSize?: IntFilter<"FileAttachment"> | number
     uploadedBy?: StringFilter<"FileAttachment"> | string
     description?: StringNullableFilter<"FileAttachment"> | string | null
     createdAt?: DateTimeFilter<"FileAttachment"> | Date | string
@@ -16478,27 +22482,23 @@ export namespace Prisma {
 
   export type OrderLineItemCreateWithoutFileAttachmentsInput = {
     id?: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    part: PartCreateNestedOneWithoutOrderLineItemsInput
     batches?: BatchCreateNestedManyWithoutLineItemInput
   }
 
   export type OrderLineItemUncheckedCreateWithoutFileAttachmentsInput = {
     id?: string
     orderId: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -16524,27 +22524,23 @@ export namespace Prisma {
 
   export type OrderLineItemUpdateWithoutFileAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    part?: PartUpdateOneRequiredWithoutOrderLineItemsNestedInput
     batches?: BatchUpdateManyWithoutLineItemNestedInput
   }
 
   export type OrderLineItemUncheckedUpdateWithoutFileAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16554,27 +22550,23 @@ export namespace Prisma {
 
   export type OrderLineItemCreateWithoutBatchesInput = {
     id?: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutLineItemsInput
+    part: PartCreateNestedOneWithoutOrderLineItemsInput
     fileAttachments?: FileAttachmentCreateNestedManyWithoutLineItemInput
   }
 
   export type OrderLineItemUncheckedCreateWithoutBatchesInput = {
     id?: string
     orderId: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -16655,6 +22647,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MaterialConsumptionCreateWithoutBatchInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materialPart: PartCreateNestedOneWithoutMaterialConsumptionsInput
+  }
+
+  export type MaterialConsumptionUncheckedCreateWithoutBatchInput = {
+    id?: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionCreateOrConnectWithoutBatchInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    create: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput>
+  }
+
+  export type MaterialConsumptionCreateManyBatchInputEnvelope = {
+    data: MaterialConsumptionCreateManyBatchInput | MaterialConsumptionCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrderLineItemUpsertWithoutBatchesInput = {
     update: XOR<OrderLineItemUpdateWithoutBatchesInput, OrderLineItemUncheckedUpdateWithoutBatchesInput>
     create: XOR<OrderLineItemCreateWithoutBatchesInput, OrderLineItemUncheckedCreateWithoutBatchesInput>
@@ -16668,27 +22694,23 @@ export namespace Prisma {
 
   export type OrderLineItemUpdateWithoutBatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    part?: PartUpdateOneRequiredWithoutOrderLineItemsNestedInput
     fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
   }
 
   export type OrderLineItemUncheckedUpdateWithoutBatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16759,6 +22781,206 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"QCRecord"> | Date | string
   }
 
+  export type MaterialConsumptionUpsertWithWhereUniqueWithoutBatchInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    update: XOR<MaterialConsumptionUpdateWithoutBatchInput, MaterialConsumptionUncheckedUpdateWithoutBatchInput>
+    create: XOR<MaterialConsumptionCreateWithoutBatchInput, MaterialConsumptionUncheckedCreateWithoutBatchInput>
+  }
+
+  export type MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput = {
+    where: MaterialConsumptionWhereUniqueInput
+    data: XOR<MaterialConsumptionUpdateWithoutBatchInput, MaterialConsumptionUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type MaterialConsumptionUpdateManyWithWhereWithoutBatchInput = {
+    where: MaterialConsumptionScalarWhereInput
+    data: XOR<MaterialConsumptionUpdateManyMutationInput, MaterialConsumptionUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type BatchCreateWithoutMaterialConsumptionInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
+    routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutMaterialConsumptionInput = {
+    id?: string
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutMaterialConsumptionInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutMaterialConsumptionInput, BatchUncheckedCreateWithoutMaterialConsumptionInput>
+  }
+
+  export type PartCreateWithoutMaterialConsumptionsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+  }
+
+  export type PartUncheckedCreateWithoutMaterialConsumptionsInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+  }
+
+  export type PartCreateOrConnectWithoutMaterialConsumptionsInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutMaterialConsumptionsInput, PartUncheckedCreateWithoutMaterialConsumptionsInput>
+  }
+
+  export type BatchUpsertWithoutMaterialConsumptionInput = {
+    update: XOR<BatchUpdateWithoutMaterialConsumptionInput, BatchUncheckedUpdateWithoutMaterialConsumptionInput>
+    create: XOR<BatchCreateWithoutMaterialConsumptionInput, BatchUncheckedCreateWithoutMaterialConsumptionInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutMaterialConsumptionInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutMaterialConsumptionInput, BatchUncheckedUpdateWithoutMaterialConsumptionInput>
+  }
+
+  export type BatchUpdateWithoutMaterialConsumptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
+    routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutMaterialConsumptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type PartUpsertWithoutMaterialConsumptionsInput = {
+    update: XOR<PartUpdateWithoutMaterialConsumptionsInput, PartUncheckedUpdateWithoutMaterialConsumptionsInput>
+    create: XOR<PartCreateWithoutMaterialConsumptionsInput, PartUncheckedCreateWithoutMaterialConsumptionsInput>
+    where?: PartWhereInput
+  }
+
+  export type PartUpdateToOneWithWhereWithoutMaterialConsumptionsInput = {
+    where?: PartWhereInput
+    data: XOR<PartUpdateWithoutMaterialConsumptionsInput, PartUncheckedUpdateWithoutMaterialConsumptionsInput>
+  }
+
+  export type PartUpdateWithoutMaterialConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+  }
+
+  export type PartUncheckedUpdateWithoutMaterialConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+  }
+
   export type BatchCreateWithoutRoutingStepsInput = {
     id?: string
     batchId: string
@@ -16773,6 +22995,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutRoutingStepsInput = {
@@ -16789,6 +23012,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutRoutingStepsInput = {
@@ -16886,6 +23110,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutRoutingStepsInput = {
@@ -16902,6 +23127,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type WorkstationUpsertWithoutRoutingStepsInput = {
@@ -17222,6 +23448,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutQcRecordsInput = {
@@ -17238,6 +23465,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutQcRecordsInput = {
@@ -17270,6 +23498,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutQcRecordsInput = {
@@ -17286,6 +23515,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type PurchaseOrderCreateManyCustomerInput = {
@@ -17336,11 +23566,9 @@ export namespace Prisma {
 
   export type OrderLineItemCreateManyPurchaseOrderInput = {
     id?: string
-    partNumber: string
-    partName: string
-    drawingNumber?: string | null
-    revisionLevel?: string | null
+    partId: string
     quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
     dueDate?: Date | string | null
     notes?: string | null
     createdAt?: Date | string
@@ -17349,26 +23577,22 @@ export namespace Prisma {
 
   export type OrderLineItemUpdateWithoutPurchaseOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    part?: PartUpdateOneRequiredWithoutOrderLineItemsNestedInput
     fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
     batches?: BatchUpdateManyWithoutLineItemNestedInput
   }
 
   export type OrderLineItemUncheckedUpdateWithoutPurchaseOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17379,12 +23603,202 @@ export namespace Prisma {
 
   export type OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    partNumber?: StringFieldUpdateOperationsInput | string
-    partName?: StringFieldUpdateOperationsInput | string
-    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    partId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentCreateManyParentPartInput = {
+    id?: string
+    childPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentCreateManyChildPartInput = {
+    id?: string
+    parentPartId: string
+    quantity: Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: string | null
+    scrapFactor?: Decimal | DecimalJsLike | number | string | null
+    operation?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderLineItemCreateManyPartInput = {
+    id?: string
+    orderId: string
+    quantity: number
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    dueDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionCreateManyMaterialPartInput = {
+    id?: string
+    batchId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMComponentUpdateWithoutParentPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childPart?: PartUpdateOneRequiredWithoutChildBOMsNestedInput
+  }
+
+  export type BOMComponentUncheckedUpdateWithoutParentPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    childPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentUncheckedUpdateManyWithoutParentPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    childPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentUpdateWithoutChildPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentPart?: PartUpdateOneRequiredWithoutParentBOMsNestedInput
+  }
+
+  export type BOMComponentUncheckedUpdateWithoutChildPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parentPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMComponentUncheckedUpdateManyWithoutChildPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parentPartId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    scrapFactor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operation?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderLineItemUpdateWithoutPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutLineItemsNestedInput
+    fileAttachments?: FileAttachmentUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateWithoutPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fileAttachments?: FileAttachmentUncheckedUpdateManyWithoutLineItemNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutLineItemNestedInput
+  }
+
+  export type OrderLineItemUncheckedUpdateManyWithoutPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionUpdateWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutMaterialConsumptionNestedInput
+  }
+
+  export type MaterialConsumptionUncheckedUpdateWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17393,8 +23807,11 @@ export namespace Prisma {
   export type FileAttachmentCreateManyLineItemInput = {
     id?: string
     fileName: string
+    storedFileName: string
+    filePath: string
     fileType: string
-    fileUrl: string
+    mimeType: string
+    fileSize: number
     uploadedBy: string
     description?: string | null
     createdAt?: Date | string
@@ -17417,8 +23834,11 @@ export namespace Prisma {
   export type FileAttachmentUpdateWithoutLineItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17427,8 +23847,11 @@ export namespace Prisma {
   export type FileAttachmentUncheckedUpdateWithoutLineItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17437,8 +23860,11 @@ export namespace Prisma {
   export type FileAttachmentUncheckedUpdateManyWithoutLineItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
+    storedFileName?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
     uploadedBy?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17458,6 +23884,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutLineItemInput = {
@@ -17474,6 +23901,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateManyWithoutLineItemInput = {
@@ -17508,6 +23936,18 @@ export namespace Prisma {
     inspector: string
     inspectionDate?: Date | string
     result: $Enums.QCResult
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialConsumptionCreateManyBatchInput = {
+    id?: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17579,6 +24019,42 @@ export namespace Prisma {
     inspector?: StringFieldUpdateOperationsInput | string
     inspectionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialPart?: PartUpdateOneRequiredWithoutMaterialConsumptionsNestedInput
+  }
+
+  export type MaterialConsumptionUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialConsumptionUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

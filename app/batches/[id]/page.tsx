@@ -210,14 +210,14 @@ export default function BatchDetailPage() {
                     Part Information
                   </Text>
                   <Text size="lg" style={{ color: '#f1f5f9', fontWeight: 600 }}>
-                    {batch.lineItem.partNumber}
+                    {batch.lineItem.part.partNumber}
                   </Text>
                   <Text size="md" style={{ color: '#cbd5e1' }}>
-                    {batch.lineItem.partName}
+                    {batch.lineItem.part.partName}
                   </Text>
-                  {batch.lineItem.drawingNumber && (
+                  {batch.lineItem.part.drawingNumber && (
                     <Text size="sm" style={{ color: '#94a3b8' }}>
-                      Drawing: {batch.lineItem.drawingNumber}
+                      Drawing: {batch.lineItem.part.drawingNumber}
                     </Text>
                   )}
                 </div>

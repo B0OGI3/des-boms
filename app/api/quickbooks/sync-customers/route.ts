@@ -20,7 +20,7 @@ export type QBCustomer = {
 };
 
 // --- Helpers ---
-export async function upsertQBCustomer(qb: QBCustomer): Promise<void> {
+async function upsertQBCustomer(qb: QBCustomer): Promise<void> {
   if (!qb.PrimaryEmailAddr?.Address || !qb.Id) return;
   await prisma.customer.upsert({
     where: { email: qb.PrimaryEmailAddr.Address },
@@ -46,7 +46,7 @@ export async function upsertQBCustomer(qb: QBCustomer): Promise<void> {
   });
 }
 
-export async function deleteLocalCustomersNotInQB(qbIds: Set<string>): Promise<string[]> {
+async function deleteLocalCustomersNotInQB(qbIds: Set<string>): Promise<string[]> {
   const localCustomers = await prisma.customer.findMany();
   const toDelete = localCustomers.filter((c) => c.quickbooksId && !qbIds.has(c.quickbooksId));
   const deleted: string[] = [];
@@ -60,16 +60,29 @@ export async function deleteLocalCustomersNotInQB(qbIds: Set<string>): Promise<s
 
 // --- Main Handler ---
 export async function POST() {
-  const qbService = await getQuickBooksService();
+  console.log('[SYNC] Starting QuickBooks sync-customers...');
+  
+  let qbService;
+  try {
+    qbService = await getQuickBooksService();
+    console.log('[SYNC] QuickBooks service obtained:', !!qbService);
+  } catch (err) {
+    console.error('[SYNC] Error getting QuickBooks service:', err);
+    return NextResponse.json({ error: "Failed to get QuickBooks service", details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+  }
+  
   if (!qbService) {
+    console.log('[SYNC] QuickBooks service is null - not configured');
     return NextResponse.json({ error: "QuickBooks not configured." }, { status: 503 });
   }
 
   let qbCustomers: QBCustomer[] = [];
   try {
+    console.log('[SYNC] Calling getAllCustomers...');
     qbCustomers = await qbService.getAllCustomers();
+    console.log('[SYNC] Got customers from QuickBooks:', qbCustomers.length);
   } catch (err) {
-    console.error("QuickBooks getAllCustomers error:", err);
+    console.error("[SYNC] QuickBooks getAllCustomers error:", err);
     return NextResponse.json({ error: "QuickBooks API error", details: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 

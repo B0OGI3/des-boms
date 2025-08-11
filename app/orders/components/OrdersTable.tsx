@@ -35,11 +35,18 @@ export interface OrderTableItem extends BaseEntity {
   assignedBatches: number;
   completedBatches: number;
   lineItems?: Array<{
-    partNumber: string;
-    partName: string;
-    drawingNumber?: string;
-    revisionLevel?: string;
+    part: {
+      id: string;
+      partNumber: string;
+      partName: string;
+      partType: 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+      drawingNumber?: string;
+      revisionLevel?: string;
+      description?: string;
+    };
     quantity: number;
+    unitPrice?: number;
+    notes?: string;
   }>;
 }
 
@@ -298,25 +305,25 @@ const OrderRow: React.FC<OrderRowProps> = ({
                         </Table.Thead>
                         <Table.Tbody>
                           {order.lineItems.map((item, index) => (
-                            <Table.Tr key={`${item.partNumber}-${index}`}>
+                            <Table.Tr key={`${item.part.partNumber}-${index}`}>
                               <Table.Td>
                                 <Text size="sm" fw={500} style={{ color: '#0f172a' }}>
-                                  {item.partNumber}
+                                  {item.part.partNumber}
                                 </Text>
                               </Table.Td>
                               <Table.Td>
                                 <Text size="sm" style={{ color: '#0f172a' }}>
-                                  {item.partName}
+                                  {item.part.partName}
                                 </Text>
                               </Table.Td>
                               <Table.Td>
                                 <Text size="sm" style={{ color: '#475569' }}>
-                                  {item.drawingNumber || '—'}
+                                  {item.part.drawingNumber || '—'}
                                 </Text>
                               </Table.Td>
                               <Table.Td>
                                 <Text size="sm" style={{ color: '#475569' }}>
-                                  {item.revisionLevel || '—'}
+                                  {item.part.revisionLevel || '—'}
                                 </Text>
                               </Table.Td>
                               <Table.Td>

@@ -202,7 +202,7 @@ export function DeleteBatchConfirmation({
                   Part Number
                 </Text>
                 <Text fw={500} style={{ color: "#f1f5f9" }}>
-                  {batch.lineItem.partNumber}
+                  {batch.lineItem.part.partNumber}
                 </Text>
               </div>
               <div>

@@ -13,13 +13,13 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const isConfigured = !!(
-      process.env.QB_CONSUMER_KEY && 
-      process.env.QB_CONSUMER_SECRET
+      process.env.QB_CLIENT_ID && 
+      process.env.QB_CLIENT_SECRET
     );
 
     const hasTokens = !!(
       process.env.QB_ACCESS_TOKEN && 
-      process.env.QB_ACCESS_TOKEN_SECRET && 
+      process.env.QB_REFRESH_TOKEN && 
       process.env.QB_COMPANY_ID
     );
 

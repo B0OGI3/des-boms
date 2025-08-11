@@ -15,7 +15,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
   Modal, 
   NumberInput, 
@@ -92,16 +92,7 @@ export function NewBatchModal({ opened, onClose, onBatchCreated }: Readonly<NewB
   // Generate new batch ID only when modal opens
   const [newBatchId, setNewBatchId] = useState<string>('');
 
-  // Load line items and routing templates
-  useEffect(() => {
-    if (opened) {
-      // Generate a new batch ID when modal opens
-      setNewBatchId(generateBatchId());
-      loadFormData();
-    }
-  }, [opened]);
-
-  const loadFormData = async () => {
+  const loadFormData = useCallback(async () => {
     try {
       setLoadingData(true);
       setError(null);
@@ -141,7 +132,16 @@ export function NewBatchModal({ opened, onClose, onBatchCreated }: Readonly<NewB
     } finally {
       setLoadingData(false);
     }
-  };
+  }, [retryCount]);
+
+  // Load line items and routing templates
+  useEffect(() => {
+    if (opened) {
+      // Generate a new batch ID when modal opens
+      setNewBatchId(generateBatchId());
+      loadFormData();
+    }
+  }, [opened, loadFormData]);
 
   // Validate quantity against available quantity
   const validateQuantity = (quantity: number, lineItemId: string) => {

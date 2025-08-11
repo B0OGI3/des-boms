@@ -149,14 +149,43 @@ exports.Prisma.PurchaseOrderScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PartScalarFieldEnum = {
+  id: 'id',
+  partNumber: 'partNumber',
+  partName: 'partName',
+  partType: 'partType',
+  drawingNumber: 'drawingNumber',
+  revisionLevel: 'revisionLevel',
+  description: 'description',
+  materialSpec: 'materialSpec',
+  unitOfMeasure: 'unitOfMeasure',
+  standardCost: 'standardCost',
+  leadTime: 'leadTime',
+  active: 'active',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BOMComponentScalarFieldEnum = {
+  id: 'id',
+  parentPartId: 'parentPartId',
+  childPartId: 'childPartId',
+  quantity: 'quantity',
+  unitOfMeasure: 'unitOfMeasure',
+  scrapFactor: 'scrapFactor',
+  operation: 'operation',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.OrderLineItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
-  partNumber: 'partNumber',
-  partName: 'partName',
-  drawingNumber: 'drawingNumber',
-  revisionLevel: 'revisionLevel',
+  partId: 'partId',
   quantity: 'quantity',
+  unitPrice: 'unitPrice',
   dueDate: 'dueDate',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -167,8 +196,11 @@ exports.Prisma.FileAttachmentScalarFieldEnum = {
   id: 'id',
   lineItemId: 'lineItemId',
   fileName: 'fileName',
+  storedFileName: 'storedFileName',
+  filePath: 'filePath',
   fileType: 'fileType',
-  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
   uploadedBy: 'uploadedBy',
   description: 'description',
   createdAt: 'createdAt'
@@ -184,6 +216,19 @@ exports.Prisma.BatchScalarFieldEnum = {
   actualCompletion: 'actualCompletion',
   priority: 'priority',
   status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaterialConsumptionScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  materialPartId: 'materialPartId',
+  quantityUsed: 'quantityUsed',
+  unitCost: 'unitCost',
+  consumedAt: 'consumedAt',
+  operatorId: 'operatorId',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -266,6 +311,12 @@ exports.OrderPriority = exports.$Enums.OrderPriority = {
   HOLD: 'HOLD'
 };
 
+exports.PartType = exports.$Enums.PartType = {
+  FINISHED: 'FINISHED',
+  SEMI_FINISHED: 'SEMI_FINISHED',
+  RAW_MATERIAL: 'RAW_MATERIAL'
+};
+
 exports.BatchPriority = exports.$Enums.BatchPriority = {
   RUSH: 'RUSH',
   STANDARD: 'STANDARD',
@@ -304,9 +355,12 @@ exports.QCResult = exports.$Enums.QCResult = {
 exports.Prisma.ModelName = {
   Customer: 'Customer',
   PurchaseOrder: 'PurchaseOrder',
+  Part: 'Part',
+  BOMComponent: 'BOMComponent',
   OrderLineItem: 'OrderLineItem',
   FileAttachment: 'FileAttachment',
   Batch: 'Batch',
+  MaterialConsumption: 'MaterialConsumption',
   RoutingStep: 'RoutingStep',
   Workstation: 'Workstation',
   StepConfirmation: 'StepConfirmation',

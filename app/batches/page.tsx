@@ -86,7 +86,7 @@ export default function BatchManagementPage() {
   const smartNotifications = useSmartNotifications({
     batches: batchSearch.batches,
     enabled: true,
-    onNotification: (notification: BatchNotification) => {
+    onNotification: (_notification: BatchNotification) => {
       // Handle notifications - you could show them in a toast or notification system
       // For now, notifications are processed silently
     }

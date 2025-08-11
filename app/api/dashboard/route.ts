@@ -53,6 +53,7 @@ export async function GET(request: NextRequest) {
               include: {
                 lineItem: {
                   include: {
+                    part: true, // Include Parts Master data
                     purchaseOrder: {
                       include: {
                         customer: true,
@@ -100,6 +101,7 @@ export async function GET(request: NextRequest) {
               include: {
                 lineItem: {
                   include: {
+                    part: true, // Include Parts Master data
                     purchaseOrder: {
                       include: {
                         customer: true,
@@ -189,10 +191,20 @@ export async function GET(request: NextRequest) {
       const activeSteps = ws.routingSteps.filter(step => step.status === 'IN_PROGRESS');
       const queuedSteps = ws.routingSteps.filter(step => step.status === 'PENDING');
       
+      // Determine workstation status
+      let status: 'ACTIVE' | 'QUEUED' | 'IDLE';
+      if (activeSteps.length > 0) {
+        status = 'ACTIVE';
+      } else if (queuedSteps.length > 0) {
+        status = 'QUEUED';
+      } else {
+        status = 'IDLE';
+      }
+      
       return {
         workstationId: ws.id,
         name: ws.name,
-        status: activeSteps.length > 0 ? 'ACTIVE' : queuedSteps.length > 0 ? 'QUEUED' : 'IDLE',
+        status,
         activeJobs: activeSteps.length,
         queuedJobs: queuedSteps.length,
         currentOperator: activeSteps[0]?.confirmations[0]?.operatorName || null,

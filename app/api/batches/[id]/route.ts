@@ -99,8 +99,7 @@ async function updateBatch(
       );
     }
 
-    // Prepare update data
-    // Using any due to complex Prisma type unions for update operations
+    // Prepare update data - using any due to complex Prisma type unions
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {};
     

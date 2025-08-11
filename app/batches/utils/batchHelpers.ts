@@ -128,7 +128,20 @@ export function getNextStepNumber(existingSteps: RoutingStep[]): number {
 }
 
 // Validate batch form data
-export function validateBatchForm(data: any): { isValid: boolean; errors: string[] } {
+interface BatchFormData {
+  lineItemId?: string;
+  quantity?: number;
+  priority?: string;
+  notes?: string;
+  estimatedCompletion?: string;
+  routingSteps?: Array<{
+    stepNumber: number;
+    workstationId: string;
+    estimatedTime?: number;
+  }>;
+}
+
+export function validateBatchForm(data: BatchFormData): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
   if (!data.lineItemId) {

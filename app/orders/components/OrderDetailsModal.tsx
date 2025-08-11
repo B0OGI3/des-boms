@@ -2,7 +2,7 @@
  * OrderDetailsModal - View detailed information about an order
  */
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   Text,
@@ -12,12 +12,49 @@ import {
   Card,
   Divider,
   Grid,
-  Table,
   Button,
-  ScrollArea
+  ScrollArea,
+  Collapse,
+  ActionIcon,
+  Box,
+  LoadingOverlay
 } from '@mantine/core';
-import { IconCalendar, IconUser, IconFileText, IconPackage } from '@tabler/icons-react';
+import { IconCalendar, IconUser, IconFileText, IconPackage, IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { Order } from '../hooks/useOrderSearch';
+import { FileAttachmentManager } from './FileAttachmentManager';
+
+// Enhanced interface for full order data with line item IDs and file attachments
+interface EnhancedLineItem {
+  id: string;
+  part: {
+    id: string;
+    partNumber: string;
+    partName: string;
+    partType: 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+    drawingNumber?: string;
+    revisionLevel?: string;
+    description?: string;
+  };
+  quantity: number;
+  unitPrice?: number;
+  notes?: string;
+  fileAttachments?: Array<{
+    id: string;
+    fileName: string;
+    storedFileName: string;
+    filePath: string;
+    fileType: string;
+    mimeType: string;
+    fileSize: number;
+    uploadedBy: string;
+    description?: string;
+    createdAt: string;
+  }>;
+}
+
+interface EnhancedOrder extends Order {
+  lineItems?: EnhancedLineItem[];
+}
 
 interface OrderDetailsModalProps {
   opened: boolean;
@@ -75,10 +112,145 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   order,
   onEdit
 }) => {
+  const [enhancedOrder, setEnhancedOrder] = useState<EnhancedOrder | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  // Fetch full order data when modal opens
+  useEffect(() => {
+    const fetchEnhancedOrder = async () => {
+      if (!order || !opened) {
+        setEnhancedOrder(null);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/orders/${order.orderId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch order details');
+        }
+        const result = await response.json();
+        if (result.success) {
+          // Convert the Prisma result to our enhanced format
+          const enhanced: EnhancedOrder = {
+            ...order,
+            lineItems: result.data.lineItems?.map((item: {
+              id: string;
+              partNumber: string;
+              partName: string;
+              drawingNumber?: string;
+              revisionLevel?: string;
+              quantity: number;
+              fileAttachments?: Array<{
+                id: string;
+                fileName: string;
+                storedFileName: string;
+                filePath: string;
+                fileType: string;
+                mimeType: string;
+                fileSize: number;
+                uploadedBy: string;
+                description?: string;
+                createdAt: string;
+              }>;
+            }) => ({
+              id: item.id,
+              partNumber: item.partNumber,
+              partName: item.partName,
+              drawingNumber: item.drawingNumber,
+              revisionLevel: item.revisionLevel,
+              quantity: item.quantity,
+              fileAttachments: item.fileAttachments || []
+            })) || []
+          };
+          setEnhancedOrder(enhanced);
+        }
+      } catch (error) {
+        console.error('Error fetching enhanced order data:', error);
+        // Fallback to basic order data - transform to match interface
+        setEnhancedOrder({
+          ...order,
+          lineItems: order.lineItems?.map((item, index) => ({
+            id: `temp-${index}`, // Temporary ID for display only
+            ...item,
+            fileAttachments: []
+          })) || []
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEnhancedOrder();
+  }, [order, opened]);
+
+  const refreshOrderData = useCallback(async () => {
+    if (!order || !opened) return;
+    
+    try {
+      const response = await fetch(`/api/orders/${order.orderId}`);
+      if (!response.ok) return;
+      
+      const result = await response.json();
+      if (result.success) {
+        const enhanced: EnhancedOrder = {
+          ...order,
+          lineItems: result.data.lineItems?.map((apiItem: {
+            id: string;
+            partNumber: string;
+            partName: string;
+            drawingNumber?: string;
+            revisionLevel?: string;
+            quantity: number;
+            fileAttachments?: Array<{
+              id: string;
+              fileName: string;
+              storedFileName: string;
+              filePath: string;
+              fileType: string;
+              mimeType: string;
+              fileSize: number;
+              uploadedBy: string;
+              description?: string;
+              createdAt: string;
+            }>;
+          }) => ({
+            id: apiItem.id,
+            partNumber: apiItem.partNumber,
+            partName: apiItem.partName,
+            drawingNumber: apiItem.drawingNumber,
+            revisionLevel: apiItem.revisionLevel,
+            quantity: apiItem.quantity,
+            fileAttachments: apiItem.fileAttachments || []
+          })) || []
+        };
+        setEnhancedOrder(enhanced);
+      }
+    } catch (error) {
+      console.error('Error refreshing order data:', error);
+    }
+  }, [order, opened]);
+
+  const toggleItemExpansion = (itemId: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
   if (!order) return null;
 
-  const progressPercentage = order.assignedBatches > 0 
-    ? Math.round((order.completedBatches / order.assignedBatches) * 100) 
+  // Use enhanced order data if available, fall back to basic order
+  const displayOrder = enhancedOrder || order;
+
+  const progressPercentage = displayOrder.assignedBatches > 0 
+    ? Math.round((displayOrder.completedBatches / displayOrder.assignedBatches) * 100) 
     : 0;
 
   return (
@@ -93,7 +265,11 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
       }
       size="xl"
       scrollAreaComponent={ScrollArea.Autosize}
+      styles={{
+        content: { position: 'relative' }
+      }}
     >
+      <LoadingOverlay visible={loading} />
       <Stack gap="lg">
         {/* Order Header */}
         <Card withBorder>
@@ -101,13 +277,13 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             <Grid.Col span={6}>
               <Stack gap="xs">
                 <Text size="sm" c="dimmed">Order ID</Text>
-                <Text fw={600} size="lg">{order.orderId}</Text>
+                <Text fw={600} size="lg">{displayOrder.orderId}</Text>
               </Stack>
             </Grid.Col>
             <Grid.Col span={6}>
               <Stack gap="xs">
                 <Text size="sm" c="dimmed">PO Number</Text>
-                <Text fw={500}>{order.orderNumber}</Text>
+                <Text fw={500}>{displayOrder.orderNumber}</Text>
               </Stack>
             </Grid.Col>
             <Grid.Col span={6}>
@@ -115,7 +291,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 <Text size="sm" c="dimmed">Customer</Text>
                 <Group gap="xs">
                   <IconUser size={16} />
-                  <Text fw={500}>{order.customerName}</Text>
+                  <Text fw={500}>{displayOrder.customerName}</Text>
                 </Group>
               </Stack>
             </Grid.Col>
@@ -123,11 +299,11 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               <Stack gap="xs">
                 <Text size="sm" c="dimmed">Status & Priority</Text>
                 <Group gap="xs">
-                  <Badge color={getStatusColor(order.status)} variant="filled">
-                    {order.status.replace('_', ' ')}
+                  <Badge color={getStatusColor(displayOrder.status)} variant="filled">
+                    {displayOrder.status.replace('_', ' ')}
                   </Badge>
-                  <Badge color={getPriorityColor(order.priority)} variant="outline">
-                    {order.priority}
+                  <Badge color={getPriorityColor(displayOrder.priority)} variant="outline">
+                    {displayOrder.priority}
                   </Badge>
                 </Group>
               </Stack>
@@ -147,23 +323,23 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 <Stack gap="xs">
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Order Date:</Text>
-                    <Text size="sm">{formatDate(order.orderDate)}</Text>
+                    <Text size="sm">{formatDate(displayOrder.orderDate)}</Text>
                   </Group>
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Due Date:</Text>
-                    <Text size="sm" fw={500}>{formatDate(order.dueDate)}</Text>
+                    <Text size="sm" fw={500}>{formatDate(displayOrder.dueDate)}</Text>
                   </Group>
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Days Until Due:</Text>
                     <Text size="sm" c={
                       (() => {
-                        const daysUntilDue = Math.ceil((new Date(order.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                        const daysUntilDue = Math.ceil((new Date(displayOrder.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
                         if (daysUntilDue < 0) return 'red';
                         if (daysUntilDue < 7) return 'orange';
                         return 'green';
                       })()
                     }>
-                      {Math.ceil((new Date(order.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
+                      {Math.ceil((new Date(displayOrder.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
                     </Text>
                   </Group>
                 </Stack>
@@ -180,15 +356,15 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 <Stack gap="xs">
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Total Value:</Text>
-                    <Text size="sm" fw={600} c="green">{formatCurrency(order.totalValue)}</Text>
+                    <Text size="sm" fw={600} c="green">{formatCurrency(displayOrder.totalValue)}</Text>
                   </Group>
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Line Items:</Text>
-                    <Text size="sm">{order.itemCount}</Text>
+                    <Text size="sm">{displayOrder.itemCount}</Text>
                   </Group>
                   <Group justify="space-between">
                     <Text size="sm" c="dimmed">Production Progress:</Text>
-                    <Text size="sm">{order.completedBatches} / {order.assignedBatches} batches ({progressPercentage}%)</Text>
+                    <Text size="sm">{displayOrder.completedBatches} / {displayOrder.assignedBatches} batches ({progressPercentage}%)</Text>
                   </Group>
                 </Stack>
               </Stack>
@@ -197,38 +373,78 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         </Grid>
 
         {/* Line Items */}
-        {order.lineItems && order.lineItems.length > 0 && (
+        {displayOrder.lineItems && displayOrder.lineItems.length > 0 && (
           <Card withBorder>
             <Stack gap="md">
               <Text fw={500} size="md">Line Items</Text>
               <Divider />
               <ScrollArea>
-                <Table striped highlightOnHover>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Part Number</Table.Th>
-                      <Table.Th>Part Name</Table.Th>
-                      <Table.Th>Drawing #</Table.Th>
-                      <Table.Th>Revision</Table.Th>
-                      <Table.Th style={{ textAlign: 'right' }}>Quantity</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {order.lineItems.map((item, index) => (
-                      <Table.Tr key={`${item.partNumber}-${index}`}>
-                        <Table.Td>
-                          <Text fw={500}>{item.partNumber}</Text>
-                        </Table.Td>
-                        <Table.Td>{item.partName}</Table.Td>
-                        <Table.Td>{item.drawingNumber || '-'}</Table.Td>
-                        <Table.Td>{item.revisionLevel || '-'}</Table.Td>
-                        <Table.Td style={{ textAlign: 'right' }}>
-                          <Text fw={500}>{item.quantity.toLocaleString()}</Text>
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
+                <Stack gap="md">
+                  {displayOrder.lineItems.map((item, index) => {
+                    // Check if this is an enhanced line item with ID
+                    const isEnhanced = enhancedOrder && 'id' in item;
+                    const enhancedItem = item as EnhancedLineItem;
+                    const itemId = isEnhanced ? enhancedItem.id : `temp-${index}`;
+                    const hasFileAttachments = isEnhanced && enhancedItem.fileAttachments;
+                    
+                    return (
+                      <Card key={itemId} withBorder padding="md">
+                        <Stack gap="sm">
+                          {/* Line Item Header */}
+                          <Group justify="space-between" align="flex-start">
+                            <Stack gap="xs" style={{ flex: 1 }}>
+                              <Group gap="md">
+                                <Text fw={600} size="md">{item.part.partNumber}</Text>
+                                <Text c="dimmed">-</Text>
+                                <Text>{item.part.partName}</Text>
+                              </Group>
+                              <Group gap="md">
+                                {item.part.drawingNumber && (
+                                  <Text size="sm" c="dimmed">
+                                    Drawing: {item.part.drawingNumber}
+                                    {item.part.revisionLevel && ` (Rev. ${item.part.revisionLevel})`}
+                                  </Text>
+                                )}
+                                <Text size="sm" fw={500} c="blue">
+                                  Qty: {item.quantity.toLocaleString()}
+                                </Text>
+                              </Group>
+                            </Stack>
+                            
+                            {isEnhanced && (
+                              <ActionIcon
+                                variant="subtle"
+                                onClick={() => toggleItemExpansion(itemId)}
+                                size="sm"
+                              >
+                                {expandedItems.has(itemId) ? (
+                                  <IconChevronDown size={16} />
+                                ) : (
+                                  <IconChevronRight size={16} />
+                                )}
+                              </ActionIcon>
+                            )}
+                          </Group>
+                          
+                          {/* File Attachments - Only show if we have enhanced data and item is expanded */}
+                          {isEnhanced && (
+                            <Collapse in={expandedItems.has(itemId)}>
+                              <Box pt="md">
+                                <Divider mb="md" />
+                                <Text fw={500} size="sm" mb="sm">File Attachments</Text>
+                                <FileAttachmentManager
+                                  lineItemId={itemId}
+                                  attachments={hasFileAttachments ? enhancedItem.fileAttachments || [] : []}
+                                  onAttachmentsChange={refreshOrderData}
+                                />
+                              </Box>
+                            </Collapse>
+                          )}
+                        </Stack>
+                      </Card>
+                    );
+                  })}
+                </Stack>
               </ScrollArea>
             </Stack>
           </Card>
@@ -243,7 +459,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             <Button 
               variant="filled" 
               onClick={() => {
-                onEdit(order);
+                onEdit(displayOrder);
                 onClose();
               }}
             >

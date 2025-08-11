@@ -32,9 +32,30 @@ import {
   IconAlertCircle
 } from '@tabler/icons-react';
 import type { Customer } from '../../../types/shared';
+import { QuickBooksStatus } from '../../components/ui/QuickBooksStatus';
+import { PartSelector } from './PartSelector';
+
+// Types
+type PartType = 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+
+interface Part {
+  id: string;
+  partNumber: string;
+  partName: string;
+  partType: PartType;
+  drawingNumber?: string;
+  revisionLevel?: string;
+  description?: string;
+  materialSpec?: string;
+  unitOfMeasure?: string;
+  standardCost?: number;
+  leadTime?: number;
+  notes?: string;
+}
 
 // Form interfaces
 interface LineItemForm {
+  partId?: string; // When selecting existing part
   partNumber: string;
   partName: string;
   drawingNumber: string;
@@ -67,6 +88,7 @@ export interface NewOrderModalProps {
   opened: boolean;
   onClose: () => void;
   onOrderCreated?: () => void;
+  isPageReady?: boolean; // New prop to indicate page readiness
 }
 
 // Priority options (aligned with DES-BOMS spec: Rush / Standard / Hold)
@@ -224,6 +246,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   opened,
   onClose,
   onOrderCreated,
+  isPageReady = true, // Default to true for backward compatibility
 }) => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [showNewCustomer, setShowNewCustomer] = useState(false);
@@ -237,6 +260,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     notes: '',
     lineItems: [
       {
+        partId: '',
         partNumber: '',
         partName: '',
         drawingNumber: '',
@@ -255,11 +279,45 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   useEffect(() => {
     if (opened) {
       fetchCustomers();
+      generatePONumber();
     }
   }, [opened]);
 
+  const generatePONumber = async () => {
+    try {
+      const response = await fetch('/api/orders/generate-po');
+      if (response.ok) {
+        const data = await response.json();
+        setOrderData(prev => ({ ...prev, poNumber: data.poNumber }));
+      }
+    } catch (error) {
+      console.error('Error generating PO number:', error);
+    }
+  };
+
   const fetchCustomers = async () => {
     try {
+      // First, try to sync QuickBooks customers if connected
+      try {
+        const qbStatusResponse = await fetch('/api/quickbooks/status');
+        if (qbStatusResponse.ok) {
+          const qbStatus = await qbStatusResponse.json();
+          if (qbStatus.hasValidTokens) {
+            // Try to sync QuickBooks customers
+            const syncResponse = await fetch('/api/quickbooks/sync-customers', { method: 'POST' });
+            if (syncResponse.ok) {
+              console.log('QuickBooks customers synced successfully');
+            } else {
+              console.warn('QuickBooks customer sync failed, using local customers only');
+            }
+          }
+        }
+      } catch (qbError) {
+        console.warn('QuickBooks sync check failed:', qbError);
+        // Continue with local customers even if QB sync fails
+      }
+
+      // Fetch all customers (local + synced QB customers)
       const response = await fetch('/api/customers');
       if (response.ok) {
         const customersData = await response.json();
@@ -282,6 +340,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       lineItems: [
         ...orderData.lineItems,
         {
+          partId: '',
           partNumber: '',
           partName: '',
           drawingNumber: '',
@@ -306,28 +365,54 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     setOrderData({ ...orderData, lineItems: newLineItems });
   };
 
+  const handlePartSelect = (index: number, part: Part | null) => {
+    const newLineItems = [...orderData.lineItems];
+    if (part) {
+      newLineItems[index] = {
+        ...newLineItems[index],
+        partId: part.id,
+        partNumber: part.partNumber,
+        partName: part.partName,
+        drawingNumber: part.drawingNumber || '',
+        revisionLevel: part.revisionLevel || '',
+        unitPrice: part.standardCost || newLineItems[index].unitPrice,
+      };
+    } else {
+      // Clear part data when no part selected
+      newLineItems[index] = {
+        ...newLineItems[index],
+        partId: '',
+        partNumber: '',
+        partName: '',
+        drawingNumber: '',
+        revisionLevel: '',
+      };
+    }
+    setOrderData({ ...orderData, lineItems: newLineItems });
+  };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     
     if (!orderData.customerId) {
-      newErrors.customerId = 'Customer is required';
+      newErrors.customerId = 'Please select a customer';
     }
     if (!orderData.poNumber) {
-      newErrors.poNumber = 'PO Number is required';
+      newErrors.poNumber = 'PO Number is required (should be auto-generated)';
     }
     if (!orderData.dueDate) {
-      newErrors.dueDate = 'Due date is required';
+      newErrors.dueDate = 'Due date is required - please select a date';
     }
     
     orderData.lineItems.forEach((item, index) => {
       if (!item.partNumber) {
-        newErrors[`lineItems.${index}.partNumber`] = 'Part number is required';
+        newErrors[`lineItems.${index}.partNumber`] = `Line item ${index + 1}: Part selection or part number is required`;
       }
-      if (!item.partName) {
-        newErrors[`lineItems.${index}.partName`] = 'Part name is required';
+      if (!item.partId && !item.partName) {
+        newErrors[`lineItems.${index}.partName`] = `Line item ${index + 1}: Part name is required when creating new part`;
       }
       if (!item.quantity || item.quantity <= 0) {
-        newErrors[`lineItems.${index}.quantity`] = 'Quantity must be greater than 0';
+        newErrors[`lineItems.${index}.quantity`] = `Line item ${index + 1}: Quantity must be greater than 0`;
       }
     });
     
@@ -350,6 +435,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
           priority: orderData.priority,
           notes: orderData.notes,
           lineItems: orderData.lineItems.map(item => ({
+            partId: item.partId || undefined, // Include partId if selecting existing part
             partNumber: item.partNumber,
             partName: item.partName,
             drawingNumber: item.drawingNumber,
@@ -380,12 +466,13 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   const handleClose = () => {
     setOrderData({
       customerId: '',
-      poNumber: '',
+      poNumber: '', // Will be auto-generated when modal opens again
       dueDate: '',
       priority: 'STANDARD',
       notes: '',
       lineItems: [
         {
+          partId: '',
           partNumber: '',
           partName: '',
           drawingNumber: '',
@@ -419,6 +506,19 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       }}
     >
       <Stack gap="lg">
+        {/* General Error Alert */}
+        {Object.keys(errors).length > 0 && (
+          <Alert color="red" icon={<IconAlertCircle size={16} />} title="Please fix the following errors:">
+            <Stack gap="xs">
+              {Object.entries(errors).map(([field, message]) => (
+                <Text key={field} size="sm">
+                  • {message}
+                </Text>
+              ))}
+            </Stack>
+          </Alert>
+        )}
+
         {/* Order Information */}
         <Card withBorder>
           <Stack gap="md">
@@ -428,23 +528,27 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
 
             <Group grow>
               <div>
-                <Group gap="xs" mb="xs">
-                  <Select
-                    label="Customer"
-                    placeholder="Select customer"
-                    data={customerOptions}
-                    searchable
-                    required
-                    value={orderData.customerId}
-                    onChange={(value) => setOrderData({ ...orderData, customerId: value || '' })}
-                    error={errors.customerId}
-                    style={{ flex: 1 }}
-                  />
+                <Group gap="xs" mb="xs" align="end">
+                  <div style={{ flex: 1 }}>
+                    <Select
+                      label="Customer"
+                      placeholder="Select customer"
+                      data={customerOptions}
+                      searchable
+                      required
+                      value={orderData.customerId}
+                      onChange={(value) => setOrderData({ ...orderData, customerId: value || '' })}
+                      error={errors.customerId}
+                    />
+                    {/* QuickBooks status with reauth button */}
+                    <Group gap="xs" mt={4}>
+                      <QuickBooksStatus compact={true} showActions={true} />
+                    </Group>
+                  </div>
                   <Button
                     variant="light"
                     size="sm"
                     onClick={() => setShowNewCustomer(!showNewCustomer)}
-                    style={{ marginTop: '24px' }}
                     leftSection={showNewCustomer ? <IconChevronDown size={16} /> : <IconPlus size={16} />}
                   >
                     {showNewCustomer ? 'Cancel' : 'New Customer'}
@@ -463,14 +567,29 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
             </Group>
 
             <Group grow>
-              <TextInput
-                label="PO Number"
-                placeholder="Customer purchase order number"
-                required
-                value={orderData.poNumber}
-                onChange={(e) => setOrderData({ ...orderData, poNumber: e.target.value })}
-                error={errors.poNumber}
-              />
+              <div>
+                <Group gap="xs" align="end">
+                  <div style={{ flex: 1 }}>
+                    <TextInput
+                      label="PO Number"
+                      placeholder="Auto-generated PO number"
+                      required
+                      value={orderData.poNumber}
+                      onChange={(e) => setOrderData({ ...orderData, poNumber: e.target.value })}
+                      error={errors.poNumber}
+                      description="Auto-generated - you can edit if needed"
+                    />
+                  </div>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    onClick={generatePONumber}
+                    title="Generate new PO number"
+                  >
+                    🔄
+                  </Button>
+                </Group>
+              </div>
               <Select
                 label="Priority"
                 data={priorityOptions}
@@ -541,25 +660,37 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       )}
                     </Group>
 
-                    <Group grow>
-                      <TextInput
-                        label="Part Number"
-                        placeholder="SKU or part identifier"
-                        required
-                        value={item.partNumber}
-                        onChange={(e) => updateLineItem(index, 'partNumber', e.target.value)}
-                        error={errors[`lineItems.${index}.partNumber`]}
-                      />
-                      <TextInput
-                        label="Part Name"
-                        placeholder="Description of the part"
-                        required
-                        value={item.partName}
-                        onChange={(e) => updateLineItem(index, 'partName', e.target.value)}
-                        error={errors[`lineItems.${index}.partName`]}
-                      />
-                    </Group>
+                    <PartSelector
+                      value={item.partId ? {
+                        id: item.partId,
+                        partNumber: item.partNumber,
+                        partName: item.partName,
+                        partType: 'FINISHED' as PartType,
+                        drawingNumber: item.drawingNumber,
+                        revisionLevel: item.revisionLevel,
+                      } : null}
+                      onChange={(part) => handlePartSelect(index, part)}
+                      placeholder="Select existing part or create new one"
+                      error={errors[`lineItems.${index}.partNumber`]}
+                      required
+                      isPageReady={isPageReady}
+                    />
 
+                    {/* Manual part details - only show if no part selected or for editing */}
+                    {!item.partId && (
+                      <Group grow>
+                        <TextInput
+                          label="Part Name"
+                          placeholder="Description of the part"
+                          required
+                          value={item.partName}
+                          onChange={(e) => updateLineItem(index, 'partName', e.target.value)}
+                          error={errors[`lineItems.${index}.partName`]}
+                        />
+                      </Group>
+                    )}
+
+                    {/* Drawing and revision - always editable */}
                     <Group grow>
                       <TextInput
                         label="Drawing Number"
@@ -619,18 +750,57 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
         </Card>
 
         {/* Action Buttons */}
-        <Group justify="flex-end" gap="sm">
-          <Button variant="subtle" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            loading={submitting}
-            disabled={orderData.lineItems.length === 0}
-            leftSection={<IconCheck size={16} />}
-          >
-            Create Order
-          </Button>
+        <Group justify="space-between" align="center">
+          <div style={{ flex: 1 }}>
+            {/* Form Status Indicator */}
+            {(() => {
+              const hasErrors = Object.keys(errors).length > 0;
+              const missingRequiredFields = [];
+              
+              if (!orderData.customerId) missingRequiredFields.push('Customer');
+              if (!orderData.poNumber) missingRequiredFields.push('PO Number');
+              if (!orderData.dueDate) missingRequiredFields.push('Due Date');
+              if (orderData.lineItems.length === 0) missingRequiredFields.push('Line Items');
+              
+              const hasLineItemIssues = orderData.lineItems.some((item, index) => 
+                !item.partNumber || (!item.partId && !item.partName) || !item.quantity || item.quantity <= 0
+              );
+              
+              if (hasLineItemIssues) missingRequiredFields.push('Complete Line Item Details');
+              
+              if (missingRequiredFields.length === 0 && !hasErrors) {
+                return (
+                  <Group gap="xs">
+                    <IconCheck size={16} color="green" />
+                    <Text size="sm" c="green" fw={500}>Ready to create order</Text>
+                  </Group>
+                );
+              } else {
+                return (
+                  <Group gap="xs">
+                    <IconAlertCircle size={16} color="orange" />
+                    <Text size="sm" c="orange">
+                      Missing: {missingRequiredFields.join(', ')}
+                    </Text>
+                  </Group>
+                );
+              }
+            })()}
+          </div>
+          
+          <Group gap="sm">
+            <Button variant="subtle" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              loading={submitting}
+              disabled={orderData.lineItems.length === 0 || Object.keys(errors).length > 0}
+              leftSection={<IconCheck size={16} />}
+            >
+              Create Order
+            </Button>
+          </Group>
         </Group>
       </Stack>
     </Modal>

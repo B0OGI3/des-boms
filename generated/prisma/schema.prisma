@@ -28,6 +28,12 @@ model Customer {
   shippingAddress String?
   notes           String? // General customer notes
 
+  // QuickBooks Integration Fields
+  quickbooksId String? // QuickBooks Customer ID for sync
+  syncStatus   SyncStatus @default(PENDING) // Sync state tracking
+  lastSyncedAt DateTime? // Last successful sync timestamp
+  syncError    String? // Last sync error message if any
+
   // Relations
   purchaseOrders PurchaseOrder[]
 
@@ -55,16 +61,66 @@ model PurchaseOrder {
   updatedAt DateTime @updatedAt
 }
 
-// Order Line Items - Individual parts within a PO
+// Parts Master - Central part definition with BOM structure
+model Part {
+  id            String   @id @default(cuid())
+  partNumber    String   @unique // System-generated unique ID
+  partName      String // Descriptive part name
+  partType      PartType // Finished, Semi-Finished, Raw Material
+  drawingNumber String? // Engineering drawing number
+  revisionLevel String? // Drawing revision (A, B, C, etc.)
+  description   String? // Detailed part description
+  materialSpec  String? // Material specification (e.g., "Ti-6Al-4V", "6061-T6")
+  unitOfMeasure String? // UOM (each, ft, lb, etc.)
+  standardCost  Decimal? // Standard cost per unit
+  leadTime      Int? // Lead time in days
+  active        Boolean  @default(true)
+  notes         String? // Part-specific notes
+
+  // BOM Relations
+  parentBOMs BOMComponent[] @relation("ParentPart")
+  childBOMs  BOMComponent[] @relation("ChildPart")
+
+  // Order Relations
+  orderLineItems OrderLineItem[]
+
+  // Material Consumption Relations
+  materialConsumptions MaterialConsumption[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// BOM (Bill of Materials) - Part composition relationships
+model BOMComponent {
+  id            String   @id @default(cuid())
+  parentPart    Part     @relation("ParentPart", fields: [parentPartId], references: [id])
+  parentPartId  String
+  childPart     Part     @relation("ChildPart", fields: [childPartId], references: [id])
+  childPartId   String
+  quantity      Decimal // Quantity of child part needed per parent
+  unitOfMeasure String? // UOM for this relationship
+  scrapFactor   Decimal? // Expected scrap percentage (0.05 = 5%)
+  operation     String? // Where this component is used in manufacturing
+  notes         String? // Component-specific notes
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([parentPartId, childPartId]) // Prevent duplicate relationships
+}
+
+// Order Line Items - Individual parts within a PO (linked to Parts Master)
 model OrderLineItem {
   id            String        @id @default(cuid())
   purchaseOrder PurchaseOrder @relation(fields: [orderId], references: [id])
   orderId       String
-  partNumber    String // Part identifier
-  partName      String // Descriptive part name
-  drawingNumber String? // Engineering drawing number
-  revisionLevel String? // Drawing revision (A, B, C, etc.)
+  part          Part          @relation(fields: [partId], references: [id])
+  partId        String // Links to Parts Master
   quantity      Int // Ordered quantity
+  unitPrice     Decimal? // Price per unit for this order
   dueDate       DateTime? // Line item due date (overrides PO due date)
   notes         String? // Line item specific notes
 
@@ -79,14 +135,17 @@ model OrderLineItem {
 
 // File Attachments - Drawings, CAD models, specs per line item
 model FileAttachment {
-  id          String        @id @default(cuid())
-  lineItem    OrderLineItem @relation(fields: [lineItemId], references: [id])
-  lineItemId  String
-  fileName    String // Original file name
-  fileType    String // File extension/type
-  fileUrl     String // Storage path/URL
-  uploadedBy  String // User who uploaded
-  description String? // File description
+  id             String        @id @default(cuid())
+  lineItem       OrderLineItem @relation(fields: [lineItemId], references: [id])
+  lineItemId     String
+  fileName       String // Original file name
+  storedFileName String // Actual filename on disk (with timestamp)
+  filePath       String // Full storage path/URL
+  fileType       String // File extension/type
+  mimeType       String // MIME type for proper handling
+  fileSize       Int // File size in bytes
+  uploadedBy     String // User who uploaded
+  description    String? // File description
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -111,12 +170,33 @@ model Batch {
   notes               String? // Batch-specific notes
 
   // Relations
-  routingSteps RoutingStep[]
-  qcRecords    QCRecord[]
+  routingSteps        RoutingStep[]
+  qcRecords           QCRecord[]
+  materialConsumption MaterialConsumption[] // Track raw material usage
 
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Material Consumption - Track raw materials used in batches
+model MaterialConsumption {
+  id             String   @id @default(cuid())
+  batch          Batch    @relation(fields: [batchId], references: [id])
+  batchId        String
+  materialPart   Part     @relation(fields: [materialPartId], references: [id])
+  materialPartId String // Links to raw material part
+  quantityUsed   Decimal // Actual quantity consumed
+  unitCost       Decimal? // Cost per unit at time of consumption
+  consumedAt     DateTime @default(now())
+  operatorId     String? // Who recorded the consumption
+  notes          String? // Consumption notes
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([batchId, materialPartId]) // One consumption record per material per batch
 }
 
 // Routing Steps - Sequential workstation steps for each batch
@@ -207,6 +287,12 @@ model QCRecord {
 // 5. ENUMS - STATUS DEFINITIONS
 // =============================================================================
 
+enum PartType {
+  FINISHED // Finished goods/assemblies - prefix FG-
+  SEMI_FINISHED // Work-in-process/sub-assemblies - prefix SF-
+  RAW_MATERIAL // Raw materials/stock - prefix RM-
+}
+
 enum OrderPriority {
   RUSH
   STANDARD
@@ -240,6 +326,13 @@ enum ConfirmationStatus {
   COMPLETED // Operator completed step
   PAUSED // Step paused
   FLAGGED // Issue reported
+}
+
+enum SyncStatus {
+  PENDING // Not yet synced to QuickBooks
+  SYNCED // Successfully synced
+  FAILED // Sync failed
+  UPDATING // Sync in progress
 }
 
 enum QCResult {

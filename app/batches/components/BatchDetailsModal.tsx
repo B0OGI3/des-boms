@@ -197,7 +197,7 @@ export function BatchDetailsModal({
                     Part Number
                   </Text>
                   <Text fw={500} style={{ color: "#f1f5f9" }}>
-                    {batch.lineItem.partNumber}
+                    {batch.lineItem.part.partNumber}
                   </Text>
                 </div>
                 <div>
@@ -205,7 +205,7 @@ export function BatchDetailsModal({
                     Part Name
                   </Text>
                   <Text fw={500} style={{ color: "#f1f5f9" }}>
-                    {batch.lineItem.partName}
+                    {batch.lineItem.part.partName}
                   </Text>
                 </div>
                 <div>
@@ -237,7 +237,7 @@ export function BatchDetailsModal({
                     Drawing Number
                   </Text>
                   <Text fw={500} style={{ color: "#f1f5f9" }}>
-                    {batch.lineItem.drawingNumber || 'N/A'}
+                    {batch.lineItem.part.drawingNumber || 'N/A'}
                   </Text>
                 </div>
               </div>
