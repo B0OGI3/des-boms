@@ -96,6 +96,17 @@ export const OrderPriority: {
 export type OrderPriority = (typeof OrderPriority)[keyof typeof OrderPriority]
 
 
+export const OrderStatus: {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  SHIPPED: 'SHIPPED',
+  CANCELLED: 'CANCELLED',
+  ON_HOLD: 'ON_HOLD'
+};
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
 export const BatchPriority: {
   RUSH: 'RUSH',
   STANDARD: 'STANDARD',
@@ -164,6 +175,10 @@ export const PartType: typeof $Enums.PartType
 export type OrderPriority = $Enums.OrderPriority
 
 export const OrderPriority: typeof $Enums.OrderPriority
+
+export type OrderStatus = $Enums.OrderStatus
+
+export const OrderStatus: typeof $Enums.OrderStatus
 
 export type BatchPriority = $Enums.BatchPriority
 
@@ -3469,6 +3484,13 @@ export namespace Prisma {
     dueDate: Date | null
     priority: $Enums.OrderPriority | null
     notes: string | null
+    orderStatus: $Enums.OrderStatus | null
+    completedAt: Date | null
+    completedBy: string | null
+    completionNotes: string | null
+    shippedAt: Date | null
+    shippedBy: string | null
+    shippingNotes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3481,6 +3503,13 @@ export namespace Prisma {
     dueDate: Date | null
     priority: $Enums.OrderPriority | null
     notes: string | null
+    orderStatus: $Enums.OrderStatus | null
+    completedAt: Date | null
+    completedBy: string | null
+    completionNotes: string | null
+    shippedAt: Date | null
+    shippedBy: string | null
+    shippingNotes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3493,6 +3522,13 @@ export namespace Prisma {
     dueDate: number
     priority: number
     notes: number
+    orderStatus: number
+    completedAt: number
+    completedBy: number
+    completionNotes: number
+    shippedAt: number
+    shippedBy: number
+    shippingNotes: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3507,6 +3543,13 @@ export namespace Prisma {
     dueDate?: true
     priority?: true
     notes?: true
+    orderStatus?: true
+    completedAt?: true
+    completedBy?: true
+    completionNotes?: true
+    shippedAt?: true
+    shippedBy?: true
+    shippingNotes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3519,6 +3562,13 @@ export namespace Prisma {
     dueDate?: true
     priority?: true
     notes?: true
+    orderStatus?: true
+    completedAt?: true
+    completedBy?: true
+    completionNotes?: true
+    shippedAt?: true
+    shippedBy?: true
+    shippingNotes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3531,6 +3581,13 @@ export namespace Prisma {
     dueDate?: true
     priority?: true
     notes?: true
+    orderStatus?: true
+    completedAt?: true
+    completedBy?: true
+    completionNotes?: true
+    shippedAt?: true
+    shippedBy?: true
+    shippingNotes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3616,6 +3673,13 @@ export namespace Prisma {
     dueDate: Date
     priority: $Enums.OrderPriority
     notes: string | null
+    orderStatus: $Enums.OrderStatus
+    completedAt: Date | null
+    completedBy: string | null
+    completionNotes: string | null
+    shippedAt: Date | null
+    shippedBy: string | null
+    shippingNotes: string | null
     createdAt: Date
     updatedAt: Date
     _count: PurchaseOrderCountAggregateOutputType | null
@@ -3645,6 +3709,13 @@ export namespace Prisma {
     dueDate?: boolean
     priority?: boolean
     notes?: boolean
+    orderStatus?: boolean
+    completedAt?: boolean
+    completedBy?: boolean
+    completionNotes?: boolean
+    shippedAt?: boolean
+    shippedBy?: boolean
+    shippingNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
@@ -3660,6 +3731,13 @@ export namespace Prisma {
     dueDate?: boolean
     priority?: boolean
     notes?: boolean
+    orderStatus?: boolean
+    completedAt?: boolean
+    completedBy?: boolean
+    completionNotes?: boolean
+    shippedAt?: boolean
+    shippedBy?: boolean
+    shippingNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
@@ -3673,6 +3751,13 @@ export namespace Prisma {
     dueDate?: boolean
     priority?: boolean
     notes?: boolean
+    orderStatus?: boolean
+    completedAt?: boolean
+    completedBy?: boolean
+    completionNotes?: boolean
+    shippedAt?: boolean
+    shippedBy?: boolean
+    shippingNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
@@ -3686,11 +3771,18 @@ export namespace Prisma {
     dueDate?: boolean
     priority?: boolean
     notes?: boolean
+    orderStatus?: boolean
+    completedAt?: boolean
+    completedBy?: boolean
+    completionNotes?: boolean
+    shippedAt?: boolean
+    shippedBy?: boolean
+    shippingNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PurchaseOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "systemOrderId" | "customerId" | "poNumber" | "dueDate" | "priority" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseOrder"]>
+  export type PurchaseOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "systemOrderId" | "customerId" | "poNumber" | "dueDate" | "priority" | "notes" | "orderStatus" | "completedAt" | "completedBy" | "completionNotes" | "shippedAt" | "shippedBy" | "shippingNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseOrder"]>
   export type PurchaseOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
     lineItems?: boolean | PurchaseOrder$lineItemsArgs<ExtArgs>
@@ -3717,6 +3809,13 @@ export namespace Prisma {
       dueDate: Date
       priority: $Enums.OrderPriority
       notes: string | null
+      orderStatus: $Enums.OrderStatus
+      completedAt: Date | null
+      completedBy: string | null
+      completionNotes: string | null
+      shippedAt: Date | null
+      shippedBy: string | null
+      shippingNotes: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["purchaseOrder"]>
@@ -4151,6 +4250,13 @@ export namespace Prisma {
     readonly dueDate: FieldRef<"PurchaseOrder", 'DateTime'>
     readonly priority: FieldRef<"PurchaseOrder", 'OrderPriority'>
     readonly notes: FieldRef<"PurchaseOrder", 'String'>
+    readonly orderStatus: FieldRef<"PurchaseOrder", 'OrderStatus'>
+    readonly completedAt: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly completedBy: FieldRef<"PurchaseOrder", 'String'>
+    readonly completionNotes: FieldRef<"PurchaseOrder", 'String'>
+    readonly shippedAt: FieldRef<"PurchaseOrder", 'DateTime'>
+    readonly shippedBy: FieldRef<"PurchaseOrder", 'String'>
+    readonly shippingNotes: FieldRef<"PurchaseOrder", 'String'>
     readonly createdAt: FieldRef<"PurchaseOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"PurchaseOrder", 'DateTime'>
   }
@@ -16536,6 +16642,13 @@ export namespace Prisma {
     dueDate: 'dueDate',
     priority: 'priority',
     notes: 'notes',
+    orderStatus: 'orderStatus',
+    completedAt: 'completedAt',
+    completedBy: 'completedBy',
+    completionNotes: 'completionNotes',
+    shippedAt: 'shippedAt',
+    shippedBy: 'shippedBy',
+    shippingNotes: 'shippingNotes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16794,6 +16907,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'OrderStatus'
+   */
+  export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderStatus[]'
+   */
+  export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'PartType'
    */
   export type EnumPartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartType'>
@@ -17040,6 +17167,13 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
     priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
     notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    orderStatus?: EnumOrderStatusFilter<"PurchaseOrder"> | $Enums.OrderStatus
+    completedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    completedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    completionNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    shippedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippingNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
@@ -17054,6 +17188,13 @@ export namespace Prisma {
     dueDate?: SortOrder
     priority?: SortOrder
     notes?: SortOrderInput | SortOrder
+    orderStatus?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    completedBy?: SortOrderInput | SortOrder
+    completionNotes?: SortOrderInput | SortOrder
+    shippedAt?: SortOrderInput | SortOrder
+    shippedBy?: SortOrderInput | SortOrder
+    shippingNotes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     customer?: CustomerOrderByWithRelationInput
@@ -17071,6 +17212,13 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
     priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
     notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    orderStatus?: EnumOrderStatusFilter<"PurchaseOrder"> | $Enums.OrderStatus
+    completedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    completedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    completionNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    shippedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippingNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
@@ -17085,6 +17233,13 @@ export namespace Prisma {
     dueDate?: SortOrder
     priority?: SortOrder
     notes?: SortOrderInput | SortOrder
+    orderStatus?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    completedBy?: SortOrderInput | SortOrder
+    completionNotes?: SortOrderInput | SortOrder
+    shippedAt?: SortOrderInput | SortOrder
+    shippedBy?: SortOrderInput | SortOrder
+    shippingNotes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PurchaseOrderCountOrderByAggregateInput
@@ -17103,6 +17258,13 @@ export namespace Prisma {
     dueDate?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
     priority?: EnumOrderPriorityWithAggregatesFilter<"PurchaseOrder"> | $Enums.OrderPriority
     notes?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    orderStatus?: EnumOrderStatusWithAggregatesFilter<"PurchaseOrder"> | $Enums.OrderStatus
+    completedAt?: DateTimeNullableWithAggregatesFilter<"PurchaseOrder"> | Date | string | null
+    completedBy?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    completionNotes?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    shippedAt?: DateTimeNullableWithAggregatesFilter<"PurchaseOrder"> | Date | string | null
+    shippedBy?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+    shippingNotes?: StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
   }
@@ -18124,6 +18286,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer: CustomerCreateNestedOneWithoutPurchaseOrdersInput
@@ -18138,6 +18307,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -18150,6 +18326,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput
@@ -18164,6 +18347,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lineItems?: OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -18177,6 +18367,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18188,6 +18385,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18200,6 +18404,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19390,6 +19601,13 @@ export namespace Prisma {
     not?: NestedEnumOrderPriorityFilter<$PrismaModel> | $Enums.OrderPriority
   }
 
+  export type EnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
   export type CustomerScalarRelationFilter = {
     is?: CustomerWhereInput
     isNot?: CustomerWhereInput
@@ -19413,6 +19631,13 @@ export namespace Prisma {
     dueDate?: SortOrder
     priority?: SortOrder
     notes?: SortOrder
+    orderStatus?: SortOrder
+    completedAt?: SortOrder
+    completedBy?: SortOrder
+    completionNotes?: SortOrder
+    shippedAt?: SortOrder
+    shippedBy?: SortOrder
+    shippingNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19425,6 +19650,13 @@ export namespace Prisma {
     dueDate?: SortOrder
     priority?: SortOrder
     notes?: SortOrder
+    orderStatus?: SortOrder
+    completedAt?: SortOrder
+    completedBy?: SortOrder
+    completionNotes?: SortOrder
+    shippedAt?: SortOrder
+    shippedBy?: SortOrder
+    shippingNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19437,6 +19669,13 @@ export namespace Prisma {
     dueDate?: SortOrder
     priority?: SortOrder
     notes?: SortOrder
+    orderStatus?: SortOrder
+    completedAt?: SortOrder
+    completedBy?: SortOrder
+    completionNotes?: SortOrder
+    shippedAt?: SortOrder
+    shippedBy?: SortOrder
+    shippingNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19449,6 +19688,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderPriorityFilter<$PrismaModel>
     _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
+  }
+
+  export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
   }
 
   export type EnumPartTypeFilter<$PrismaModel = never> = {
@@ -20344,6 +20593,10 @@ export namespace Prisma {
 
   export type EnumOrderPriorityFieldUpdateOperationsInput = {
     set?: $Enums.OrderPriority
+  }
+
+  export type EnumOrderStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OrderStatus
   }
 
   export type CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput = {
@@ -21286,6 +21539,13 @@ export namespace Prisma {
     not?: NestedEnumOrderPriorityFilter<$PrismaModel> | $Enums.OrderPriority
   }
 
+  export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
   export type NestedEnumOrderPriorityWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderPriority | EnumOrderPriorityFieldRefInput<$PrismaModel>
     in?: $Enums.OrderPriority[] | ListEnumOrderPriorityFieldRefInput<$PrismaModel>
@@ -21294,6 +21554,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderPriorityFilter<$PrismaModel>
     _max?: NestedEnumOrderPriorityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumPartTypeFilter<$PrismaModel = never> = {
@@ -21526,6 +21796,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lineItems?: OrderLineItemCreateNestedManyWithoutPurchaseOrderInput
@@ -21538,6 +21815,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -21580,6 +21864,13 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"PurchaseOrder"> | Date | string
     priority?: EnumOrderPriorityFilter<"PurchaseOrder"> | $Enums.OrderPriority
     notes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    orderStatus?: EnumOrderStatusFilter<"PurchaseOrder"> | $Enums.OrderStatus
+    completedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    completedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    completionNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippedAt?: DateTimeNullableFilter<"PurchaseOrder"> | Date | string | null
+    shippedBy?: StringNullableFilter<"PurchaseOrder"> | string | null
+    shippingNotes?: StringNullableFilter<"PurchaseOrder"> | string | null
     createdAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
   }
@@ -22176,6 +22467,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer: CustomerCreateNestedOneWithoutPurchaseOrdersInput
@@ -22189,6 +22487,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22343,6 +22648,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneRequiredWithoutPurchaseOrdersNestedInput
@@ -22356,6 +22668,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23525,6 +23844,13 @@ export namespace Prisma {
     dueDate: Date | string
     priority?: $Enums.OrderPriority
     notes?: string | null
+    orderStatus?: $Enums.OrderStatus
+    completedAt?: Date | string | null
+    completedBy?: string | null
+    completionNotes?: string | null
+    shippedAt?: Date | string | null
+    shippedBy?: string | null
+    shippingNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23536,6 +23862,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lineItems?: OrderLineItemUpdateManyWithoutPurchaseOrderNestedInput
@@ -23548,6 +23881,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lineItems?: OrderLineItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -23560,6 +23900,13 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     priority?: EnumOrderPriorityFieldUpdateOperationsInput | $Enums.OrderPriority
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    orderStatus?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    completionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

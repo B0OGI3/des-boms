@@ -97,10 +97,12 @@ export default function BatchManagementPage() {
     setMounted(true);
   }, []);
 
-  // Handle QR code batch lookup
+  // Handle QR code batch lookup and order filtering
   useEffect(() => {
-    if (mounted && searchParams.get('batch')) {
+    if (mounted) {
       const batchId = searchParams.get('batch');
+      const orderId = searchParams.get('order');
+      
       if (batchId) {
         // Set search term to the batch ID to filter the results
         batchSearch.setSearchTerm(batchId);
@@ -112,6 +114,11 @@ export default function BatchManagementPage() {
             handleViewBatch(targetBatch);
           }
         }, 1000);
+      }
+      
+      if (orderId) {
+        // Filter batches by order ID
+        batchSearch.setOrderFilter(orderId);
       }
     }
   }, [mounted, searchParams, batchSearch.batches]);

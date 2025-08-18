@@ -21,6 +21,8 @@ interface UseBatchSearchReturn extends BatchSearchResult {
   setWorkstationFilter: (workstation: string) => void;
   overdueFilter: boolean;
   setOverdueFilter: (overdue: boolean) => void;
+  orderFilter: string;
+  setOrderFilter: (orderId: string) => void;
   refetch: () => void;
 }
 
@@ -82,6 +84,7 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
   const [priorityFilter, setPriorityFilter] = useState<BatchPriorityFilter>('ALL');
   const [workstationFilter, setWorkstationFilter] = useState<string>('ALL');
   const [overdueFilter, setOverdueFilter] = useState<boolean>(false);
+  const [orderFilter, setOrderFilter] = useState<string>('ALL');
   
   // Debounce search term to avoid too many API calls
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -104,8 +107,11 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
     if (overdueFilter) {
       params.overdue = 'true';
     }
+    if (orderFilter !== 'ALL') {
+      params.orderId = orderFilter;
+    }
     return params;
-  }, [debouncedSearchTerm, statusFilter, priorityFilter, workstationFilter, overdueFilter]);
+  }, [debouncedSearchTerm, statusFilter, priorityFilter, workstationFilter, overdueFilter, orderFilter]);
   
   // Fetch batches from API
   const fetchBatches = useCallback(async (params: BatchSearchParams = {}) => {
@@ -175,7 +181,8 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
     statusFilter !== 'ALL' || 
     priorityFilter !== 'ALL' ||
     workstationFilter !== 'ALL' ||
-    overdueFilter
+    overdueFilter ||
+    orderFilter !== 'ALL'
   );
   
   return {
@@ -194,6 +201,8 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
     setWorkstationFilter,
     overdueFilter,
     setOverdueFilter,
+    orderFilter,
+    setOrderFilter,
     refetch,
   };
 };

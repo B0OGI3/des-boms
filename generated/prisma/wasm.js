@@ -145,6 +145,13 @@ exports.Prisma.PurchaseOrderScalarFieldEnum = {
   dueDate: 'dueDate',
   priority: 'priority',
   notes: 'notes',
+  orderStatus: 'orderStatus',
+  completedAt: 'completedAt',
+  completedBy: 'completedBy',
+  completionNotes: 'completionNotes',
+  shippedAt: 'shippedAt',
+  shippedBy: 'shippedBy',
+  shippingNotes: 'shippingNotes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -309,6 +316,14 @@ exports.OrderPriority = exports.$Enums.OrderPriority = {
   RUSH: 'RUSH',
   STANDARD: 'STANDARD',
   HOLD: 'HOLD'
+};
+
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  SHIPPED: 'SHIPPED',
+  CANCELLED: 'CANCELLED',
+  ON_HOLD: 'ON_HOLD'
 };
 
 exports.PartType = exports.$Enums.PartType = {

@@ -198,7 +198,7 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
           leftSection={<IconPlus size={14} />}
           onClick={() => onOpenPartCreation?.(searchTerm)}
         >
-          Create "{searchTerm}"
+          Create &quot;{searchTerm}&quot;
         </Button>
       </Group>
     );
@@ -404,7 +404,7 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
 };
 
 // Wrapper component with modal management
-interface WrapperProps extends Omit<PartSelectorProps, 'onOpenPartCreation'> {}
+type WrapperProps = Omit<PartSelectorProps, 'onOpenPartCreation'>;
 
 export const PartSelector: React.FC<WrapperProps> = (props) => {
   const [showPartCreationModal, setShowPartCreationModal] = useState(false);

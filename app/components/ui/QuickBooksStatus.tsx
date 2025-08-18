@@ -296,7 +296,7 @@ export function QuickBooksStatus({
           <Text size="xs">{status.message}</Text>
           {status.status === 'token_expired' && (
             <Text size="xs" c="dimmed" style={{ marginTop: 4 }}>
-              Click "Reconnect" to renew your QuickBooks authorization.
+              Click &quot;Reconnect&quot; to renew your QuickBooks authorization.
             </Text>
           )}
         </Alert>

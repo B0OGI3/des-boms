@@ -136,6 +136,7 @@ export interface BatchSearchParams {
   priority?: BatchPriorityFilter;
   workstation?: string;
   lineItemId?: string;
+  orderId?: string;
   overdue?: string;
 }
 

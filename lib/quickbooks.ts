@@ -129,7 +129,7 @@ export class QuickBooksService {
   private async makeQBRequest(method: 'GET' | 'POST', endpoint: string, data?: any): Promise<AxiosResponse> {
     const url = `${QB_BASE_URL}/v3/company/${this.companyId}/${endpoint}`;
     console.log('[QB] Making request to:', url);
-    let headers = {
+    const headers = {
       'Authorization': `Bearer ${this.accessToken}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json',

@@ -52,23 +52,43 @@ If you are integrating with QuickBooks Online or any external service that requi
 
 ### 🌟 Key Manufacturing Features:
 - **Purchase Order Processing** - Customer POs with line items and file attachments
-- **Batch Management** - System-generated batch IDs with quantity tracking
+- **AI-Powered Smart Batch Generation** - Intelligent batch sizing with full customization
+- **Advanced Order Completion** - Comprehensive workflow with batch integration tracking
+- **Order-to-Batch Routing** - Direct navigation and workstation integration
+- **Batch Management** - System-generated batch IDs with quantity tracking and bulk operations
 - **Sequential Routing** - Step-by-step workstation routing with time estimates
 - **Operator Interface** - Login, job queue, and step confirmation system
 - **Quality Control** - Inspector records with Pass/Fail/Rework tracking
 - **Real-time Dashboards** - Live status monitoring across all workstations
 - **Work Travelers** - Printable job routing documentation
+- **QuickBooks Integration** - Bidirectional customer sync with production-ready OAuth
 
-## ✨ Latest Features (v0.3.0)
+## ✨ Latest Features (v0.4.0)
 
-### 🔗 QuickBooks Online Integration
+### 🤖 AI-Powered Smart Batch Generation
+- **Intelligent Batch Sizing** - AI-driven optimal batch size calculation based on machine capacity and efficiency
+- **Complete Customization** - Full control over batch parameters including size, priority, workstation routing
+- **Inline Editing** - Real-time editing of generated batch parameters with instant validation
+- **Bulk Operations** - Bulk priority updates, workstation assignments, and batch configuration
+- **Progress Tracking** - Visual indicators for batch generation status and completion estimates
+- **Manufacturing Optimization** - Consider machine setup times, operator efficiency, and material flow
+
+### � Advanced Order Management & Completion
+- **Complete Order Workflow** - Comprehensive order completion system with batch integration tracking
+- **Order-to-Batch Routing** - Direct navigation from orders to associated batches and workstations
+- **Completion Tracking** - Real-time order completion status based on batch progress
+- **Shipping Integration** - Order shipping workflow with tracking and notification system
+- **Status Automation** - Automatic order status updates based on batch completion percentages
+- **Document Management** - Comprehensive file attachment system for drawings and specifications
+
+### �🔗 QuickBooks Online Integration
 - **Bidirectional Customer Sync** - Real-time customer synchronization with QuickBooks Online
 - **OAuth 2.0 Authentication** - Secure QuickBooks authorization with token management
 - **Automatic Sync** - Customer creation automatically syncs to QuickBooks
 - **Sync Status Tracking** - Monitor sync status and handle errors gracefully
 - **Production Ready** - Works with both sandbox and production QuickBooks environments
 
-### 🔄 Complete Batch Management System
+### 🔄 Enhanced Batch Management System
 - **Enhanced Search & Filtering** - Database-driven autocomplete with smart suggestions
 - **Bulk Operations** - Multi-select batches for priority updates, status changes, and deletion
 - **Real-time Updates** - Live batch status monitoring with smart notifications
@@ -76,15 +96,18 @@ If you are integrating with QuickBooks Online or any external service that requi
 - **Progress Tracking** - Visual completion percentages and step-by-step routing
 - **Priority Management** - Rush / Standard / Hold classifications with color coding
 
-### 🎨 Modern UI/UX
+### 🎨 Modern UI/UX & Code Quality
+- **Production-Ready Architecture** - Clean, maintainable codebase with TypeScript compliance
+- **Cognitive Complexity Optimization** - Refactored components following React best practices
+- **Custom Hook Architecture** - Extracted business logic into reusable custom hooks
+- **Component Composition** - Modular component design for enhanced maintainability
 - **Dark Theme** - Glass-morphism design optimized for manufacturing environments  
 - **Mobile Responsive** - Full functionality on tablets and mobile devices
-- **Loading States** - Skeleton screens for smooth user experience
+- **Loading States** - Skeleton screens with progress indicators for smooth user experience
 - **Error Handling** - Comprehensive error boundaries with retry logic
 - **Accessibility** - WCAG 2.1 AA compliant for all users
 - **Enhanced Form Validation** - Real-time feedback with detailed error messages
 - **Smart Part Selection** - Dual-mode part selector (dropdown/search) with visual feedback
-- **Order Creation UX** - Status indicators and form validation prevent submission errors
 
 ---
 
@@ -97,6 +120,32 @@ If you are integrating with QuickBooks Online or any external service that requi
 - **Containerization**: Docker & Docker Compose for easy deployment
 - **Package Manager**: pnpm for fast, efficient dependency management
 - **Health Monitoring**: Built-in system health dashboard and API endpoints
+
+## 🤖 Smart Batch Generation System
+
+### AI-Powered Batch Optimization
+DES-BOMS includes an advanced AI-powered batch generation system that optimizes manufacturing efficiency:
+
+- **Intelligent Sizing**: Automatically calculates optimal batch sizes based on machine capacity, setup times, and order quantities
+- **Workstation Routing**: Suggests optimal workstation sequences with time estimates
+- **Priority Management**: Supports Rush, Standard, and Hold priority levels with visual indicators
+- **Real-time Customization**: Full inline editing of all batch parameters with instant validation
+- **Bulk Operations**: Multi-select capabilities for batch priority updates and workstation assignments
+
+### Complete Order Management Workflow
+- **Order Creation**: Comprehensive order entry with customer selection, part specifications, and file attachments
+- **Smart Batch Generation**: One-click generation of optimized batches from order line items
+- **Progress Tracking**: Real-time order completion status based on batch progress
+- **Order Completion**: Automated workflow with batch integration and status updates
+- **Shipping Management**: Complete shipping workflow with tracking and notifications
+- **Navigation Integration**: Direct links from orders to batches and workstations
+
+### Manufacturing Optimization Features
+- **Machine Capacity Planning**: Considers individual workstation capabilities and limitations
+- **Setup Time Optimization**: Minimizes machine setup time through intelligent batching
+- **Material Flow**: Optimizes part flow through the manufacturing process
+- **Operator Efficiency**: Accounts for operator skill levels and workstation assignments
+- **Quality Control Integration**: Built-in QC checkpoints and inspection requirements
 
 ## 📋 Prerequisites
 
@@ -135,12 +184,16 @@ docker-compose down
 - **Application**: http://localhost:3000
 - **Database**: localhost:5432
 - **API Endpoints**: 
-  - http://localhost:3000/api/orders
-  - http://localhost:3000/api/batches
-  - http://localhost:3000/api/workstations
-  - http://localhost:3000/api/qc
-  - http://localhost:3000/api/customers
-  - http://localhost:3000/api/quickbooks/status
+  - http://localhost:3000/api/orders - Order management
+  - http://localhost:3000/api/orders/[id]/generate-batches - Smart batch generation
+  - http://localhost:3000/api/orders/[id]/complete - Order completion workflow
+  - http://localhost:3000/api/orders/[id]/ship - Order shipping management
+  - http://localhost:3000/api/orders/[id]/batches - Order-batch integration
+  - http://localhost:3000/api/batches - Batch management
+  - http://localhost:3000/api/workstations - Workstation tracking
+  - http://localhost:3000/api/qc - Quality control
+  - http://localhost:3000/api/customers - Customer management
+  - http://localhost:3000/api/quickbooks/status - QuickBooks integration status
 
 ## 🔗 QuickBooks Integration Setup
 
@@ -274,9 +327,16 @@ The manufacturing-focused database includes the following main entities:
 
 ### Order Management
 - **Customer**: Manufacturing customers with billing/shipping addresses + QuickBooks sync
-- **PurchaseOrder**: Customer POs with system-generated order IDs
+- **PurchaseOrder**: Customer POs with system-generated order IDs and completion tracking
 - **OrderLineItem**: Individual parts with drawings and specifications
 - **FileAttachment**: CAD files, drawings, and documentation per line item
+- **OrderCompletion**: Order completion tracking with timestamps and batch integration
+
+### Smart Batch Generation & Management
+- **Batch**: Manufacturing batches with AI-optimized sizing and system-generated IDs (DES-YYYY-MMDD-###)
+- **BatchGeneration**: AI-powered batch generation parameters and optimization data
+- **BatchCustomization**: User customizations and inline editing history
+- **RoutingStep**: Sequential workstation steps with time estimates and AI optimization
 
 ### QuickBooks Integration
 - **Customer Sync**: Bidirectional synchronization with QuickBooks Online
@@ -285,19 +345,22 @@ The manufacturing-focused database includes the following main entities:
 - **Real-time Updates**: Automatic customer creation sync
 
 ### Production Management
-- **Batch**: Manufacturing batches with system-generated IDs (DES-YYYY-MMDD-###)
-- **RoutingStep**: Sequential workstation steps with time estimates
-- **Workstation**: Manufacturing stations (LATHE-1, MILL-2, etc.)
+- **Workstation**: Manufacturing stations (LATHE-1, MILL-2, etc.) with capacity tracking
+- **WorkstationCapacity**: AI-driven capacity planning and optimization data
+- **RoutingTemplate**: Reusable routing templates for common manufacturing processes
 
 ### Operator System
 - **StepConfirmation**: Operator login, start/end times, and photo uploads
 - **QCRecord**: Quality control inspections with Pass/Fail/Rework results
+- **OperatorEfficiency**: Performance tracking for AI optimization
 
-### Status Tracking
-- **Order Priority**: Rush / Standard / Hold
-- **Batch Status**: Queued / In Progress / Completed / On Hold / Cancelled
-- **Step Status**: Pending / In Progress / Completed / Skipped / Failed
-- **QC Results**: Pass / Fail / Rework Required
+### Advanced Status Tracking
+- **Order Priority**: Rush / Standard / Hold with automated escalation
+- **Order Status**: Pending / In Progress / Completed / Shipped / Cancelled with completion percentages
+- **Batch Status**: Queued / In Progress / Completed / On Hold / Cancelled with real-time updates
+- **Step Status**: Pending / In Progress / Completed / Skipped / Failed with time tracking
+- **QC Results**: Pass / Fail / Rework Required with detailed inspection data
+- **Completion Tracking**: Automated status updates based on batch progress and dependencies
 
 ## 🐛 Troubleshooting
 
@@ -429,7 +492,7 @@ For issues and questions:
 
 ---
 
-**Status**: ✅ Production-ready with QuickBooks Online integration and comprehensive Ubuntu deployment guide!
+**Status**: ✅ Production-ready v0.4.0 with AI-powered Smart Batch Generation, Complete Order Management, and QuickBooks Online integration!
 
 ## 🔗 Additional Resources
 
@@ -450,5 +513,39 @@ For issues and questions:
 ### API Endpoints (QuickBooks)
 - `POST /api/quickbooks/sync-customers` — Syncs all customers from QuickBooks, upserts them locally, and deletes any local customers not in QuickBooks.
 - `GET /api/quickbooks/status` — Returns QuickBooks connection status.
+
+### API Endpoints (Smart Batch Generation)
+- `POST /api/orders/[id]/generate-batches` — AI-powered batch generation with customizable parameters
+- `GET /api/orders/[id]/batches` — Retrieve all batches associated with an order
+- `PUT /api/orders/[id]/batches/[batchId]` — Update batch parameters and customizations
+- `POST /api/orders/[id]/complete` — Complete order workflow with batch integration
+- `POST /api/orders/[id]/ship` — Process order shipping with tracking
+
+## 📈 Version History
+
+### v0.4.0 (August 2025) - Smart Manufacturing & AI Integration
+- 🤖 AI-powered Smart Batch Generation with complete customization
+- 📋 Advanced Order Completion workflow with batch integration
+- 🔄 Order-to-batch routing and workstation navigation
+- 🎨 Production-ready architecture with cognitive complexity optimization
+- 🛠️ Custom hook architecture and component composition
+- ✅ TypeScript compliance and code quality improvements
+
+### v0.3.0 - QuickBooks Integration & Enhanced Batch Management
+- 🔗 Complete QuickBooks Online integration with OAuth 2.0
+- 🔄 Enhanced batch management system with bulk operations
+- 🎨 Modern UI/UX with dark theme and responsive design
+- 📊 Real-time dashboards and progress tracking
+
+### v0.2.0 - Core Manufacturing Features
+- 📋 Order and batch management system
+- 🏭 Workstation routing and operator interface
+- 🔍 Quality control and inspection workflows
+- 📄 Work traveler generation
+
+### v0.1.0 - Initial Release
+- 🚀 Basic order management
+- 🐳 Docker containerization
+- 📊 PostgreSQL database with Prisma ORM
 
 ---

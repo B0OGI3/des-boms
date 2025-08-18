@@ -138,6 +138,7 @@ export async function GET(
         customer: true,
         lineItems: {
           include: {
+            part: true, // Include Parts Master data
             fileAttachments: true,
             batches: {
               include: {

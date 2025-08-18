@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const priority = searchParams.get('priority');
     const workstationId = searchParams.get('workstationId');
+    const orderId = searchParams.get('orderId');
 
     // Build where clause
     const where: any = {};
@@ -29,6 +30,14 @@ export async function GET(request: NextRequest) {
 
     if (priority) {
       where.priority = priority;
+    }
+
+    if (orderId) {
+      where.lineItem = {
+        purchaseOrder: {
+          id: orderId
+        }
+      };
     }
 
     if (searchTerm) {

@@ -17,6 +17,7 @@ export interface Order extends BaseEntity {
   customerName: string;
   orderNumber: string;
   status: StatusType;
+  orderStatus: 'ACTIVE' | 'COMPLETED' | 'SHIPPED' | 'CANCELLED' | 'ON_HOLD'; // Database order status
   priority: 'RUSH' | 'STANDARD' | 'HOLD';
   orderDate: string;
   dueDate: string;
@@ -24,6 +25,10 @@ export interface Order extends BaseEntity {
   itemCount: number;
   assignedBatches: number;
   completedBatches: number;
+  completedAt?: string;
+  completedBy?: string;
+  shippedAt?: string;
+  shippedBy?: string;
   lineItems?: Array<{
     part: {
       id: string;
@@ -69,12 +74,56 @@ interface UseOrderSearchReturn {
 }
 
 // Utility function to convert Prisma PurchaseOrder to UI Order
+// Helper functions to reduce cognitive complexity
+
+const calculateBatchStats = (lineItems?: Array<{ batches?: Array<{ status: string }> }>) => {
+  const allBatches = lineItems?.flatMap((item) => item.batches || []) || [];
+  const completedBatches = allBatches.filter((batch) => batch.status === 'COMPLETED').length;
+  const inProgressBatches = allBatches.filter((batch) => batch.status === 'IN_PROGRESS').length;
+  
+  return { allBatches, completedBatches, inProgressBatches };
+};
+
+const determineStatusFromDatabase = (orderStatus: string): StatusType => {
+  switch (orderStatus) {
+    case 'COMPLETED':
+    case 'SHIPPED':
+      return 'COMPLETED';
+    case 'CANCELLED':
+      return 'CANCELLED';
+    case 'ON_HOLD':
+      return 'ON_HOLD';
+    default:
+      return 'PENDING'; // Will be refined by batch status
+  }
+};
+
+const determineStatusFromBatches = (batchStats: { allBatches: any[], completedBatches: number, inProgressBatches: number }): StatusType => {
+  const { allBatches, completedBatches, inProgressBatches } = batchStats;
+  
+  if (allBatches.length === 0) {
+    return 'PENDING';
+  } else if (completedBatches === allBatches.length) {
+    return 'COMPLETED';
+  } else if (inProgressBatches > 0) {
+    return 'IN_PROGRESS';
+  } else {
+    return 'PENDING';
+  }
+};
+
+// Main conversion function
 const convertPurchaseOrderToOrder = (purchaseOrder: {
   id: string;
   orderNumber: string;
   priority: string;
   dueDate: Date | null;
   customerCode: string;
+  orderStatus?: string; // Database order status
+  completedAt?: Date | null;
+  completedBy?: string | null;
+  shippedAt?: Date | null;
+  shippedBy?: string | null;
   lineItems?: Array<{
     quantity: number;
     batches?: Array<{ status: string }>;
@@ -83,20 +132,19 @@ const convertPurchaseOrderToOrder = (purchaseOrder: {
   [key: string]: any;
 }): Order => {
   try {
-    const allBatches = purchaseOrder.lineItems?.flatMap((item) => item.batches || []) || [];
-    const completedBatches = allBatches.filter((batch) => batch.status === 'COMPLETED').length;
-    const inProgressBatches = allBatches.filter((batch) => batch.status === 'IN_PROGRESS').length;
+    const batchStats = calculateBatchStats(purchaseOrder.lineItems);
     
-    // Determine overall order status based on batch completion
+    // Determine overall order status
     let status: StatusType;
-    if (allBatches.length === 0) {
-      status = 'PENDING';
-    } else if (completedBatches === allBatches.length) {
-      status = 'COMPLETED';
-    } else if (inProgressBatches > 0) {
-      status = 'IN_PROGRESS';
+    if (purchaseOrder.orderStatus) {
+      status = determineStatusFromDatabase(purchaseOrder.orderStatus);
+      // For ACTIVE orders, refine status based on batches
+      if (status === 'PENDING' && purchaseOrder.orderStatus === 'ACTIVE') {
+        status = determineStatusFromBatches(batchStats);
+      }
     } else {
-      status = 'PENDING';
+      // Fallback to batch-based calculation for backwards compatibility
+      status = determineStatusFromBatches(batchStats);
     }
 
     // Convert priority mapping from database to frontend values (DES-BOMS spec: Rush / Standard / Hold)
@@ -123,13 +171,18 @@ const convertPurchaseOrderToOrder = (purchaseOrder: {
       customerName: purchaseOrder.customer?.name || 'Unknown Customer',
       orderNumber: purchaseOrder.poNumber || '',
       status,
+      orderStatus: (purchaseOrder.orderStatus as 'ACTIVE' | 'COMPLETED' | 'SHIPPED' | 'CANCELLED' | 'ON_HOLD') || 'ACTIVE',
       priority: priorityMap[purchaseOrder.priority] || 'STANDARD',
       orderDate: new Date(purchaseOrder.createdAt).toISOString().split('T')[0],
       dueDate: purchaseOrder.dueDate ? new Date(purchaseOrder.dueDate).toISOString().split('T')[0] : '',
       totalValue,
       itemCount: (purchaseOrder.lineItems || []).length,
-      assignedBatches: allBatches.length,
-      completedBatches,
+      assignedBatches: batchStats.allBatches.length,
+      completedBatches: batchStats.completedBatches,
+      completedAt: purchaseOrder.completedAt ? new Date(purchaseOrder.completedAt).toISOString() : undefined,
+      completedBy: purchaseOrder.completedBy || undefined,
+      shippedAt: purchaseOrder.shippedAt ? new Date(purchaseOrder.shippedAt).toISOString() : undefined,
+      shippedBy: purchaseOrder.shippedBy || undefined,
       lineItems: (purchaseOrder.lineItems || []).map((item: {
         part?: {
           id?: string;

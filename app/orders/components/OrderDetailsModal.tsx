@@ -23,6 +23,11 @@ import { IconCalendar, IconUser, IconFileText, IconPackage, IconChevronDown, Ico
 import type { Order } from '../hooks/useOrderSearch';
 import { FileAttachmentManager } from './FileAttachmentManager';
 
+// Type aliases for union types
+type PartType = 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+type OrderOrNull = Order | null;
+type EnhancedOrderOrNull = EnhancedOrder | null;
+
 // Enhanced interface for full order data with line item IDs and file attachments
 interface EnhancedLineItem {
   id: string;
@@ -30,7 +35,7 @@ interface EnhancedLineItem {
     id: string;
     partNumber: string;
     partName: string;
-    partType: 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+    partType: PartType;
     drawingNumber?: string;
     revisionLevel?: string;
     description?: string;
@@ -59,7 +64,7 @@ interface EnhancedOrder extends Order {
 interface OrderDetailsModalProps {
   opened: boolean;
   onClose: () => void;
-  order: Order | null;
+  order: OrderOrNull;
   onEdit?: (order: Order) => void;
 }
 
@@ -112,7 +117,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   order,
   onEdit
 }) => {
-  const [enhancedOrder, setEnhancedOrder] = useState<EnhancedOrder | null>(null);
+  const [enhancedOrder, setEnhancedOrder] = useState<EnhancedOrderOrNull>(null);
   const [loading, setLoading] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
@@ -126,7 +131,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
 
       setLoading(true);
       try {
-        const response = await fetch(`/api/orders/${order.orderId}`);
+        const response = await fetch(`/api/orders/${order.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch order details');
         }
@@ -137,11 +142,17 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             ...order,
             lineItems: result.data.lineItems?.map((item: {
               id: string;
-              partNumber: string;
-              partName: string;
-              drawingNumber?: string;
-              revisionLevel?: string;
+              part: {
+                partNumber: string;
+                partName: string;
+                partType: string;
+                drawingNumber?: string;
+                revisionLevel?: string;
+                description?: string;
+              };
               quantity: number;
+              unitPrice?: number;
+              notes?: string;
               fileAttachments?: Array<{
                 id: string;
                 fileName: string;
@@ -156,11 +167,18 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               }>;
             }) => ({
               id: item.id,
-              partNumber: item.partNumber,
-              partName: item.partName,
-              drawingNumber: item.drawingNumber,
-              revisionLevel: item.revisionLevel,
+              part: {
+                id: '', // Placeholder since part ID not needed for display
+                partNumber: item.part.partNumber,
+                partName: item.part.partName,
+                partType: item.part.partType as PartType,
+                drawingNumber: item.part.drawingNumber,
+                revisionLevel: item.part.revisionLevel,
+                description: item.part.description,
+              },
               quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              notes: item.notes,
               fileAttachments: item.fileAttachments || []
             })) || []
           };
@@ -189,7 +207,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
     if (!order || !opened) return;
     
     try {
-      const response = await fetch(`/api/orders/${order.orderId}`);
+      const response = await fetch(`/api/orders/${order.id}`);
       if (!response.ok) return;
       
       const result = await response.json();
@@ -198,11 +216,17 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
           ...order,
           lineItems: result.data.lineItems?.map((apiItem: {
             id: string;
-            partNumber: string;
-            partName: string;
-            drawingNumber?: string;
-            revisionLevel?: string;
+            part: {
+              partNumber: string;
+              partName: string;
+              partType: string;
+              drawingNumber?: string;
+              revisionLevel?: string;
+              description?: string;
+            };
             quantity: number;
+            unitPrice?: number;
+            notes?: string;
             fileAttachments?: Array<{
               id: string;
               fileName: string;
@@ -217,11 +241,18 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             }>;
           }) => ({
             id: apiItem.id,
-            partNumber: apiItem.partNumber,
-            partName: apiItem.partName,
-            drawingNumber: apiItem.drawingNumber,
-            revisionLevel: apiItem.revisionLevel,
+            part: {
+              id: '', // Placeholder since part ID not needed for display
+              partNumber: apiItem.part.partNumber,
+              partName: apiItem.part.partName,
+              partType: apiItem.part.partType as 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL',
+              drawingNumber: apiItem.part.drawingNumber,
+              revisionLevel: apiItem.part.revisionLevel,
+              description: apiItem.part.description,
+            },
             quantity: apiItem.quantity,
+            unitPrice: apiItem.unitPrice,
+            notes: apiItem.notes,
             fileAttachments: apiItem.fileAttachments || []
           })) || []
         };

@@ -18,7 +18,7 @@ import {
   Divider,
   Box
 } from '@mantine/core';
-import { IconChevronDown, IconChevronRight, IconEye, IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronRight, IconEye, IconEdit, IconTrash, IconCheck, IconTruck, IconRoute, IconWand } from '@tabler/icons-react';
 import type { BaseEntity, StatusType } from '../../../types/shared';
 
 // Order interface for table display (aligned with DES-BOMS spec)
@@ -27,6 +27,7 @@ export interface OrderTableItem extends BaseEntity {
   customerName: string;
   orderNumber: string;
   status: StatusType;
+  orderStatus: 'ACTIVE' | 'COMPLETED' | 'SHIPPED' | 'CANCELLED' | 'ON_HOLD'; // Database order status
   priority: 'RUSH' | 'STANDARD' | 'HOLD';
   orderDate: string;
   dueDate: string;
@@ -34,6 +35,10 @@ export interface OrderTableItem extends BaseEntity {
   itemCount: number;
   assignedBatches: number;
   completedBatches: number;
+  completedAt?: string;
+  completedBy?: string;
+  shippedAt?: string;
+  shippedBy?: string;
   lineItems?: Array<{
     part: {
       id: string;
@@ -55,6 +60,10 @@ export interface OrdersTableProps {
   onViewOrder?: (order: OrderTableItem) => void;
   onEditOrder?: (order: OrderTableItem) => void;
   onDeleteOrder?: (order: OrderTableItem) => void;
+  onCompleteOrder?: (order: OrderTableItem) => void;
+  onShipOrder?: (order: OrderTableItem) => void;
+  onViewBatches?: (order: OrderTableItem) => void;
+  onSmartGenerate?: (order: OrderTableItem) => void;
   loading?: boolean;
   emptyMessage?: string;
 }
@@ -108,13 +117,21 @@ interface OrderRowProps {
   onViewOrder?: (order: OrderTableItem) => void;
   onEditOrder?: (order: OrderTableItem) => void;
   onDeleteOrder?: (order: OrderTableItem) => void;
+  onCompleteOrder?: (order: OrderTableItem) => void;
+  onShipOrder?: (order: OrderTableItem) => void;
+  onViewBatches?: (order: OrderTableItem) => void;
+  onSmartGenerate?: (order: OrderTableItem) => void;
 }
 
 const OrderRow: React.FC<OrderRowProps> = ({ 
   order, 
   onViewOrder, 
   onEditOrder, 
-  onDeleteOrder 
+  onDeleteOrder,
+  onCompleteOrder,
+  onShipOrder,
+  onViewBatches,
+  onSmartGenerate
 }) => {
   const [expanded, setExpanded] = useState(false);
   
@@ -207,6 +224,34 @@ const OrderRow: React.FC<OrderRowProps> = ({
         
         <Table.Td>
           <Group gap="xs">
+            {/* Smart Batch Generation - Show for ACTIVE orders with no batches */}
+            {onSmartGenerate && order.orderStatus === 'ACTIVE' && order.assignedBatches === 0 && (
+              <Tooltip label="Smart Batch Generation">
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  onClick={() => onSmartGenerate(order)}
+                  style={{ color: '#7c3aed' }}
+                >
+                  <IconWand size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            
+            {/* View Batches/Manufacturing Progress */}
+            {onViewBatches && order.assignedBatches > 0 && (
+              <Tooltip label="View Manufacturing Progress">
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  onClick={() => onViewBatches(order)}
+                  style={{ color: '#7c3aed' }}
+                >
+                  <IconRoute size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            
             {onViewOrder && (
               <Tooltip label="View Details">
                 <ActionIcon
@@ -219,6 +264,37 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 </ActionIcon>
               </Tooltip>
             )}
+            
+            {/* Complete Order Action */}
+            {onCompleteOrder && order.orderStatus === 'ACTIVE' && 
+             order.assignedBatches > 0 && 
+             order.completedBatches === order.assignedBatches && (
+              <Tooltip label="Complete Order">
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  onClick={() => onCompleteOrder(order)}
+                  style={{ color: '#16a34a' }}
+                >
+                  <IconCheck size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            
+            {/* Ship Order Action */}
+            {onShipOrder && order.orderStatus === 'COMPLETED' && (
+              <Tooltip label="Ship Order">
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  onClick={() => onShipOrder(order)}
+                  style={{ color: '#0ea5e9' }}
+                >
+                  <IconTruck size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            
             {onEditOrder && (
               <Tooltip label="Edit Order">
                 <ActionIcon
@@ -353,6 +429,10 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
   onViewOrder,
   onEditOrder,
   onDeleteOrder,
+  onCompleteOrder,
+  onShipOrder,
+  onViewBatches,
+  onSmartGenerate,
   loading = false,
   emptyMessage = "No orders found"
 }) => {
@@ -434,6 +514,10 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 onViewOrder={onViewOrder}
                 onEditOrder={onEditOrder}
                 onDeleteOrder={onDeleteOrder}
+                onCompleteOrder={onCompleteOrder}
+                onShipOrder={onShipOrder}
+                onViewBatches={onViewBatches}
+                onSmartGenerate={onSmartGenerate}
               />
             ))}
           </Table.Tbody>

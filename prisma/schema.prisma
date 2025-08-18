@@ -53,6 +53,15 @@ model PurchaseOrder {
   priority    OrderPriority @default(STANDARD)
   notes       String?       // Order-level notes/shipping details
   
+  // Order Completion Tracking (DES-BOMS Spec Section 2)
+  orderStatus     OrderStatus   @default(ACTIVE)     // Current order status
+  completedAt     DateTime?     // When order was marked complete
+  completedBy     String?       // Operator who completed the order
+  completionNotes String?       // Final completion notes
+  shippedAt       DateTime?     // When order was shipped
+  shippedBy       String?       // Who processed shipping
+  shippingNotes   String?       // Shipping details/tracking
+  
   // Relations
   lineItems   OrderLineItem[]
   
@@ -297,6 +306,14 @@ enum OrderPriority {
   RUSH
   STANDARD
   HOLD
+}
+
+enum OrderStatus {
+  ACTIVE       // Order is being worked - batches in progress
+  COMPLETED    // All manufacturing and QC complete, ready to ship
+  SHIPPED      // Order has been shipped to customer
+  CANCELLED    // Order was cancelled
+  ON_HOLD      // Order temporarily paused
 }
 
 enum BatchPriority {

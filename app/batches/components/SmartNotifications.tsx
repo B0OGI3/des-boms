@@ -20,7 +20,11 @@ export const useSmartNotifications = ({ batches, enabled = true, onNotification 
   const notifyUser = useCallback((notification: BatchNotification) => {
     if (onNotification) {
       onNotification(notification);
-    } else {
+      return;
+    }
+    
+    // Log notification for debugging
+    if (process.env.NODE_ENV === 'development') {
       console.log('Smart Notification:', notification);
     }
   }, [onNotification]);
