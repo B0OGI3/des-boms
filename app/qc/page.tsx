@@ -28,7 +28,6 @@ import {
   Badge, 
   Group, 
   Stack, 
-  Loader, 
   Alert, 
   Button,
   Grid,
@@ -40,6 +39,8 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { IconPlus, IconEye, IconSearch, IconFileText } from "@tabler/icons-react";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { usePageInitialization } from "../../hooks/usePageInitialization";
 
 interface QCRecord {
   id: string;
@@ -108,23 +109,30 @@ export default function QCPage() {
   });
   const [searchTerm, setSearchTerm] = useState('');
 
+  const { isPageReady, pageInitialization, initializeTask, getProgress } = usePageInitialization({
+    initialTasks: ['qc-records', 'batches'],
+    autoStart: false
+  });
+
   // Fetch QC records and batches
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch existing QC records
-        const qcResponse = await fetch('/api/qc');
-        if (qcResponse.ok) {
-          const qcResult = await qcResponse.json();
-          setQCRecords(qcResult.data || []);
-        }
+        await initializeTask('qc-records', async () => {
+          const qcResponse = await fetch('/api/qc');
+          if (qcResponse.ok) {
+            const qcResult = await qcResponse.json();
+            setQCRecords(qcResult.data || []);
+          }
+        });
 
-        // Fetch batches that need inspection (completed batches without QC records)
-        const batchesResponse = await fetch('/api/batches?status=COMPLETED&needsQC=true');
-        if (batchesResponse.ok) {
-          const batchesResult = await batchesResponse.json();
-          setBatchesForInspection(batchesResult.data || []);
-        }
+        await initializeTask('batches', async () => {
+          const batchesResponse = await fetch('/api/batches?status=COMPLETED&needsQC=true');
+          if (batchesResponse.ok) {
+            const batchesResult = await batchesResponse.json();
+            setBatchesForInspection(batchesResult.data || []);
+          }
+        });
       } catch (error) {
         console.error('Error fetching QC data:', error);
       } finally {
@@ -204,19 +212,14 @@ export default function QCPage() {
     record.inspector.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) {
-    return (
-      <div style={{ 
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-        minHeight: "100vh",
-        padding: "20px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}>
-        <Loader size="xl" color="#3b82f6" />
-      </div>
-    );
+  if (!isPageReady || loading) {
+    return <LoadingScreen 
+      title="Loading Quality Control"
+      description="Initializing QC records and batch inspection data..."
+      icon="🔍"
+      pageInitialization={pageInitialization}
+      progress={getProgress()}
+    />;
   }
 
   return (

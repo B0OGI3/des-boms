@@ -1,6 +1,137 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Smart routing types and functions
+interface RoutingTemplate {
+  templateId: string;
+  name: string;
+  steps: Array<{
+    stepNumber: number;
+    description: string;
+    workstationCategory: string;
+    estimatedTime: number;
+    required: boolean;
+  }>;
+  businessRules: {
+    applicablePartTypes: string[];
+    minQuantity?: number;
+    maxQuantity?: number;
+    priority?: string[];
+  };
+}
+
+// Smart routing templates
+const ROUTING_TEMPLATES: RoutingTemplate[] = [
+  {
+    templateId: 'standard',
+    name: 'Standard Manufacturing',
+    steps: [
+      { stepNumber: 1, description: 'Material Preparation', workstationCategory: 'MACHINING', estimatedTime: 2, required: true },
+      { stepNumber: 2, description: 'Primary Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 4, required: true },
+      { stepNumber: 3, description: 'Quality Inspection', workstationCategory: 'INSPECTION', estimatedTime: 1, required: true },
+      { stepNumber: 4, description: 'Finishing Operations', workstationCategory: 'FINISHING', estimatedTime: 2, required: true }
+    ],
+    businessRules: {
+      applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
+    }
+  },
+  {
+    templateId: 'rush',
+    name: 'Rush Priority',
+    steps: [
+      { stepNumber: 1, description: 'Express Material Prep', workstationCategory: 'MACHINING', estimatedTime: 1, required: true },
+      { stepNumber: 2, description: 'Priority Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 3, required: true },
+      { stepNumber: 3, description: 'Final Inspection', workstationCategory: 'INSPECTION', estimatedTime: 1, required: true }
+    ],
+    businessRules: {
+      applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
+      priority: ['RUSH']
+    }
+  },
+  {
+    templateId: 'high-volume',
+    name: 'High Volume Production',
+    steps: [
+      { stepNumber: 1, description: 'Bulk Material Setup', workstationCategory: 'MACHINING', estimatedTime: 3, required: true },
+      { stepNumber: 2, description: 'High-Speed Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 5, required: true },
+      { stepNumber: 3, description: 'Batch Quality Control', workstationCategory: 'INSPECTION', estimatedTime: 2, required: true },
+      { stepNumber: 4, description: 'Surface Treatment', workstationCategory: 'FINISHING', estimatedTime: 2, required: true },
+      { stepNumber: 5, description: 'Final Packaging', workstationCategory: 'FINISHING', estimatedTime: 1, required: true }
+    ],
+    businessRules: {
+      applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
+      minQuantity: 50
+    }
+  }
+];
+
+// Smart routing selection logic
+function selectOptimalTemplate(part: any, batchQuantity: number, priority: string): RoutingTemplate {
+  // Priority-based selection
+  if (priority === 'RUSH') {
+    const rushTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'rush');
+    if (rushTemplate?.businessRules.applicablePartTypes.includes(part.partType)) {
+      return rushTemplate;
+    }
+  }
+
+  // Volume-based selection
+  if (batchQuantity >= 50) {
+    const highVolumeTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'high-volume');
+    if (highVolumeTemplate?.businessRules.applicablePartTypes.includes(part.partType)) {
+      return highVolumeTemplate;
+    }
+  }
+
+  // Default to standard template
+  const standardTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'standard');
+  return standardTemplate || ROUTING_TEMPLATES[0];
+}
+
+// Generate smart routing for a batch
+async function generateSmartRoutingForBatch(tx: any, batch: any, part: any) {
+  try {
+    // Select optimal routing template
+    const template = selectOptimalTemplate(part, batch.quantity, batch.priority);
+    
+    // Get workstations by category
+    const workstations = await tx.workstation.findMany({
+      where: { active: true }
+    });
+
+    // Create routing steps from template
+    for (const stepTemplate of template.steps) {
+      // Find appropriate workstation for this step
+      const suitableWorkstations = workstations.filter((ws: any) => 
+        ws.category === stepTemplate.workstationCategory
+      );
+      
+      // Select first available workstation or fall back to any active workstation
+      const selectedWorkstation = suitableWorkstations[0] || workstations[0];
+      
+      if (selectedWorkstation) {
+        await tx.routingStep.create({
+          data: {
+            batchId: batch.id,
+            stepNumber: stepTemplate.stepNumber,
+            workstationId: selectedWorkstation.id,
+            description: stepTemplate.description,
+            required: stepTemplate.required,
+            estimatedTime: stepTemplate.estimatedTime,
+            notes: `Auto-generated from ${template.name} template`,
+            status: 'PENDING'
+          }
+        });
+      }
+    }
+
+    console.log(`Generated ${template.steps.length} routing steps for batch ${batch.batchId} using ${template.name} template`);
+  } catch (error) {
+    console.error('Error generating smart routing for batch:', error);
+    // Don't throw - let batch creation succeed even if routing fails
+  }
+}
+
 interface GenerationConfig {
   maxBatchSize: number;
   minBatchSize: number;
@@ -22,8 +153,14 @@ interface BatchSuggestion {
     quantity: number;
     priority: 'RUSH' | 'STANDARD';
     estimatedDuration: number; // in days
-    routingTemplateId?: string;
-    routingTemplateName?: string;
+    workflowSteps: Array<{
+      id: string;
+      stepNumber: number;
+      workstationId: string;
+      description: string;
+      estimatedTime: number;
+      status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED';
+    }>;
     reasoning: string;
   }>;
 }
@@ -101,6 +238,19 @@ function generateBatchSuggestions(
     // Determine batch priority - first batch gets order priority for rush orders
     const batchPriority: 'RUSH' | 'STANDARD' = shouldRush ? 'RUSH' : 'STANDARD';
     
+    // *** SELECT SMART ROUTING TEMPLATE AND CREATE WORKFLOW STEPS ***
+    const template = selectOptimalTemplate(part, batchQuantity, batchPriority);
+    
+    // Convert template steps to workflow steps
+    const workflowSteps = template.steps.map(step => ({
+      id: `temp-step-${Date.now()}-${step.stepNumber}`,
+      stepNumber: step.stepNumber,
+      workstationId: '', // Will be assigned when batch is created
+      description: step.description,
+      estimatedTime: step.estimatedTime,
+      status: 'PENDING' as const
+    }));
+    
     // Estimate duration based on batch size, part complexity, and QC level
     let baseDuration = Math.ceil(batchQuantity / 25); // Base: 25 parts per day
     
@@ -119,13 +269,13 @@ function generateBatchSuggestions(
     // Generate reasoning based on configuration
     let reasoning = '';
     if (config.priorityStrategy === 'QUALITY') {
-      reasoning = `Small batch (${batchQuantity}) for enhanced quality control (${config.qualityControlLevel.toLowerCase()})`;
+      reasoning = `Small batch (${batchQuantity}) for enhanced quality control (${config.qualityControlLevel.toLowerCase()}) using ${template.name}`;
     } else if (config.priorityStrategy === 'SPEED') {
-      reasoning = `Optimized batch (${batchQuantity}) for fast turnaround with ${config.estimationBuffer}% buffer`;
+      reasoning = `Optimized batch (${batchQuantity}) for fast turnaround with ${config.estimationBuffer}% buffer using ${template.name}`;
     } else if (config.priorityStrategy === 'EFFICIENCY') {
-      reasoning = `Large batch (${batchQuantity}) for maximum manufacturing efficiency`;
+      reasoning = `Large batch (${batchQuantity}) for maximum manufacturing efficiency using ${template.name}`;
     } else {
-      reasoning = `Balanced batch (${batchQuantity}) considering quality and efficiency`;
+      reasoning = `Balanced batch (${batchQuantity}) considering quality and efficiency using ${template.name}`;
     }
     
     batches.push({
@@ -133,8 +283,7 @@ function generateBatchSuggestions(
       quantity: batchQuantity,
       priority: batchPriority,
       estimatedDuration,
-      routingTemplateId: undefined,
-      routingTemplateName: undefined,
+      workflowSteps,
       reasoning
     });
     
@@ -284,11 +433,19 @@ export async function PUT(
 
     const createdBatches: any[] = [];
 
-    // Create batches in a transaction
+    // Create batches in a transaction with smart routing
     await prisma.$transaction(async (tx) => {
       for (const suggestion of approvedSuggestions) {
         for (const batch of suggestion.suggestedBatches) {
           const batchId = await generateBatchId(tx);
+
+          // Get the part information for smart routing
+          const lineItem = await tx.orderLineItem.findUnique({
+            where: { id: suggestion.lineItemId },
+            include: { part: true }
+          });
+
+          if (!lineItem) continue;
 
           // Calculate estimated completion date
           const estimatedCompletion = new Date();
@@ -320,6 +477,42 @@ export async function PUT(
             },
           });
 
+          // *** CREATE ROUTING STEPS FROM WORKFLOW STEPS ***
+          if (batch.workflowSteps && batch.workflowSteps.length > 0) {
+            // Get workstations for assignment
+            const workstations = await tx.workstation.findMany({
+              where: { active: true }
+            });
+
+            for (const workflowStep of batch.workflowSteps) {
+              // Assign workstation if not already assigned
+              let workstationId = workflowStep.workstationId;
+              if (!workstationId) {
+                // Find a suitable workstation (fallback to first available)
+                const suitableWorkstation = workstations[0];
+                workstationId = suitableWorkstation?.id || '';
+              }
+
+              if (workstationId) {
+                await tx.routingStep.create({
+                  data: {
+                    batchId: newBatch.id,
+                    stepNumber: workflowStep.stepNumber,
+                    workstationId: workstationId,
+                    description: workflowStep.description,
+                    required: true,
+                    estimatedTime: workflowStep.estimatedTime,
+                    notes: 'Generated from smart batch workflow steps',
+                    status: workflowStep.status || 'PENDING'
+                  }
+                });
+              }
+            }
+          } else {
+            // Fallback to legacy smart routing generation if no workflow steps
+            await generateSmartRoutingForBatch(tx, newBatch, lineItem.part);
+          }
+
           createdBatches.push(newBatch);
         }
       }
@@ -331,7 +524,7 @@ export async function PUT(
         createdBatches: createdBatches.length,
         batches: createdBatches,
       },
-      message: `Successfully created ${createdBatches.length} batches`,
+      message: `Successfully created ${createdBatches.length} batches with smart routing`,
     });
   } catch (error) {
     console.error('Error creating batches from suggestions:', error);

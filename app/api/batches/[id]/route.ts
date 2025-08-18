@@ -173,9 +173,18 @@ export async function DELETE(
   try {
     const { id } = await params;
     
-    // Check if batch exists
+    // Check if batch exists and get related data counts for response
     const existingBatch = await prisma.batch.findUnique({
       where: { id },
+      include: {
+        routingSteps: {
+          include: {
+            confirmations: true
+          }
+        },
+        qcRecords: true,
+        materialConsumption: true
+      }
     });
 
     if (!existingBatch) {
@@ -185,14 +194,47 @@ export async function DELETE(
       );
     }
 
-    // Delete the batch (cascade will handle related records)
-    await prisma.batch.delete({
-      where: { id },
+    // Use a transaction to delete all related records first
+    await prisma.$transaction(async (tx) => {
+      // Delete step confirmations first (they reference routing steps)
+      for (const step of existingBatch.routingSteps) {
+        if (step.confirmations.length > 0) {
+          await tx.stepConfirmation.deleteMany({
+            where: { stepId: step.id }
+          });
+        }
+      }
+
+      // Delete routing steps
+      await tx.routingStep.deleteMany({
+        where: { batchId: id }
+      });
+
+      // Delete QC records
+      await tx.qCRecord.deleteMany({
+        where: { batchId: id }
+      });
+
+      // Delete material consumption records
+      await tx.materialConsumption.deleteMany({
+        where: { batchId: id }
+      });
+
+      // Finally delete the batch itself
+      await tx.batch.delete({
+        where: { id }
+      });
     });
 
     return NextResponse.json({
       success: true,
       message: 'Batch deleted successfully',
+      deletedData: {
+        routingSteps: existingBatch.routingSteps.length,
+        stepConfirmations: existingBatch.routingSteps.reduce((total, step) => total + step.confirmations.length, 0),
+        qcRecords: existingBatch.qcRecords.length,
+        materialConsumption: existingBatch.materialConsumption.length
+      }
     });
   } catch (error) {
     console.error('Error deleting batch:', error);

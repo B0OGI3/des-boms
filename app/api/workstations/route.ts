@@ -2,61 +2,92 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '../../../generated/prisma';
 
-// GET /api/workstations - Get all workstations with current job queue
+// GET /api/workstations - Get all workstations with current job queue and operator info
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const activeOnly = searchParams.get('active') === 'true';
     const includeQueue = searchParams.get('includeQueue') === 'true';
+    const includeOperators = searchParams.get('includeOperators') === 'true';
     
     const where: Prisma.WorkstationWhereInput = {};
     if (activeOnly) where.active = true;
 
     const workstations = await prisma.workstation.findMany({
       where,
-      include: includeQueue ? {
-        routingSteps: {
-          where: {
-            status: {
-              in: ['PENDING', 'IN_PROGRESS'],
+      include: {
+        ...(includeQueue && {
+          routingSteps: {
+            where: {
+              status: {
+                in: ['PENDING', 'IN_PROGRESS'],
+              },
             },
-          },
-          include: {
-            batch: {
-              include: {
-                lineItem: {
-                  include: {
-                    purchaseOrder: {
-                      include: {
-                        customer: true,
+            include: {
+              batch: {
+                include: {
+                  lineItem: {
+                    include: {
+                      purchaseOrder: {
+                        include: {
+                          customer: true,
+                        },
                       },
                     },
                   },
                 },
               },
-            },
-            confirmations: {
-              orderBy: {
-                createdAt: 'desc',
+              confirmations: {
+                orderBy: {
+                  createdAt: 'desc',
+                },
+                take: 1,
               },
-              take: 1,
+            },
+            orderBy: [
+              { batch: { priority: 'desc' } },
+              { batch: { createdAt: 'asc' } },
+            ],
+          },
+        }),
+        ...(includeOperators && {
+          currentOperators: {
+            where: {
+              active: true,
+            },
+            orderBy: {
+              operatorName: 'asc',
             },
           },
-          orderBy: [
-            { batch: { priority: 'desc' } },
-            { batch: { createdAt: 'asc' } },
-          ],
-        },
-      } : {},
+          operatorSessions: {
+            where: {
+              logoutTime: null, // Current active sessions
+            },
+            orderBy: {
+              loginTime: 'desc',
+            },
+          },
+        }),
+        capacity: true,
+      },
       orderBy: {
         name: 'asc',
       },
     });
 
+    // Transform data to include calculated fields
+    const transformedWorkstations = workstations.map(workstation => ({
+      ...workstation,
+      status: workstation.operatorSessions?.length > 0 ? 'ACTIVE' : 'IDLE',
+      currentOperator: workstation.operatorSessions?.[0]?.operatorId || null,
+      activeJobs: workstation.routingSteps?.filter(step => step.status === 'IN_PROGRESS').length || 0,
+      queuedJobs: workstation.routingSteps?.filter(step => step.status === 'PENDING').length || 0,
+    }));
+
     return NextResponse.json({
       success: true,
-      data: workstations,
-      count: workstations.length,
+      data: transformedWorkstations,
+      count: transformedWorkstations.length,
     });
   } catch (error) {
     console.error('Error fetching workstations:', error);

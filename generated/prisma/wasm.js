@@ -170,6 +170,7 @@ exports.Prisma.PartScalarFieldEnum = {
   leadTime: 'leadTime',
   active: 'active',
   notes: 'notes',
+  recommendedRoutingTemplateId: 'recommendedRoutingTemplateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -255,11 +256,83 @@ exports.Prisma.RoutingStepScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RoutingTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoutingTemplateStepScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  stepNumber: 'stepNumber',
+  workstationId: 'workstationId',
+  description: 'description',
+  estimatedTime: 'estimatedTime',
+  required: 'required',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkstationOperatorScalarFieldEnum = {
+  id: 'id',
+  operatorId: 'operatorId',
+  operatorName: 'operatorName',
+  email: 'email',
+  phone: 'phone',
+  certifications: 'certifications',
+  shift: 'shift',
+  hourlyRate: 'hourlyRate',
+  active: 'active',
+  currentWorkstationId: 'currentWorkstationId',
+  loginTime: 'loginTime',
+  logoutTime: 'logoutTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OperatorSessionScalarFieldEnum = {
+  id: 'id',
+  operatorId: 'operatorId',
+  workstationId: 'workstationId',
+  loginTime: 'loginTime',
+  logoutTime: 'logoutTime',
+  shift: 'shift',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkstationCapacityScalarFieldEnum = {
+  id: 'id',
+  workstationId: 'workstationId',
+  maxConcurrentJobs: 'maxConcurrentJobs',
+  avgSetupTime: 'avgSetupTime',
+  efficiency: 'efficiency',
+  hoursPerDay: 'hoursPerDay',
+  maintenanceHours: 'maintenanceHours',
+  operatingCostPerHour: 'operatingCostPerHour',
+  maintenanceCostPerHour: 'maintenanceCostPerHour',
+  utilizationTarget: 'utilizationTarget',
+  qualityTarget: 'qualityTarget',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.WorkstationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
   active: 'active',
+  category: 'category',
+  location: 'location',
+  serialNumber: 'serialNumber',
+  manufacturer: 'manufacturer',
+  model: 'model',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -354,6 +427,24 @@ exports.StepStatus = exports.$Enums.StepStatus = {
   FAILED: 'FAILED'
 };
 
+exports.OperatorShift = exports.$Enums.OperatorShift = {
+  DAY: 'DAY',
+  SWING: 'SWING',
+  NIGHT: 'NIGHT',
+  FLEXIBLE: 'FLEXIBLE'
+};
+
+exports.WorkstationCategory = exports.$Enums.WorkstationCategory = {
+  MACHINING: 'MACHINING',
+  ASSEMBLY: 'ASSEMBLY',
+  WELDING: 'WELDING',
+  INSPECTION: 'INSPECTION',
+  PACKAGING: 'PACKAGING',
+  PREP: 'PREP',
+  FINISHING: 'FINISHING',
+  OTHER: 'OTHER'
+};
+
 exports.ConfirmationStatus = exports.$Enums.ConfirmationStatus = {
   STARTED: 'STARTED',
   COMPLETED: 'COMPLETED',
@@ -377,6 +468,11 @@ exports.Prisma.ModelName = {
   Batch: 'Batch',
   MaterialConsumption: 'MaterialConsumption',
   RoutingStep: 'RoutingStep',
+  RoutingTemplate: 'RoutingTemplate',
+  RoutingTemplateStep: 'RoutingTemplateStep',
+  WorkstationOperator: 'WorkstationOperator',
+  OperatorSession: 'OperatorSession',
+  WorkstationCapacity: 'WorkstationCapacity',
   Workstation: 'Workstation',
   StepConfirmation: 'StepConfirmation',
   QCRecord: 'QCRecord'

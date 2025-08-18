@@ -2,8 +2,24 @@
 
 import { Title, Text, Card } from "@mantine/core";
 import Link from "next/link";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { usePageInitialization } from "../../hooks/usePageInitialization";
 
 export default function ReportsPage() {
+  const { isPageReady, pageInitialization, getProgress } = usePageInitialization({
+    initialTasks: ['interface'],
+    autoStart: true
+  });
+
+  if (!isPageReady) {
+    return <LoadingScreen 
+      title="Loading Reports"
+      description="Initializing reporting interface..."
+      icon="📊"
+      pageInitialization={pageInitialization}
+      progress={getProgress()}
+    />;
+  }
   return (
     <main style={{ padding: "40px 20px", minHeight: "100vh", background: "linear-gradient(135deg, #0f172a, #1e293b)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>

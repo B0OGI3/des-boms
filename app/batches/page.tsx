@@ -25,6 +25,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { usePageInitialization } from "../../hooks/usePageInitialization";
 
 // Shared utilities and components
 import { usePagination } from "../../hooks/usePagination";
@@ -63,10 +65,15 @@ interface BatchStats {
 
 export default function BatchManagementPage() {
   const searchParams = useSearchParams();
-  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState<BatchStats | null>(null);
   const [bulkSelectionMode, setBulkSelectionMode] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  // Page initialization
+  const { mounted, isPageReady, pageInitialization, initializePage } = usePageInitialization({
+    initialTasks: ['batches', 'workstations', 'components'],
+    autoStart: false
+  });
 
   // Use batch search hook for database-driven filtering
   const batchSearch = useBatchSearch();
@@ -94,7 +101,28 @@ export default function BatchManagementPage() {
   
   // Ensure component is mounted before rendering
   useEffect(() => {
-    setMounted(true);
+    if (typeof window === 'undefined') return;
+    
+    initializePage([
+      { 
+        name: 'batches', 
+        fn: async () => {
+          batchSearch.refetch();
+        }
+      },
+      { 
+        name: 'workstations', 
+        fn: async () => {
+          // Preload workstation data if needed
+          try {
+            await fetch('/api/workstations');
+          } catch (error) {
+            console.warn('Workstations preload failed:', error);
+          }
+        }
+      },
+      { name: 'components' }
+    ]);
   }, []);
 
   // Handle QR code batch lookup and order filtering
@@ -339,6 +367,18 @@ export default function BatchManagementPage() {
       }}>
         <Loader size="lg" color="#14b8a6" />
       </div>
+    );
+  }
+
+  // Show loading screen during initial page load
+  if (!mounted || !isPageReady) {
+    return (
+      <LoadingScreen
+        title="Loading Batch Management"
+        description="Initializing batch tracking and routing systems..."
+        icon="🏭"
+        pageInitialization={pageInitialization}
+      />
     );
   }
 

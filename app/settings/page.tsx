@@ -4,8 +4,24 @@ import { Title, Text, Card, Stack, Group } from "@mantine/core";
 import Link from "next/link";
 import { QuickBooksStatus } from "../components/ui/QuickBooksStatus";
 import { QuickBooksCustomerSync } from "../components/ui/QuickBooksCustomerSync";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { usePageInitialization } from "../../hooks/usePageInitialization";
 
 export default function SettingsPage() {
+  const { isPageReady, pageInitialization, getProgress } = usePageInitialization({
+    initialTasks: ['settings', 'quickbooks'],
+    autoStart: true
+  });
+
+  if (!isPageReady) {
+    return <LoadingScreen 
+      title="Loading Settings"
+      description="Initializing system configuration..."
+      icon="⚙️"
+      pageInitialization={pageInitialization}
+      progress={getProgress()}
+    />;
+  }
   return (
     <main style={{ padding: "40px 20px", minHeight: "100vh", background: "linear-gradient(135deg, #0f172a, #1e293b)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>

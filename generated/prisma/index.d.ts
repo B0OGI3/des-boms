@@ -59,6 +59,31 @@ export type MaterialConsumption = $Result.DefaultSelection<Prisma.$MaterialConsu
  */
 export type RoutingStep = $Result.DefaultSelection<Prisma.$RoutingStepPayload>
 /**
+ * Model RoutingTemplate
+ * 
+ */
+export type RoutingTemplate = $Result.DefaultSelection<Prisma.$RoutingTemplatePayload>
+/**
+ * Model RoutingTemplateStep
+ * 
+ */
+export type RoutingTemplateStep = $Result.DefaultSelection<Prisma.$RoutingTemplateStepPayload>
+/**
+ * Model WorkstationOperator
+ * 
+ */
+export type WorkstationOperator = $Result.DefaultSelection<Prisma.$WorkstationOperatorPayload>
+/**
+ * Model OperatorSession
+ * 
+ */
+export type OperatorSession = $Result.DefaultSelection<Prisma.$OperatorSessionPayload>
+/**
+ * Model WorkstationCapacity
+ * 
+ */
+export type WorkstationCapacity = $Result.DefaultSelection<Prisma.$WorkstationCapacityPayload>
+/**
  * Model Workstation
  * 
  */
@@ -166,6 +191,30 @@ export const QCResult: {
 
 export type QCResult = (typeof QCResult)[keyof typeof QCResult]
 
+
+export const OperatorShift: {
+  DAY: 'DAY',
+  SWING: 'SWING',
+  NIGHT: 'NIGHT',
+  FLEXIBLE: 'FLEXIBLE'
+};
+
+export type OperatorShift = (typeof OperatorShift)[keyof typeof OperatorShift]
+
+
+export const WorkstationCategory: {
+  MACHINING: 'MACHINING',
+  ASSEMBLY: 'ASSEMBLY',
+  WELDING: 'WELDING',
+  INSPECTION: 'INSPECTION',
+  PACKAGING: 'PACKAGING',
+  PREP: 'PREP',
+  FINISHING: 'FINISHING',
+  OTHER: 'OTHER'
+};
+
+export type WorkstationCategory = (typeof WorkstationCategory)[keyof typeof WorkstationCategory]
+
 }
 
 export type PartType = $Enums.PartType
@@ -203,6 +252,14 @@ export const SyncStatus: typeof $Enums.SyncStatus
 export type QCResult = $Enums.QCResult
 
 export const QCResult: typeof $Enums.QCResult
+
+export type OperatorShift = $Enums.OperatorShift
+
+export const OperatorShift: typeof $Enums.OperatorShift
+
+export type WorkstationCategory = $Enums.WorkstationCategory
+
+export const WorkstationCategory: typeof $Enums.WorkstationCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -418,6 +475,56 @@ export class PrismaClient<
     * ```
     */
   get routingStep(): Prisma.RoutingStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.routingTemplate`: Exposes CRUD operations for the **RoutingTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RoutingTemplates
+    * const routingTemplates = await prisma.routingTemplate.findMany()
+    * ```
+    */
+  get routingTemplate(): Prisma.RoutingTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.routingTemplateStep`: Exposes CRUD operations for the **RoutingTemplateStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RoutingTemplateSteps
+    * const routingTemplateSteps = await prisma.routingTemplateStep.findMany()
+    * ```
+    */
+  get routingTemplateStep(): Prisma.RoutingTemplateStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workstationOperator`: Exposes CRUD operations for the **WorkstationOperator** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkstationOperators
+    * const workstationOperators = await prisma.workstationOperator.findMany()
+    * ```
+    */
+  get workstationOperator(): Prisma.WorkstationOperatorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.operatorSession`: Exposes CRUD operations for the **OperatorSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OperatorSessions
+    * const operatorSessions = await prisma.operatorSession.findMany()
+    * ```
+    */
+  get operatorSession(): Prisma.OperatorSessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workstationCapacity`: Exposes CRUD operations for the **WorkstationCapacity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkstationCapacities
+    * const workstationCapacities = await prisma.workstationCapacity.findMany()
+    * ```
+    */
+  get workstationCapacity(): Prisma.WorkstationCapacityDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.workstation`: Exposes CRUD operations for the **Workstation** model.
@@ -897,6 +1004,11 @@ export namespace Prisma {
     Batch: 'Batch',
     MaterialConsumption: 'MaterialConsumption',
     RoutingStep: 'RoutingStep',
+    RoutingTemplate: 'RoutingTemplate',
+    RoutingTemplateStep: 'RoutingTemplateStep',
+    WorkstationOperator: 'WorkstationOperator',
+    OperatorSession: 'OperatorSession',
+    WorkstationCapacity: 'WorkstationCapacity',
     Workstation: 'Workstation',
     StepConfirmation: 'StepConfirmation',
     QCRecord: 'QCRecord'
@@ -918,7 +1030,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "customer" | "purchaseOrder" | "part" | "bOMComponent" | "orderLineItem" | "fileAttachment" | "batch" | "materialConsumption" | "routingStep" | "workstation" | "stepConfirmation" | "qCRecord"
+      modelProps: "customer" | "purchaseOrder" | "part" | "bOMComponent" | "orderLineItem" | "fileAttachment" | "batch" | "materialConsumption" | "routingStep" | "routingTemplate" | "routingTemplateStep" | "workstationOperator" | "operatorSession" | "workstationCapacity" | "workstation" | "stepConfirmation" | "qCRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1588,6 +1700,376 @@ export namespace Prisma {
           }
         }
       }
+      RoutingTemplate: {
+        payload: Prisma.$RoutingTemplatePayload<ExtArgs>
+        fields: Prisma.RoutingTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoutingTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoutingTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.RoutingTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoutingTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.RoutingTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.RoutingTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.RoutingTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoutingTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.RoutingTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          update: {
+            args: Prisma.RoutingTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.RoutingTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoutingTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoutingTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.RoutingTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.RoutingTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoutingTemplate>
+          }
+          groupBy: {
+            args: Prisma.RoutingTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoutingTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoutingTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<RoutingTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      RoutingTemplateStep: {
+        payload: Prisma.$RoutingTemplateStepPayload<ExtArgs>
+        fields: Prisma.RoutingTemplateStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoutingTemplateStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoutingTemplateStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          findFirst: {
+            args: Prisma.RoutingTemplateStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoutingTemplateStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          findMany: {
+            args: Prisma.RoutingTemplateStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>[]
+          }
+          create: {
+            args: Prisma.RoutingTemplateStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          createMany: {
+            args: Prisma.RoutingTemplateStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoutingTemplateStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>[]
+          }
+          delete: {
+            args: Prisma.RoutingTemplateStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          update: {
+            args: Prisma.RoutingTemplateStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoutingTemplateStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoutingTemplateStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoutingTemplateStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.RoutingTemplateStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoutingTemplateStepPayload>
+          }
+          aggregate: {
+            args: Prisma.RoutingTemplateStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoutingTemplateStep>
+          }
+          groupBy: {
+            args: Prisma.RoutingTemplateStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoutingTemplateStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoutingTemplateStepCountArgs<ExtArgs>
+            result: $Utils.Optional<RoutingTemplateStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkstationOperator: {
+        payload: Prisma.$WorkstationOperatorPayload<ExtArgs>
+        fields: Prisma.WorkstationOperatorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkstationOperatorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkstationOperatorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkstationOperatorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkstationOperatorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          findMany: {
+            args: Prisma.WorkstationOperatorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>[]
+          }
+          create: {
+            args: Prisma.WorkstationOperatorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          createMany: {
+            args: Prisma.WorkstationOperatorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkstationOperatorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkstationOperatorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          update: {
+            args: Prisma.WorkstationOperatorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkstationOperatorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkstationOperatorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkstationOperatorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkstationOperatorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationOperatorPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkstationOperatorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkstationOperator>
+          }
+          groupBy: {
+            args: Prisma.WorkstationOperatorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationOperatorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkstationOperatorCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationOperatorCountAggregateOutputType> | number
+          }
+        }
+      }
+      OperatorSession: {
+        payload: Prisma.$OperatorSessionPayload<ExtArgs>
+        fields: Prisma.OperatorSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OperatorSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OperatorSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.OperatorSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OperatorSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          findMany: {
+            args: Prisma.OperatorSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>[]
+          }
+          create: {
+            args: Prisma.OperatorSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          createMany: {
+            args: Prisma.OperatorSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OperatorSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.OperatorSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          update: {
+            args: Prisma.OperatorSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.OperatorSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OperatorSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OperatorSessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.OperatorSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OperatorSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.OperatorSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOperatorSession>
+          }
+          groupBy: {
+            args: Prisma.OperatorSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OperatorSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OperatorSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<OperatorSessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkstationCapacity: {
+        payload: Prisma.$WorkstationCapacityPayload<ExtArgs>
+        fields: Prisma.WorkstationCapacityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkstationCapacityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkstationCapacityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkstationCapacityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkstationCapacityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          findMany: {
+            args: Prisma.WorkstationCapacityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>[]
+          }
+          create: {
+            args: Prisma.WorkstationCapacityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          createMany: {
+            args: Prisma.WorkstationCapacityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkstationCapacityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkstationCapacityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          update: {
+            args: Prisma.WorkstationCapacityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkstationCapacityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkstationCapacityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkstationCapacityUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkstationCapacityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkstationCapacityPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkstationCapacityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkstationCapacity>
+          }
+          groupBy: {
+            args: Prisma.WorkstationCapacityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationCapacityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkstationCapacityCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkstationCapacityCountAggregateOutputType> | number
+          }
+        }
+      }
       Workstation: {
         payload: Prisma.$WorkstationPayload<ExtArgs>
         fields: Prisma.WorkstationFieldRefs
@@ -1903,6 +2385,11 @@ export namespace Prisma {
     batch?: BatchOmit
     materialConsumption?: MaterialConsumptionOmit
     routingStep?: RoutingStepOmit
+    routingTemplate?: RoutingTemplateOmit
+    routingTemplateStep?: RoutingTemplateStepOmit
+    workstationOperator?: WorkstationOperatorOmit
+    operatorSession?: OperatorSessionOmit
+    workstationCapacity?: WorkstationCapacityOmit
     workstation?: WorkstationOmit
     stepConfirmation?: StepConfirmationOmit
     qCRecord?: QCRecordOmit
@@ -2236,17 +2723,94 @@ export namespace Prisma {
 
 
   /**
+   * Count Type RoutingTemplateCountOutputType
+   */
+
+  export type RoutingTemplateCountOutputType = {
+    templateSteps: number
+  }
+
+  export type RoutingTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templateSteps?: boolean | RoutingTemplateCountOutputTypeCountTemplateStepsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoutingTemplateCountOutputType without action
+   */
+  export type RoutingTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateCountOutputType
+     */
+    select?: RoutingTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoutingTemplateCountOutputType without action
+   */
+  export type RoutingTemplateCountOutputTypeCountTemplateStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingTemplateStepWhereInput
+  }
+
+
+  /**
+   * Count Type WorkstationOperatorCountOutputType
+   */
+
+  export type WorkstationOperatorCountOutputType = {
+    stepConfirmations: number
+    operatorSessions: number
+  }
+
+  export type WorkstationOperatorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    stepConfirmations?: boolean | WorkstationOperatorCountOutputTypeCountStepConfirmationsArgs
+    operatorSessions?: boolean | WorkstationOperatorCountOutputTypeCountOperatorSessionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkstationOperatorCountOutputType without action
+   */
+  export type WorkstationOperatorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperatorCountOutputType
+     */
+    select?: WorkstationOperatorCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationOperatorCountOutputType without action
+   */
+  export type WorkstationOperatorCountOutputTypeCountStepConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepConfirmationWhereInput
+  }
+
+  /**
+   * WorkstationOperatorCountOutputType without action
+   */
+  export type WorkstationOperatorCountOutputTypeCountOperatorSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperatorSessionWhereInput
+  }
+
+
+  /**
    * Count Type WorkstationCountOutputType
    */
 
   export type WorkstationCountOutputType = {
     routingSteps: number
     confirmations: number
+    templateSteps: number
+    currentOperators: number
+    operatorSessions: number
   }
 
   export type WorkstationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingSteps?: boolean | WorkstationCountOutputTypeCountRoutingStepsArgs
     confirmations?: boolean | WorkstationCountOutputTypeCountConfirmationsArgs
+    templateSteps?: boolean | WorkstationCountOutputTypeCountTemplateStepsArgs
+    currentOperators?: boolean | WorkstationCountOutputTypeCountCurrentOperatorsArgs
+    operatorSessions?: boolean | WorkstationCountOutputTypeCountOperatorSessionsArgs
   }
 
   // Custom InputTypes
@@ -2272,6 +2836,27 @@ export namespace Prisma {
    */
   export type WorkstationCountOutputTypeCountConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StepConfirmationWhereInput
+  }
+
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeCountTemplateStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingTemplateStepWhereInput
+  }
+
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeCountCurrentOperatorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkstationOperatorWhereInput
+  }
+
+  /**
+   * WorkstationCountOutputType without action
+   */
+  export type WorkstationCountOutputTypeCountOperatorSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperatorSessionWhereInput
   }
 
 
@@ -4733,6 +5318,7 @@ export namespace Prisma {
     leadTime: number | null
     active: boolean | null
     notes: string | null
+    recommendedRoutingTemplateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4751,6 +5337,7 @@ export namespace Prisma {
     leadTime: number | null
     active: boolean | null
     notes: string | null
+    recommendedRoutingTemplateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4769,6 +5356,7 @@ export namespace Prisma {
     leadTime: number
     active: number
     notes: number
+    recommendedRoutingTemplateId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4799,6 +5387,7 @@ export namespace Prisma {
     leadTime?: true
     active?: true
     notes?: true
+    recommendedRoutingTemplateId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4817,6 +5406,7 @@ export namespace Prisma {
     leadTime?: true
     active?: true
     notes?: true
+    recommendedRoutingTemplateId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4835,6 +5425,7 @@ export namespace Prisma {
     leadTime?: true
     active?: true
     notes?: true
+    recommendedRoutingTemplateId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4940,6 +5531,7 @@ export namespace Prisma {
     leadTime: number | null
     active: boolean
     notes: string | null
+    recommendedRoutingTemplateId: string | null
     createdAt: Date
     updatedAt: Date
     _count: PartCountAggregateOutputType | null
@@ -4977,6 +5569,7 @@ export namespace Prisma {
     leadTime?: boolean
     active?: boolean
     notes?: boolean
+    recommendedRoutingTemplateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parentBOMs?: boolean | Part$parentBOMsArgs<ExtArgs>
@@ -5000,6 +5593,7 @@ export namespace Prisma {
     leadTime?: boolean
     active?: boolean
     notes?: boolean
+    recommendedRoutingTemplateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["part"]>
@@ -5018,6 +5612,7 @@ export namespace Prisma {
     leadTime?: boolean
     active?: boolean
     notes?: boolean
+    recommendedRoutingTemplateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["part"]>
@@ -5036,11 +5631,12 @@ export namespace Prisma {
     leadTime?: boolean
     active?: boolean
     notes?: boolean
+    recommendedRoutingTemplateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "partNumber" | "partName" | "partType" | "drawingNumber" | "revisionLevel" | "description" | "materialSpec" | "unitOfMeasure" | "standardCost" | "leadTime" | "active" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["part"]>
+  export type PartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "partNumber" | "partName" | "partType" | "drawingNumber" | "revisionLevel" | "description" | "materialSpec" | "unitOfMeasure" | "standardCost" | "leadTime" | "active" | "notes" | "recommendedRoutingTemplateId" | "createdAt" | "updatedAt", ExtArgs["result"]["part"]>
   export type PartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parentBOMs?: boolean | Part$parentBOMsArgs<ExtArgs>
     childBOMs?: boolean | Part$childBOMsArgs<ExtArgs>
@@ -5073,6 +5669,7 @@ export namespace Prisma {
       leadTime: number | null
       active: boolean
       notes: string | null
+      recommendedRoutingTemplateId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["part"]>
@@ -5515,6 +6112,7 @@ export namespace Prisma {
     readonly leadTime: FieldRef<"Part", 'Int'>
     readonly active: FieldRef<"Part", 'Boolean'>
     readonly notes: FieldRef<"Part", 'String'>
+    readonly recommendedRoutingTemplateId: FieldRef<"Part", 'String'>
     readonly createdAt: FieldRef<"Part", 'DateTime'>
     readonly updatedAt: FieldRef<"Part", 'DateTime'>
   }
@@ -13223,6 +13821,5886 @@ export namespace Prisma {
 
 
   /**
+   * Model RoutingTemplate
+   */
+
+  export type AggregateRoutingTemplate = {
+    _count: RoutingTemplateCountAggregateOutputType | null
+    _min: RoutingTemplateMinAggregateOutputType | null
+    _max: RoutingTemplateMaxAggregateOutputType | null
+  }
+
+  export type RoutingTemplateMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingTemplateMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingTemplateCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoutingTemplateMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingTemplateMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingTemplateCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoutingTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingTemplate to aggregate.
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplates to fetch.
+     */
+    orderBy?: RoutingTemplateOrderByWithRelationInput | RoutingTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoutingTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RoutingTemplates
+    **/
+    _count?: true | RoutingTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoutingTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoutingTemplateMaxAggregateInputType
+  }
+
+  export type GetRoutingTemplateAggregateType<T extends RoutingTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoutingTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoutingTemplate[P]>
+      : GetScalarType<T[P], AggregateRoutingTemplate[P]>
+  }
+
+
+
+
+  export type RoutingTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingTemplateWhereInput
+    orderBy?: RoutingTemplateOrderByWithAggregationInput | RoutingTemplateOrderByWithAggregationInput[]
+    by: RoutingTemplateScalarFieldEnum[] | RoutingTemplateScalarFieldEnum
+    having?: RoutingTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoutingTemplateCountAggregateInputType | true
+    _min?: RoutingTemplateMinAggregateInputType
+    _max?: RoutingTemplateMaxAggregateInputType
+  }
+
+  export type RoutingTemplateGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: RoutingTemplateCountAggregateOutputType | null
+    _min: RoutingTemplateMinAggregateOutputType | null
+    _max: RoutingTemplateMaxAggregateOutputType | null
+  }
+
+  type GetRoutingTemplateGroupByPayload<T extends RoutingTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoutingTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoutingTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoutingTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], RoutingTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoutingTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    templateSteps?: boolean | RoutingTemplate$templateStepsArgs<ExtArgs>
+    _count?: boolean | RoutingTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingTemplate"]>
+
+  export type RoutingTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["routingTemplate"]>
+
+  export type RoutingTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["routingTemplate"]>
+
+  export type RoutingTemplateSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoutingTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["routingTemplate"]>
+  export type RoutingTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templateSteps?: boolean | RoutingTemplate$templateStepsArgs<ExtArgs>
+    _count?: boolean | RoutingTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RoutingTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type RoutingTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $RoutingTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RoutingTemplate"
+    objects: {
+      templateSteps: Prisma.$RoutingTemplateStepPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["routingTemplate"]>
+    composites: {}
+  }
+
+  type RoutingTemplateGetPayload<S extends boolean | null | undefined | RoutingTemplateDefaultArgs> = $Result.GetResult<Prisma.$RoutingTemplatePayload, S>
+
+  type RoutingTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoutingTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoutingTemplateCountAggregateInputType | true
+    }
+
+  export interface RoutingTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RoutingTemplate'], meta: { name: 'RoutingTemplate' } }
+    /**
+     * Find zero or one RoutingTemplate that matches the filter.
+     * @param {RoutingTemplateFindUniqueArgs} args - Arguments to find a RoutingTemplate
+     * @example
+     * // Get one RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoutingTemplateFindUniqueArgs>(args: SelectSubset<T, RoutingTemplateFindUniqueArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RoutingTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoutingTemplateFindUniqueOrThrowArgs} args - Arguments to find a RoutingTemplate
+     * @example
+     * // Get one RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoutingTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, RoutingTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateFindFirstArgs} args - Arguments to find a RoutingTemplate
+     * @example
+     * // Get one RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoutingTemplateFindFirstArgs>(args?: SelectSubset<T, RoutingTemplateFindFirstArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateFindFirstOrThrowArgs} args - Arguments to find a RoutingTemplate
+     * @example
+     * // Get one RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoutingTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, RoutingTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RoutingTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RoutingTemplates
+     * const routingTemplates = await prisma.routingTemplate.findMany()
+     * 
+     * // Get first 10 RoutingTemplates
+     * const routingTemplates = await prisma.routingTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const routingTemplateWithIdOnly = await prisma.routingTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoutingTemplateFindManyArgs>(args?: SelectSubset<T, RoutingTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RoutingTemplate.
+     * @param {RoutingTemplateCreateArgs} args - Arguments to create a RoutingTemplate.
+     * @example
+     * // Create one RoutingTemplate
+     * const RoutingTemplate = await prisma.routingTemplate.create({
+     *   data: {
+     *     // ... data to create a RoutingTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoutingTemplateCreateArgs>(args: SelectSubset<T, RoutingTemplateCreateArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RoutingTemplates.
+     * @param {RoutingTemplateCreateManyArgs} args - Arguments to create many RoutingTemplates.
+     * @example
+     * // Create many RoutingTemplates
+     * const routingTemplate = await prisma.routingTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoutingTemplateCreateManyArgs>(args?: SelectSubset<T, RoutingTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RoutingTemplates and returns the data saved in the database.
+     * @param {RoutingTemplateCreateManyAndReturnArgs} args - Arguments to create many RoutingTemplates.
+     * @example
+     * // Create many RoutingTemplates
+     * const routingTemplate = await prisma.routingTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RoutingTemplates and only return the `id`
+     * const routingTemplateWithIdOnly = await prisma.routingTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoutingTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, RoutingTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RoutingTemplate.
+     * @param {RoutingTemplateDeleteArgs} args - Arguments to delete one RoutingTemplate.
+     * @example
+     * // Delete one RoutingTemplate
+     * const RoutingTemplate = await prisma.routingTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one RoutingTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoutingTemplateDeleteArgs>(args: SelectSubset<T, RoutingTemplateDeleteArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RoutingTemplate.
+     * @param {RoutingTemplateUpdateArgs} args - Arguments to update one RoutingTemplate.
+     * @example
+     * // Update one RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoutingTemplateUpdateArgs>(args: SelectSubset<T, RoutingTemplateUpdateArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RoutingTemplates.
+     * @param {RoutingTemplateDeleteManyArgs} args - Arguments to filter RoutingTemplates to delete.
+     * @example
+     * // Delete a few RoutingTemplates
+     * const { count } = await prisma.routingTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoutingTemplateDeleteManyArgs>(args?: SelectSubset<T, RoutingTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RoutingTemplates
+     * const routingTemplate = await prisma.routingTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoutingTemplateUpdateManyArgs>(args: SelectSubset<T, RoutingTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingTemplates and returns the data updated in the database.
+     * @param {RoutingTemplateUpdateManyAndReturnArgs} args - Arguments to update many RoutingTemplates.
+     * @example
+     * // Update many RoutingTemplates
+     * const routingTemplate = await prisma.routingTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RoutingTemplates and only return the `id`
+     * const routingTemplateWithIdOnly = await prisma.routingTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoutingTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, RoutingTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RoutingTemplate.
+     * @param {RoutingTemplateUpsertArgs} args - Arguments to update or create a RoutingTemplate.
+     * @example
+     * // Update or create a RoutingTemplate
+     * const routingTemplate = await prisma.routingTemplate.upsert({
+     *   create: {
+     *     // ... data to create a RoutingTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RoutingTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoutingTemplateUpsertArgs>(args: SelectSubset<T, RoutingTemplateUpsertArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RoutingTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateCountArgs} args - Arguments to filter RoutingTemplates to count.
+     * @example
+     * // Count the number of RoutingTemplates
+     * const count = await prisma.routingTemplate.count({
+     *   where: {
+     *     // ... the filter for the RoutingTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoutingTemplateCountArgs>(
+      args?: Subset<T, RoutingTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoutingTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RoutingTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoutingTemplateAggregateArgs>(args: Subset<T, RoutingTemplateAggregateArgs>): Prisma.PrismaPromise<GetRoutingTemplateAggregateType<T>>
+
+    /**
+     * Group by RoutingTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoutingTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoutingTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: RoutingTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoutingTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoutingTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RoutingTemplate model
+   */
+  readonly fields: RoutingTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RoutingTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoutingTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    templateSteps<T extends RoutingTemplate$templateStepsArgs<ExtArgs> = {}>(args?: Subset<T, RoutingTemplate$templateStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RoutingTemplate model
+   */
+  interface RoutingTemplateFieldRefs {
+    readonly id: FieldRef<"RoutingTemplate", 'String'>
+    readonly name: FieldRef<"RoutingTemplate", 'String'>
+    readonly description: FieldRef<"RoutingTemplate", 'String'>
+    readonly active: FieldRef<"RoutingTemplate", 'Boolean'>
+    readonly createdAt: FieldRef<"RoutingTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"RoutingTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RoutingTemplate findUnique
+   */
+  export type RoutingTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplate to fetch.
+     */
+    where: RoutingTemplateWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplate findUniqueOrThrow
+   */
+  export type RoutingTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplate to fetch.
+     */
+    where: RoutingTemplateWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplate findFirst
+   */
+  export type RoutingTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplate to fetch.
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplates to fetch.
+     */
+    orderBy?: RoutingTemplateOrderByWithRelationInput | RoutingTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingTemplates.
+     */
+    cursor?: RoutingTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingTemplates.
+     */
+    distinct?: RoutingTemplateScalarFieldEnum | RoutingTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplate findFirstOrThrow
+   */
+  export type RoutingTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplate to fetch.
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplates to fetch.
+     */
+    orderBy?: RoutingTemplateOrderByWithRelationInput | RoutingTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingTemplates.
+     */
+    cursor?: RoutingTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingTemplates.
+     */
+    distinct?: RoutingTemplateScalarFieldEnum | RoutingTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplate findMany
+   */
+  export type RoutingTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplates to fetch.
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplates to fetch.
+     */
+    orderBy?: RoutingTemplateOrderByWithRelationInput | RoutingTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RoutingTemplates.
+     */
+    cursor?: RoutingTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplates.
+     */
+    skip?: number
+    distinct?: RoutingTemplateScalarFieldEnum | RoutingTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplate create
+   */
+  export type RoutingTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RoutingTemplate.
+     */
+    data: XOR<RoutingTemplateCreateInput, RoutingTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * RoutingTemplate createMany
+   */
+  export type RoutingTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RoutingTemplates.
+     */
+    data: RoutingTemplateCreateManyInput | RoutingTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoutingTemplate createManyAndReturn
+   */
+  export type RoutingTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many RoutingTemplates.
+     */
+    data: RoutingTemplateCreateManyInput | RoutingTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoutingTemplate update
+   */
+  export type RoutingTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RoutingTemplate.
+     */
+    data: XOR<RoutingTemplateUpdateInput, RoutingTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which RoutingTemplate to update.
+     */
+    where: RoutingTemplateWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplate updateMany
+   */
+  export type RoutingTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RoutingTemplates.
+     */
+    data: XOR<RoutingTemplateUpdateManyMutationInput, RoutingTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingTemplates to update
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * Limit how many RoutingTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingTemplate updateManyAndReturn
+   */
+  export type RoutingTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update RoutingTemplates.
+     */
+    data: XOR<RoutingTemplateUpdateManyMutationInput, RoutingTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingTemplates to update
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * Limit how many RoutingTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingTemplate upsert
+   */
+  export type RoutingTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RoutingTemplate to update in case it exists.
+     */
+    where: RoutingTemplateWhereUniqueInput
+    /**
+     * In case the RoutingTemplate found by the `where` argument doesn't exist, create a new RoutingTemplate with this data.
+     */
+    create: XOR<RoutingTemplateCreateInput, RoutingTemplateUncheckedCreateInput>
+    /**
+     * In case the RoutingTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoutingTemplateUpdateInput, RoutingTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * RoutingTemplate delete
+   */
+  export type RoutingTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which RoutingTemplate to delete.
+     */
+    where: RoutingTemplateWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplate deleteMany
+   */
+  export type RoutingTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingTemplates to delete
+     */
+    where?: RoutingTemplateWhereInput
+    /**
+     * Limit how many RoutingTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingTemplate.templateSteps
+   */
+  export type RoutingTemplate$templateStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    where?: RoutingTemplateStepWhereInput
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoutingTemplateStepScalarFieldEnum | RoutingTemplateStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplate without action
+   */
+  export type RoutingTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplate
+     */
+    select?: RoutingTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplate
+     */
+    omit?: RoutingTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RoutingTemplateStep
+   */
+
+  export type AggregateRoutingTemplateStep = {
+    _count: RoutingTemplateStepCountAggregateOutputType | null
+    _avg: RoutingTemplateStepAvgAggregateOutputType | null
+    _sum: RoutingTemplateStepSumAggregateOutputType | null
+    _min: RoutingTemplateStepMinAggregateOutputType | null
+    _max: RoutingTemplateStepMaxAggregateOutputType | null
+  }
+
+  export type RoutingTemplateStepAvgAggregateOutputType = {
+    stepNumber: number | null
+    estimatedTime: number | null
+  }
+
+  export type RoutingTemplateStepSumAggregateOutputType = {
+    stepNumber: number | null
+    estimatedTime: number | null
+  }
+
+  export type RoutingTemplateStepMinAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    stepNumber: number | null
+    workstationId: string | null
+    description: string | null
+    estimatedTime: number | null
+    required: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingTemplateStepMaxAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    stepNumber: number | null
+    workstationId: string | null
+    description: string | null
+    estimatedTime: number | null
+    required: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoutingTemplateStepCountAggregateOutputType = {
+    id: number
+    templateId: number
+    stepNumber: number
+    workstationId: number
+    description: number
+    estimatedTime: number
+    required: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoutingTemplateStepAvgAggregateInputType = {
+    stepNumber?: true
+    estimatedTime?: true
+  }
+
+  export type RoutingTemplateStepSumAggregateInputType = {
+    stepNumber?: true
+    estimatedTime?: true
+  }
+
+  export type RoutingTemplateStepMinAggregateInputType = {
+    id?: true
+    templateId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    estimatedTime?: true
+    required?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingTemplateStepMaxAggregateInputType = {
+    id?: true
+    templateId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    estimatedTime?: true
+    required?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoutingTemplateStepCountAggregateInputType = {
+    id?: true
+    templateId?: true
+    stepNumber?: true
+    workstationId?: true
+    description?: true
+    estimatedTime?: true
+    required?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoutingTemplateStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingTemplateStep to aggregate.
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplateSteps to fetch.
+     */
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplateSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplateSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RoutingTemplateSteps
+    **/
+    _count?: true | RoutingTemplateStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoutingTemplateStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoutingTemplateStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoutingTemplateStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoutingTemplateStepMaxAggregateInputType
+  }
+
+  export type GetRoutingTemplateStepAggregateType<T extends RoutingTemplateStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoutingTemplateStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoutingTemplateStep[P]>
+      : GetScalarType<T[P], AggregateRoutingTemplateStep[P]>
+  }
+
+
+
+
+  export type RoutingTemplateStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoutingTemplateStepWhereInput
+    orderBy?: RoutingTemplateStepOrderByWithAggregationInput | RoutingTemplateStepOrderByWithAggregationInput[]
+    by: RoutingTemplateStepScalarFieldEnum[] | RoutingTemplateStepScalarFieldEnum
+    having?: RoutingTemplateStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoutingTemplateStepCountAggregateInputType | true
+    _avg?: RoutingTemplateStepAvgAggregateInputType
+    _sum?: RoutingTemplateStepSumAggregateInputType
+    _min?: RoutingTemplateStepMinAggregateInputType
+    _max?: RoutingTemplateStepMaxAggregateInputType
+  }
+
+  export type RoutingTemplateStepGroupByOutputType = {
+    id: string
+    templateId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    estimatedTime: number | null
+    required: boolean
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: RoutingTemplateStepCountAggregateOutputType | null
+    _avg: RoutingTemplateStepAvgAggregateOutputType | null
+    _sum: RoutingTemplateStepSumAggregateOutputType | null
+    _min: RoutingTemplateStepMinAggregateOutputType | null
+    _max: RoutingTemplateStepMaxAggregateOutputType | null
+  }
+
+  type GetRoutingTemplateStepGroupByPayload<T extends RoutingTemplateStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoutingTemplateStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoutingTemplateStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoutingTemplateStepGroupByOutputType[P]>
+            : GetScalarType<T[P], RoutingTemplateStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoutingTemplateStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    estimatedTime?: boolean
+    required?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingTemplateStep"]>
+
+  export type RoutingTemplateStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    estimatedTime?: boolean
+    required?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingTemplateStep"]>
+
+  export type RoutingTemplateStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    estimatedTime?: boolean
+    required?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["routingTemplateStep"]>
+
+  export type RoutingTemplateStepSelectScalar = {
+    id?: boolean
+    templateId?: boolean
+    stepNumber?: boolean
+    workstationId?: boolean
+    description?: boolean
+    estimatedTime?: boolean
+    required?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoutingTemplateStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "templateId" | "stepNumber" | "workstationId" | "description" | "estimatedTime" | "required" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["routingTemplateStep"]>
+  export type RoutingTemplateStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type RoutingTemplateStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type RoutingTemplateStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | RoutingTemplateDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+
+  export type $RoutingTemplateStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RoutingTemplateStep"
+    objects: {
+      template: Prisma.$RoutingTemplatePayload<ExtArgs>
+      workstation: Prisma.$WorkstationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      templateId: string
+      stepNumber: number
+      workstationId: string
+      description: string
+      estimatedTime: number | null
+      required: boolean
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["routingTemplateStep"]>
+    composites: {}
+  }
+
+  type RoutingTemplateStepGetPayload<S extends boolean | null | undefined | RoutingTemplateStepDefaultArgs> = $Result.GetResult<Prisma.$RoutingTemplateStepPayload, S>
+
+  type RoutingTemplateStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoutingTemplateStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoutingTemplateStepCountAggregateInputType | true
+    }
+
+  export interface RoutingTemplateStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RoutingTemplateStep'], meta: { name: 'RoutingTemplateStep' } }
+    /**
+     * Find zero or one RoutingTemplateStep that matches the filter.
+     * @param {RoutingTemplateStepFindUniqueArgs} args - Arguments to find a RoutingTemplateStep
+     * @example
+     * // Get one RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoutingTemplateStepFindUniqueArgs>(args: SelectSubset<T, RoutingTemplateStepFindUniqueArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RoutingTemplateStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoutingTemplateStepFindUniqueOrThrowArgs} args - Arguments to find a RoutingTemplateStep
+     * @example
+     * // Get one RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoutingTemplateStepFindUniqueOrThrowArgs>(args: SelectSubset<T, RoutingTemplateStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingTemplateStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepFindFirstArgs} args - Arguments to find a RoutingTemplateStep
+     * @example
+     * // Get one RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoutingTemplateStepFindFirstArgs>(args?: SelectSubset<T, RoutingTemplateStepFindFirstArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoutingTemplateStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepFindFirstOrThrowArgs} args - Arguments to find a RoutingTemplateStep
+     * @example
+     * // Get one RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoutingTemplateStepFindFirstOrThrowArgs>(args?: SelectSubset<T, RoutingTemplateStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RoutingTemplateSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RoutingTemplateSteps
+     * const routingTemplateSteps = await prisma.routingTemplateStep.findMany()
+     * 
+     * // Get first 10 RoutingTemplateSteps
+     * const routingTemplateSteps = await prisma.routingTemplateStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const routingTemplateStepWithIdOnly = await prisma.routingTemplateStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoutingTemplateStepFindManyArgs>(args?: SelectSubset<T, RoutingTemplateStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RoutingTemplateStep.
+     * @param {RoutingTemplateStepCreateArgs} args - Arguments to create a RoutingTemplateStep.
+     * @example
+     * // Create one RoutingTemplateStep
+     * const RoutingTemplateStep = await prisma.routingTemplateStep.create({
+     *   data: {
+     *     // ... data to create a RoutingTemplateStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoutingTemplateStepCreateArgs>(args: SelectSubset<T, RoutingTemplateStepCreateArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RoutingTemplateSteps.
+     * @param {RoutingTemplateStepCreateManyArgs} args - Arguments to create many RoutingTemplateSteps.
+     * @example
+     * // Create many RoutingTemplateSteps
+     * const routingTemplateStep = await prisma.routingTemplateStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoutingTemplateStepCreateManyArgs>(args?: SelectSubset<T, RoutingTemplateStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RoutingTemplateSteps and returns the data saved in the database.
+     * @param {RoutingTemplateStepCreateManyAndReturnArgs} args - Arguments to create many RoutingTemplateSteps.
+     * @example
+     * // Create many RoutingTemplateSteps
+     * const routingTemplateStep = await prisma.routingTemplateStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RoutingTemplateSteps and only return the `id`
+     * const routingTemplateStepWithIdOnly = await prisma.routingTemplateStep.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoutingTemplateStepCreateManyAndReturnArgs>(args?: SelectSubset<T, RoutingTemplateStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RoutingTemplateStep.
+     * @param {RoutingTemplateStepDeleteArgs} args - Arguments to delete one RoutingTemplateStep.
+     * @example
+     * // Delete one RoutingTemplateStep
+     * const RoutingTemplateStep = await prisma.routingTemplateStep.delete({
+     *   where: {
+     *     // ... filter to delete one RoutingTemplateStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoutingTemplateStepDeleteArgs>(args: SelectSubset<T, RoutingTemplateStepDeleteArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RoutingTemplateStep.
+     * @param {RoutingTemplateStepUpdateArgs} args - Arguments to update one RoutingTemplateStep.
+     * @example
+     * // Update one RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoutingTemplateStepUpdateArgs>(args: SelectSubset<T, RoutingTemplateStepUpdateArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RoutingTemplateSteps.
+     * @param {RoutingTemplateStepDeleteManyArgs} args - Arguments to filter RoutingTemplateSteps to delete.
+     * @example
+     * // Delete a few RoutingTemplateSteps
+     * const { count } = await prisma.routingTemplateStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoutingTemplateStepDeleteManyArgs>(args?: SelectSubset<T, RoutingTemplateStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingTemplateSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RoutingTemplateSteps
+     * const routingTemplateStep = await prisma.routingTemplateStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoutingTemplateStepUpdateManyArgs>(args: SelectSubset<T, RoutingTemplateStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoutingTemplateSteps and returns the data updated in the database.
+     * @param {RoutingTemplateStepUpdateManyAndReturnArgs} args - Arguments to update many RoutingTemplateSteps.
+     * @example
+     * // Update many RoutingTemplateSteps
+     * const routingTemplateStep = await prisma.routingTemplateStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RoutingTemplateSteps and only return the `id`
+     * const routingTemplateStepWithIdOnly = await prisma.routingTemplateStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoutingTemplateStepUpdateManyAndReturnArgs>(args: SelectSubset<T, RoutingTemplateStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RoutingTemplateStep.
+     * @param {RoutingTemplateStepUpsertArgs} args - Arguments to update or create a RoutingTemplateStep.
+     * @example
+     * // Update or create a RoutingTemplateStep
+     * const routingTemplateStep = await prisma.routingTemplateStep.upsert({
+     *   create: {
+     *     // ... data to create a RoutingTemplateStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RoutingTemplateStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoutingTemplateStepUpsertArgs>(args: SelectSubset<T, RoutingTemplateStepUpsertArgs<ExtArgs>>): Prisma__RoutingTemplateStepClient<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RoutingTemplateSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepCountArgs} args - Arguments to filter RoutingTemplateSteps to count.
+     * @example
+     * // Count the number of RoutingTemplateSteps
+     * const count = await prisma.routingTemplateStep.count({
+     *   where: {
+     *     // ... the filter for the RoutingTemplateSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoutingTemplateStepCountArgs>(
+      args?: Subset<T, RoutingTemplateStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoutingTemplateStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RoutingTemplateStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoutingTemplateStepAggregateArgs>(args: Subset<T, RoutingTemplateStepAggregateArgs>): Prisma.PrismaPromise<GetRoutingTemplateStepAggregateType<T>>
+
+    /**
+     * Group by RoutingTemplateStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoutingTemplateStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoutingTemplateStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoutingTemplateStepGroupByArgs['orderBy'] }
+        : { orderBy?: RoutingTemplateStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoutingTemplateStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoutingTemplateStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RoutingTemplateStep model
+   */
+  readonly fields: RoutingTemplateStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RoutingTemplateStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoutingTemplateStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    template<T extends RoutingTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoutingTemplateDefaultArgs<ExtArgs>>): Prisma__RoutingTemplateClient<$Result.GetResult<Prisma.$RoutingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RoutingTemplateStep model
+   */
+  interface RoutingTemplateStepFieldRefs {
+    readonly id: FieldRef<"RoutingTemplateStep", 'String'>
+    readonly templateId: FieldRef<"RoutingTemplateStep", 'String'>
+    readonly stepNumber: FieldRef<"RoutingTemplateStep", 'Int'>
+    readonly workstationId: FieldRef<"RoutingTemplateStep", 'String'>
+    readonly description: FieldRef<"RoutingTemplateStep", 'String'>
+    readonly estimatedTime: FieldRef<"RoutingTemplateStep", 'Int'>
+    readonly required: FieldRef<"RoutingTemplateStep", 'Boolean'>
+    readonly notes: FieldRef<"RoutingTemplateStep", 'String'>
+    readonly createdAt: FieldRef<"RoutingTemplateStep", 'DateTime'>
+    readonly updatedAt: FieldRef<"RoutingTemplateStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RoutingTemplateStep findUnique
+   */
+  export type RoutingTemplateStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplateStep to fetch.
+     */
+    where: RoutingTemplateStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplateStep findUniqueOrThrow
+   */
+  export type RoutingTemplateStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplateStep to fetch.
+     */
+    where: RoutingTemplateStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplateStep findFirst
+   */
+  export type RoutingTemplateStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplateStep to fetch.
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplateSteps to fetch.
+     */
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingTemplateSteps.
+     */
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplateSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplateSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingTemplateSteps.
+     */
+    distinct?: RoutingTemplateStepScalarFieldEnum | RoutingTemplateStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplateStep findFirstOrThrow
+   */
+  export type RoutingTemplateStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplateStep to fetch.
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplateSteps to fetch.
+     */
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoutingTemplateSteps.
+     */
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplateSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplateSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoutingTemplateSteps.
+     */
+    distinct?: RoutingTemplateStepScalarFieldEnum | RoutingTemplateStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplateStep findMany
+   */
+  export type RoutingTemplateStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter, which RoutingTemplateSteps to fetch.
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoutingTemplateSteps to fetch.
+     */
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RoutingTemplateSteps.
+     */
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoutingTemplateSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoutingTemplateSteps.
+     */
+    skip?: number
+    distinct?: RoutingTemplateStepScalarFieldEnum | RoutingTemplateStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingTemplateStep create
+   */
+  export type RoutingTemplateStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RoutingTemplateStep.
+     */
+    data: XOR<RoutingTemplateStepCreateInput, RoutingTemplateStepUncheckedCreateInput>
+  }
+
+  /**
+   * RoutingTemplateStep createMany
+   */
+  export type RoutingTemplateStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RoutingTemplateSteps.
+     */
+    data: RoutingTemplateStepCreateManyInput | RoutingTemplateStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoutingTemplateStep createManyAndReturn
+   */
+  export type RoutingTemplateStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * The data used to create many RoutingTemplateSteps.
+     */
+    data: RoutingTemplateStepCreateManyInput | RoutingTemplateStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RoutingTemplateStep update
+   */
+  export type RoutingTemplateStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RoutingTemplateStep.
+     */
+    data: XOR<RoutingTemplateStepUpdateInput, RoutingTemplateStepUncheckedUpdateInput>
+    /**
+     * Choose, which RoutingTemplateStep to update.
+     */
+    where: RoutingTemplateStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplateStep updateMany
+   */
+  export type RoutingTemplateStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RoutingTemplateSteps.
+     */
+    data: XOR<RoutingTemplateStepUpdateManyMutationInput, RoutingTemplateStepUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingTemplateSteps to update
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * Limit how many RoutingTemplateSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingTemplateStep updateManyAndReturn
+   */
+  export type RoutingTemplateStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * The data used to update RoutingTemplateSteps.
+     */
+    data: XOR<RoutingTemplateStepUpdateManyMutationInput, RoutingTemplateStepUncheckedUpdateManyInput>
+    /**
+     * Filter which RoutingTemplateSteps to update
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * Limit how many RoutingTemplateSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RoutingTemplateStep upsert
+   */
+  export type RoutingTemplateStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RoutingTemplateStep to update in case it exists.
+     */
+    where: RoutingTemplateStepWhereUniqueInput
+    /**
+     * In case the RoutingTemplateStep found by the `where` argument doesn't exist, create a new RoutingTemplateStep with this data.
+     */
+    create: XOR<RoutingTemplateStepCreateInput, RoutingTemplateStepUncheckedCreateInput>
+    /**
+     * In case the RoutingTemplateStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoutingTemplateStepUpdateInput, RoutingTemplateStepUncheckedUpdateInput>
+  }
+
+  /**
+   * RoutingTemplateStep delete
+   */
+  export type RoutingTemplateStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    /**
+     * Filter which RoutingTemplateStep to delete.
+     */
+    where: RoutingTemplateStepWhereUniqueInput
+  }
+
+  /**
+   * RoutingTemplateStep deleteMany
+   */
+  export type RoutingTemplateStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoutingTemplateSteps to delete
+     */
+    where?: RoutingTemplateStepWhereInput
+    /**
+     * Limit how many RoutingTemplateSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoutingTemplateStep without action
+   */
+  export type RoutingTemplateStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkstationOperator
+   */
+
+  export type AggregateWorkstationOperator = {
+    _count: WorkstationOperatorCountAggregateOutputType | null
+    _avg: WorkstationOperatorAvgAggregateOutputType | null
+    _sum: WorkstationOperatorSumAggregateOutputType | null
+    _min: WorkstationOperatorMinAggregateOutputType | null
+    _max: WorkstationOperatorMaxAggregateOutputType | null
+  }
+
+  export type WorkstationOperatorAvgAggregateOutputType = {
+    hourlyRate: Decimal | null
+  }
+
+  export type WorkstationOperatorSumAggregateOutputType = {
+    hourlyRate: Decimal | null
+  }
+
+  export type WorkstationOperatorMinAggregateOutputType = {
+    id: string | null
+    operatorId: string | null
+    operatorName: string | null
+    email: string | null
+    phone: string | null
+    shift: $Enums.OperatorShift | null
+    hourlyRate: Decimal | null
+    active: boolean | null
+    currentWorkstationId: string | null
+    loginTime: Date | null
+    logoutTime: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationOperatorMaxAggregateOutputType = {
+    id: string | null
+    operatorId: string | null
+    operatorName: string | null
+    email: string | null
+    phone: string | null
+    shift: $Enums.OperatorShift | null
+    hourlyRate: Decimal | null
+    active: boolean | null
+    currentWorkstationId: string | null
+    loginTime: Date | null
+    logoutTime: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationOperatorCountAggregateOutputType = {
+    id: number
+    operatorId: number
+    operatorName: number
+    email: number
+    phone: number
+    certifications: number
+    shift: number
+    hourlyRate: number
+    active: number
+    currentWorkstationId: number
+    loginTime: number
+    logoutTime: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkstationOperatorAvgAggregateInputType = {
+    hourlyRate?: true
+  }
+
+  export type WorkstationOperatorSumAggregateInputType = {
+    hourlyRate?: true
+  }
+
+  export type WorkstationOperatorMinAggregateInputType = {
+    id?: true
+    operatorId?: true
+    operatorName?: true
+    email?: true
+    phone?: true
+    shift?: true
+    hourlyRate?: true
+    active?: true
+    currentWorkstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationOperatorMaxAggregateInputType = {
+    id?: true
+    operatorId?: true
+    operatorName?: true
+    email?: true
+    phone?: true
+    shift?: true
+    hourlyRate?: true
+    active?: true
+    currentWorkstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationOperatorCountAggregateInputType = {
+    id?: true
+    operatorId?: true
+    operatorName?: true
+    email?: true
+    phone?: true
+    certifications?: true
+    shift?: true
+    hourlyRate?: true
+    active?: true
+    currentWorkstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkstationOperatorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkstationOperator to aggregate.
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationOperators to fetch.
+     */
+    orderBy?: WorkstationOperatorOrderByWithRelationInput | WorkstationOperatorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkstationOperatorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationOperators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationOperators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkstationOperators
+    **/
+    _count?: true | WorkstationOperatorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkstationOperatorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkstationOperatorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkstationOperatorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkstationOperatorMaxAggregateInputType
+  }
+
+  export type GetWorkstationOperatorAggregateType<T extends WorkstationOperatorAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkstationOperator]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkstationOperator[P]>
+      : GetScalarType<T[P], AggregateWorkstationOperator[P]>
+  }
+
+
+
+
+  export type WorkstationOperatorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkstationOperatorWhereInput
+    orderBy?: WorkstationOperatorOrderByWithAggregationInput | WorkstationOperatorOrderByWithAggregationInput[]
+    by: WorkstationOperatorScalarFieldEnum[] | WorkstationOperatorScalarFieldEnum
+    having?: WorkstationOperatorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkstationOperatorCountAggregateInputType | true
+    _avg?: WorkstationOperatorAvgAggregateInputType
+    _sum?: WorkstationOperatorSumAggregateInputType
+    _min?: WorkstationOperatorMinAggregateInputType
+    _max?: WorkstationOperatorMaxAggregateInputType
+  }
+
+  export type WorkstationOperatorGroupByOutputType = {
+    id: string
+    operatorId: string
+    operatorName: string
+    email: string | null
+    phone: string | null
+    certifications: string[]
+    shift: $Enums.OperatorShift
+    hourlyRate: Decimal | null
+    active: boolean
+    currentWorkstationId: string | null
+    loginTime: Date | null
+    logoutTime: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkstationOperatorCountAggregateOutputType | null
+    _avg: WorkstationOperatorAvgAggregateOutputType | null
+    _sum: WorkstationOperatorSumAggregateOutputType | null
+    _min: WorkstationOperatorMinAggregateOutputType | null
+    _max: WorkstationOperatorMaxAggregateOutputType | null
+  }
+
+  type GetWorkstationOperatorGroupByPayload<T extends WorkstationOperatorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkstationOperatorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkstationOperatorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkstationOperatorGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkstationOperatorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkstationOperatorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    operatorName?: boolean
+    email?: boolean
+    phone?: boolean
+    certifications?: boolean
+    shift?: boolean
+    hourlyRate?: boolean
+    active?: boolean
+    currentWorkstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+    stepConfirmations?: boolean | WorkstationOperator$stepConfirmationsArgs<ExtArgs>
+    operatorSessions?: boolean | WorkstationOperator$operatorSessionsArgs<ExtArgs>
+    _count?: boolean | WorkstationOperatorCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationOperator"]>
+
+  export type WorkstationOperatorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    operatorName?: boolean
+    email?: boolean
+    phone?: boolean
+    certifications?: boolean
+    shift?: boolean
+    hourlyRate?: boolean
+    active?: boolean
+    currentWorkstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationOperator"]>
+
+  export type WorkstationOperatorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    operatorName?: boolean
+    email?: boolean
+    phone?: boolean
+    certifications?: boolean
+    shift?: boolean
+    hourlyRate?: boolean
+    active?: boolean
+    currentWorkstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationOperator"]>
+
+  export type WorkstationOperatorSelectScalar = {
+    id?: boolean
+    operatorId?: boolean
+    operatorName?: boolean
+    email?: boolean
+    phone?: boolean
+    certifications?: boolean
+    shift?: boolean
+    hourlyRate?: boolean
+    active?: boolean
+    currentWorkstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkstationOperatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "operatorId" | "operatorName" | "email" | "phone" | "certifications" | "shift" | "hourlyRate" | "active" | "currentWorkstationId" | "loginTime" | "logoutTime" | "createdAt" | "updatedAt", ExtArgs["result"]["workstationOperator"]>
+  export type WorkstationOperatorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+    stepConfirmations?: boolean | WorkstationOperator$stepConfirmationsArgs<ExtArgs>
+    operatorSessions?: boolean | WorkstationOperator$operatorSessionsArgs<ExtArgs>
+    _count?: boolean | WorkstationOperatorCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkstationOperatorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+  }
+  export type WorkstationOperatorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currentWorkstation?: boolean | WorkstationOperator$currentWorkstationArgs<ExtArgs>
+  }
+
+  export type $WorkstationOperatorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkstationOperator"
+    objects: {
+      currentWorkstation: Prisma.$WorkstationPayload<ExtArgs> | null
+      stepConfirmations: Prisma.$StepConfirmationPayload<ExtArgs>[]
+      operatorSessions: Prisma.$OperatorSessionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      operatorId: string
+      operatorName: string
+      email: string | null
+      phone: string | null
+      certifications: string[]
+      shift: $Enums.OperatorShift
+      hourlyRate: Prisma.Decimal | null
+      active: boolean
+      currentWorkstationId: string | null
+      loginTime: Date | null
+      logoutTime: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workstationOperator"]>
+    composites: {}
+  }
+
+  type WorkstationOperatorGetPayload<S extends boolean | null | undefined | WorkstationOperatorDefaultArgs> = $Result.GetResult<Prisma.$WorkstationOperatorPayload, S>
+
+  type WorkstationOperatorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkstationOperatorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkstationOperatorCountAggregateInputType | true
+    }
+
+  export interface WorkstationOperatorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkstationOperator'], meta: { name: 'WorkstationOperator' } }
+    /**
+     * Find zero or one WorkstationOperator that matches the filter.
+     * @param {WorkstationOperatorFindUniqueArgs} args - Arguments to find a WorkstationOperator
+     * @example
+     * // Get one WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkstationOperatorFindUniqueArgs>(args: SelectSubset<T, WorkstationOperatorFindUniqueArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkstationOperator that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkstationOperatorFindUniqueOrThrowArgs} args - Arguments to find a WorkstationOperator
+     * @example
+     * // Get one WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkstationOperatorFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkstationOperatorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkstationOperator that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorFindFirstArgs} args - Arguments to find a WorkstationOperator
+     * @example
+     * // Get one WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkstationOperatorFindFirstArgs>(args?: SelectSubset<T, WorkstationOperatorFindFirstArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkstationOperator that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorFindFirstOrThrowArgs} args - Arguments to find a WorkstationOperator
+     * @example
+     * // Get one WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkstationOperatorFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkstationOperatorFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkstationOperators that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkstationOperators
+     * const workstationOperators = await prisma.workstationOperator.findMany()
+     * 
+     * // Get first 10 WorkstationOperators
+     * const workstationOperators = await prisma.workstationOperator.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workstationOperatorWithIdOnly = await prisma.workstationOperator.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkstationOperatorFindManyArgs>(args?: SelectSubset<T, WorkstationOperatorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkstationOperator.
+     * @param {WorkstationOperatorCreateArgs} args - Arguments to create a WorkstationOperator.
+     * @example
+     * // Create one WorkstationOperator
+     * const WorkstationOperator = await prisma.workstationOperator.create({
+     *   data: {
+     *     // ... data to create a WorkstationOperator
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkstationOperatorCreateArgs>(args: SelectSubset<T, WorkstationOperatorCreateArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkstationOperators.
+     * @param {WorkstationOperatorCreateManyArgs} args - Arguments to create many WorkstationOperators.
+     * @example
+     * // Create many WorkstationOperators
+     * const workstationOperator = await prisma.workstationOperator.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkstationOperatorCreateManyArgs>(args?: SelectSubset<T, WorkstationOperatorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkstationOperators and returns the data saved in the database.
+     * @param {WorkstationOperatorCreateManyAndReturnArgs} args - Arguments to create many WorkstationOperators.
+     * @example
+     * // Create many WorkstationOperators
+     * const workstationOperator = await prisma.workstationOperator.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkstationOperators and only return the `id`
+     * const workstationOperatorWithIdOnly = await prisma.workstationOperator.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkstationOperatorCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkstationOperatorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkstationOperator.
+     * @param {WorkstationOperatorDeleteArgs} args - Arguments to delete one WorkstationOperator.
+     * @example
+     * // Delete one WorkstationOperator
+     * const WorkstationOperator = await prisma.workstationOperator.delete({
+     *   where: {
+     *     // ... filter to delete one WorkstationOperator
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkstationOperatorDeleteArgs>(args: SelectSubset<T, WorkstationOperatorDeleteArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkstationOperator.
+     * @param {WorkstationOperatorUpdateArgs} args - Arguments to update one WorkstationOperator.
+     * @example
+     * // Update one WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkstationOperatorUpdateArgs>(args: SelectSubset<T, WorkstationOperatorUpdateArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkstationOperators.
+     * @param {WorkstationOperatorDeleteManyArgs} args - Arguments to filter WorkstationOperators to delete.
+     * @example
+     * // Delete a few WorkstationOperators
+     * const { count } = await prisma.workstationOperator.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkstationOperatorDeleteManyArgs>(args?: SelectSubset<T, WorkstationOperatorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkstationOperators.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkstationOperators
+     * const workstationOperator = await prisma.workstationOperator.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkstationOperatorUpdateManyArgs>(args: SelectSubset<T, WorkstationOperatorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkstationOperators and returns the data updated in the database.
+     * @param {WorkstationOperatorUpdateManyAndReturnArgs} args - Arguments to update many WorkstationOperators.
+     * @example
+     * // Update many WorkstationOperators
+     * const workstationOperator = await prisma.workstationOperator.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkstationOperators and only return the `id`
+     * const workstationOperatorWithIdOnly = await prisma.workstationOperator.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkstationOperatorUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkstationOperatorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkstationOperator.
+     * @param {WorkstationOperatorUpsertArgs} args - Arguments to update or create a WorkstationOperator.
+     * @example
+     * // Update or create a WorkstationOperator
+     * const workstationOperator = await prisma.workstationOperator.upsert({
+     *   create: {
+     *     // ... data to create a WorkstationOperator
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkstationOperator we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkstationOperatorUpsertArgs>(args: SelectSubset<T, WorkstationOperatorUpsertArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkstationOperators.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorCountArgs} args - Arguments to filter WorkstationOperators to count.
+     * @example
+     * // Count the number of WorkstationOperators
+     * const count = await prisma.workstationOperator.count({
+     *   where: {
+     *     // ... the filter for the WorkstationOperators we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkstationOperatorCountArgs>(
+      args?: Subset<T, WorkstationOperatorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkstationOperatorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkstationOperator.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkstationOperatorAggregateArgs>(args: Subset<T, WorkstationOperatorAggregateArgs>): Prisma.PrismaPromise<GetWorkstationOperatorAggregateType<T>>
+
+    /**
+     * Group by WorkstationOperator.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationOperatorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkstationOperatorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkstationOperatorGroupByArgs['orderBy'] }
+        : { orderBy?: WorkstationOperatorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkstationOperatorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkstationOperatorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkstationOperator model
+   */
+  readonly fields: WorkstationOperatorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkstationOperator.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkstationOperatorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    currentWorkstation<T extends WorkstationOperator$currentWorkstationArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationOperator$currentWorkstationArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    stepConfirmations<T extends WorkstationOperator$stepConfirmationsArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationOperator$stepConfirmationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    operatorSessions<T extends WorkstationOperator$operatorSessionsArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationOperator$operatorSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkstationOperator model
+   */
+  interface WorkstationOperatorFieldRefs {
+    readonly id: FieldRef<"WorkstationOperator", 'String'>
+    readonly operatorId: FieldRef<"WorkstationOperator", 'String'>
+    readonly operatorName: FieldRef<"WorkstationOperator", 'String'>
+    readonly email: FieldRef<"WorkstationOperator", 'String'>
+    readonly phone: FieldRef<"WorkstationOperator", 'String'>
+    readonly certifications: FieldRef<"WorkstationOperator", 'String[]'>
+    readonly shift: FieldRef<"WorkstationOperator", 'OperatorShift'>
+    readonly hourlyRate: FieldRef<"WorkstationOperator", 'Decimal'>
+    readonly active: FieldRef<"WorkstationOperator", 'Boolean'>
+    readonly currentWorkstationId: FieldRef<"WorkstationOperator", 'String'>
+    readonly loginTime: FieldRef<"WorkstationOperator", 'DateTime'>
+    readonly logoutTime: FieldRef<"WorkstationOperator", 'DateTime'>
+    readonly createdAt: FieldRef<"WorkstationOperator", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkstationOperator", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkstationOperator findUnique
+   */
+  export type WorkstationOperatorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationOperator to fetch.
+     */
+    where: WorkstationOperatorWhereUniqueInput
+  }
+
+  /**
+   * WorkstationOperator findUniqueOrThrow
+   */
+  export type WorkstationOperatorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationOperator to fetch.
+     */
+    where: WorkstationOperatorWhereUniqueInput
+  }
+
+  /**
+   * WorkstationOperator findFirst
+   */
+  export type WorkstationOperatorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationOperator to fetch.
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationOperators to fetch.
+     */
+    orderBy?: WorkstationOperatorOrderByWithRelationInput | WorkstationOperatorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkstationOperators.
+     */
+    cursor?: WorkstationOperatorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationOperators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationOperators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkstationOperators.
+     */
+    distinct?: WorkstationOperatorScalarFieldEnum | WorkstationOperatorScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationOperator findFirstOrThrow
+   */
+  export type WorkstationOperatorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationOperator to fetch.
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationOperators to fetch.
+     */
+    orderBy?: WorkstationOperatorOrderByWithRelationInput | WorkstationOperatorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkstationOperators.
+     */
+    cursor?: WorkstationOperatorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationOperators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationOperators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkstationOperators.
+     */
+    distinct?: WorkstationOperatorScalarFieldEnum | WorkstationOperatorScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationOperator findMany
+   */
+  export type WorkstationOperatorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationOperators to fetch.
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationOperators to fetch.
+     */
+    orderBy?: WorkstationOperatorOrderByWithRelationInput | WorkstationOperatorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkstationOperators.
+     */
+    cursor?: WorkstationOperatorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationOperators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationOperators.
+     */
+    skip?: number
+    distinct?: WorkstationOperatorScalarFieldEnum | WorkstationOperatorScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationOperator create
+   */
+  export type WorkstationOperatorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkstationOperator.
+     */
+    data: XOR<WorkstationOperatorCreateInput, WorkstationOperatorUncheckedCreateInput>
+  }
+
+  /**
+   * WorkstationOperator createMany
+   */
+  export type WorkstationOperatorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkstationOperators.
+     */
+    data: WorkstationOperatorCreateManyInput | WorkstationOperatorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkstationOperator createManyAndReturn
+   */
+  export type WorkstationOperatorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkstationOperators.
+     */
+    data: WorkstationOperatorCreateManyInput | WorkstationOperatorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationOperator update
+   */
+  export type WorkstationOperatorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkstationOperator.
+     */
+    data: XOR<WorkstationOperatorUpdateInput, WorkstationOperatorUncheckedUpdateInput>
+    /**
+     * Choose, which WorkstationOperator to update.
+     */
+    where: WorkstationOperatorWhereUniqueInput
+  }
+
+  /**
+   * WorkstationOperator updateMany
+   */
+  export type WorkstationOperatorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkstationOperators.
+     */
+    data: XOR<WorkstationOperatorUpdateManyMutationInput, WorkstationOperatorUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkstationOperators to update
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * Limit how many WorkstationOperators to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkstationOperator updateManyAndReturn
+   */
+  export type WorkstationOperatorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkstationOperators.
+     */
+    data: XOR<WorkstationOperatorUpdateManyMutationInput, WorkstationOperatorUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkstationOperators to update
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * Limit how many WorkstationOperators to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationOperator upsert
+   */
+  export type WorkstationOperatorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkstationOperator to update in case it exists.
+     */
+    where: WorkstationOperatorWhereUniqueInput
+    /**
+     * In case the WorkstationOperator found by the `where` argument doesn't exist, create a new WorkstationOperator with this data.
+     */
+    create: XOR<WorkstationOperatorCreateInput, WorkstationOperatorUncheckedCreateInput>
+    /**
+     * In case the WorkstationOperator was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkstationOperatorUpdateInput, WorkstationOperatorUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkstationOperator delete
+   */
+  export type WorkstationOperatorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    /**
+     * Filter which WorkstationOperator to delete.
+     */
+    where: WorkstationOperatorWhereUniqueInput
+  }
+
+  /**
+   * WorkstationOperator deleteMany
+   */
+  export type WorkstationOperatorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkstationOperators to delete
+     */
+    where?: WorkstationOperatorWhereInput
+    /**
+     * Limit how many WorkstationOperators to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkstationOperator.currentWorkstation
+   */
+  export type WorkstationOperator$currentWorkstationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Workstation
+     */
+    select?: WorkstationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Workstation
+     */
+    omit?: WorkstationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationInclude<ExtArgs> | null
+    where?: WorkstationWhereInput
+  }
+
+  /**
+   * WorkstationOperator.stepConfirmations
+   */
+  export type WorkstationOperator$stepConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepConfirmation
+     */
+    select?: StepConfirmationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepConfirmation
+     */
+    omit?: StepConfirmationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepConfirmationInclude<ExtArgs> | null
+    where?: StepConfirmationWhereInput
+    orderBy?: StepConfirmationOrderByWithRelationInput | StepConfirmationOrderByWithRelationInput[]
+    cursor?: StepConfirmationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationOperator.operatorSessions
+   */
+  export type WorkstationOperator$operatorSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    where?: OperatorSessionWhereInput
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    cursor?: OperatorSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OperatorSessionScalarFieldEnum | OperatorSessionScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationOperator without action
+   */
+  export type WorkstationOperatorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OperatorSession
+   */
+
+  export type AggregateOperatorSession = {
+    _count: OperatorSessionCountAggregateOutputType | null
+    _min: OperatorSessionMinAggregateOutputType | null
+    _max: OperatorSessionMaxAggregateOutputType | null
+  }
+
+  export type OperatorSessionMinAggregateOutputType = {
+    id: string | null
+    operatorId: string | null
+    workstationId: string | null
+    loginTime: Date | null
+    logoutTime: Date | null
+    shift: $Enums.OperatorShift | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OperatorSessionMaxAggregateOutputType = {
+    id: string | null
+    operatorId: string | null
+    workstationId: string | null
+    loginTime: Date | null
+    logoutTime: Date | null
+    shift: $Enums.OperatorShift | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OperatorSessionCountAggregateOutputType = {
+    id: number
+    operatorId: number
+    workstationId: number
+    loginTime: number
+    logoutTime: number
+    shift: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OperatorSessionMinAggregateInputType = {
+    id?: true
+    operatorId?: true
+    workstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    shift?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OperatorSessionMaxAggregateInputType = {
+    id?: true
+    operatorId?: true
+    workstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    shift?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OperatorSessionCountAggregateInputType = {
+    id?: true
+    operatorId?: true
+    workstationId?: true
+    loginTime?: true
+    logoutTime?: true
+    shift?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OperatorSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OperatorSession to aggregate.
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OperatorSessions to fetch.
+     */
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OperatorSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OperatorSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OperatorSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OperatorSessions
+    **/
+    _count?: true | OperatorSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OperatorSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OperatorSessionMaxAggregateInputType
+  }
+
+  export type GetOperatorSessionAggregateType<T extends OperatorSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateOperatorSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOperatorSession[P]>
+      : GetScalarType<T[P], AggregateOperatorSession[P]>
+  }
+
+
+
+
+  export type OperatorSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperatorSessionWhereInput
+    orderBy?: OperatorSessionOrderByWithAggregationInput | OperatorSessionOrderByWithAggregationInput[]
+    by: OperatorSessionScalarFieldEnum[] | OperatorSessionScalarFieldEnum
+    having?: OperatorSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OperatorSessionCountAggregateInputType | true
+    _min?: OperatorSessionMinAggregateInputType
+    _max?: OperatorSessionMaxAggregateInputType
+  }
+
+  export type OperatorSessionGroupByOutputType = {
+    id: string
+    operatorId: string
+    workstationId: string
+    loginTime: Date
+    logoutTime: Date | null
+    shift: $Enums.OperatorShift
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OperatorSessionCountAggregateOutputType | null
+    _min: OperatorSessionMinAggregateOutputType | null
+    _max: OperatorSessionMaxAggregateOutputType | null
+  }
+
+  type GetOperatorSessionGroupByPayload<T extends OperatorSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OperatorSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OperatorSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OperatorSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], OperatorSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OperatorSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    workstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    shift?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["operatorSession"]>
+
+  export type OperatorSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    workstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    shift?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["operatorSession"]>
+
+  export type OperatorSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    operatorId?: boolean
+    workstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    shift?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["operatorSession"]>
+
+  export type OperatorSessionSelectScalar = {
+    id?: boolean
+    operatorId?: boolean
+    workstationId?: boolean
+    loginTime?: boolean
+    logoutTime?: boolean
+    shift?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OperatorSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "operatorId" | "workstationId" | "loginTime" | "logoutTime" | "shift" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["operatorSession"]>
+  export type OperatorSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type OperatorSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type OperatorSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operator?: boolean | WorkstationOperatorDefaultArgs<ExtArgs>
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+
+  export type $OperatorSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OperatorSession"
+    objects: {
+      operator: Prisma.$WorkstationOperatorPayload<ExtArgs>
+      workstation: Prisma.$WorkstationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      operatorId: string
+      workstationId: string
+      loginTime: Date
+      logoutTime: Date | null
+      shift: $Enums.OperatorShift
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["operatorSession"]>
+    composites: {}
+  }
+
+  type OperatorSessionGetPayload<S extends boolean | null | undefined | OperatorSessionDefaultArgs> = $Result.GetResult<Prisma.$OperatorSessionPayload, S>
+
+  type OperatorSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OperatorSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OperatorSessionCountAggregateInputType | true
+    }
+
+  export interface OperatorSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OperatorSession'], meta: { name: 'OperatorSession' } }
+    /**
+     * Find zero or one OperatorSession that matches the filter.
+     * @param {OperatorSessionFindUniqueArgs} args - Arguments to find a OperatorSession
+     * @example
+     * // Get one OperatorSession
+     * const operatorSession = await prisma.operatorSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OperatorSessionFindUniqueArgs>(args: SelectSubset<T, OperatorSessionFindUniqueArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OperatorSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OperatorSessionFindUniqueOrThrowArgs} args - Arguments to find a OperatorSession
+     * @example
+     * // Get one OperatorSession
+     * const operatorSession = await prisma.operatorSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OperatorSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, OperatorSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OperatorSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionFindFirstArgs} args - Arguments to find a OperatorSession
+     * @example
+     * // Get one OperatorSession
+     * const operatorSession = await prisma.operatorSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OperatorSessionFindFirstArgs>(args?: SelectSubset<T, OperatorSessionFindFirstArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OperatorSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionFindFirstOrThrowArgs} args - Arguments to find a OperatorSession
+     * @example
+     * // Get one OperatorSession
+     * const operatorSession = await prisma.operatorSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OperatorSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, OperatorSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OperatorSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OperatorSessions
+     * const operatorSessions = await prisma.operatorSession.findMany()
+     * 
+     * // Get first 10 OperatorSessions
+     * const operatorSessions = await prisma.operatorSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const operatorSessionWithIdOnly = await prisma.operatorSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OperatorSessionFindManyArgs>(args?: SelectSubset<T, OperatorSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OperatorSession.
+     * @param {OperatorSessionCreateArgs} args - Arguments to create a OperatorSession.
+     * @example
+     * // Create one OperatorSession
+     * const OperatorSession = await prisma.operatorSession.create({
+     *   data: {
+     *     // ... data to create a OperatorSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends OperatorSessionCreateArgs>(args: SelectSubset<T, OperatorSessionCreateArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OperatorSessions.
+     * @param {OperatorSessionCreateManyArgs} args - Arguments to create many OperatorSessions.
+     * @example
+     * // Create many OperatorSessions
+     * const operatorSession = await prisma.operatorSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OperatorSessionCreateManyArgs>(args?: SelectSubset<T, OperatorSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OperatorSessions and returns the data saved in the database.
+     * @param {OperatorSessionCreateManyAndReturnArgs} args - Arguments to create many OperatorSessions.
+     * @example
+     * // Create many OperatorSessions
+     * const operatorSession = await prisma.operatorSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OperatorSessions and only return the `id`
+     * const operatorSessionWithIdOnly = await prisma.operatorSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OperatorSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, OperatorSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OperatorSession.
+     * @param {OperatorSessionDeleteArgs} args - Arguments to delete one OperatorSession.
+     * @example
+     * // Delete one OperatorSession
+     * const OperatorSession = await prisma.operatorSession.delete({
+     *   where: {
+     *     // ... filter to delete one OperatorSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OperatorSessionDeleteArgs>(args: SelectSubset<T, OperatorSessionDeleteArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OperatorSession.
+     * @param {OperatorSessionUpdateArgs} args - Arguments to update one OperatorSession.
+     * @example
+     * // Update one OperatorSession
+     * const operatorSession = await prisma.operatorSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OperatorSessionUpdateArgs>(args: SelectSubset<T, OperatorSessionUpdateArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OperatorSessions.
+     * @param {OperatorSessionDeleteManyArgs} args - Arguments to filter OperatorSessions to delete.
+     * @example
+     * // Delete a few OperatorSessions
+     * const { count } = await prisma.operatorSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OperatorSessionDeleteManyArgs>(args?: SelectSubset<T, OperatorSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OperatorSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OperatorSessions
+     * const operatorSession = await prisma.operatorSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OperatorSessionUpdateManyArgs>(args: SelectSubset<T, OperatorSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OperatorSessions and returns the data updated in the database.
+     * @param {OperatorSessionUpdateManyAndReturnArgs} args - Arguments to update many OperatorSessions.
+     * @example
+     * // Update many OperatorSessions
+     * const operatorSession = await prisma.operatorSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OperatorSessions and only return the `id`
+     * const operatorSessionWithIdOnly = await prisma.operatorSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OperatorSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, OperatorSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OperatorSession.
+     * @param {OperatorSessionUpsertArgs} args - Arguments to update or create a OperatorSession.
+     * @example
+     * // Update or create a OperatorSession
+     * const operatorSession = await prisma.operatorSession.upsert({
+     *   create: {
+     *     // ... data to create a OperatorSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OperatorSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OperatorSessionUpsertArgs>(args: SelectSubset<T, OperatorSessionUpsertArgs<ExtArgs>>): Prisma__OperatorSessionClient<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OperatorSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionCountArgs} args - Arguments to filter OperatorSessions to count.
+     * @example
+     * // Count the number of OperatorSessions
+     * const count = await prisma.operatorSession.count({
+     *   where: {
+     *     // ... the filter for the OperatorSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends OperatorSessionCountArgs>(
+      args?: Subset<T, OperatorSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OperatorSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OperatorSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OperatorSessionAggregateArgs>(args: Subset<T, OperatorSessionAggregateArgs>): Prisma.PrismaPromise<GetOperatorSessionAggregateType<T>>
+
+    /**
+     * Group by OperatorSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OperatorSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OperatorSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OperatorSessionGroupByArgs['orderBy'] }
+        : { orderBy?: OperatorSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OperatorSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOperatorSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OperatorSession model
+   */
+  readonly fields: OperatorSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OperatorSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OperatorSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    operator<T extends WorkstationOperatorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationOperatorDefaultArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OperatorSession model
+   */
+  interface OperatorSessionFieldRefs {
+    readonly id: FieldRef<"OperatorSession", 'String'>
+    readonly operatorId: FieldRef<"OperatorSession", 'String'>
+    readonly workstationId: FieldRef<"OperatorSession", 'String'>
+    readonly loginTime: FieldRef<"OperatorSession", 'DateTime'>
+    readonly logoutTime: FieldRef<"OperatorSession", 'DateTime'>
+    readonly shift: FieldRef<"OperatorSession", 'OperatorShift'>
+    readonly notes: FieldRef<"OperatorSession", 'String'>
+    readonly createdAt: FieldRef<"OperatorSession", 'DateTime'>
+    readonly updatedAt: FieldRef<"OperatorSession", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OperatorSession findUnique
+   */
+  export type OperatorSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which OperatorSession to fetch.
+     */
+    where: OperatorSessionWhereUniqueInput
+  }
+
+  /**
+   * OperatorSession findUniqueOrThrow
+   */
+  export type OperatorSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which OperatorSession to fetch.
+     */
+    where: OperatorSessionWhereUniqueInput
+  }
+
+  /**
+   * OperatorSession findFirst
+   */
+  export type OperatorSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which OperatorSession to fetch.
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OperatorSessions to fetch.
+     */
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OperatorSessions.
+     */
+    cursor?: OperatorSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OperatorSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OperatorSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OperatorSessions.
+     */
+    distinct?: OperatorSessionScalarFieldEnum | OperatorSessionScalarFieldEnum[]
+  }
+
+  /**
+   * OperatorSession findFirstOrThrow
+   */
+  export type OperatorSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which OperatorSession to fetch.
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OperatorSessions to fetch.
+     */
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OperatorSessions.
+     */
+    cursor?: OperatorSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OperatorSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OperatorSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OperatorSessions.
+     */
+    distinct?: OperatorSessionScalarFieldEnum | OperatorSessionScalarFieldEnum[]
+  }
+
+  /**
+   * OperatorSession findMany
+   */
+  export type OperatorSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which OperatorSessions to fetch.
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OperatorSessions to fetch.
+     */
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OperatorSessions.
+     */
+    cursor?: OperatorSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OperatorSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OperatorSessions.
+     */
+    skip?: number
+    distinct?: OperatorSessionScalarFieldEnum | OperatorSessionScalarFieldEnum[]
+  }
+
+  /**
+   * OperatorSession create
+   */
+  export type OperatorSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OperatorSession.
+     */
+    data: XOR<OperatorSessionCreateInput, OperatorSessionUncheckedCreateInput>
+  }
+
+  /**
+   * OperatorSession createMany
+   */
+  export type OperatorSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OperatorSessions.
+     */
+    data: OperatorSessionCreateManyInput | OperatorSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OperatorSession createManyAndReturn
+   */
+  export type OperatorSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many OperatorSessions.
+     */
+    data: OperatorSessionCreateManyInput | OperatorSessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OperatorSession update
+   */
+  export type OperatorSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OperatorSession.
+     */
+    data: XOR<OperatorSessionUpdateInput, OperatorSessionUncheckedUpdateInput>
+    /**
+     * Choose, which OperatorSession to update.
+     */
+    where: OperatorSessionWhereUniqueInput
+  }
+
+  /**
+   * OperatorSession updateMany
+   */
+  export type OperatorSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OperatorSessions.
+     */
+    data: XOR<OperatorSessionUpdateManyMutationInput, OperatorSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which OperatorSessions to update
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * Limit how many OperatorSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OperatorSession updateManyAndReturn
+   */
+  export type OperatorSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * The data used to update OperatorSessions.
+     */
+    data: XOR<OperatorSessionUpdateManyMutationInput, OperatorSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which OperatorSessions to update
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * Limit how many OperatorSessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OperatorSession upsert
+   */
+  export type OperatorSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OperatorSession to update in case it exists.
+     */
+    where: OperatorSessionWhereUniqueInput
+    /**
+     * In case the OperatorSession found by the `where` argument doesn't exist, create a new OperatorSession with this data.
+     */
+    create: XOR<OperatorSessionCreateInput, OperatorSessionUncheckedCreateInput>
+    /**
+     * In case the OperatorSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OperatorSessionUpdateInput, OperatorSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * OperatorSession delete
+   */
+  export type OperatorSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    /**
+     * Filter which OperatorSession to delete.
+     */
+    where: OperatorSessionWhereUniqueInput
+  }
+
+  /**
+   * OperatorSession deleteMany
+   */
+  export type OperatorSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OperatorSessions to delete
+     */
+    where?: OperatorSessionWhereInput
+    /**
+     * Limit how many OperatorSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OperatorSession without action
+   */
+  export type OperatorSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkstationCapacity
+   */
+
+  export type AggregateWorkstationCapacity = {
+    _count: WorkstationCapacityCountAggregateOutputType | null
+    _avg: WorkstationCapacityAvgAggregateOutputType | null
+    _sum: WorkstationCapacitySumAggregateOutputType | null
+    _min: WorkstationCapacityMinAggregateOutputType | null
+    _max: WorkstationCapacityMaxAggregateOutputType | null
+  }
+
+  export type WorkstationCapacityAvgAggregateOutputType = {
+    maxConcurrentJobs: number | null
+    avgSetupTime: number | null
+    efficiency: Decimal | null
+    hoursPerDay: number | null
+    maintenanceHours: number | null
+    operatingCostPerHour: Decimal | null
+    maintenanceCostPerHour: Decimal | null
+    utilizationTarget: Decimal | null
+    qualityTarget: Decimal | null
+  }
+
+  export type WorkstationCapacitySumAggregateOutputType = {
+    maxConcurrentJobs: number | null
+    avgSetupTime: number | null
+    efficiency: Decimal | null
+    hoursPerDay: number | null
+    maintenanceHours: number | null
+    operatingCostPerHour: Decimal | null
+    maintenanceCostPerHour: Decimal | null
+    utilizationTarget: Decimal | null
+    qualityTarget: Decimal | null
+  }
+
+  export type WorkstationCapacityMinAggregateOutputType = {
+    id: string | null
+    workstationId: string | null
+    maxConcurrentJobs: number | null
+    avgSetupTime: number | null
+    efficiency: Decimal | null
+    hoursPerDay: number | null
+    maintenanceHours: number | null
+    operatingCostPerHour: Decimal | null
+    maintenanceCostPerHour: Decimal | null
+    utilizationTarget: Decimal | null
+    qualityTarget: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationCapacityMaxAggregateOutputType = {
+    id: string | null
+    workstationId: string | null
+    maxConcurrentJobs: number | null
+    avgSetupTime: number | null
+    efficiency: Decimal | null
+    hoursPerDay: number | null
+    maintenanceHours: number | null
+    operatingCostPerHour: Decimal | null
+    maintenanceCostPerHour: Decimal | null
+    utilizationTarget: Decimal | null
+    qualityTarget: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkstationCapacityCountAggregateOutputType = {
+    id: number
+    workstationId: number
+    maxConcurrentJobs: number
+    avgSetupTime: number
+    efficiency: number
+    hoursPerDay: number
+    maintenanceHours: number
+    operatingCostPerHour: number
+    maintenanceCostPerHour: number
+    utilizationTarget: number
+    qualityTarget: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkstationCapacityAvgAggregateInputType = {
+    maxConcurrentJobs?: true
+    avgSetupTime?: true
+    efficiency?: true
+    hoursPerDay?: true
+    maintenanceHours?: true
+    operatingCostPerHour?: true
+    maintenanceCostPerHour?: true
+    utilizationTarget?: true
+    qualityTarget?: true
+  }
+
+  export type WorkstationCapacitySumAggregateInputType = {
+    maxConcurrentJobs?: true
+    avgSetupTime?: true
+    efficiency?: true
+    hoursPerDay?: true
+    maintenanceHours?: true
+    operatingCostPerHour?: true
+    maintenanceCostPerHour?: true
+    utilizationTarget?: true
+    qualityTarget?: true
+  }
+
+  export type WorkstationCapacityMinAggregateInputType = {
+    id?: true
+    workstationId?: true
+    maxConcurrentJobs?: true
+    avgSetupTime?: true
+    efficiency?: true
+    hoursPerDay?: true
+    maintenanceHours?: true
+    operatingCostPerHour?: true
+    maintenanceCostPerHour?: true
+    utilizationTarget?: true
+    qualityTarget?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationCapacityMaxAggregateInputType = {
+    id?: true
+    workstationId?: true
+    maxConcurrentJobs?: true
+    avgSetupTime?: true
+    efficiency?: true
+    hoursPerDay?: true
+    maintenanceHours?: true
+    operatingCostPerHour?: true
+    maintenanceCostPerHour?: true
+    utilizationTarget?: true
+    qualityTarget?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkstationCapacityCountAggregateInputType = {
+    id?: true
+    workstationId?: true
+    maxConcurrentJobs?: true
+    avgSetupTime?: true
+    efficiency?: true
+    hoursPerDay?: true
+    maintenanceHours?: true
+    operatingCostPerHour?: true
+    maintenanceCostPerHour?: true
+    utilizationTarget?: true
+    qualityTarget?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkstationCapacityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkstationCapacity to aggregate.
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationCapacities to fetch.
+     */
+    orderBy?: WorkstationCapacityOrderByWithRelationInput | WorkstationCapacityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkstationCapacityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationCapacities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationCapacities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkstationCapacities
+    **/
+    _count?: true | WorkstationCapacityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkstationCapacityAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkstationCapacitySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkstationCapacityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkstationCapacityMaxAggregateInputType
+  }
+
+  export type GetWorkstationCapacityAggregateType<T extends WorkstationCapacityAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkstationCapacity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkstationCapacity[P]>
+      : GetScalarType<T[P], AggregateWorkstationCapacity[P]>
+  }
+
+
+
+
+  export type WorkstationCapacityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkstationCapacityWhereInput
+    orderBy?: WorkstationCapacityOrderByWithAggregationInput | WorkstationCapacityOrderByWithAggregationInput[]
+    by: WorkstationCapacityScalarFieldEnum[] | WorkstationCapacityScalarFieldEnum
+    having?: WorkstationCapacityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkstationCapacityCountAggregateInputType | true
+    _avg?: WorkstationCapacityAvgAggregateInputType
+    _sum?: WorkstationCapacitySumAggregateInputType
+    _min?: WorkstationCapacityMinAggregateInputType
+    _max?: WorkstationCapacityMaxAggregateInputType
+  }
+
+  export type WorkstationCapacityGroupByOutputType = {
+    id: string
+    workstationId: string
+    maxConcurrentJobs: number
+    avgSetupTime: number
+    efficiency: Decimal
+    hoursPerDay: number
+    maintenanceHours: number
+    operatingCostPerHour: Decimal | null
+    maintenanceCostPerHour: Decimal | null
+    utilizationTarget: Decimal
+    qualityTarget: Decimal
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkstationCapacityCountAggregateOutputType | null
+    _avg: WorkstationCapacityAvgAggregateOutputType | null
+    _sum: WorkstationCapacitySumAggregateOutputType | null
+    _min: WorkstationCapacityMinAggregateOutputType | null
+    _max: WorkstationCapacityMaxAggregateOutputType | null
+  }
+
+  type GetWorkstationCapacityGroupByPayload<T extends WorkstationCapacityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkstationCapacityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkstationCapacityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkstationCapacityGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkstationCapacityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkstationCapacitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workstationId?: boolean
+    maxConcurrentJobs?: boolean
+    avgSetupTime?: boolean
+    efficiency?: boolean
+    hoursPerDay?: boolean
+    maintenanceHours?: boolean
+    operatingCostPerHour?: boolean
+    maintenanceCostPerHour?: boolean
+    utilizationTarget?: boolean
+    qualityTarget?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationCapacity"]>
+
+  export type WorkstationCapacitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workstationId?: boolean
+    maxConcurrentJobs?: boolean
+    avgSetupTime?: boolean
+    efficiency?: boolean
+    hoursPerDay?: boolean
+    maintenanceHours?: boolean
+    operatingCostPerHour?: boolean
+    maintenanceCostPerHour?: boolean
+    utilizationTarget?: boolean
+    qualityTarget?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationCapacity"]>
+
+  export type WorkstationCapacitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workstationId?: boolean
+    maxConcurrentJobs?: boolean
+    avgSetupTime?: boolean
+    efficiency?: boolean
+    hoursPerDay?: boolean
+    maintenanceHours?: boolean
+    operatingCostPerHour?: boolean
+    maintenanceCostPerHour?: boolean
+    utilizationTarget?: boolean
+    qualityTarget?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workstationCapacity"]>
+
+  export type WorkstationCapacitySelectScalar = {
+    id?: boolean
+    workstationId?: boolean
+    maxConcurrentJobs?: boolean
+    avgSetupTime?: boolean
+    efficiency?: boolean
+    hoursPerDay?: boolean
+    maintenanceHours?: boolean
+    operatingCostPerHour?: boolean
+    maintenanceCostPerHour?: boolean
+    utilizationTarget?: boolean
+    qualityTarget?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkstationCapacityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workstationId" | "maxConcurrentJobs" | "avgSetupTime" | "efficiency" | "hoursPerDay" | "maintenanceHours" | "operatingCostPerHour" | "maintenanceCostPerHour" | "utilizationTarget" | "qualityTarget" | "createdAt" | "updatedAt", ExtArgs["result"]["workstationCapacity"]>
+  export type WorkstationCapacityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type WorkstationCapacityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+  export type WorkstationCapacityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+  }
+
+  export type $WorkstationCapacityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkstationCapacity"
+    objects: {
+      workstation: Prisma.$WorkstationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workstationId: string
+      maxConcurrentJobs: number
+      avgSetupTime: number
+      efficiency: Prisma.Decimal
+      hoursPerDay: number
+      maintenanceHours: number
+      operatingCostPerHour: Prisma.Decimal | null
+      maintenanceCostPerHour: Prisma.Decimal | null
+      utilizationTarget: Prisma.Decimal
+      qualityTarget: Prisma.Decimal
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workstationCapacity"]>
+    composites: {}
+  }
+
+  type WorkstationCapacityGetPayload<S extends boolean | null | undefined | WorkstationCapacityDefaultArgs> = $Result.GetResult<Prisma.$WorkstationCapacityPayload, S>
+
+  type WorkstationCapacityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkstationCapacityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkstationCapacityCountAggregateInputType | true
+    }
+
+  export interface WorkstationCapacityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkstationCapacity'], meta: { name: 'WorkstationCapacity' } }
+    /**
+     * Find zero or one WorkstationCapacity that matches the filter.
+     * @param {WorkstationCapacityFindUniqueArgs} args - Arguments to find a WorkstationCapacity
+     * @example
+     * // Get one WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkstationCapacityFindUniqueArgs>(args: SelectSubset<T, WorkstationCapacityFindUniqueArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkstationCapacity that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkstationCapacityFindUniqueOrThrowArgs} args - Arguments to find a WorkstationCapacity
+     * @example
+     * // Get one WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkstationCapacityFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkstationCapacityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkstationCapacity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityFindFirstArgs} args - Arguments to find a WorkstationCapacity
+     * @example
+     * // Get one WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkstationCapacityFindFirstArgs>(args?: SelectSubset<T, WorkstationCapacityFindFirstArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkstationCapacity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityFindFirstOrThrowArgs} args - Arguments to find a WorkstationCapacity
+     * @example
+     * // Get one WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkstationCapacityFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkstationCapacityFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkstationCapacities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkstationCapacities
+     * const workstationCapacities = await prisma.workstationCapacity.findMany()
+     * 
+     * // Get first 10 WorkstationCapacities
+     * const workstationCapacities = await prisma.workstationCapacity.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workstationCapacityWithIdOnly = await prisma.workstationCapacity.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkstationCapacityFindManyArgs>(args?: SelectSubset<T, WorkstationCapacityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkstationCapacity.
+     * @param {WorkstationCapacityCreateArgs} args - Arguments to create a WorkstationCapacity.
+     * @example
+     * // Create one WorkstationCapacity
+     * const WorkstationCapacity = await prisma.workstationCapacity.create({
+     *   data: {
+     *     // ... data to create a WorkstationCapacity
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkstationCapacityCreateArgs>(args: SelectSubset<T, WorkstationCapacityCreateArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkstationCapacities.
+     * @param {WorkstationCapacityCreateManyArgs} args - Arguments to create many WorkstationCapacities.
+     * @example
+     * // Create many WorkstationCapacities
+     * const workstationCapacity = await prisma.workstationCapacity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkstationCapacityCreateManyArgs>(args?: SelectSubset<T, WorkstationCapacityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkstationCapacities and returns the data saved in the database.
+     * @param {WorkstationCapacityCreateManyAndReturnArgs} args - Arguments to create many WorkstationCapacities.
+     * @example
+     * // Create many WorkstationCapacities
+     * const workstationCapacity = await prisma.workstationCapacity.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkstationCapacities and only return the `id`
+     * const workstationCapacityWithIdOnly = await prisma.workstationCapacity.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkstationCapacityCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkstationCapacityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkstationCapacity.
+     * @param {WorkstationCapacityDeleteArgs} args - Arguments to delete one WorkstationCapacity.
+     * @example
+     * // Delete one WorkstationCapacity
+     * const WorkstationCapacity = await prisma.workstationCapacity.delete({
+     *   where: {
+     *     // ... filter to delete one WorkstationCapacity
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkstationCapacityDeleteArgs>(args: SelectSubset<T, WorkstationCapacityDeleteArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkstationCapacity.
+     * @param {WorkstationCapacityUpdateArgs} args - Arguments to update one WorkstationCapacity.
+     * @example
+     * // Update one WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkstationCapacityUpdateArgs>(args: SelectSubset<T, WorkstationCapacityUpdateArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkstationCapacities.
+     * @param {WorkstationCapacityDeleteManyArgs} args - Arguments to filter WorkstationCapacities to delete.
+     * @example
+     * // Delete a few WorkstationCapacities
+     * const { count } = await prisma.workstationCapacity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkstationCapacityDeleteManyArgs>(args?: SelectSubset<T, WorkstationCapacityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkstationCapacities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkstationCapacities
+     * const workstationCapacity = await prisma.workstationCapacity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkstationCapacityUpdateManyArgs>(args: SelectSubset<T, WorkstationCapacityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkstationCapacities and returns the data updated in the database.
+     * @param {WorkstationCapacityUpdateManyAndReturnArgs} args - Arguments to update many WorkstationCapacities.
+     * @example
+     * // Update many WorkstationCapacities
+     * const workstationCapacity = await prisma.workstationCapacity.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkstationCapacities and only return the `id`
+     * const workstationCapacityWithIdOnly = await prisma.workstationCapacity.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkstationCapacityUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkstationCapacityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkstationCapacity.
+     * @param {WorkstationCapacityUpsertArgs} args - Arguments to update or create a WorkstationCapacity.
+     * @example
+     * // Update or create a WorkstationCapacity
+     * const workstationCapacity = await prisma.workstationCapacity.upsert({
+     *   create: {
+     *     // ... data to create a WorkstationCapacity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkstationCapacity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkstationCapacityUpsertArgs>(args: SelectSubset<T, WorkstationCapacityUpsertArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkstationCapacities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityCountArgs} args - Arguments to filter WorkstationCapacities to count.
+     * @example
+     * // Count the number of WorkstationCapacities
+     * const count = await prisma.workstationCapacity.count({
+     *   where: {
+     *     // ... the filter for the WorkstationCapacities we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkstationCapacityCountArgs>(
+      args?: Subset<T, WorkstationCapacityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkstationCapacityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkstationCapacity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkstationCapacityAggregateArgs>(args: Subset<T, WorkstationCapacityAggregateArgs>): Prisma.PrismaPromise<GetWorkstationCapacityAggregateType<T>>
+
+    /**
+     * Group by WorkstationCapacity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkstationCapacityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkstationCapacityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkstationCapacityGroupByArgs['orderBy'] }
+        : { orderBy?: WorkstationCapacityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkstationCapacityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkstationCapacityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkstationCapacity model
+   */
+  readonly fields: WorkstationCapacityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkstationCapacity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkstationCapacityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkstationCapacity model
+   */
+  interface WorkstationCapacityFieldRefs {
+    readonly id: FieldRef<"WorkstationCapacity", 'String'>
+    readonly workstationId: FieldRef<"WorkstationCapacity", 'String'>
+    readonly maxConcurrentJobs: FieldRef<"WorkstationCapacity", 'Int'>
+    readonly avgSetupTime: FieldRef<"WorkstationCapacity", 'Int'>
+    readonly efficiency: FieldRef<"WorkstationCapacity", 'Decimal'>
+    readonly hoursPerDay: FieldRef<"WorkstationCapacity", 'Int'>
+    readonly maintenanceHours: FieldRef<"WorkstationCapacity", 'Int'>
+    readonly operatingCostPerHour: FieldRef<"WorkstationCapacity", 'Decimal'>
+    readonly maintenanceCostPerHour: FieldRef<"WorkstationCapacity", 'Decimal'>
+    readonly utilizationTarget: FieldRef<"WorkstationCapacity", 'Decimal'>
+    readonly qualityTarget: FieldRef<"WorkstationCapacity", 'Decimal'>
+    readonly createdAt: FieldRef<"WorkstationCapacity", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkstationCapacity", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkstationCapacity findUnique
+   */
+  export type WorkstationCapacityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationCapacity to fetch.
+     */
+    where: WorkstationCapacityWhereUniqueInput
+  }
+
+  /**
+   * WorkstationCapacity findUniqueOrThrow
+   */
+  export type WorkstationCapacityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationCapacity to fetch.
+     */
+    where: WorkstationCapacityWhereUniqueInput
+  }
+
+  /**
+   * WorkstationCapacity findFirst
+   */
+  export type WorkstationCapacityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationCapacity to fetch.
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationCapacities to fetch.
+     */
+    orderBy?: WorkstationCapacityOrderByWithRelationInput | WorkstationCapacityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkstationCapacities.
+     */
+    cursor?: WorkstationCapacityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationCapacities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationCapacities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkstationCapacities.
+     */
+    distinct?: WorkstationCapacityScalarFieldEnum | WorkstationCapacityScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationCapacity findFirstOrThrow
+   */
+  export type WorkstationCapacityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationCapacity to fetch.
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationCapacities to fetch.
+     */
+    orderBy?: WorkstationCapacityOrderByWithRelationInput | WorkstationCapacityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkstationCapacities.
+     */
+    cursor?: WorkstationCapacityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationCapacities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationCapacities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkstationCapacities.
+     */
+    distinct?: WorkstationCapacityScalarFieldEnum | WorkstationCapacityScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationCapacity findMany
+   */
+  export type WorkstationCapacityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkstationCapacities to fetch.
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkstationCapacities to fetch.
+     */
+    orderBy?: WorkstationCapacityOrderByWithRelationInput | WorkstationCapacityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkstationCapacities.
+     */
+    cursor?: WorkstationCapacityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkstationCapacities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkstationCapacities.
+     */
+    skip?: number
+    distinct?: WorkstationCapacityScalarFieldEnum | WorkstationCapacityScalarFieldEnum[]
+  }
+
+  /**
+   * WorkstationCapacity create
+   */
+  export type WorkstationCapacityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkstationCapacity.
+     */
+    data: XOR<WorkstationCapacityCreateInput, WorkstationCapacityUncheckedCreateInput>
+  }
+
+  /**
+   * WorkstationCapacity createMany
+   */
+  export type WorkstationCapacityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkstationCapacities.
+     */
+    data: WorkstationCapacityCreateManyInput | WorkstationCapacityCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkstationCapacity createManyAndReturn
+   */
+  export type WorkstationCapacityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkstationCapacities.
+     */
+    data: WorkstationCapacityCreateManyInput | WorkstationCapacityCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationCapacity update
+   */
+  export type WorkstationCapacityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkstationCapacity.
+     */
+    data: XOR<WorkstationCapacityUpdateInput, WorkstationCapacityUncheckedUpdateInput>
+    /**
+     * Choose, which WorkstationCapacity to update.
+     */
+    where: WorkstationCapacityWhereUniqueInput
+  }
+
+  /**
+   * WorkstationCapacity updateMany
+   */
+  export type WorkstationCapacityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkstationCapacities.
+     */
+    data: XOR<WorkstationCapacityUpdateManyMutationInput, WorkstationCapacityUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkstationCapacities to update
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * Limit how many WorkstationCapacities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkstationCapacity updateManyAndReturn
+   */
+  export type WorkstationCapacityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkstationCapacities.
+     */
+    data: XOR<WorkstationCapacityUpdateManyMutationInput, WorkstationCapacityUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkstationCapacities to update
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * Limit how many WorkstationCapacities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkstationCapacity upsert
+   */
+  export type WorkstationCapacityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkstationCapacity to update in case it exists.
+     */
+    where: WorkstationCapacityWhereUniqueInput
+    /**
+     * In case the WorkstationCapacity found by the `where` argument doesn't exist, create a new WorkstationCapacity with this data.
+     */
+    create: XOR<WorkstationCapacityCreateInput, WorkstationCapacityUncheckedCreateInput>
+    /**
+     * In case the WorkstationCapacity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkstationCapacityUpdateInput, WorkstationCapacityUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkstationCapacity delete
+   */
+  export type WorkstationCapacityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    /**
+     * Filter which WorkstationCapacity to delete.
+     */
+    where: WorkstationCapacityWhereUniqueInput
+  }
+
+  /**
+   * WorkstationCapacity deleteMany
+   */
+  export type WorkstationCapacityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkstationCapacities to delete
+     */
+    where?: WorkstationCapacityWhereInput
+    /**
+     * Limit how many WorkstationCapacities to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkstationCapacity without action
+   */
+  export type WorkstationCapacityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Workstation
    */
 
@@ -13237,6 +19715,11 @@ export namespace Prisma {
     name: string | null
     description: string | null
     active: boolean | null
+    category: $Enums.WorkstationCategory | null
+    location: string | null
+    serialNumber: string | null
+    manufacturer: string | null
+    model: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13246,6 +19729,11 @@ export namespace Prisma {
     name: string | null
     description: string | null
     active: boolean | null
+    category: $Enums.WorkstationCategory | null
+    location: string | null
+    serialNumber: string | null
+    manufacturer: string | null
+    model: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13255,6 +19743,11 @@ export namespace Prisma {
     name: number
     description: number
     active: number
+    category: number
+    location: number
+    serialNumber: number
+    manufacturer: number
+    model: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13266,6 +19759,11 @@ export namespace Prisma {
     name?: true
     description?: true
     active?: true
+    category?: true
+    location?: true
+    serialNumber?: true
+    manufacturer?: true
+    model?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13275,6 +19773,11 @@ export namespace Prisma {
     name?: true
     description?: true
     active?: true
+    category?: true
+    location?: true
+    serialNumber?: true
+    manufacturer?: true
+    model?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13284,6 +19787,11 @@ export namespace Prisma {
     name?: true
     description?: true
     active?: true
+    category?: true
+    location?: true
+    serialNumber?: true
+    manufacturer?: true
+    model?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13366,6 +19874,11 @@ export namespace Prisma {
     name: string
     description: string | null
     active: boolean
+    category: $Enums.WorkstationCategory
+    location: string | null
+    serialNumber: string | null
+    manufacturer: string | null
+    model: string | null
     createdAt: Date
     updatedAt: Date
     _count: WorkstationCountAggregateOutputType | null
@@ -13392,10 +19905,19 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     active?: boolean
+    category?: boolean
+    location?: boolean
+    serialNumber?: boolean
+    manufacturer?: boolean
+    model?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     routingSteps?: boolean | Workstation$routingStepsArgs<ExtArgs>
     confirmations?: boolean | Workstation$confirmationsArgs<ExtArgs>
+    templateSteps?: boolean | Workstation$templateStepsArgs<ExtArgs>
+    currentOperators?: boolean | Workstation$currentOperatorsArgs<ExtArgs>
+    operatorSessions?: boolean | Workstation$operatorSessionsArgs<ExtArgs>
+    capacity?: boolean | Workstation$capacityArgs<ExtArgs>
     _count?: boolean | WorkstationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workstation"]>
 
@@ -13404,6 +19926,11 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     active?: boolean
+    category?: boolean
+    location?: boolean
+    serialNumber?: boolean
+    manufacturer?: boolean
+    model?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["workstation"]>
@@ -13413,6 +19940,11 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     active?: boolean
+    category?: boolean
+    location?: boolean
+    serialNumber?: boolean
+    manufacturer?: boolean
+    model?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["workstation"]>
@@ -13422,14 +19954,23 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     active?: boolean
+    category?: boolean
+    location?: boolean
+    serialNumber?: boolean
+    manufacturer?: boolean
+    model?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WorkstationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["workstation"]>
+  export type WorkstationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "active" | "category" | "location" | "serialNumber" | "manufacturer" | "model" | "createdAt" | "updatedAt", ExtArgs["result"]["workstation"]>
   export type WorkstationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingSteps?: boolean | Workstation$routingStepsArgs<ExtArgs>
     confirmations?: boolean | Workstation$confirmationsArgs<ExtArgs>
+    templateSteps?: boolean | Workstation$templateStepsArgs<ExtArgs>
+    currentOperators?: boolean | Workstation$currentOperatorsArgs<ExtArgs>
+    operatorSessions?: boolean | Workstation$operatorSessionsArgs<ExtArgs>
+    capacity?: boolean | Workstation$capacityArgs<ExtArgs>
     _count?: boolean | WorkstationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkstationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -13440,12 +19981,21 @@ export namespace Prisma {
     objects: {
       routingSteps: Prisma.$RoutingStepPayload<ExtArgs>[]
       confirmations: Prisma.$StepConfirmationPayload<ExtArgs>[]
+      templateSteps: Prisma.$RoutingTemplateStepPayload<ExtArgs>[]
+      currentOperators: Prisma.$WorkstationOperatorPayload<ExtArgs>[]
+      operatorSessions: Prisma.$OperatorSessionPayload<ExtArgs>[]
+      capacity: Prisma.$WorkstationCapacityPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       description: string | null
       active: boolean
+      category: $Enums.WorkstationCategory
+      location: string | null
+      serialNumber: string | null
+      manufacturer: string | null
+      model: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workstation"]>
@@ -13844,6 +20394,10 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     routingSteps<T extends Workstation$routingStepsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$routingStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     confirmations<T extends Workstation$confirmationsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$confirmationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    templateSteps<T extends Workstation$templateStepsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$templateStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingTemplateStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    currentOperators<T extends Workstation$currentOperatorsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$currentOperatorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    operatorSessions<T extends Workstation$operatorSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$operatorSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    capacity<T extends Workstation$capacityArgs<ExtArgs> = {}>(args?: Subset<T, Workstation$capacityArgs<ExtArgs>>): Prisma__WorkstationCapacityClient<$Result.GetResult<Prisma.$WorkstationCapacityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13877,6 +20431,11 @@ export namespace Prisma {
     readonly name: FieldRef<"Workstation", 'String'>
     readonly description: FieldRef<"Workstation", 'String'>
     readonly active: FieldRef<"Workstation", 'Boolean'>
+    readonly category: FieldRef<"Workstation", 'WorkstationCategory'>
+    readonly location: FieldRef<"Workstation", 'String'>
+    readonly serialNumber: FieldRef<"Workstation", 'String'>
+    readonly manufacturer: FieldRef<"Workstation", 'String'>
+    readonly model: FieldRef<"Workstation", 'String'>
     readonly createdAt: FieldRef<"Workstation", 'DateTime'>
     readonly updatedAt: FieldRef<"Workstation", 'DateTime'>
   }
@@ -14315,6 +20874,97 @@ export namespace Prisma {
   }
 
   /**
+   * Workstation.templateSteps
+   */
+  export type Workstation$templateStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingTemplateStep
+     */
+    select?: RoutingTemplateStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingTemplateStep
+     */
+    omit?: RoutingTemplateStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingTemplateStepInclude<ExtArgs> | null
+    where?: RoutingTemplateStepWhereInput
+    orderBy?: RoutingTemplateStepOrderByWithRelationInput | RoutingTemplateStepOrderByWithRelationInput[]
+    cursor?: RoutingTemplateStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoutingTemplateStepScalarFieldEnum | RoutingTemplateStepScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation.currentOperators
+   */
+  export type Workstation$currentOperatorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    where?: WorkstationOperatorWhereInput
+    orderBy?: WorkstationOperatorOrderByWithRelationInput | WorkstationOperatorOrderByWithRelationInput[]
+    cursor?: WorkstationOperatorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkstationOperatorScalarFieldEnum | WorkstationOperatorScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation.operatorSessions
+   */
+  export type Workstation$operatorSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OperatorSession
+     */
+    select?: OperatorSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OperatorSession
+     */
+    omit?: OperatorSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperatorSessionInclude<ExtArgs> | null
+    where?: OperatorSessionWhereInput
+    orderBy?: OperatorSessionOrderByWithRelationInput | OperatorSessionOrderByWithRelationInput[]
+    cursor?: OperatorSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OperatorSessionScalarFieldEnum | OperatorSessionScalarFieldEnum[]
+  }
+
+  /**
+   * Workstation.capacity
+   */
+  export type Workstation$capacityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationCapacity
+     */
+    select?: WorkstationCapacitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationCapacity
+     */
+    omit?: WorkstationCapacityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationCapacityInclude<ExtArgs> | null
+    where?: WorkstationCapacityWhereInput
+  }
+
+  /**
    * Workstation without action
    */
   export type WorkstationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14563,6 +21213,7 @@ export namespace Prisma {
     updatedAt?: boolean
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }, ExtArgs["result"]["stepConfirmation"]>
 
   export type StepConfirmationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14581,6 +21232,7 @@ export namespace Prisma {
     updatedAt?: boolean
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }, ExtArgs["result"]["stepConfirmation"]>
 
   export type StepConfirmationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14599,6 +21251,7 @@ export namespace Prisma {
     updatedAt?: boolean
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }, ExtArgs["result"]["stepConfirmation"]>
 
   export type StepConfirmationSelectScalar = {
@@ -14621,14 +21274,17 @@ export namespace Prisma {
   export type StepConfirmationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }
   export type StepConfirmationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }
   export type StepConfirmationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
+    operator?: boolean | StepConfirmation$operatorArgs<ExtArgs>
   }
 
   export type $StepConfirmationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14636,6 +21292,7 @@ export namespace Prisma {
     objects: {
       routingStep: Prisma.$RoutingStepPayload<ExtArgs>
       workstation: Prisma.$WorkstationPayload<ExtArgs>
+      operator: Prisma.$WorkstationOperatorPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15047,6 +21704,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     routingStep<T extends RoutingStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStepDefaultArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    operator<T extends StepConfirmation$operatorArgs<ExtArgs> = {}>(args?: Subset<T, StepConfirmation$operatorArgs<ExtArgs>>): Prisma__WorkstationOperatorClient<$Result.GetResult<Prisma.$WorkstationOperatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15482,6 +22140,25 @@ export namespace Prisma {
      * Limit how many StepConfirmations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * StepConfirmation.operator
+   */
+  export type StepConfirmation$operatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkstationOperator
+     */
+    select?: WorkstationOperatorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkstationOperator
+     */
+    omit?: WorkstationOperatorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkstationOperatorInclude<ExtArgs> | null
+    where?: WorkstationOperatorWhereInput
   }
 
   /**
@@ -16670,6 +23347,7 @@ export namespace Prisma {
     leadTime: 'leadTime',
     active: 'active',
     notes: 'notes',
+    recommendedRoutingTemplateId: 'recommendedRoutingTemplateId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16776,11 +23454,98 @@ export namespace Prisma {
   export type RoutingStepScalarFieldEnum = (typeof RoutingStepScalarFieldEnum)[keyof typeof RoutingStepScalarFieldEnum]
 
 
+  export const RoutingTemplateScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoutingTemplateScalarFieldEnum = (typeof RoutingTemplateScalarFieldEnum)[keyof typeof RoutingTemplateScalarFieldEnum]
+
+
+  export const RoutingTemplateStepScalarFieldEnum: {
+    id: 'id',
+    templateId: 'templateId',
+    stepNumber: 'stepNumber',
+    workstationId: 'workstationId',
+    description: 'description',
+    estimatedTime: 'estimatedTime',
+    required: 'required',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoutingTemplateStepScalarFieldEnum = (typeof RoutingTemplateStepScalarFieldEnum)[keyof typeof RoutingTemplateStepScalarFieldEnum]
+
+
+  export const WorkstationOperatorScalarFieldEnum: {
+    id: 'id',
+    operatorId: 'operatorId',
+    operatorName: 'operatorName',
+    email: 'email',
+    phone: 'phone',
+    certifications: 'certifications',
+    shift: 'shift',
+    hourlyRate: 'hourlyRate',
+    active: 'active',
+    currentWorkstationId: 'currentWorkstationId',
+    loginTime: 'loginTime',
+    logoutTime: 'logoutTime',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkstationOperatorScalarFieldEnum = (typeof WorkstationOperatorScalarFieldEnum)[keyof typeof WorkstationOperatorScalarFieldEnum]
+
+
+  export const OperatorSessionScalarFieldEnum: {
+    id: 'id',
+    operatorId: 'operatorId',
+    workstationId: 'workstationId',
+    loginTime: 'loginTime',
+    logoutTime: 'logoutTime',
+    shift: 'shift',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OperatorSessionScalarFieldEnum = (typeof OperatorSessionScalarFieldEnum)[keyof typeof OperatorSessionScalarFieldEnum]
+
+
+  export const WorkstationCapacityScalarFieldEnum: {
+    id: 'id',
+    workstationId: 'workstationId',
+    maxConcurrentJobs: 'maxConcurrentJobs',
+    avgSetupTime: 'avgSetupTime',
+    efficiency: 'efficiency',
+    hoursPerDay: 'hoursPerDay',
+    maintenanceHours: 'maintenanceHours',
+    operatingCostPerHour: 'operatingCostPerHour',
+    maintenanceCostPerHour: 'maintenanceCostPerHour',
+    utilizationTarget: 'utilizationTarget',
+    qualityTarget: 'qualityTarget',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkstationCapacityScalarFieldEnum = (typeof WorkstationCapacityScalarFieldEnum)[keyof typeof WorkstationCapacityScalarFieldEnum]
+
+
   export const WorkstationScalarFieldEnum: {
     id: 'id',
     name: 'name',
     description: 'description',
     active: 'active',
+    category: 'category',
+    location: 'location',
+    serialNumber: 'serialNumber',
+    manufacturer: 'manufacturer',
+    model: 'model',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17008,6 +23773,34 @@ export namespace Prisma {
    * Reference to a field of type 'StepStatus[]'
    */
   export type ListEnumStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'OperatorShift'
+   */
+  export type EnumOperatorShiftFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperatorShift'>
+    
+
+
+  /**
+   * Reference to a field of type 'OperatorShift[]'
+   */
+  export type ListEnumOperatorShiftFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperatorShift[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WorkstationCategory'
+   */
+  export type EnumWorkstationCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkstationCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'WorkstationCategory[]'
+   */
+  export type ListEnumWorkstationCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkstationCategory[]'>
     
 
 
@@ -17286,6 +24079,7 @@ export namespace Prisma {
     leadTime?: IntNullableFilter<"Part"> | number | null
     active?: BoolFilter<"Part"> | boolean
     notes?: StringNullableFilter<"Part"> | string | null
+    recommendedRoutingTemplateId?: StringNullableFilter<"Part"> | string | null
     createdAt?: DateTimeFilter<"Part"> | Date | string
     updatedAt?: DateTimeFilter<"Part"> | Date | string
     parentBOMs?: BOMComponentListRelationFilter
@@ -17308,6 +24102,7 @@ export namespace Prisma {
     leadTime?: SortOrderInput | SortOrder
     active?: SortOrder
     notes?: SortOrderInput | SortOrder
+    recommendedRoutingTemplateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     parentBOMs?: BOMComponentOrderByRelationAggregateInput
@@ -17333,6 +24128,7 @@ export namespace Prisma {
     leadTime?: IntNullableFilter<"Part"> | number | null
     active?: BoolFilter<"Part"> | boolean
     notes?: StringNullableFilter<"Part"> | string | null
+    recommendedRoutingTemplateId?: StringNullableFilter<"Part"> | string | null
     createdAt?: DateTimeFilter<"Part"> | Date | string
     updatedAt?: DateTimeFilter<"Part"> | Date | string
     parentBOMs?: BOMComponentListRelationFilter
@@ -17355,6 +24151,7 @@ export namespace Prisma {
     leadTime?: SortOrderInput | SortOrder
     active?: SortOrder
     notes?: SortOrderInput | SortOrder
+    recommendedRoutingTemplateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PartCountOrderByAggregateInput
@@ -17381,6 +24178,7 @@ export namespace Prisma {
     leadTime?: IntNullableWithAggregatesFilter<"Part"> | number | null
     active?: BoolWithAggregatesFilter<"Part"> | boolean
     notes?: StringNullableWithAggregatesFilter<"Part"> | string | null
+    recommendedRoutingTemplateId?: StringNullableWithAggregatesFilter<"Part"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
   }
@@ -17925,6 +24723,435 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"RoutingStep"> | Date | string
   }
 
+  export type RoutingTemplateWhereInput = {
+    AND?: RoutingTemplateWhereInput | RoutingTemplateWhereInput[]
+    OR?: RoutingTemplateWhereInput[]
+    NOT?: RoutingTemplateWhereInput | RoutingTemplateWhereInput[]
+    id?: StringFilter<"RoutingTemplate"> | string
+    name?: StringFilter<"RoutingTemplate"> | string
+    description?: StringNullableFilter<"RoutingTemplate"> | string | null
+    active?: BoolFilter<"RoutingTemplate"> | boolean
+    createdAt?: DateTimeFilter<"RoutingTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingTemplate"> | Date | string
+    templateSteps?: RoutingTemplateStepListRelationFilter
+  }
+
+  export type RoutingTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    templateSteps?: RoutingTemplateStepOrderByRelationAggregateInput
+  }
+
+  export type RoutingTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: RoutingTemplateWhereInput | RoutingTemplateWhereInput[]
+    OR?: RoutingTemplateWhereInput[]
+    NOT?: RoutingTemplateWhereInput | RoutingTemplateWhereInput[]
+    description?: StringNullableFilter<"RoutingTemplate"> | string | null
+    active?: BoolFilter<"RoutingTemplate"> | boolean
+    createdAt?: DateTimeFilter<"RoutingTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingTemplate"> | Date | string
+    templateSteps?: RoutingTemplateStepListRelationFilter
+  }, "id" | "name">
+
+  export type RoutingTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoutingTemplateCountOrderByAggregateInput
+    _max?: RoutingTemplateMaxOrderByAggregateInput
+    _min?: RoutingTemplateMinOrderByAggregateInput
+  }
+
+  export type RoutingTemplateScalarWhereWithAggregatesInput = {
+    AND?: RoutingTemplateScalarWhereWithAggregatesInput | RoutingTemplateScalarWhereWithAggregatesInput[]
+    OR?: RoutingTemplateScalarWhereWithAggregatesInput[]
+    NOT?: RoutingTemplateScalarWhereWithAggregatesInput | RoutingTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RoutingTemplate"> | string
+    name?: StringWithAggregatesFilter<"RoutingTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"RoutingTemplate"> | string | null
+    active?: BoolWithAggregatesFilter<"RoutingTemplate"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"RoutingTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RoutingTemplate"> | Date | string
+  }
+
+  export type RoutingTemplateStepWhereInput = {
+    AND?: RoutingTemplateStepWhereInput | RoutingTemplateStepWhereInput[]
+    OR?: RoutingTemplateStepWhereInput[]
+    NOT?: RoutingTemplateStepWhereInput | RoutingTemplateStepWhereInput[]
+    id?: StringFilter<"RoutingTemplateStep"> | string
+    templateId?: StringFilter<"RoutingTemplateStep"> | string
+    stepNumber?: IntFilter<"RoutingTemplateStep"> | number
+    workstationId?: StringFilter<"RoutingTemplateStep"> | string
+    description?: StringFilter<"RoutingTemplateStep"> | string
+    estimatedTime?: IntNullableFilter<"RoutingTemplateStep"> | number | null
+    required?: BoolFilter<"RoutingTemplateStep"> | boolean
+    notes?: StringNullableFilter<"RoutingTemplateStep"> | string | null
+    createdAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+    template?: XOR<RoutingTemplateScalarRelationFilter, RoutingTemplateWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }
+
+  export type RoutingTemplateStepOrderByWithRelationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    estimatedTime?: SortOrderInput | SortOrder
+    required?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    template?: RoutingTemplateOrderByWithRelationInput
+    workstation?: WorkstationOrderByWithRelationInput
+  }
+
+  export type RoutingTemplateStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    templateId_stepNumber?: RoutingTemplateStepTemplateIdStepNumberCompoundUniqueInput
+    AND?: RoutingTemplateStepWhereInput | RoutingTemplateStepWhereInput[]
+    OR?: RoutingTemplateStepWhereInput[]
+    NOT?: RoutingTemplateStepWhereInput | RoutingTemplateStepWhereInput[]
+    templateId?: StringFilter<"RoutingTemplateStep"> | string
+    stepNumber?: IntFilter<"RoutingTemplateStep"> | number
+    workstationId?: StringFilter<"RoutingTemplateStep"> | string
+    description?: StringFilter<"RoutingTemplateStep"> | string
+    estimatedTime?: IntNullableFilter<"RoutingTemplateStep"> | number | null
+    required?: BoolFilter<"RoutingTemplateStep"> | boolean
+    notes?: StringNullableFilter<"RoutingTemplateStep"> | string | null
+    createdAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+    template?: XOR<RoutingTemplateScalarRelationFilter, RoutingTemplateWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }, "id" | "templateId_stepNumber">
+
+  export type RoutingTemplateStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    estimatedTime?: SortOrderInput | SortOrder
+    required?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoutingTemplateStepCountOrderByAggregateInput
+    _avg?: RoutingTemplateStepAvgOrderByAggregateInput
+    _max?: RoutingTemplateStepMaxOrderByAggregateInput
+    _min?: RoutingTemplateStepMinOrderByAggregateInput
+    _sum?: RoutingTemplateStepSumOrderByAggregateInput
+  }
+
+  export type RoutingTemplateStepScalarWhereWithAggregatesInput = {
+    AND?: RoutingTemplateStepScalarWhereWithAggregatesInput | RoutingTemplateStepScalarWhereWithAggregatesInput[]
+    OR?: RoutingTemplateStepScalarWhereWithAggregatesInput[]
+    NOT?: RoutingTemplateStepScalarWhereWithAggregatesInput | RoutingTemplateStepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RoutingTemplateStep"> | string
+    templateId?: StringWithAggregatesFilter<"RoutingTemplateStep"> | string
+    stepNumber?: IntWithAggregatesFilter<"RoutingTemplateStep"> | number
+    workstationId?: StringWithAggregatesFilter<"RoutingTemplateStep"> | string
+    description?: StringWithAggregatesFilter<"RoutingTemplateStep"> | string
+    estimatedTime?: IntNullableWithAggregatesFilter<"RoutingTemplateStep"> | number | null
+    required?: BoolWithAggregatesFilter<"RoutingTemplateStep"> | boolean
+    notes?: StringNullableWithAggregatesFilter<"RoutingTemplateStep"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RoutingTemplateStep"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RoutingTemplateStep"> | Date | string
+  }
+
+  export type WorkstationOperatorWhereInput = {
+    AND?: WorkstationOperatorWhereInput | WorkstationOperatorWhereInput[]
+    OR?: WorkstationOperatorWhereInput[]
+    NOT?: WorkstationOperatorWhereInput | WorkstationOperatorWhereInput[]
+    id?: StringFilter<"WorkstationOperator"> | string
+    operatorId?: StringFilter<"WorkstationOperator"> | string
+    operatorName?: StringFilter<"WorkstationOperator"> | string
+    email?: StringNullableFilter<"WorkstationOperator"> | string | null
+    phone?: StringNullableFilter<"WorkstationOperator"> | string | null
+    certifications?: StringNullableListFilter<"WorkstationOperator">
+    shift?: EnumOperatorShiftFilter<"WorkstationOperator"> | $Enums.OperatorShift
+    hourlyRate?: DecimalNullableFilter<"WorkstationOperator"> | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFilter<"WorkstationOperator"> | boolean
+    currentWorkstationId?: StringNullableFilter<"WorkstationOperator"> | string | null
+    loginTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    logoutTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    createdAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+    currentWorkstation?: XOR<WorkstationNullableScalarRelationFilter, WorkstationWhereInput> | null
+    stepConfirmations?: StepConfirmationListRelationFilter
+    operatorSessions?: OperatorSessionListRelationFilter
+  }
+
+  export type WorkstationOperatorOrderByWithRelationInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    operatorName?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    certifications?: SortOrder
+    shift?: SortOrder
+    hourlyRate?: SortOrderInput | SortOrder
+    active?: SortOrder
+    currentWorkstationId?: SortOrderInput | SortOrder
+    loginTime?: SortOrderInput | SortOrder
+    logoutTime?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    currentWorkstation?: WorkstationOrderByWithRelationInput
+    stepConfirmations?: StepConfirmationOrderByRelationAggregateInput
+    operatorSessions?: OperatorSessionOrderByRelationAggregateInput
+  }
+
+  export type WorkstationOperatorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    operatorId?: string
+    AND?: WorkstationOperatorWhereInput | WorkstationOperatorWhereInput[]
+    OR?: WorkstationOperatorWhereInput[]
+    NOT?: WorkstationOperatorWhereInput | WorkstationOperatorWhereInput[]
+    operatorName?: StringFilter<"WorkstationOperator"> | string
+    email?: StringNullableFilter<"WorkstationOperator"> | string | null
+    phone?: StringNullableFilter<"WorkstationOperator"> | string | null
+    certifications?: StringNullableListFilter<"WorkstationOperator">
+    shift?: EnumOperatorShiftFilter<"WorkstationOperator"> | $Enums.OperatorShift
+    hourlyRate?: DecimalNullableFilter<"WorkstationOperator"> | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFilter<"WorkstationOperator"> | boolean
+    currentWorkstationId?: StringNullableFilter<"WorkstationOperator"> | string | null
+    loginTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    logoutTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    createdAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+    currentWorkstation?: XOR<WorkstationNullableScalarRelationFilter, WorkstationWhereInput> | null
+    stepConfirmations?: StepConfirmationListRelationFilter
+    operatorSessions?: OperatorSessionListRelationFilter
+  }, "id" | "operatorId">
+
+  export type WorkstationOperatorOrderByWithAggregationInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    operatorName?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    certifications?: SortOrder
+    shift?: SortOrder
+    hourlyRate?: SortOrderInput | SortOrder
+    active?: SortOrder
+    currentWorkstationId?: SortOrderInput | SortOrder
+    loginTime?: SortOrderInput | SortOrder
+    logoutTime?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkstationOperatorCountOrderByAggregateInput
+    _avg?: WorkstationOperatorAvgOrderByAggregateInput
+    _max?: WorkstationOperatorMaxOrderByAggregateInput
+    _min?: WorkstationOperatorMinOrderByAggregateInput
+    _sum?: WorkstationOperatorSumOrderByAggregateInput
+  }
+
+  export type WorkstationOperatorScalarWhereWithAggregatesInput = {
+    AND?: WorkstationOperatorScalarWhereWithAggregatesInput | WorkstationOperatorScalarWhereWithAggregatesInput[]
+    OR?: WorkstationOperatorScalarWhereWithAggregatesInput[]
+    NOT?: WorkstationOperatorScalarWhereWithAggregatesInput | WorkstationOperatorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkstationOperator"> | string
+    operatorId?: StringWithAggregatesFilter<"WorkstationOperator"> | string
+    operatorName?: StringWithAggregatesFilter<"WorkstationOperator"> | string
+    email?: StringNullableWithAggregatesFilter<"WorkstationOperator"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"WorkstationOperator"> | string | null
+    certifications?: StringNullableListFilter<"WorkstationOperator">
+    shift?: EnumOperatorShiftWithAggregatesFilter<"WorkstationOperator"> | $Enums.OperatorShift
+    hourlyRate?: DecimalNullableWithAggregatesFilter<"WorkstationOperator"> | Decimal | DecimalJsLike | number | string | null
+    active?: BoolWithAggregatesFilter<"WorkstationOperator"> | boolean
+    currentWorkstationId?: StringNullableWithAggregatesFilter<"WorkstationOperator"> | string | null
+    loginTime?: DateTimeNullableWithAggregatesFilter<"WorkstationOperator"> | Date | string | null
+    logoutTime?: DateTimeNullableWithAggregatesFilter<"WorkstationOperator"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkstationOperator"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkstationOperator"> | Date | string
+  }
+
+  export type OperatorSessionWhereInput = {
+    AND?: OperatorSessionWhereInput | OperatorSessionWhereInput[]
+    OR?: OperatorSessionWhereInput[]
+    NOT?: OperatorSessionWhereInput | OperatorSessionWhereInput[]
+    id?: StringFilter<"OperatorSession"> | string
+    operatorId?: StringFilter<"OperatorSession"> | string
+    workstationId?: StringFilter<"OperatorSession"> | string
+    loginTime?: DateTimeFilter<"OperatorSession"> | Date | string
+    logoutTime?: DateTimeNullableFilter<"OperatorSession"> | Date | string | null
+    shift?: EnumOperatorShiftFilter<"OperatorSession"> | $Enums.OperatorShift
+    notes?: StringNullableFilter<"OperatorSession"> | string | null
+    createdAt?: DateTimeFilter<"OperatorSession"> | Date | string
+    updatedAt?: DateTimeFilter<"OperatorSession"> | Date | string
+    operator?: XOR<WorkstationOperatorScalarRelationFilter, WorkstationOperatorWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }
+
+  export type OperatorSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    workstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrderInput | SortOrder
+    shift?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    operator?: WorkstationOperatorOrderByWithRelationInput
+    workstation?: WorkstationOrderByWithRelationInput
+  }
+
+  export type OperatorSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: OperatorSessionWhereInput | OperatorSessionWhereInput[]
+    OR?: OperatorSessionWhereInput[]
+    NOT?: OperatorSessionWhereInput | OperatorSessionWhereInput[]
+    operatorId?: StringFilter<"OperatorSession"> | string
+    workstationId?: StringFilter<"OperatorSession"> | string
+    loginTime?: DateTimeFilter<"OperatorSession"> | Date | string
+    logoutTime?: DateTimeNullableFilter<"OperatorSession"> | Date | string | null
+    shift?: EnumOperatorShiftFilter<"OperatorSession"> | $Enums.OperatorShift
+    notes?: StringNullableFilter<"OperatorSession"> | string | null
+    createdAt?: DateTimeFilter<"OperatorSession"> | Date | string
+    updatedAt?: DateTimeFilter<"OperatorSession"> | Date | string
+    operator?: XOR<WorkstationOperatorScalarRelationFilter, WorkstationOperatorWhereInput>
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }, "id">
+
+  export type OperatorSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    workstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrderInput | SortOrder
+    shift?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OperatorSessionCountOrderByAggregateInput
+    _max?: OperatorSessionMaxOrderByAggregateInput
+    _min?: OperatorSessionMinOrderByAggregateInput
+  }
+
+  export type OperatorSessionScalarWhereWithAggregatesInput = {
+    AND?: OperatorSessionScalarWhereWithAggregatesInput | OperatorSessionScalarWhereWithAggregatesInput[]
+    OR?: OperatorSessionScalarWhereWithAggregatesInput[]
+    NOT?: OperatorSessionScalarWhereWithAggregatesInput | OperatorSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OperatorSession"> | string
+    operatorId?: StringWithAggregatesFilter<"OperatorSession"> | string
+    workstationId?: StringWithAggregatesFilter<"OperatorSession"> | string
+    loginTime?: DateTimeWithAggregatesFilter<"OperatorSession"> | Date | string
+    logoutTime?: DateTimeNullableWithAggregatesFilter<"OperatorSession"> | Date | string | null
+    shift?: EnumOperatorShiftWithAggregatesFilter<"OperatorSession"> | $Enums.OperatorShift
+    notes?: StringNullableWithAggregatesFilter<"OperatorSession"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OperatorSession"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OperatorSession"> | Date | string
+  }
+
+  export type WorkstationCapacityWhereInput = {
+    AND?: WorkstationCapacityWhereInput | WorkstationCapacityWhereInput[]
+    OR?: WorkstationCapacityWhereInput[]
+    NOT?: WorkstationCapacityWhereInput | WorkstationCapacityWhereInput[]
+    id?: StringFilter<"WorkstationCapacity"> | string
+    workstationId?: StringFilter<"WorkstationCapacity"> | string
+    maxConcurrentJobs?: IntFilter<"WorkstationCapacity"> | number
+    avgSetupTime?: IntFilter<"WorkstationCapacity"> | number
+    efficiency?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFilter<"WorkstationCapacity"> | number
+    maintenanceHours?: IntFilter<"WorkstationCapacity"> | number
+    operatingCostPerHour?: DecimalNullableFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: DecimalNullableFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"WorkstationCapacity"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkstationCapacity"> | Date | string
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }
+
+  export type WorkstationCapacityOrderByWithRelationInput = {
+    id?: SortOrder
+    workstationId?: SortOrder
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrderInput | SortOrder
+    maintenanceCostPerHour?: SortOrderInput | SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workstation?: WorkstationOrderByWithRelationInput
+  }
+
+  export type WorkstationCapacityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    workstationId?: string
+    AND?: WorkstationCapacityWhereInput | WorkstationCapacityWhereInput[]
+    OR?: WorkstationCapacityWhereInput[]
+    NOT?: WorkstationCapacityWhereInput | WorkstationCapacityWhereInput[]
+    maxConcurrentJobs?: IntFilter<"WorkstationCapacity"> | number
+    avgSetupTime?: IntFilter<"WorkstationCapacity"> | number
+    efficiency?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFilter<"WorkstationCapacity"> | number
+    maintenanceHours?: IntFilter<"WorkstationCapacity"> | number
+    operatingCostPerHour?: DecimalNullableFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: DecimalNullableFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"WorkstationCapacity"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkstationCapacity"> | Date | string
+    workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+  }, "id" | "workstationId">
+
+  export type WorkstationCapacityOrderByWithAggregationInput = {
+    id?: SortOrder
+    workstationId?: SortOrder
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrderInput | SortOrder
+    maintenanceCostPerHour?: SortOrderInput | SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkstationCapacityCountOrderByAggregateInput
+    _avg?: WorkstationCapacityAvgOrderByAggregateInput
+    _max?: WorkstationCapacityMaxOrderByAggregateInput
+    _min?: WorkstationCapacityMinOrderByAggregateInput
+    _sum?: WorkstationCapacitySumOrderByAggregateInput
+  }
+
+  export type WorkstationCapacityScalarWhereWithAggregatesInput = {
+    AND?: WorkstationCapacityScalarWhereWithAggregatesInput | WorkstationCapacityScalarWhereWithAggregatesInput[]
+    OR?: WorkstationCapacityScalarWhereWithAggregatesInput[]
+    NOT?: WorkstationCapacityScalarWhereWithAggregatesInput | WorkstationCapacityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkstationCapacity"> | string
+    workstationId?: StringWithAggregatesFilter<"WorkstationCapacity"> | string
+    maxConcurrentJobs?: IntWithAggregatesFilter<"WorkstationCapacity"> | number
+    avgSetupTime?: IntWithAggregatesFilter<"WorkstationCapacity"> | number
+    efficiency?: DecimalWithAggregatesFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntWithAggregatesFilter<"WorkstationCapacity"> | number
+    maintenanceHours?: IntWithAggregatesFilter<"WorkstationCapacity"> | number
+    operatingCostPerHour?: DecimalNullableWithAggregatesFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: DecimalNullableWithAggregatesFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalWithAggregatesFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalWithAggregatesFilter<"WorkstationCapacity"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"WorkstationCapacity"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkstationCapacity"> | Date | string
+  }
+
   export type WorkstationWhereInput = {
     AND?: WorkstationWhereInput | WorkstationWhereInput[]
     OR?: WorkstationWhereInput[]
@@ -17933,10 +25160,19 @@ export namespace Prisma {
     name?: StringFilter<"Workstation"> | string
     description?: StringNullableFilter<"Workstation"> | string | null
     active?: BoolFilter<"Workstation"> | boolean
+    category?: EnumWorkstationCategoryFilter<"Workstation"> | $Enums.WorkstationCategory
+    location?: StringNullableFilter<"Workstation"> | string | null
+    serialNumber?: StringNullableFilter<"Workstation"> | string | null
+    manufacturer?: StringNullableFilter<"Workstation"> | string | null
+    model?: StringNullableFilter<"Workstation"> | string | null
     createdAt?: DateTimeFilter<"Workstation"> | Date | string
     updatedAt?: DateTimeFilter<"Workstation"> | Date | string
     routingSteps?: RoutingStepListRelationFilter
     confirmations?: StepConfirmationListRelationFilter
+    templateSteps?: RoutingTemplateStepListRelationFilter
+    currentOperators?: WorkstationOperatorListRelationFilter
+    operatorSessions?: OperatorSessionListRelationFilter
+    capacity?: XOR<WorkstationCapacityNullableScalarRelationFilter, WorkstationCapacityWhereInput> | null
   }
 
   export type WorkstationOrderByWithRelationInput = {
@@ -17944,10 +25180,19 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     active?: SortOrder
+    category?: SortOrder
+    location?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     routingSteps?: RoutingStepOrderByRelationAggregateInput
     confirmations?: StepConfirmationOrderByRelationAggregateInput
+    templateSteps?: RoutingTemplateStepOrderByRelationAggregateInput
+    currentOperators?: WorkstationOperatorOrderByRelationAggregateInput
+    operatorSessions?: OperatorSessionOrderByRelationAggregateInput
+    capacity?: WorkstationCapacityOrderByWithRelationInput
   }
 
   export type WorkstationWhereUniqueInput = Prisma.AtLeast<{
@@ -17958,10 +25203,19 @@ export namespace Prisma {
     NOT?: WorkstationWhereInput | WorkstationWhereInput[]
     description?: StringNullableFilter<"Workstation"> | string | null
     active?: BoolFilter<"Workstation"> | boolean
+    category?: EnumWorkstationCategoryFilter<"Workstation"> | $Enums.WorkstationCategory
+    location?: StringNullableFilter<"Workstation"> | string | null
+    serialNumber?: StringNullableFilter<"Workstation"> | string | null
+    manufacturer?: StringNullableFilter<"Workstation"> | string | null
+    model?: StringNullableFilter<"Workstation"> | string | null
     createdAt?: DateTimeFilter<"Workstation"> | Date | string
     updatedAt?: DateTimeFilter<"Workstation"> | Date | string
     routingSteps?: RoutingStepListRelationFilter
     confirmations?: StepConfirmationListRelationFilter
+    templateSteps?: RoutingTemplateStepListRelationFilter
+    currentOperators?: WorkstationOperatorListRelationFilter
+    operatorSessions?: OperatorSessionListRelationFilter
+    capacity?: XOR<WorkstationCapacityNullableScalarRelationFilter, WorkstationCapacityWhereInput> | null
   }, "id" | "name">
 
   export type WorkstationOrderByWithAggregationInput = {
@@ -17969,6 +25223,11 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     active?: SortOrder
+    category?: SortOrder
+    location?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkstationCountOrderByAggregateInput
@@ -17984,6 +25243,11 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Workstation"> | string
     description?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
     active?: BoolWithAggregatesFilter<"Workstation"> | boolean
+    category?: EnumWorkstationCategoryWithAggregatesFilter<"Workstation"> | $Enums.WorkstationCategory
+    location?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
+    serialNumber?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
+    manufacturer?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
+    model?: StringNullableWithAggregatesFilter<"Workstation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Workstation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Workstation"> | Date | string
   }
@@ -18007,6 +25271,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
     routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
     workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+    operator?: XOR<WorkstationOperatorNullableScalarRelationFilter, WorkstationOperatorWhereInput> | null
   }
 
   export type StepConfirmationOrderByWithRelationInput = {
@@ -18025,6 +25290,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     routingStep?: RoutingStepOrderByWithRelationInput
     workstation?: WorkstationOrderByWithRelationInput
+    operator?: WorkstationOperatorOrderByWithRelationInput
   }
 
   export type StepConfirmationWhereUniqueInput = Prisma.AtLeast<{
@@ -18046,6 +25312,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
     routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
     workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
+    operator?: XOR<WorkstationOperatorNullableScalarRelationFilter, WorkstationOperatorWhereInput> | null
   }, "id">
 
   export type StepConfirmationOrderByWithAggregationInput = {
@@ -18429,6 +25696,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
@@ -18451,6 +25719,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
@@ -18473,6 +25742,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
@@ -18495,6 +25765,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
@@ -18517,6 +25788,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18535,6 +25807,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18553,6 +25826,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19138,15 +26412,499 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type WorkstationCreateInput = {
+  export type RoutingTemplateCreateInput = {
     id?: string
     name: string
     description?: string | null
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutTemplateInput
+  }
+
+  export type RoutingTemplateUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type RoutingTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type RoutingTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type RoutingTemplateCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepCreateInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    template: RoutingTemplateCreateNestedOneWithoutTemplateStepsInput
+    workstation: WorkstationCreateNestedOneWithoutTemplateStepsInput
+  }
+
+  export type RoutingTemplateStepUncheckedCreateInput = {
+    id?: string
+    templateId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: RoutingTemplateUpdateOneRequiredWithoutTemplateStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutTemplateStepsNestedInput
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepCreateManyInput = {
+    id?: string
+    templateId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationOperatorCreateInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    currentWorkstation?: WorkstationCreateNestedOneWithoutCurrentOperatorsInput
+    stepConfirmations?: StepConfirmationCreateNestedManyWithoutOperatorInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorUncheckedCreateInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    currentWorkstationId?: string | null
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepConfirmations?: StepConfirmationUncheckedCreateNestedManyWithoutOperatorInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentWorkstation?: WorkstationUpdateOneWithoutCurrentOperatorsNestedInput
+    stepConfirmations?: StepConfirmationUpdateManyWithoutOperatorNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    currentWorkstationId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepConfirmations?: StepConfirmationUncheckedUpdateManyWithoutOperatorNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorCreateManyInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    currentWorkstationId?: string | null
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationOperatorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationOperatorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    currentWorkstationId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionCreateInput = {
+    id?: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    operator: WorkstationOperatorCreateNestedOneWithoutOperatorSessionsInput
+    workstation: WorkstationCreateNestedOneWithoutOperatorSessionsInput
+  }
+
+  export type OperatorSessionUncheckedCreateInput = {
+    id?: string
+    operatorId: string
+    workstationId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operator?: WorkstationOperatorUpdateOneRequiredWithoutOperatorSessionsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutOperatorSessionsNestedInput
+  }
+
+  export type OperatorSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionCreateManyInput = {
+    id?: string
+    operatorId: string
+    workstationId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCapacityCreateInput = {
+    id?: string
+    maxConcurrentJobs?: number
+    avgSetupTime?: number
+    efficiency?: Decimal | DecimalJsLike | number | string
+    hoursPerDay?: number
+    maintenanceHours?: number
+    operatingCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: Decimal | DecimalJsLike | number | string
+    qualityTarget?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workstation: WorkstationCreateNestedOneWithoutCapacityInput
+  }
+
+  export type WorkstationCapacityUncheckedCreateInput = {
+    id?: string
+    workstationId: string
+    maxConcurrentJobs?: number
+    avgSetupTime?: number
+    efficiency?: Decimal | DecimalJsLike | number | string
+    hoursPerDay?: number
+    maintenanceHours?: number
+    operatingCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: Decimal | DecimalJsLike | number | string
+    qualityTarget?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationCapacityUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workstation?: WorkstationUpdateOneRequiredWithoutCapacityNestedInput
+  }
+
+  export type WorkstationCapacityUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCapacityCreateManyInput = {
+    id?: string
+    workstationId: string
+    maxConcurrentJobs?: number
+    avgSetupTime?: number
+    efficiency?: Decimal | DecimalJsLike | number | string
+    hoursPerDay?: number
+    maintenanceHours?: number
+    operatingCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: Decimal | DecimalJsLike | number | string
+    qualityTarget?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationCapacityUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCapacityUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
     confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationUncheckedCreateInput = {
@@ -19154,10 +26912,19 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
     confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationUpdateInput = {
@@ -19165,10 +26932,19 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
     confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
   }
 
   export type WorkstationUncheckedUpdateInput = {
@@ -19176,10 +26952,19 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
     confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
   }
 
   export type WorkstationCreateManyInput = {
@@ -19187,6 +26972,11 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19196,6 +26986,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19205,6 +27000,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19212,7 +27012,6 @@ export namespace Prisma {
   export type StepConfirmationCreateInput = {
     id?: string
     operatorName: string
-    operatorId?: string | null
     startTime?: Date | string | null
     endTime?: Date | string | null
     notes?: string | null
@@ -19223,6 +27022,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingStep: RoutingStepCreateNestedOneWithoutConfirmationsInput
     workstation: WorkstationCreateNestedOneWithoutConfirmationsInput
+    operator?: WorkstationOperatorCreateNestedOneWithoutStepConfirmationsInput
   }
 
   export type StepConfirmationUncheckedCreateInput = {
@@ -19244,7 +27044,6 @@ export namespace Prisma {
   export type StepConfirmationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     operatorName?: StringFieldUpdateOperationsInput | string
-    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19255,6 +27054,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingStep?: RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput
     workstation?: WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput
+    operator?: WorkstationOperatorUpdateOneWithoutStepConfirmationsNestedInput
   }
 
   export type StepConfirmationUncheckedUpdateInput = {
@@ -19292,7 +27092,6 @@ export namespace Prisma {
   export type StepConfirmationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     operatorName?: StringFieldUpdateOperationsInput | string
-    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19768,6 +27567,7 @@ export namespace Prisma {
     leadTime?: SortOrder
     active?: SortOrder
     notes?: SortOrder
+    recommendedRoutingTemplateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19791,6 +27591,7 @@ export namespace Prisma {
     leadTime?: SortOrder
     active?: SortOrder
     notes?: SortOrder
+    recommendedRoutingTemplateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19809,6 +27610,7 @@ export namespace Prisma {
     leadTime?: SortOrder
     active?: SortOrder
     notes?: SortOrder
+    recommendedRoutingTemplateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20362,11 +28164,344 @@ export namespace Prisma {
     _max?: NestedEnumStepStatusFilter<$PrismaModel>
   }
 
+  export type RoutingTemplateStepListRelationFilter = {
+    every?: RoutingTemplateStepWhereInput
+    some?: RoutingTemplateStepWhereInput
+    none?: RoutingTemplateStepWhereInput
+  }
+
+  export type RoutingTemplateStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RoutingTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateScalarRelationFilter = {
+    is?: RoutingTemplateWhereInput
+    isNot?: RoutingTemplateWhereInput
+  }
+
+  export type RoutingTemplateStepTemplateIdStepNumberCompoundUniqueInput = {
+    templateId: string
+    stepNumber: number
+  }
+
+  export type RoutingTemplateStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    estimatedTime?: SortOrder
+    required?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateStepAvgOrderByAggregateInput = {
+    stepNumber?: SortOrder
+    estimatedTime?: SortOrder
+  }
+
+  export type RoutingTemplateStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    estimatedTime?: SortOrder
+    required?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    stepNumber?: SortOrder
+    workstationId?: SortOrder
+    description?: SortOrder
+    estimatedTime?: SortOrder
+    required?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoutingTemplateStepSumOrderByAggregateInput = {
+    stepNumber?: SortOrder
+    estimatedTime?: SortOrder
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type EnumOperatorShiftFilter<$PrismaModel = never> = {
+    equals?: $Enums.OperatorShift | EnumOperatorShiftFieldRefInput<$PrismaModel>
+    in?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    not?: NestedEnumOperatorShiftFilter<$PrismaModel> | $Enums.OperatorShift
+  }
+
+  export type WorkstationNullableScalarRelationFilter = {
+    is?: WorkstationWhereInput | null
+    isNot?: WorkstationWhereInput | null
+  }
+
+  export type OperatorSessionListRelationFilter = {
+    every?: OperatorSessionWhereInput
+    some?: OperatorSessionWhereInput
+    none?: OperatorSessionWhereInput
+  }
+
+  export type OperatorSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkstationOperatorCountOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    operatorName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    certifications?: SortOrder
+    shift?: SortOrder
+    hourlyRate?: SortOrder
+    active?: SortOrder
+    currentWorkstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationOperatorAvgOrderByAggregateInput = {
+    hourlyRate?: SortOrder
+  }
+
+  export type WorkstationOperatorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    operatorName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    shift?: SortOrder
+    hourlyRate?: SortOrder
+    active?: SortOrder
+    currentWorkstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationOperatorMinOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    operatorName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    shift?: SortOrder
+    hourlyRate?: SortOrder
+    active?: SortOrder
+    currentWorkstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationOperatorSumOrderByAggregateInput = {
+    hourlyRate?: SortOrder
+  }
+
+  export type EnumOperatorShiftWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OperatorShift | EnumOperatorShiftFieldRefInput<$PrismaModel>
+    in?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    not?: NestedEnumOperatorShiftWithAggregatesFilter<$PrismaModel> | $Enums.OperatorShift
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOperatorShiftFilter<$PrismaModel>
+    _max?: NestedEnumOperatorShiftFilter<$PrismaModel>
+  }
+
+  export type WorkstationOperatorScalarRelationFilter = {
+    is?: WorkstationOperatorWhereInput
+    isNot?: WorkstationOperatorWhereInput
+  }
+
+  export type OperatorSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    workstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    shift?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OperatorSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    workstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    shift?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OperatorSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    operatorId?: SortOrder
+    workstationId?: SortOrder
+    loginTime?: SortOrder
+    logoutTime?: SortOrder
+    shift?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationCapacityCountOrderByAggregateInput = {
+    id?: SortOrder
+    workstationId?: SortOrder
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrder
+    maintenanceCostPerHour?: SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationCapacityAvgOrderByAggregateInput = {
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrder
+    maintenanceCostPerHour?: SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+  }
+
+  export type WorkstationCapacityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workstationId?: SortOrder
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrder
+    maintenanceCostPerHour?: SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationCapacityMinOrderByAggregateInput = {
+    id?: SortOrder
+    workstationId?: SortOrder
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrder
+    maintenanceCostPerHour?: SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkstationCapacitySumOrderByAggregateInput = {
+    maxConcurrentJobs?: SortOrder
+    avgSetupTime?: SortOrder
+    efficiency?: SortOrder
+    hoursPerDay?: SortOrder
+    maintenanceHours?: SortOrder
+    operatingCostPerHour?: SortOrder
+    maintenanceCostPerHour?: SortOrder
+    utilizationTarget?: SortOrder
+    qualityTarget?: SortOrder
+  }
+
+  export type EnumWorkstationCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkstationCategory | EnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkstationCategoryFilter<$PrismaModel> | $Enums.WorkstationCategory
+  }
+
+  export type WorkstationOperatorListRelationFilter = {
+    every?: WorkstationOperatorWhereInput
+    some?: WorkstationOperatorWhereInput
+    none?: WorkstationOperatorWhereInput
+  }
+
+  export type WorkstationCapacityNullableScalarRelationFilter = {
+    is?: WorkstationCapacityWhereInput | null
+    isNot?: WorkstationCapacityWhereInput | null
+  }
+
+  export type WorkstationOperatorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type WorkstationCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
     active?: SortOrder
+    category?: SortOrder
+    location?: SortOrder
+    serialNumber?: SortOrder
+    manufacturer?: SortOrder
+    model?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20376,6 +28511,11 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     active?: SortOrder
+    category?: SortOrder
+    location?: SortOrder
+    serialNumber?: SortOrder
+    manufacturer?: SortOrder
+    model?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20385,8 +28525,23 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     active?: SortOrder
+    category?: SortOrder
+    location?: SortOrder
+    serialNumber?: SortOrder
+    manufacturer?: SortOrder
+    model?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumWorkstationCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkstationCategory | EnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkstationCategoryWithAggregatesFilter<$PrismaModel> | $Enums.WorkstationCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkstationCategoryFilter<$PrismaModel>
+    _max?: NestedEnumWorkstationCategoryFilter<$PrismaModel>
   }
 
   export type EnumConfirmationStatusFilter<$PrismaModel = never> = {
@@ -20399,6 +28554,11 @@ export namespace Prisma {
   export type RoutingStepScalarRelationFilter = {
     is?: RoutingStepWhereInput
     isNot?: RoutingStepWhereInput
+  }
+
+  export type WorkstationOperatorNullableScalarRelationFilter = {
+    is?: WorkstationOperatorWhereInput | null
+    isNot?: WorkstationOperatorWhereInput | null
   }
 
   export type StepConfirmationCountOrderByAggregateInput = {
@@ -21247,6 +29407,231 @@ export namespace Prisma {
     deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
   }
 
+  export type RoutingTemplateStepCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput> | RoutingTemplateStepCreateWithoutTemplateInput[] | RoutingTemplateStepUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutTemplateInput | RoutingTemplateStepCreateOrConnectWithoutTemplateInput[]
+    createMany?: RoutingTemplateStepCreateManyTemplateInputEnvelope
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+  }
+
+  export type RoutingTemplateStepUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput> | RoutingTemplateStepCreateWithoutTemplateInput[] | RoutingTemplateStepUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutTemplateInput | RoutingTemplateStepCreateOrConnectWithoutTemplateInput[]
+    createMany?: RoutingTemplateStepCreateManyTemplateInputEnvelope
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+  }
+
+  export type RoutingTemplateStepUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput> | RoutingTemplateStepCreateWithoutTemplateInput[] | RoutingTemplateStepUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutTemplateInput | RoutingTemplateStepCreateOrConnectWithoutTemplateInput[]
+    upsert?: RoutingTemplateStepUpsertWithWhereUniqueWithoutTemplateInput | RoutingTemplateStepUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: RoutingTemplateStepCreateManyTemplateInputEnvelope
+    set?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    disconnect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    delete?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    update?: RoutingTemplateStepUpdateWithWhereUniqueWithoutTemplateInput | RoutingTemplateStepUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: RoutingTemplateStepUpdateManyWithWhereWithoutTemplateInput | RoutingTemplateStepUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput> | RoutingTemplateStepCreateWithoutTemplateInput[] | RoutingTemplateStepUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutTemplateInput | RoutingTemplateStepCreateOrConnectWithoutTemplateInput[]
+    upsert?: RoutingTemplateStepUpsertWithWhereUniqueWithoutTemplateInput | RoutingTemplateStepUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: RoutingTemplateStepCreateManyTemplateInputEnvelope
+    set?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    disconnect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    delete?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    update?: RoutingTemplateStepUpdateWithWhereUniqueWithoutTemplateInput | RoutingTemplateStepUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: RoutingTemplateStepUpdateManyWithWhereWithoutTemplateInput | RoutingTemplateStepUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+  }
+
+  export type RoutingTemplateCreateNestedOneWithoutTemplateStepsInput = {
+    create?: XOR<RoutingTemplateCreateWithoutTemplateStepsInput, RoutingTemplateUncheckedCreateWithoutTemplateStepsInput>
+    connectOrCreate?: RoutingTemplateCreateOrConnectWithoutTemplateStepsInput
+    connect?: RoutingTemplateWhereUniqueInput
+  }
+
+  export type WorkstationCreateNestedOneWithoutTemplateStepsInput = {
+    create?: XOR<WorkstationCreateWithoutTemplateStepsInput, WorkstationUncheckedCreateWithoutTemplateStepsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutTemplateStepsInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type RoutingTemplateUpdateOneRequiredWithoutTemplateStepsNestedInput = {
+    create?: XOR<RoutingTemplateCreateWithoutTemplateStepsInput, RoutingTemplateUncheckedCreateWithoutTemplateStepsInput>
+    connectOrCreate?: RoutingTemplateCreateOrConnectWithoutTemplateStepsInput
+    upsert?: RoutingTemplateUpsertWithoutTemplateStepsInput
+    connect?: RoutingTemplateWhereUniqueInput
+    update?: XOR<XOR<RoutingTemplateUpdateToOneWithWhereWithoutTemplateStepsInput, RoutingTemplateUpdateWithoutTemplateStepsInput>, RoutingTemplateUncheckedUpdateWithoutTemplateStepsInput>
+  }
+
+  export type WorkstationUpdateOneRequiredWithoutTemplateStepsNestedInput = {
+    create?: XOR<WorkstationCreateWithoutTemplateStepsInput, WorkstationUncheckedCreateWithoutTemplateStepsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutTemplateStepsInput
+    upsert?: WorkstationUpsertWithoutTemplateStepsInput
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutTemplateStepsInput, WorkstationUpdateWithoutTemplateStepsInput>, WorkstationUncheckedUpdateWithoutTemplateStepsInput>
+  }
+
+  export type WorkstationOperatorCreatecertificationsInput = {
+    set: string[]
+  }
+
+  export type WorkstationCreateNestedOneWithoutCurrentOperatorsInput = {
+    create?: XOR<WorkstationCreateWithoutCurrentOperatorsInput, WorkstationUncheckedCreateWithoutCurrentOperatorsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutCurrentOperatorsInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type StepConfirmationCreateNestedManyWithoutOperatorInput = {
+    create?: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput> | StepConfirmationCreateWithoutOperatorInput[] | StepConfirmationUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutOperatorInput | StepConfirmationCreateOrConnectWithoutOperatorInput[]
+    createMany?: StepConfirmationCreateManyOperatorInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type OperatorSessionCreateNestedManyWithoutOperatorInput = {
+    create?: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput> | OperatorSessionCreateWithoutOperatorInput[] | OperatorSessionUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutOperatorInput | OperatorSessionCreateOrConnectWithoutOperatorInput[]
+    createMany?: OperatorSessionCreateManyOperatorInputEnvelope
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+  }
+
+  export type StepConfirmationUncheckedCreateNestedManyWithoutOperatorInput = {
+    create?: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput> | StepConfirmationCreateWithoutOperatorInput[] | StepConfirmationUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutOperatorInput | StepConfirmationCreateOrConnectWithoutOperatorInput[]
+    createMany?: StepConfirmationCreateManyOperatorInputEnvelope
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type OperatorSessionUncheckedCreateNestedManyWithoutOperatorInput = {
+    create?: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput> | OperatorSessionCreateWithoutOperatorInput[] | OperatorSessionUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutOperatorInput | OperatorSessionCreateOrConnectWithoutOperatorInput[]
+    createMany?: OperatorSessionCreateManyOperatorInputEnvelope
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+  }
+
+  export type WorkstationOperatorUpdatecertificationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EnumOperatorShiftFieldUpdateOperationsInput = {
+    set?: $Enums.OperatorShift
+  }
+
+  export type WorkstationUpdateOneWithoutCurrentOperatorsNestedInput = {
+    create?: XOR<WorkstationCreateWithoutCurrentOperatorsInput, WorkstationUncheckedCreateWithoutCurrentOperatorsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutCurrentOperatorsInput
+    upsert?: WorkstationUpsertWithoutCurrentOperatorsInput
+    disconnect?: WorkstationWhereInput | boolean
+    delete?: WorkstationWhereInput | boolean
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutCurrentOperatorsInput, WorkstationUpdateWithoutCurrentOperatorsInput>, WorkstationUncheckedUpdateWithoutCurrentOperatorsInput>
+  }
+
+  export type StepConfirmationUpdateManyWithoutOperatorNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput> | StepConfirmationCreateWithoutOperatorInput[] | StepConfirmationUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutOperatorInput | StepConfirmationCreateOrConnectWithoutOperatorInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutOperatorInput | StepConfirmationUpsertWithWhereUniqueWithoutOperatorInput[]
+    createMany?: StepConfirmationCreateManyOperatorInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutOperatorInput | StepConfirmationUpdateWithWhereUniqueWithoutOperatorInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutOperatorInput | StepConfirmationUpdateManyWithWhereWithoutOperatorInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type OperatorSessionUpdateManyWithoutOperatorNestedInput = {
+    create?: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput> | OperatorSessionCreateWithoutOperatorInput[] | OperatorSessionUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutOperatorInput | OperatorSessionCreateOrConnectWithoutOperatorInput[]
+    upsert?: OperatorSessionUpsertWithWhereUniqueWithoutOperatorInput | OperatorSessionUpsertWithWhereUniqueWithoutOperatorInput[]
+    createMany?: OperatorSessionCreateManyOperatorInputEnvelope
+    set?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    disconnect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    delete?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    update?: OperatorSessionUpdateWithWhereUniqueWithoutOperatorInput | OperatorSessionUpdateWithWhereUniqueWithoutOperatorInput[]
+    updateMany?: OperatorSessionUpdateManyWithWhereWithoutOperatorInput | OperatorSessionUpdateManyWithWhereWithoutOperatorInput[]
+    deleteMany?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutOperatorNestedInput = {
+    create?: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput> | StepConfirmationCreateWithoutOperatorInput[] | StepConfirmationUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: StepConfirmationCreateOrConnectWithoutOperatorInput | StepConfirmationCreateOrConnectWithoutOperatorInput[]
+    upsert?: StepConfirmationUpsertWithWhereUniqueWithoutOperatorInput | StepConfirmationUpsertWithWhereUniqueWithoutOperatorInput[]
+    createMany?: StepConfirmationCreateManyOperatorInputEnvelope
+    set?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    disconnect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    delete?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+    update?: StepConfirmationUpdateWithWhereUniqueWithoutOperatorInput | StepConfirmationUpdateWithWhereUniqueWithoutOperatorInput[]
+    updateMany?: StepConfirmationUpdateManyWithWhereWithoutOperatorInput | StepConfirmationUpdateManyWithWhereWithoutOperatorInput[]
+    deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type OperatorSessionUncheckedUpdateManyWithoutOperatorNestedInput = {
+    create?: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput> | OperatorSessionCreateWithoutOperatorInput[] | OperatorSessionUncheckedCreateWithoutOperatorInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutOperatorInput | OperatorSessionCreateOrConnectWithoutOperatorInput[]
+    upsert?: OperatorSessionUpsertWithWhereUniqueWithoutOperatorInput | OperatorSessionUpsertWithWhereUniqueWithoutOperatorInput[]
+    createMany?: OperatorSessionCreateManyOperatorInputEnvelope
+    set?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    disconnect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    delete?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    update?: OperatorSessionUpdateWithWhereUniqueWithoutOperatorInput | OperatorSessionUpdateWithWhereUniqueWithoutOperatorInput[]
+    updateMany?: OperatorSessionUpdateManyWithWhereWithoutOperatorInput | OperatorSessionUpdateManyWithWhereWithoutOperatorInput[]
+    deleteMany?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+  }
+
+  export type WorkstationOperatorCreateNestedOneWithoutOperatorSessionsInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedCreateWithoutOperatorSessionsInput>
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutOperatorSessionsInput
+    connect?: WorkstationOperatorWhereUniqueInput
+  }
+
+  export type WorkstationCreateNestedOneWithoutOperatorSessionsInput = {
+    create?: XOR<WorkstationCreateWithoutOperatorSessionsInput, WorkstationUncheckedCreateWithoutOperatorSessionsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutOperatorSessionsInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type WorkstationOperatorUpdateOneRequiredWithoutOperatorSessionsNestedInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedCreateWithoutOperatorSessionsInput>
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutOperatorSessionsInput
+    upsert?: WorkstationOperatorUpsertWithoutOperatorSessionsInput
+    connect?: WorkstationOperatorWhereUniqueInput
+    update?: XOR<XOR<WorkstationOperatorUpdateToOneWithWhereWithoutOperatorSessionsInput, WorkstationOperatorUpdateWithoutOperatorSessionsInput>, WorkstationOperatorUncheckedUpdateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationUpdateOneRequiredWithoutOperatorSessionsNestedInput = {
+    create?: XOR<WorkstationCreateWithoutOperatorSessionsInput, WorkstationUncheckedCreateWithoutOperatorSessionsInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutOperatorSessionsInput
+    upsert?: WorkstationUpsertWithoutOperatorSessionsInput
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutOperatorSessionsInput, WorkstationUpdateWithoutOperatorSessionsInput>, WorkstationUncheckedUpdateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationCreateNestedOneWithoutCapacityInput = {
+    create?: XOR<WorkstationCreateWithoutCapacityInput, WorkstationUncheckedCreateWithoutCapacityInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutCapacityInput
+    connect?: WorkstationWhereUniqueInput
+  }
+
+  export type WorkstationUpdateOneRequiredWithoutCapacityNestedInput = {
+    create?: XOR<WorkstationCreateWithoutCapacityInput, WorkstationUncheckedCreateWithoutCapacityInput>
+    connectOrCreate?: WorkstationCreateOrConnectWithoutCapacityInput
+    upsert?: WorkstationUpsertWithoutCapacityInput
+    connect?: WorkstationWhereUniqueInput
+    update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutCapacityInput, WorkstationUpdateWithoutCapacityInput>, WorkstationUncheckedUpdateWithoutCapacityInput>
+  }
+
   export type RoutingStepCreateNestedManyWithoutWorkstationInput = {
     create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
@@ -21261,6 +29646,33 @@ export namespace Prisma {
     connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
   }
 
+  export type RoutingTemplateStepCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput> | RoutingTemplateStepCreateWithoutWorkstationInput[] | RoutingTemplateStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutWorkstationInput | RoutingTemplateStepCreateOrConnectWithoutWorkstationInput[]
+    createMany?: RoutingTemplateStepCreateManyWorkstationInputEnvelope
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+  }
+
+  export type WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput> | WorkstationOperatorCreateWithoutCurrentWorkstationInput[] | WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput[]
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput | WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput[]
+    createMany?: WorkstationOperatorCreateManyCurrentWorkstationInputEnvelope
+    connect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+  }
+
+  export type OperatorSessionCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput> | OperatorSessionCreateWithoutWorkstationInput[] | OperatorSessionUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutWorkstationInput | OperatorSessionCreateOrConnectWithoutWorkstationInput[]
+    createMany?: OperatorSessionCreateManyWorkstationInputEnvelope
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+  }
+
+  export type WorkstationCapacityCreateNestedOneWithoutWorkstationInput = {
+    create?: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
+    connectOrCreate?: WorkstationCapacityCreateOrConnectWithoutWorkstationInput
+    connect?: WorkstationCapacityWhereUniqueInput
+  }
+
   export type RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput = {
     create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
@@ -21273,6 +29685,37 @@ export namespace Prisma {
     connectOrCreate?: StepConfirmationCreateOrConnectWithoutWorkstationInput | StepConfirmationCreateOrConnectWithoutWorkstationInput[]
     createMany?: StepConfirmationCreateManyWorkstationInputEnvelope
     connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
+  }
+
+  export type RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput> | RoutingTemplateStepCreateWithoutWorkstationInput[] | RoutingTemplateStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutWorkstationInput | RoutingTemplateStepCreateOrConnectWithoutWorkstationInput[]
+    createMany?: RoutingTemplateStepCreateManyWorkstationInputEnvelope
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+  }
+
+  export type WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput> | WorkstationOperatorCreateWithoutCurrentWorkstationInput[] | WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput[]
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput | WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput[]
+    createMany?: WorkstationOperatorCreateManyCurrentWorkstationInputEnvelope
+    connect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+  }
+
+  export type OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput = {
+    create?: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput> | OperatorSessionCreateWithoutWorkstationInput[] | OperatorSessionUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutWorkstationInput | OperatorSessionCreateOrConnectWithoutWorkstationInput[]
+    createMany?: OperatorSessionCreateManyWorkstationInputEnvelope
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+  }
+
+  export type WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput = {
+    create?: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
+    connectOrCreate?: WorkstationCapacityCreateOrConnectWithoutWorkstationInput
+    connect?: WorkstationCapacityWhereUniqueInput
+  }
+
+  export type EnumWorkstationCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.WorkstationCategory
   }
 
   export type RoutingStepUpdateManyWithoutWorkstationNestedInput = {
@@ -21303,6 +29746,58 @@ export namespace Prisma {
     deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
   }
 
+  export type RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput> | RoutingTemplateStepCreateWithoutWorkstationInput[] | RoutingTemplateStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutWorkstationInput | RoutingTemplateStepCreateOrConnectWithoutWorkstationInput[]
+    upsert?: RoutingTemplateStepUpsertWithWhereUniqueWithoutWorkstationInput | RoutingTemplateStepUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: RoutingTemplateStepCreateManyWorkstationInputEnvelope
+    set?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    disconnect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    delete?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    update?: RoutingTemplateStepUpdateWithWhereUniqueWithoutWorkstationInput | RoutingTemplateStepUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: RoutingTemplateStepUpdateManyWithWhereWithoutWorkstationInput | RoutingTemplateStepUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+  }
+
+  export type WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput> | WorkstationOperatorCreateWithoutCurrentWorkstationInput[] | WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput[]
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput | WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput[]
+    upsert?: WorkstationOperatorUpsertWithWhereUniqueWithoutCurrentWorkstationInput | WorkstationOperatorUpsertWithWhereUniqueWithoutCurrentWorkstationInput[]
+    createMany?: WorkstationOperatorCreateManyCurrentWorkstationInputEnvelope
+    set?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    disconnect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    delete?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    connect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    update?: WorkstationOperatorUpdateWithWhereUniqueWithoutCurrentWorkstationInput | WorkstationOperatorUpdateWithWhereUniqueWithoutCurrentWorkstationInput[]
+    updateMany?: WorkstationOperatorUpdateManyWithWhereWithoutCurrentWorkstationInput | WorkstationOperatorUpdateManyWithWhereWithoutCurrentWorkstationInput[]
+    deleteMany?: WorkstationOperatorScalarWhereInput | WorkstationOperatorScalarWhereInput[]
+  }
+
+  export type OperatorSessionUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput> | OperatorSessionCreateWithoutWorkstationInput[] | OperatorSessionUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutWorkstationInput | OperatorSessionCreateOrConnectWithoutWorkstationInput[]
+    upsert?: OperatorSessionUpsertWithWhereUniqueWithoutWorkstationInput | OperatorSessionUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: OperatorSessionCreateManyWorkstationInputEnvelope
+    set?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    disconnect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    delete?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    update?: OperatorSessionUpdateWithWhereUniqueWithoutWorkstationInput | OperatorSessionUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: OperatorSessionUpdateManyWithWhereWithoutWorkstationInput | OperatorSessionUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+  }
+
+  export type WorkstationCapacityUpdateOneWithoutWorkstationNestedInput = {
+    create?: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
+    connectOrCreate?: WorkstationCapacityCreateOrConnectWithoutWorkstationInput
+    upsert?: WorkstationCapacityUpsertWithoutWorkstationInput
+    disconnect?: WorkstationCapacityWhereInput | boolean
+    delete?: WorkstationCapacityWhereInput | boolean
+    connect?: WorkstationCapacityWhereUniqueInput
+    update?: XOR<XOR<WorkstationCapacityUpdateToOneWithWhereWithoutWorkstationInput, WorkstationCapacityUpdateWithoutWorkstationInput>, WorkstationCapacityUncheckedUpdateWithoutWorkstationInput>
+  }
+
   export type RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput = {
     create?: XOR<RoutingStepCreateWithoutWorkstationInput, RoutingStepUncheckedCreateWithoutWorkstationInput> | RoutingStepCreateWithoutWorkstationInput[] | RoutingStepUncheckedCreateWithoutWorkstationInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkstationInput | RoutingStepCreateOrConnectWithoutWorkstationInput[]
@@ -21331,6 +29826,58 @@ export namespace Prisma {
     deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
   }
 
+  export type RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput> | RoutingTemplateStepCreateWithoutWorkstationInput[] | RoutingTemplateStepUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: RoutingTemplateStepCreateOrConnectWithoutWorkstationInput | RoutingTemplateStepCreateOrConnectWithoutWorkstationInput[]
+    upsert?: RoutingTemplateStepUpsertWithWhereUniqueWithoutWorkstationInput | RoutingTemplateStepUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: RoutingTemplateStepCreateManyWorkstationInputEnvelope
+    set?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    disconnect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    delete?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    connect?: RoutingTemplateStepWhereUniqueInput | RoutingTemplateStepWhereUniqueInput[]
+    update?: RoutingTemplateStepUpdateWithWhereUniqueWithoutWorkstationInput | RoutingTemplateStepUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: RoutingTemplateStepUpdateManyWithWhereWithoutWorkstationInput | RoutingTemplateStepUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+  }
+
+  export type WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput> | WorkstationOperatorCreateWithoutCurrentWorkstationInput[] | WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput[]
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput | WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput[]
+    upsert?: WorkstationOperatorUpsertWithWhereUniqueWithoutCurrentWorkstationInput | WorkstationOperatorUpsertWithWhereUniqueWithoutCurrentWorkstationInput[]
+    createMany?: WorkstationOperatorCreateManyCurrentWorkstationInputEnvelope
+    set?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    disconnect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    delete?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    connect?: WorkstationOperatorWhereUniqueInput | WorkstationOperatorWhereUniqueInput[]
+    update?: WorkstationOperatorUpdateWithWhereUniqueWithoutCurrentWorkstationInput | WorkstationOperatorUpdateWithWhereUniqueWithoutCurrentWorkstationInput[]
+    updateMany?: WorkstationOperatorUpdateManyWithWhereWithoutCurrentWorkstationInput | WorkstationOperatorUpdateManyWithWhereWithoutCurrentWorkstationInput[]
+    deleteMany?: WorkstationOperatorScalarWhereInput | WorkstationOperatorScalarWhereInput[]
+  }
+
+  export type OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput = {
+    create?: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput> | OperatorSessionCreateWithoutWorkstationInput[] | OperatorSessionUncheckedCreateWithoutWorkstationInput[]
+    connectOrCreate?: OperatorSessionCreateOrConnectWithoutWorkstationInput | OperatorSessionCreateOrConnectWithoutWorkstationInput[]
+    upsert?: OperatorSessionUpsertWithWhereUniqueWithoutWorkstationInput | OperatorSessionUpsertWithWhereUniqueWithoutWorkstationInput[]
+    createMany?: OperatorSessionCreateManyWorkstationInputEnvelope
+    set?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    disconnect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    delete?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    connect?: OperatorSessionWhereUniqueInput | OperatorSessionWhereUniqueInput[]
+    update?: OperatorSessionUpdateWithWhereUniqueWithoutWorkstationInput | OperatorSessionUpdateWithWhereUniqueWithoutWorkstationInput[]
+    updateMany?: OperatorSessionUpdateManyWithWhereWithoutWorkstationInput | OperatorSessionUpdateManyWithWhereWithoutWorkstationInput[]
+    deleteMany?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+  }
+
+  export type WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput = {
+    create?: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
+    connectOrCreate?: WorkstationCapacityCreateOrConnectWithoutWorkstationInput
+    upsert?: WorkstationCapacityUpsertWithoutWorkstationInput
+    disconnect?: WorkstationCapacityWhereInput | boolean
+    delete?: WorkstationCapacityWhereInput | boolean
+    connect?: WorkstationCapacityWhereUniqueInput
+    update?: XOR<XOR<WorkstationCapacityUpdateToOneWithWhereWithoutWorkstationInput, WorkstationCapacityUpdateWithoutWorkstationInput>, WorkstationCapacityUncheckedUpdateWithoutWorkstationInput>
+  }
+
   export type RoutingStepCreateNestedOneWithoutConfirmationsInput = {
     create?: XOR<RoutingStepCreateWithoutConfirmationsInput, RoutingStepUncheckedCreateWithoutConfirmationsInput>
     connectOrCreate?: RoutingStepCreateOrConnectWithoutConfirmationsInput
@@ -21341,6 +29888,12 @@ export namespace Prisma {
     create?: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
     connectOrCreate?: WorkstationCreateOrConnectWithoutConfirmationsInput
     connect?: WorkstationWhereUniqueInput
+  }
+
+  export type WorkstationOperatorCreateNestedOneWithoutStepConfirmationsInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedCreateWithoutStepConfirmationsInput>
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutStepConfirmationsInput
+    connect?: WorkstationOperatorWhereUniqueInput
   }
 
   export type EnumConfirmationStatusFieldUpdateOperationsInput = {
@@ -21361,6 +29914,16 @@ export namespace Prisma {
     upsert?: WorkstationUpsertWithoutConfirmationsInput
     connect?: WorkstationWhereUniqueInput
     update?: XOR<XOR<WorkstationUpdateToOneWithWhereWithoutConfirmationsInput, WorkstationUpdateWithoutConfirmationsInput>, WorkstationUncheckedUpdateWithoutConfirmationsInput>
+  }
+
+  export type WorkstationOperatorUpdateOneWithoutStepConfirmationsNestedInput = {
+    create?: XOR<WorkstationOperatorCreateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedCreateWithoutStepConfirmationsInput>
+    connectOrCreate?: WorkstationOperatorCreateOrConnectWithoutStepConfirmationsInput
+    upsert?: WorkstationOperatorUpsertWithoutStepConfirmationsInput
+    disconnect?: WorkstationOperatorWhereInput | boolean
+    delete?: WorkstationOperatorWhereInput | boolean
+    connect?: WorkstationOperatorWhereUniqueInput
+    update?: XOR<XOR<WorkstationOperatorUpdateToOneWithWhereWithoutStepConfirmationsInput, WorkstationOperatorUpdateWithoutStepConfirmationsInput>, WorkstationOperatorUncheckedUpdateWithoutStepConfirmationsInput>
   }
 
   export type BatchCreateNestedOneWithoutQcRecordsInput = {
@@ -21753,6 +30316,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStepStatusFilter<$PrismaModel>
     _max?: NestedEnumStepStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOperatorShiftFilter<$PrismaModel = never> = {
+    equals?: $Enums.OperatorShift | EnumOperatorShiftFieldRefInput<$PrismaModel>
+    in?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    not?: NestedEnumOperatorShiftFilter<$PrismaModel> | $Enums.OperatorShift
+  }
+
+  export type NestedEnumOperatorShiftWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OperatorShift | EnumOperatorShiftFieldRefInput<$PrismaModel>
+    in?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OperatorShift[] | ListEnumOperatorShiftFieldRefInput<$PrismaModel>
+    not?: NestedEnumOperatorShiftWithAggregatesFilter<$PrismaModel> | $Enums.OperatorShift
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOperatorShiftFilter<$PrismaModel>
+    _max?: NestedEnumOperatorShiftFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWorkstationCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkstationCategory | EnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkstationCategoryFilter<$PrismaModel> | $Enums.WorkstationCategory
+  }
+
+  export type NestedEnumWorkstationCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkstationCategory | EnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkstationCategory[] | ListEnumWorkstationCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkstationCategoryWithAggregatesFilter<$PrismaModel> | $Enums.WorkstationCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkstationCategoryFilter<$PrismaModel>
+    _max?: NestedEnumWorkstationCategoryFilter<$PrismaModel>
   }
 
   export type NestedEnumConfirmationStatusFilter<$PrismaModel = never> = {
@@ -22274,6 +30871,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
@@ -22295,6 +30893,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
@@ -22321,6 +30920,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
@@ -22342,6 +30942,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
@@ -22379,6 +30980,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
@@ -22400,6 +31002,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
@@ -22432,6 +31035,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
@@ -22453,6 +31057,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
@@ -22517,6 +31122,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
@@ -22538,6 +31144,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
@@ -22704,6 +31311,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
@@ -22725,6 +31333,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
@@ -23169,6 +31778,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
@@ -23190,6 +31800,7 @@ export namespace Prisma {
     leadTime?: number | null
     active?: boolean
     notes?: string | null
+    recommendedRoutingTemplateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
@@ -23272,6 +31883,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
@@ -23293,6 +31905,7 @@ export namespace Prisma {
     leadTime?: NullableIntFieldUpdateOperationsInput | number | null
     active?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
@@ -23344,9 +31957,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationUncheckedCreateWithoutRoutingStepsInput = {
@@ -23354,9 +31976,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationCreateOrConnectWithoutRoutingStepsInput = {
@@ -23367,7 +31998,6 @@ export namespace Prisma {
   export type StepConfirmationCreateWithoutRoutingStepInput = {
     id?: string
     operatorName: string
-    operatorId?: string | null
     startTime?: Date | string | null
     endTime?: Date | string | null
     notes?: string | null
@@ -23377,6 +32007,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workstation: WorkstationCreateNestedOneWithoutConfirmationsInput
+    operator?: WorkstationOperatorCreateNestedOneWithoutStepConfirmationsInput
   }
 
   export type StepConfirmationUncheckedCreateWithoutRoutingStepInput = {
@@ -23465,9 +32096,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
   }
 
   export type WorkstationUncheckedUpdateWithoutRoutingStepsInput = {
@@ -23475,9 +32115,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
   }
 
   export type StepConfirmationUpsertWithWhereUniqueWithoutRoutingStepInput = {
@@ -23513,6 +32162,699 @@ export namespace Prisma {
     status?: EnumConfirmationStatusFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
     createdAt?: DateTimeFilter<"StepConfirmation"> | Date | string
     updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+  }
+
+  export type RoutingTemplateStepCreateWithoutTemplateInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workstation: WorkstationCreateNestedOneWithoutTemplateStepsInput
+  }
+
+  export type RoutingTemplateStepUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepCreateOrConnectWithoutTemplateInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    create: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type RoutingTemplateStepCreateManyTemplateInputEnvelope = {
+    data: RoutingTemplateStepCreateManyTemplateInput | RoutingTemplateStepCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RoutingTemplateStepUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    update: XOR<RoutingTemplateStepUpdateWithoutTemplateInput, RoutingTemplateStepUncheckedUpdateWithoutTemplateInput>
+    create: XOR<RoutingTemplateStepCreateWithoutTemplateInput, RoutingTemplateStepUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type RoutingTemplateStepUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    data: XOR<RoutingTemplateStepUpdateWithoutTemplateInput, RoutingTemplateStepUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type RoutingTemplateStepUpdateManyWithWhereWithoutTemplateInput = {
+    where: RoutingTemplateStepScalarWhereInput
+    data: XOR<RoutingTemplateStepUpdateManyMutationInput, RoutingTemplateStepUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type RoutingTemplateStepScalarWhereInput = {
+    AND?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+    OR?: RoutingTemplateStepScalarWhereInput[]
+    NOT?: RoutingTemplateStepScalarWhereInput | RoutingTemplateStepScalarWhereInput[]
+    id?: StringFilter<"RoutingTemplateStep"> | string
+    templateId?: StringFilter<"RoutingTemplateStep"> | string
+    stepNumber?: IntFilter<"RoutingTemplateStep"> | number
+    workstationId?: StringFilter<"RoutingTemplateStep"> | string
+    description?: StringFilter<"RoutingTemplateStep"> | string
+    estimatedTime?: IntNullableFilter<"RoutingTemplateStep"> | number | null
+    required?: BoolFilter<"RoutingTemplateStep"> | boolean
+    notes?: StringNullableFilter<"RoutingTemplateStep"> | string | null
+    createdAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoutingTemplateStep"> | Date | string
+  }
+
+  export type RoutingTemplateCreateWithoutTemplateStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateUncheckedCreateWithoutTemplateStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateCreateOrConnectWithoutTemplateStepsInput = {
+    where: RoutingTemplateWhereUniqueInput
+    create: XOR<RoutingTemplateCreateWithoutTemplateStepsInput, RoutingTemplateUncheckedCreateWithoutTemplateStepsInput>
+  }
+
+  export type WorkstationCreateWithoutTemplateStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutTemplateStepsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutTemplateStepsInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutTemplateStepsInput, WorkstationUncheckedCreateWithoutTemplateStepsInput>
+  }
+
+  export type RoutingTemplateUpsertWithoutTemplateStepsInput = {
+    update: XOR<RoutingTemplateUpdateWithoutTemplateStepsInput, RoutingTemplateUncheckedUpdateWithoutTemplateStepsInput>
+    create: XOR<RoutingTemplateCreateWithoutTemplateStepsInput, RoutingTemplateUncheckedCreateWithoutTemplateStepsInput>
+    where?: RoutingTemplateWhereInput
+  }
+
+  export type RoutingTemplateUpdateToOneWithWhereWithoutTemplateStepsInput = {
+    where?: RoutingTemplateWhereInput
+    data: XOR<RoutingTemplateUpdateWithoutTemplateStepsInput, RoutingTemplateUncheckedUpdateWithoutTemplateStepsInput>
+  }
+
+  export type RoutingTemplateUpdateWithoutTemplateStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateUncheckedUpdateWithoutTemplateStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationUpsertWithoutTemplateStepsInput = {
+    update: XOR<WorkstationUpdateWithoutTemplateStepsInput, WorkstationUncheckedUpdateWithoutTemplateStepsInput>
+    create: XOR<WorkstationCreateWithoutTemplateStepsInput, WorkstationUncheckedCreateWithoutTemplateStepsInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutTemplateStepsInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutTemplateStepsInput, WorkstationUncheckedUpdateWithoutTemplateStepsInput>
+  }
+
+  export type WorkstationUpdateWithoutTemplateStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutTemplateStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationCreateWithoutCurrentOperatorsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutCurrentOperatorsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutCurrentOperatorsInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutCurrentOperatorsInput, WorkstationUncheckedCreateWithoutCurrentOperatorsInput>
+  }
+
+  export type StepConfirmationCreateWithoutOperatorInput = {
+    id?: string
+    operatorName: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingStep: RoutingStepCreateNestedOneWithoutConfirmationsInput
+    workstation: WorkstationCreateNestedOneWithoutConfirmationsInput
+  }
+
+  export type StepConfirmationUncheckedCreateWithoutOperatorInput = {
+    id?: string
+    stepId: string
+    workstationId: string
+    operatorName: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationCreateOrConnectWithoutOperatorInput = {
+    where: StepConfirmationWhereUniqueInput
+    create: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput>
+  }
+
+  export type StepConfirmationCreateManyOperatorInputEnvelope = {
+    data: StepConfirmationCreateManyOperatorInput | StepConfirmationCreateManyOperatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OperatorSessionCreateWithoutOperatorInput = {
+    id?: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workstation: WorkstationCreateNestedOneWithoutOperatorSessionsInput
+  }
+
+  export type OperatorSessionUncheckedCreateWithoutOperatorInput = {
+    id?: string
+    workstationId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionCreateOrConnectWithoutOperatorInput = {
+    where: OperatorSessionWhereUniqueInput
+    create: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput>
+  }
+
+  export type OperatorSessionCreateManyOperatorInputEnvelope = {
+    data: OperatorSessionCreateManyOperatorInput | OperatorSessionCreateManyOperatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkstationUpsertWithoutCurrentOperatorsInput = {
+    update: XOR<WorkstationUpdateWithoutCurrentOperatorsInput, WorkstationUncheckedUpdateWithoutCurrentOperatorsInput>
+    create: XOR<WorkstationCreateWithoutCurrentOperatorsInput, WorkstationUncheckedCreateWithoutCurrentOperatorsInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutCurrentOperatorsInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutCurrentOperatorsInput, WorkstationUncheckedUpdateWithoutCurrentOperatorsInput>
+  }
+
+  export type WorkstationUpdateWithoutCurrentOperatorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutCurrentOperatorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type StepConfirmationUpsertWithWhereUniqueWithoutOperatorInput = {
+    where: StepConfirmationWhereUniqueInput
+    update: XOR<StepConfirmationUpdateWithoutOperatorInput, StepConfirmationUncheckedUpdateWithoutOperatorInput>
+    create: XOR<StepConfirmationCreateWithoutOperatorInput, StepConfirmationUncheckedCreateWithoutOperatorInput>
+  }
+
+  export type StepConfirmationUpdateWithWhereUniqueWithoutOperatorInput = {
+    where: StepConfirmationWhereUniqueInput
+    data: XOR<StepConfirmationUpdateWithoutOperatorInput, StepConfirmationUncheckedUpdateWithoutOperatorInput>
+  }
+
+  export type StepConfirmationUpdateManyWithWhereWithoutOperatorInput = {
+    where: StepConfirmationScalarWhereInput
+    data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyWithoutOperatorInput>
+  }
+
+  export type OperatorSessionUpsertWithWhereUniqueWithoutOperatorInput = {
+    where: OperatorSessionWhereUniqueInput
+    update: XOR<OperatorSessionUpdateWithoutOperatorInput, OperatorSessionUncheckedUpdateWithoutOperatorInput>
+    create: XOR<OperatorSessionCreateWithoutOperatorInput, OperatorSessionUncheckedCreateWithoutOperatorInput>
+  }
+
+  export type OperatorSessionUpdateWithWhereUniqueWithoutOperatorInput = {
+    where: OperatorSessionWhereUniqueInput
+    data: XOR<OperatorSessionUpdateWithoutOperatorInput, OperatorSessionUncheckedUpdateWithoutOperatorInput>
+  }
+
+  export type OperatorSessionUpdateManyWithWhereWithoutOperatorInput = {
+    where: OperatorSessionScalarWhereInput
+    data: XOR<OperatorSessionUpdateManyMutationInput, OperatorSessionUncheckedUpdateManyWithoutOperatorInput>
+  }
+
+  export type OperatorSessionScalarWhereInput = {
+    AND?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+    OR?: OperatorSessionScalarWhereInput[]
+    NOT?: OperatorSessionScalarWhereInput | OperatorSessionScalarWhereInput[]
+    id?: StringFilter<"OperatorSession"> | string
+    operatorId?: StringFilter<"OperatorSession"> | string
+    workstationId?: StringFilter<"OperatorSession"> | string
+    loginTime?: DateTimeFilter<"OperatorSession"> | Date | string
+    logoutTime?: DateTimeNullableFilter<"OperatorSession"> | Date | string | null
+    shift?: EnumOperatorShiftFilter<"OperatorSession"> | $Enums.OperatorShift
+    notes?: StringNullableFilter<"OperatorSession"> | string | null
+    createdAt?: DateTimeFilter<"OperatorSession"> | Date | string
+    updatedAt?: DateTimeFilter<"OperatorSession"> | Date | string
+  }
+
+  export type WorkstationOperatorCreateWithoutOperatorSessionsInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    currentWorkstation?: WorkstationCreateNestedOneWithoutCurrentOperatorsInput
+    stepConfirmations?: StepConfirmationCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorUncheckedCreateWithoutOperatorSessionsInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    currentWorkstationId?: string | null
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepConfirmations?: StepConfirmationUncheckedCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorCreateOrConnectWithoutOperatorSessionsInput = {
+    where: WorkstationOperatorWhereUniqueInput
+    create: XOR<WorkstationOperatorCreateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedCreateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationCreateWithoutOperatorSessionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutOperatorSessionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutOperatorSessionsInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutOperatorSessionsInput, WorkstationUncheckedCreateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationOperatorUpsertWithoutOperatorSessionsInput = {
+    update: XOR<WorkstationOperatorUpdateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedUpdateWithoutOperatorSessionsInput>
+    create: XOR<WorkstationOperatorCreateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedCreateWithoutOperatorSessionsInput>
+    where?: WorkstationOperatorWhereInput
+  }
+
+  export type WorkstationOperatorUpdateToOneWithWhereWithoutOperatorSessionsInput = {
+    where?: WorkstationOperatorWhereInput
+    data: XOR<WorkstationOperatorUpdateWithoutOperatorSessionsInput, WorkstationOperatorUncheckedUpdateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationOperatorUpdateWithoutOperatorSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentWorkstation?: WorkstationUpdateOneWithoutCurrentOperatorsNestedInput
+    stepConfirmations?: StepConfirmationUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorUncheckedUpdateWithoutOperatorSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    currentWorkstationId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepConfirmations?: StepConfirmationUncheckedUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationUpsertWithoutOperatorSessionsInput = {
+    update: XOR<WorkstationUpdateWithoutOperatorSessionsInput, WorkstationUncheckedUpdateWithoutOperatorSessionsInput>
+    create: XOR<WorkstationCreateWithoutOperatorSessionsInput, WorkstationUncheckedCreateWithoutOperatorSessionsInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutOperatorSessionsInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutOperatorSessionsInput, WorkstationUncheckedUpdateWithoutOperatorSessionsInput>
+  }
+
+  export type WorkstationUpdateWithoutOperatorSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutOperatorSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationCreateWithoutCapacityInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationUncheckedCreateWithoutCapacityInput = {
+    id?: string
+    name: string
+    description?: string | null
+    active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+  }
+
+  export type WorkstationCreateOrConnectWithoutCapacityInput = {
+    where: WorkstationWhereUniqueInput
+    create: XOR<WorkstationCreateWithoutCapacityInput, WorkstationUncheckedCreateWithoutCapacityInput>
+  }
+
+  export type WorkstationUpsertWithoutCapacityInput = {
+    update: XOR<WorkstationUpdateWithoutCapacityInput, WorkstationUncheckedUpdateWithoutCapacityInput>
+    create: XOR<WorkstationCreateWithoutCapacityInput, WorkstationUncheckedCreateWithoutCapacityInput>
+    where?: WorkstationWhereInput
+  }
+
+  export type WorkstationUpdateToOneWithWhereWithoutCapacityInput = {
+    where?: WorkstationWhereInput
+    data: XOR<WorkstationUpdateWithoutCapacityInput, WorkstationUncheckedUpdateWithoutCapacityInput>
+  }
+
+  export type WorkstationUpdateWithoutCapacityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationUncheckedUpdateWithoutCapacityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
   }
 
   export type RoutingStepCreateWithoutWorkstationInput = {
@@ -23556,7 +32898,6 @@ export namespace Prisma {
   export type StepConfirmationCreateWithoutWorkstationInput = {
     id?: string
     operatorName: string
-    operatorId?: string | null
     startTime?: Date | string | null
     endTime?: Date | string | null
     notes?: string | null
@@ -23566,6 +32907,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     routingStep: RoutingStepCreateNestedOneWithoutConfirmationsInput
+    operator?: WorkstationOperatorCreateNestedOneWithoutStepConfirmationsInput
   }
 
   export type StepConfirmationUncheckedCreateWithoutWorkstationInput = {
@@ -23591,6 +32933,153 @@ export namespace Prisma {
   export type StepConfirmationCreateManyWorkstationInputEnvelope = {
     data: StepConfirmationCreateManyWorkstationInput | StepConfirmationCreateManyWorkstationInput[]
     skipDuplicates?: boolean
+  }
+
+  export type RoutingTemplateStepCreateWithoutWorkstationInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    template: RoutingTemplateCreateNestedOneWithoutTemplateStepsInput
+  }
+
+  export type RoutingTemplateStepUncheckedCreateWithoutWorkstationInput = {
+    id?: string
+    templateId: string
+    stepNumber: number
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepCreateOrConnectWithoutWorkstationInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    create: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type RoutingTemplateStepCreateManyWorkstationInputEnvelope = {
+    data: RoutingTemplateStepCreateManyWorkstationInput | RoutingTemplateStepCreateManyWorkstationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkstationOperatorCreateWithoutCurrentWorkstationInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepConfirmations?: StepConfirmationCreateNestedManyWithoutOperatorInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepConfirmations?: StepConfirmationUncheckedCreateNestedManyWithoutOperatorInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorCreateOrConnectWithoutCurrentWorkstationInput = {
+    where: WorkstationOperatorWhereUniqueInput
+    create: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput>
+  }
+
+  export type WorkstationOperatorCreateManyCurrentWorkstationInputEnvelope = {
+    data: WorkstationOperatorCreateManyCurrentWorkstationInput | WorkstationOperatorCreateManyCurrentWorkstationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OperatorSessionCreateWithoutWorkstationInput = {
+    id?: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    operator: WorkstationOperatorCreateNestedOneWithoutOperatorSessionsInput
+  }
+
+  export type OperatorSessionUncheckedCreateWithoutWorkstationInput = {
+    id?: string
+    operatorId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionCreateOrConnectWithoutWorkstationInput = {
+    where: OperatorSessionWhereUniqueInput
+    create: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type OperatorSessionCreateManyWorkstationInputEnvelope = {
+    data: OperatorSessionCreateManyWorkstationInput | OperatorSessionCreateManyWorkstationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkstationCapacityCreateWithoutWorkstationInput = {
+    id?: string
+    maxConcurrentJobs?: number
+    avgSetupTime?: number
+    efficiency?: Decimal | DecimalJsLike | number | string
+    hoursPerDay?: number
+    maintenanceHours?: number
+    operatingCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: Decimal | DecimalJsLike | number | string
+    qualityTarget?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationCapacityUncheckedCreateWithoutWorkstationInput = {
+    id?: string
+    maxConcurrentJobs?: number
+    avgSetupTime?: number
+    efficiency?: Decimal | DecimalJsLike | number | string
+    hoursPerDay?: number
+    maintenanceHours?: number
+    operatingCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: Decimal | DecimalJsLike | number | string
+    qualityTarget?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationCapacityCreateOrConnectWithoutWorkstationInput = {
+    where: WorkstationCapacityWhereUniqueInput
+    create: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
   }
 
   export type RoutingStepUpsertWithWhereUniqueWithoutWorkstationInput = {
@@ -23623,6 +33112,115 @@ export namespace Prisma {
   export type StepConfirmationUpdateManyWithWhereWithoutWorkstationInput = {
     where: StepConfirmationScalarWhereInput
     data: XOR<StepConfirmationUpdateManyMutationInput, StepConfirmationUncheckedUpdateManyWithoutWorkstationInput>
+  }
+
+  export type RoutingTemplateStepUpsertWithWhereUniqueWithoutWorkstationInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    update: XOR<RoutingTemplateStepUpdateWithoutWorkstationInput, RoutingTemplateStepUncheckedUpdateWithoutWorkstationInput>
+    create: XOR<RoutingTemplateStepCreateWithoutWorkstationInput, RoutingTemplateStepUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type RoutingTemplateStepUpdateWithWhereUniqueWithoutWorkstationInput = {
+    where: RoutingTemplateStepWhereUniqueInput
+    data: XOR<RoutingTemplateStepUpdateWithoutWorkstationInput, RoutingTemplateStepUncheckedUpdateWithoutWorkstationInput>
+  }
+
+  export type RoutingTemplateStepUpdateManyWithWhereWithoutWorkstationInput = {
+    where: RoutingTemplateStepScalarWhereInput
+    data: XOR<RoutingTemplateStepUpdateManyMutationInput, RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationInput>
+  }
+
+  export type WorkstationOperatorUpsertWithWhereUniqueWithoutCurrentWorkstationInput = {
+    where: WorkstationOperatorWhereUniqueInput
+    update: XOR<WorkstationOperatorUpdateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedUpdateWithoutCurrentWorkstationInput>
+    create: XOR<WorkstationOperatorCreateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedCreateWithoutCurrentWorkstationInput>
+  }
+
+  export type WorkstationOperatorUpdateWithWhereUniqueWithoutCurrentWorkstationInput = {
+    where: WorkstationOperatorWhereUniqueInput
+    data: XOR<WorkstationOperatorUpdateWithoutCurrentWorkstationInput, WorkstationOperatorUncheckedUpdateWithoutCurrentWorkstationInput>
+  }
+
+  export type WorkstationOperatorUpdateManyWithWhereWithoutCurrentWorkstationInput = {
+    where: WorkstationOperatorScalarWhereInput
+    data: XOR<WorkstationOperatorUpdateManyMutationInput, WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationInput>
+  }
+
+  export type WorkstationOperatorScalarWhereInput = {
+    AND?: WorkstationOperatorScalarWhereInput | WorkstationOperatorScalarWhereInput[]
+    OR?: WorkstationOperatorScalarWhereInput[]
+    NOT?: WorkstationOperatorScalarWhereInput | WorkstationOperatorScalarWhereInput[]
+    id?: StringFilter<"WorkstationOperator"> | string
+    operatorId?: StringFilter<"WorkstationOperator"> | string
+    operatorName?: StringFilter<"WorkstationOperator"> | string
+    email?: StringNullableFilter<"WorkstationOperator"> | string | null
+    phone?: StringNullableFilter<"WorkstationOperator"> | string | null
+    certifications?: StringNullableListFilter<"WorkstationOperator">
+    shift?: EnumOperatorShiftFilter<"WorkstationOperator"> | $Enums.OperatorShift
+    hourlyRate?: DecimalNullableFilter<"WorkstationOperator"> | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFilter<"WorkstationOperator"> | boolean
+    currentWorkstationId?: StringNullableFilter<"WorkstationOperator"> | string | null
+    loginTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    logoutTime?: DateTimeNullableFilter<"WorkstationOperator"> | Date | string | null
+    createdAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkstationOperator"> | Date | string
+  }
+
+  export type OperatorSessionUpsertWithWhereUniqueWithoutWorkstationInput = {
+    where: OperatorSessionWhereUniqueInput
+    update: XOR<OperatorSessionUpdateWithoutWorkstationInput, OperatorSessionUncheckedUpdateWithoutWorkstationInput>
+    create: XOR<OperatorSessionCreateWithoutWorkstationInput, OperatorSessionUncheckedCreateWithoutWorkstationInput>
+  }
+
+  export type OperatorSessionUpdateWithWhereUniqueWithoutWorkstationInput = {
+    where: OperatorSessionWhereUniqueInput
+    data: XOR<OperatorSessionUpdateWithoutWorkstationInput, OperatorSessionUncheckedUpdateWithoutWorkstationInput>
+  }
+
+  export type OperatorSessionUpdateManyWithWhereWithoutWorkstationInput = {
+    where: OperatorSessionScalarWhereInput
+    data: XOR<OperatorSessionUpdateManyMutationInput, OperatorSessionUncheckedUpdateManyWithoutWorkstationInput>
+  }
+
+  export type WorkstationCapacityUpsertWithoutWorkstationInput = {
+    update: XOR<WorkstationCapacityUpdateWithoutWorkstationInput, WorkstationCapacityUncheckedUpdateWithoutWorkstationInput>
+    create: XOR<WorkstationCapacityCreateWithoutWorkstationInput, WorkstationCapacityUncheckedCreateWithoutWorkstationInput>
+    where?: WorkstationCapacityWhereInput
+  }
+
+  export type WorkstationCapacityUpdateToOneWithWhereWithoutWorkstationInput = {
+    where?: WorkstationCapacityWhereInput
+    data: XOR<WorkstationCapacityUpdateWithoutWorkstationInput, WorkstationCapacityUncheckedUpdateWithoutWorkstationInput>
+  }
+
+  export type WorkstationCapacityUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationCapacityUncheckedUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    maxConcurrentJobs?: IntFieldUpdateOperationsInput | number
+    avgSetupTime?: IntFieldUpdateOperationsInput | number
+    efficiency?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hoursPerDay?: IntFieldUpdateOperationsInput | number
+    maintenanceHours?: IntFieldUpdateOperationsInput | number
+    operatingCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maintenanceCostPerHour?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    utilizationTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualityTarget?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoutingStepCreateWithoutConfirmationsInput = {
@@ -23663,9 +33261,18 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     routingSteps?: RoutingStepCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationUncheckedCreateWithoutConfirmationsInput = {
@@ -23673,14 +33280,64 @@ export namespace Prisma {
     name: string
     description?: string | null
     active?: boolean
+    category?: $Enums.WorkstationCategory
+    location?: string | null
+    serialNumber?: string | null
+    manufacturer?: string | null
+    model?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutWorkstationInput
+    templateSteps?: RoutingTemplateStepUncheckedCreateNestedManyWithoutWorkstationInput
+    currentOperators?: WorkstationOperatorUncheckedCreateNestedManyWithoutCurrentWorkstationInput
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutWorkstationInput
+    capacity?: WorkstationCapacityUncheckedCreateNestedOneWithoutWorkstationInput
   }
 
   export type WorkstationCreateOrConnectWithoutConfirmationsInput = {
     where: WorkstationWhereUniqueInput
     create: XOR<WorkstationCreateWithoutConfirmationsInput, WorkstationUncheckedCreateWithoutConfirmationsInput>
+  }
+
+  export type WorkstationOperatorCreateWithoutStepConfirmationsInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    currentWorkstation?: WorkstationCreateNestedOneWithoutCurrentOperatorsInput
+    operatorSessions?: OperatorSessionCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorUncheckedCreateWithoutStepConfirmationsInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    currentWorkstationId?: string | null
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    operatorSessions?: OperatorSessionUncheckedCreateNestedManyWithoutOperatorInput
+  }
+
+  export type WorkstationOperatorCreateOrConnectWithoutStepConfirmationsInput = {
+    where: WorkstationOperatorWhereUniqueInput
+    create: XOR<WorkstationOperatorCreateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedCreateWithoutStepConfirmationsInput>
   }
 
   export type RoutingStepUpsertWithoutConfirmationsInput = {
@@ -23738,9 +33395,18 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUpdateOneWithoutWorkstationNestedInput
   }
 
   export type WorkstationUncheckedUpdateWithoutConfirmationsInput = {
@@ -23748,9 +33414,65 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    category?: EnumWorkstationCategoryFieldUpdateOperationsInput | $Enums.WorkstationCategory
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    templateSteps?: RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationNestedInput
+    currentOperators?: WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutWorkstationNestedInput
+    capacity?: WorkstationCapacityUncheckedUpdateOneWithoutWorkstationNestedInput
+  }
+
+  export type WorkstationOperatorUpsertWithoutStepConfirmationsInput = {
+    update: XOR<WorkstationOperatorUpdateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedUpdateWithoutStepConfirmationsInput>
+    create: XOR<WorkstationOperatorCreateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedCreateWithoutStepConfirmationsInput>
+    where?: WorkstationOperatorWhereInput
+  }
+
+  export type WorkstationOperatorUpdateToOneWithWhereWithoutStepConfirmationsInput = {
+    where?: WorkstationOperatorWhereInput
+    data: XOR<WorkstationOperatorUpdateWithoutStepConfirmationsInput, WorkstationOperatorUncheckedUpdateWithoutStepConfirmationsInput>
+  }
+
+  export type WorkstationOperatorUpdateWithoutStepConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentWorkstation?: WorkstationUpdateOneWithoutCurrentOperatorsNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorUncheckedUpdateWithoutStepConfirmationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    currentWorkstationId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutOperatorNestedInput
   }
 
   export type BatchCreateWithoutQcRecordsInput = {
@@ -24425,7 +34147,6 @@ export namespace Prisma {
   export type StepConfirmationUpdateWithoutRoutingStepInput = {
     id?: StringFieldUpdateOperationsInput | string
     operatorName?: StringFieldUpdateOperationsInput | string
-    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24435,6 +34156,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workstation?: WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput
+    operator?: WorkstationOperatorUpdateOneWithoutStepConfirmationsNestedInput
   }
 
   export type StepConfirmationUncheckedUpdateWithoutRoutingStepInput = {
@@ -24467,6 +34189,158 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RoutingTemplateStepCreateManyTemplateInput = {
+    id?: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workstation?: WorkstationUpdateOneRequiredWithoutTemplateStepsNestedInput
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationCreateManyOperatorInput = {
+    id?: string
+    stepId: string
+    workstationId: string
+    operatorName: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    notes?: string | null
+    photoUrl?: string | null
+    flagged?: boolean
+    status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionCreateManyOperatorInput = {
+    id?: string
+    workstationId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepConfirmationUpdateWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingStep?: RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutConfirmationsNestedInput
+  }
+
+  export type StepConfirmationUncheckedUpdateWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepConfirmationUncheckedUpdateManyWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    flagged?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionUpdateWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workstation?: WorkstationUpdateOneRequiredWithoutOperatorSessionsNestedInput
+  }
+
+  export type OperatorSessionUncheckedUpdateWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionUncheckedUpdateManyWithoutOperatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workstationId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RoutingStepCreateManyWorkstationInput = {
     id?: string
     batchId: string
@@ -24491,6 +34365,45 @@ export namespace Prisma {
     photoUrl?: string | null
     flagged?: boolean
     status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoutingTemplateStepCreateManyWorkstationInput = {
+    id?: string
+    templateId: string
+    stepNumber: number
+    description: string
+    estimatedTime?: number | null
+    required?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkstationOperatorCreateManyCurrentWorkstationInput = {
+    id?: string
+    operatorId: string
+    operatorName: string
+    email?: string | null
+    phone?: string | null
+    certifications?: WorkstationOperatorCreatecertificationsInput | string[]
+    shift?: $Enums.OperatorShift
+    hourlyRate?: Decimal | DecimalJsLike | number | string | null
+    active?: boolean
+    loginTime?: Date | string | null
+    logoutTime?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OperatorSessionCreateManyWorkstationInput = {
+    id?: string
+    operatorId: string
+    loginTime?: Date | string
+    logoutTime?: Date | string | null
+    shift: $Enums.OperatorShift
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24539,7 +34452,6 @@ export namespace Prisma {
   export type StepConfirmationUpdateWithoutWorkstationInput = {
     id?: StringFieldUpdateOperationsInput | string
     operatorName?: StringFieldUpdateOperationsInput | string
-    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24549,6 +34461,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingStep?: RoutingStepUpdateOneRequiredWithoutConfirmationsNestedInput
+    operator?: WorkstationOperatorUpdateOneWithoutStepConfirmationsNestedInput
   }
 
   export type StepConfirmationUncheckedUpdateWithoutWorkstationInput = {
@@ -24577,6 +34490,127 @@ export namespace Prisma {
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     flagged?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: RoutingTemplateUpdateOneRequiredWithoutTemplateStepsNestedInput
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoutingTemplateStepUncheckedUpdateManyWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    required?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkstationOperatorUpdateWithoutCurrentWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepConfirmations?: StepConfirmationUpdateManyWithoutOperatorNestedInput
+    operatorSessions?: OperatorSessionUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorUncheckedUpdateWithoutCurrentWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepConfirmations?: StepConfirmationUncheckedUpdateManyWithoutOperatorNestedInput
+    operatorSessions?: OperatorSessionUncheckedUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type WorkstationOperatorUncheckedUpdateManyWithoutCurrentWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    operatorName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: WorkstationOperatorUpdatecertificationsInput | string[]
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    hourlyRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    loginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operator?: WorkstationOperatorUpdateOneRequiredWithoutOperatorSessionsNestedInput
+  }
+
+  export type OperatorSessionUncheckedUpdateWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OperatorSessionUncheckedUpdateManyWithoutWorkstationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    operatorId?: StringFieldUpdateOperationsInput | string
+    loginTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    logoutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shift?: EnumOperatorShiftFieldUpdateOperationsInput | $Enums.OperatorShift
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

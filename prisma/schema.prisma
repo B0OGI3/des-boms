@@ -19,105 +19,108 @@ datasource db {
 
 // Customer Model - Manufacturing customers who place orders
 model Customer {
-  id              String    @id @default(cuid())
-  name            String    // Customer/Company name
-  contactName     String?   // Primary contact person
-  email           String?   @unique
+  id              String  @id @default(cuid())
+  name            String // Customer/Company name
+  contactName     String? // Primary contact person
+  email           String? @unique
   phone           String?
   billingAddress  String?
   shippingAddress String?
-  notes           String?   // General customer notes
-  
+  notes           String? // General customer notes
+
   // QuickBooks Integration Fields
-  quickbooksId    String?   // QuickBooks Customer ID for sync
-  syncStatus      SyncStatus @default(PENDING) // Sync state tracking
-  lastSyncedAt    DateTime? // Last successful sync timestamp
-  syncError       String?   // Last sync error message if any
-  
+  quickbooksId String? // QuickBooks Customer ID for sync
+  syncStatus   SyncStatus @default(PENDING) // Sync state tracking
+  lastSyncedAt DateTime? // Last successful sync timestamp
+  syncError    String? // Last sync error message if any
+
   // Relations
-  purchaseOrders  PurchaseOrder[]
-  
+  purchaseOrders PurchaseOrder[]
+
   // Timestamps
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Purchase Order Header
 model PurchaseOrder {
-  id          String        @id @default(cuid())
-  systemOrderId String      @unique @default(cuid()) // System-generated unique ID
-  customer    Customer      @relation(fields: [customerId], references: [id])
-  customerId  String
-  poNumber    String        // Customer-provided PO number
-  dueDate     DateTime      // Order-level due date
-  priority    OrderPriority @default(STANDARD)
-  notes       String?       // Order-level notes/shipping details
-  
+  id            String        @id @default(cuid())
+  systemOrderId String        @unique @default(cuid()) // System-generated unique ID
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  customerId    String
+  poNumber      String // Customer-provided PO number
+  dueDate       DateTime // Order-level due date
+  priority      OrderPriority @default(STANDARD)
+  notes         String? // Order-level notes/shipping details
+
   // Order Completion Tracking (DES-BOMS Spec Section 2)
-  orderStatus     OrderStatus   @default(ACTIVE)     // Current order status
-  completedAt     DateTime?     // When order was marked complete
-  completedBy     String?       // Operator who completed the order
-  completionNotes String?       // Final completion notes
-  shippedAt       DateTime?     // When order was shipped
-  shippedBy       String?       // Who processed shipping
-  shippingNotes   String?       // Shipping details/tracking
-  
+  orderStatus     OrderStatus @default(ACTIVE) // Current order status
+  completedAt     DateTime? // When order was marked complete
+  completedBy     String? // Operator who completed the order
+  completionNotes String? // Final completion notes
+  shippedAt       DateTime? // When order was shipped
+  shippedBy       String? // Who processed shipping
+  shippingNotes   String? // Shipping details/tracking
+
   // Relations
-  lineItems   OrderLineItem[]
-  
+  lineItems OrderLineItem[]
+
   // Timestamps
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Parts Master - Central part definition with BOM structure
 model Part {
-  id            String      @id @default(cuid())
-  partNumber    String      @unique // System-generated unique ID
-  partName      String      // Descriptive part name
-  partType      PartType    // Finished, Semi-Finished, Raw Material
-  drawingNumber String?     // Engineering drawing number
-  revisionLevel String?     // Drawing revision (A, B, C, etc.)
-  description   String?     // Detailed part description
-  materialSpec  String?     // Material specification (e.g., "Ti-6Al-4V", "6061-T6")
-  unitOfMeasure String?     // UOM (each, ft, lb, etc.)
-  standardCost  Decimal?    // Standard cost per unit
-  leadTime      Int?        // Lead time in days
-  active        Boolean     @default(true)
-  notes         String?     // Part-specific notes
-  
+  id            String   @id @default(cuid())
+  partNumber    String   @unique // System-generated unique ID
+  partName      String // Descriptive part name
+  partType      PartType // Finished, Semi-Finished, Raw Material
+  drawingNumber String? // Engineering drawing number
+  revisionLevel String? // Drawing revision (A, B, C, etc.)
+  description   String? // Detailed part description
+  materialSpec  String? // Material specification (e.g., "Ti-6Al-4V", "6061-T6")
+  unitOfMeasure String? // UOM (each, ft, lb, etc.)
+  standardCost  Decimal? // Standard cost per unit
+  leadTime      Int? // Lead time in days
+  active        Boolean  @default(true)
+  notes         String? // Part-specific notes
+
+  // Recommended Routing Template (for smart batch creation)
+  recommendedRoutingTemplateId String? // Suggested routing template for this part
+
   // BOM Relations
-  parentBOMs    BOMComponent[] @relation("ParentPart")
-  childBOMs     BOMComponent[] @relation("ChildPart")
-  
+  parentBOMs BOMComponent[] @relation("ParentPart")
+  childBOMs  BOMComponent[] @relation("ChildPart")
+
   // Order Relations
   orderLineItems OrderLineItem[]
-  
+
   // Material Consumption Relations
   materialConsumptions MaterialConsumption[]
-  
+
   // Timestamps
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // BOM (Bill of Materials) - Part composition relationships
 model BOMComponent {
-  id              String   @id @default(cuid())
-  parentPart      Part     @relation("ParentPart", fields: [parentPartId], references: [id])
-  parentPartId    String
-  childPart       Part     @relation("ChildPart", fields: [childPartId], references: [id])
-  childPartId     String
-  quantity        Decimal  // Quantity of child part needed per parent
-  unitOfMeasure   String?  // UOM for this relationship
-  scrapFactor     Decimal? // Expected scrap percentage (0.05 = 5%)
-  operation       String?  // Where this component is used in manufacturing
-  notes           String?  // Component-specific notes
-  
+  id            String   @id @default(cuid())
+  parentPart    Part     @relation("ParentPart", fields: [parentPartId], references: [id])
+  parentPartId  String
+  childPart     Part     @relation("ChildPart", fields: [childPartId], references: [id])
+  childPartId   String
+  quantity      Decimal // Quantity of child part needed per parent
+  unitOfMeasure String? // UOM for this relationship
+  scrapFactor   Decimal? // Expected scrap percentage (0.05 = 5%)
+  operation     String? // Where this component is used in manufacturing
+  notes         String? // Component-specific notes
+
   // Timestamps
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([parentPartId, childPartId]) // Prevent duplicate relationships
 }
 
@@ -127,19 +130,19 @@ model OrderLineItem {
   purchaseOrder PurchaseOrder @relation(fields: [orderId], references: [id])
   orderId       String
   part          Part          @relation(fields: [partId], references: [id])
-  partId        String        // Links to Parts Master
-  quantity      Int           // Ordered quantity
-  unitPrice     Decimal?      // Price per unit for this order
-  dueDate       DateTime?     // Line item due date (overrides PO due date)
-  notes         String?       // Line item specific notes
-  
+  partId        String // Links to Parts Master
+  quantity      Int // Ordered quantity
+  unitPrice     Decimal? // Price per unit for this order
+  dueDate       DateTime? // Line item due date (overrides PO due date)
+  notes         String? // Line item specific notes
+
   // Relations
   fileAttachments FileAttachment[]
   batches         Batch[]
-  
+
   // Timestamps
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // File Attachments - Drawings, CAD models, specs per line item
@@ -147,17 +150,17 @@ model FileAttachment {
   id             String        @id @default(cuid())
   lineItem       OrderLineItem @relation(fields: [lineItemId], references: [id])
   lineItemId     String
-  fileName       String        // Original file name
-  storedFileName String        // Actual filename on disk (with timestamp)
-  filePath       String        // Full storage path/URL
-  fileType       String        // File extension/type
-  mimeType       String        // MIME type for proper handling
-  fileSize       Int           // File size in bytes
-  uploadedBy     String        // User who uploaded
-  description    String?       // File description
-  
+  fileName       String // Original file name
+  storedFileName String // Actual filename on disk (with timestamp)
+  filePath       String // Full storage path/URL
+  fileType       String // File extension/type
+  mimeType       String // MIME type for proper handling
+  fileSize       Int // File size in bytes
+  uploadedBy     String // User who uploaded
+  description    String? // File description
+
   // Timestamps
-  createdAt      DateTime      @default(now())
+  createdAt DateTime @default(now())
 }
 
 // =============================================================================
@@ -170,82 +173,196 @@ model Batch {
   batchId             String        @unique // Format: DES-YYYY-MMDD-###
   lineItem            OrderLineItem @relation(fields: [lineItemId], references: [id])
   lineItemId          String
-  quantity            Int           // Quantity in this batch
-  startDate           DateTime?     // Actual start date
-  estimatedCompletion DateTime?     // Estimated completion
-  actualCompletion    DateTime?     // Actual completion
+  quantity            Int // Quantity in this batch
+  startDate           DateTime? // Actual start date
+  estimatedCompletion DateTime? // Estimated completion
+  actualCompletion    DateTime? // Actual completion
   priority            BatchPriority @default(STANDARD)
   status              BatchStatus   @default(QUEUED)
-  notes               String?       // Batch-specific notes
-  
+  notes               String? // Batch-specific notes
+
   // Relations
   routingSteps        RoutingStep[]
-  qcRecords          QCRecord[]
+  qcRecords           QCRecord[]
   materialConsumption MaterialConsumption[] // Track raw material usage
-  
+
   // Timestamps
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Material Consumption - Track raw materials used in batches
 model MaterialConsumption {
-  id            String   @id @default(cuid())
-  batch         Batch    @relation(fields: [batchId], references: [id])
-  batchId       String
-  materialPart  Part     @relation(fields: [materialPartId], references: [id])
-  materialPartId String  // Links to raw material part
-  quantityUsed  Decimal  // Actual quantity consumed
-  unitCost      Decimal? // Cost per unit at time of consumption
-  consumedAt    DateTime @default(now())
-  operatorId    String?  // Who recorded the consumption
-  notes         String?  // Consumption notes
-  
+  id             String   @id @default(cuid())
+  batch          Batch    @relation(fields: [batchId], references: [id])
+  batchId        String
+  materialPart   Part     @relation(fields: [materialPartId], references: [id])
+  materialPartId String // Links to raw material part
+  quantityUsed   Decimal // Actual quantity consumed
+  unitCost       Decimal? // Cost per unit at time of consumption
+  consumedAt     DateTime @default(now())
+  operatorId     String? // Who recorded the consumption
+  notes          String? // Consumption notes
+
   // Timestamps
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([batchId, materialPartId]) // One consumption record per material per batch
 }
 
 // Routing Steps - Sequential workstation steps for each batch
 model RoutingStep {
-  id            String           @id @default(cuid())
-  batch         Batch            @relation(fields: [batchId], references: [id])
+  id            String      @id @default(cuid())
+  batch         Batch       @relation(fields: [batchId], references: [id])
   batchId       String
-  stepNumber    Int              // Sequence in route (1, 2, 3...)
-  workstation   Workstation      @relation(fields: [workstationId], references: [id])
+  stepNumber    Int // Sequence in route (1, 2, 3...)
+  workstation   Workstation @relation(fields: [workstationId], references: [id])
   workstationId String
-  description   String           // Task description
-  required      Boolean          @default(true) // Is this step required?
-  estimatedTime Int?             // Estimated time in minutes
-  notes         String?          // Operator instructions
-  status        StepStatus       @default(PENDING)
-  
+  description   String // Task description
+  required      Boolean     @default(true) // Is this step required?
+  estimatedTime Int? // Estimated time in minutes
+  notes         String? // Operator instructions
+  status        StepStatus  @default(PENDING)
+
   // Relations
   confirmations StepConfirmation[]
-  
+
   // Timestamps
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([batchId, stepNumber]) // Ensure unique step numbers per batch
+}
+
+// Routing Templates - Predefined manufacturing workflows (DES-BOMS Spec)
+model RoutingTemplate {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "Standard Machining", "Assembly Only"
+  description String? // Template description
+  active      Boolean @default(true)
+
+  // Relations
+  templateSteps RoutingTemplateStep[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Routing Template Steps - Predefined steps within templates
+model RoutingTemplateStep {
+  id            String          @id @default(cuid())
+  template      RoutingTemplate @relation(fields: [templateId], references: [id])
+  templateId    String
+  stepNumber    Int // Sequence in template (1, 2, 3...)
+  workstation   Workstation     @relation(fields: [workstationId], references: [id])
+  workstationId String
+  description   String // Task description
+  estimatedTime Int? // Estimated time in minutes
+  required      Boolean         @default(true)
+  notes         String? // Standard operator instructions
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([templateId, stepNumber]) // Ensure unique step numbers per template
+}
+
+// Workstation Operators - Enhanced operator management for DES-BOMS compliance
+model WorkstationOperator {
+  id             String        @id @default(cuid())
+  operatorId     String        @unique // Badge/ID number
+  operatorName   String // Full name
+  email          String? // Contact email
+  phone          String? // Contact phone
+  certifications String[] // Workstation certifications
+  shift          OperatorShift @default(DAY) // Work shift
+  hourlyRate     Decimal? // Pay rate (optional)
+  active         Boolean       @default(true)
+
+  // Current session tracking
+  currentWorkstation   Workstation? @relation(fields: [currentWorkstationId], references: [id])
+  currentWorkstationId String?
+  loginTime            DateTime? // Current session start
+  logoutTime           DateTime? // Last session end
+
+  // Relations
+  stepConfirmations StepConfirmation[]
+  operatorSessions  OperatorSession[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Operator Sessions - Track login/logout history
+model OperatorSession {
+  id            String              @id @default(cuid())
+  operator      WorkstationOperator @relation(fields: [operatorId], references: [operatorId])
+  operatorId    String
+  workstation   Workstation         @relation(fields: [workstationId], references: [id])
+  workstationId String
+  loginTime     DateTime            @default(now())
+  logoutTime    DateTime?
+  shift         OperatorShift
+  notes         String? // Session notes
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Workstation Capacity - Machine capability and efficiency tracking
+model WorkstationCapacity {
+  id                String      @id @default(cuid())
+  workstation       Workstation @relation(fields: [workstationId], references: [id])
+  workstationId     String      @unique
+  maxConcurrentJobs Int         @default(1) // Maximum simultaneous batches
+  avgSetupTime      Int         @default(30) // Average setup time in minutes
+  efficiency        Decimal     @default(1.0) // Performance multiplier (0.8 = 80% efficiency)
+  hoursPerDay       Int         @default(8) // Operating hours per day
+  maintenanceHours  Int         @default(0) // Hours per week for maintenance
+
+  // Cost tracking
+  operatingCostPerHour   Decimal? // Cost per operating hour
+  maintenanceCostPerHour Decimal? // Maintenance cost per hour
+
+  // Performance metrics
+  utilizationTarget Decimal @default(0.85) // Target utilization percentage
+  qualityTarget     Decimal @default(0.98) // Target quality percentage
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Workstations - Manufacturing workstations/machines
 model Workstation {
-  id           String        @id @default(cuid())
-  name         String        @unique // e.g., "LATHE-1", "MILL-2"
-  description  String?       // Workstation description
-  active       Boolean       @default(true)
-  
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "LATHE-1", "MILL-2"
+  description String? // Workstation description
+  active      Boolean @default(true)
+
+  // Enhanced workstation properties
+  category     WorkstationCategory @default(MACHINING) // Type of workstation
+  location     String? // Physical location in shop
+  serialNumber String? // Machine serial number
+  manufacturer String? // Equipment manufacturer
+  model        String? // Equipment model
+
   // Relations
-  routingSteps RoutingStep[]
-  confirmations StepConfirmation[]
-  
+  routingSteps     RoutingStep[]
+  confirmations    StepConfirmation[]
+  templateSteps    RoutingTemplateStep[]
+  currentOperators WorkstationOperator[]
+  operatorSessions OperatorSession[]
+  capacity         WorkstationCapacity?
+
   // Timestamps
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // =============================================================================
@@ -254,23 +371,26 @@ model Workstation {
 
 // Step Confirmations - Operator actions at workstations
 model StepConfirmation {
-  id            String       @id @default(cuid())
-  routingStep   RoutingStep  @relation(fields: [stepId], references: [id])
+  id            String             @id @default(cuid())
+  routingStep   RoutingStep        @relation(fields: [stepId], references: [id])
   stepId        String
-  workstation   Workstation  @relation(fields: [workstationId], references: [id])
+  workstation   Workstation        @relation(fields: [workstationId], references: [id])
   workstationId String
-  operatorName  String       // Logged-in operator
-  operatorId    String?      // Optional operator ID/badge number
-  startTime     DateTime?    // When operator started step
-  endTime       DateTime?    // When operator completed step
-  notes         String?      // Operator comments/issues
-  photoUrl      String?      // Optional photo upload
-  flagged       Boolean      @default(false) // Issue flagged?
+  operatorName  String // Logged-in operator
+  operatorId    String? // Optional operator ID/badge number
+  startTime     DateTime? // When operator started step
+  endTime       DateTime? // When operator completed step
+  notes         String? // Operator comments/issues
+  photoUrl      String? // Optional photo upload
+  flagged       Boolean            @default(false) // Issue flagged?
   status        ConfirmationStatus @default(STARTED)
-  
+
+  // Relations
+  operator WorkstationOperator? @relation(fields: [operatorId], references: [operatorId])
+
   // Timestamps
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // =============================================================================
@@ -279,17 +399,17 @@ model StepConfirmation {
 
 // QC Records - Quality control inspections per batch
 model QCRecord {
-  id          String    @id @default(cuid())
-  batch       Batch     @relation(fields: [batchId], references: [id])
-  batchId     String
-  inspector   String    // Inspector name/ID
+  id             String   @id @default(cuid())
+  batch          Batch    @relation(fields: [batchId], references: [id])
+  batchId        String
+  inspector      String // Inspector name/ID
   inspectionDate DateTime @default(now())
-  result      QCResult  // Pass/Fail/Rework
-  notes       String?   // Inspection notes
-  
+  result         QCResult // Pass/Fail/Rework
+  notes          String? // Inspection notes
+
   // Timestamps
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // =============================================================================
@@ -297,9 +417,9 @@ model QCRecord {
 // =============================================================================
 
 enum PartType {
-  FINISHED      // Finished goods/assemblies - prefix FG-
+  FINISHED // Finished goods/assemblies - prefix FG-
   SEMI_FINISHED // Work-in-process/sub-assemblies - prefix SF-
-  RAW_MATERIAL  // Raw materials/stock - prefix RM-
+  RAW_MATERIAL // Raw materials/stock - prefix RM-
 }
 
 enum OrderPriority {
@@ -309,11 +429,11 @@ enum OrderPriority {
 }
 
 enum OrderStatus {
-  ACTIVE       // Order is being worked - batches in progress
-  COMPLETED    // All manufacturing and QC complete, ready to ship
-  SHIPPED      // Order has been shipped to customer
-  CANCELLED    // Order was cancelled
-  ON_HOLD      // Order temporarily paused
+  ACTIVE // Order is being worked - batches in progress
+  COMPLETED // All manufacturing and QC complete, ready to ship
+  SHIPPED // Order has been shipped to customer
+  CANCELLED // Order was cancelled
+  ON_HOLD // Order temporarily paused
 }
 
 enum BatchPriority {
@@ -323,37 +443,55 @@ enum BatchPriority {
 }
 
 enum BatchStatus {
-  QUEUED      // Waiting to start
+  QUEUED // Waiting to start
   IN_PROGRESS // Currently being worked
-  COMPLETED   // All steps finished
-  ON_HOLD     // Temporarily paused
-  CANCELLED   // Cancelled batch
+  COMPLETED // All steps finished
+  ON_HOLD // Temporarily paused
+  CANCELLED // Cancelled batch
 }
 
 enum StepStatus {
-  PENDING     // Not started
+  PENDING // Not started
   IN_PROGRESS // Currently being worked
-  COMPLETED   // Step finished
-  SKIPPED     // Step was skipped
-  FAILED      // Step failed/flagged
+  COMPLETED // Step finished
+  SKIPPED // Step was skipped
+  FAILED // Step failed/flagged
 }
 
 enum ConfirmationStatus {
-  STARTED     // Operator started step
-  COMPLETED   // Operator completed step
-  PAUSED      // Step paused
-  FLAGGED     // Issue reported
+  STARTED // Operator started step
+  COMPLETED // Operator completed step
+  PAUSED // Step paused
+  FLAGGED // Issue reported
 }
 
 enum SyncStatus {
-  PENDING     // Not yet synced to QuickBooks
-  SYNCED      // Successfully synced
-  FAILED      // Sync failed
-  UPDATING    // Sync in progress
+  PENDING // Not yet synced to QuickBooks
+  SYNCED // Successfully synced
+  FAILED // Sync failed
+  UPDATING // Sync in progress
 }
 
 enum QCResult {
   PASS
   FAIL
   REWORK_REQUIRED
+}
+
+enum OperatorShift {
+  DAY // Day shift (typically 6 AM - 2 PM)
+  SWING // Swing shift (typically 2 PM - 10 PM)
+  NIGHT // Night shift (typically 10 PM - 6 AM)
+  FLEXIBLE // Flexible/variable shift
+}
+
+enum WorkstationCategory {
+  MACHINING // CNC, Manual machining
+  ASSEMBLY // Assembly stations
+  WELDING // Welding operations
+  INSPECTION // Quality control stations
+  PACKAGING // Final packaging
+  PREP // Material preparation
+  FINISHING // Surface finishing, painting
+  OTHER // Other specialized operations
 }

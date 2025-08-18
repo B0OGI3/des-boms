@@ -2,7 +2,8 @@
 
 import React, { useState, useCallback } from "react";
 import { Table, Badge, Text, Group, ActionIcon, Tooltip, Progress, Stack, Checkbox } from "@mantine/core";
-import { IconEye, IconEdit, IconTrash, IconPlayerPlay, IconClipboardList } from "@tabler/icons-react";
+import { IconEye, IconEdit, IconTrash, IconPlayerPlay, IconClipboardList, IconRoute2 } from "@tabler/icons-react";
+import { RoutingEditorModal } from "./RoutingEditorModal";
 import type { Batch } from '../types';
 import { 
   calculateBatchProgress, 
@@ -43,6 +44,8 @@ export function BatchTable({
   bulkSelectionMode = false,
 }: Readonly<BatchTableProps>) {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [routingModalOpen, setRoutingModalOpen] = useState(false);
+  const [selectedBatchForRouting, setSelectedBatchForRouting] = useState<Batch | null>(null);
 
   // Optimized checkbox calculations - only run when needed
   const hasSelection = selectedBatches.size > 0;
@@ -59,6 +62,21 @@ export function BatchTable({
       }
       return newExpanded;
     });
+  }, []);
+
+  const openRoutingEditor = useCallback((batch: Batch) => {
+    setSelectedBatchForRouting(batch);
+    setRoutingModalOpen(true);
+  }, []);
+
+  const closeRoutingEditor = useCallback(() => {
+    setRoutingModalOpen(false);
+    setSelectedBatchForRouting(null);
+  }, []);
+
+  const handleRoutingSave = useCallback((steps: any[]) => {
+    // Refresh the page or update the batch data
+    window.location.reload();
   }, []);
 
   // Simple status color function
@@ -168,7 +186,8 @@ export function BatchTable({
             <Table.Th>Status</Table.Th>
             <Table.Th>Progress</Table.Th>
             <Table.Th>Current Step</Table.Th>
-            <Table.Th style={{ width: "140px" }}>Actions</Table.Th>
+            <Table.Th>Routing</Table.Th>
+            <Table.Th style={{ width: "180px" }}>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -339,6 +358,27 @@ export function BatchTable({
                   </Table.Td>
                   
                   <Table.Td>
+                    <div>
+                      <Text size="sm" fw={500} style={{ color: "#111827" }}>
+                        {batch.routingSteps.length > 0 ? (
+                          <>
+                            {batch.routingSteps.length} steps
+                          </>
+                        ) : (
+                          'No routing'
+                        )}
+                      </Text>
+                      <Text size="xs" style={{ color: "#6b7280" }}>
+                        {batch.routingSteps.length > 0 ? (
+                          `${batch.routingSteps.filter(s => s.status === 'COMPLETED').length} completed`
+                        ) : (
+                          'Not configured'
+                        )}
+                      </Text>
+                    </div>
+                  </Table.Td>
+                  
+                  <Table.Td>
                     <Group gap="xs">
                       <Tooltip label="View Details">
                         <ActionIcon
@@ -359,6 +399,17 @@ export function BatchTable({
                           style={{ color: "#10b981" }}
                         >
                           <IconEdit size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                      
+                      <Tooltip label="Edit Routing">
+                        <ActionIcon
+                          variant="subtle"
+                          size="sm"
+                          onClick={() => openRoutingEditor(batch)}
+                          style={{ color: "#8b5cf6" }}
+                        >
+                          <IconRoute2 size={16} />
                         </ActionIcon>
                       </Tooltip>
                       
@@ -538,6 +589,24 @@ export function BatchTable({
         }
       }
     `}</style>
+    
+    {/* Routing Editor Modal */}
+    {selectedBatchForRouting && (
+      <RoutingEditorModal
+        opened={routingModalOpen}
+        onClose={closeRoutingEditor}
+        batchId={selectedBatchForRouting.id}
+        currentSteps={selectedBatchForRouting.routingSteps.map(step => ({
+          id: step.id,
+          stepNumber: step.stepNumber,
+          workstationId: step.workstationId,
+          estimatedMinutes: step.estimatedTime || 60,
+          description: step.description,
+          status: step.status
+        }))}
+        onSave={handleRoutingSave}
+      />
+    )}
   </>
   );
 }
