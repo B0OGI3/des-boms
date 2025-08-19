@@ -8,9 +8,18 @@
 
 "use client";
 
-import { Title, Text, Card, Badge, Group, Stack, Loader, Alert } from "@mantine/core";
-import Link from "next/link";
+import { Title, Text, Card, Badge, Group, Stack, Alert } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { 
+  PageLayout, 
+  PageHeader, 
+  LoadingState, 
+  ErrorState, 
+  StatsGrid, 
+  StatCard, 
+  NavigationCard 
+} from "./components/ui/StyledComponents";
+import theme from "./theme";
 
 interface DashboardData {
   overview: {
@@ -93,278 +102,109 @@ export default function HomePage() {
   };
 
   return (
-    <main
-      style={{
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
+    <PageLayout>
+      <PageHeader
+        title="DES-BOMS"
+        subtitle="Batch Order Management System"
+        icon="🏭"
+        accentColor={theme.pageAccents.home}
+      >
+        <Text
+          size="md"
+          style={{
+            color: theme.colors.textMuted,
+            maxWidth: 500,
+            margin: "0 auto",
+            lineHeight: theme.typography.lineHeightNormal,
+            textAlign: 'center',
+          }}
+        >
+          Manufacturing order management with real-time tracking and quality control.
+        </Text>
+      </PageHeader>
+
+      {/* Primary Navigation Cards */}
       <div
         style={{
-          maxWidth: 1200,
-          margin: "0 auto",
+          width: "100%",
+          maxWidth: 800,
+          margin: "0 auto 48px auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+          gap: theme.spacing.lg,
         }}
       >
-        {/* Header */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: 48,
-            paddingTop: 32,
-          }}
-        >
-          <Title
-            order={1}
-            style={{
-              color: "#f1f5f9",
-              marginBottom: 16,
-              fontSize: "3rem",
-              fontWeight: 700,
-              textShadow: "0 4px 8px rgba(0,0,0,0.4)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            DES-BOMS
-          </Title>
-          <Text
-            size="xl"
-            style={{
-              color: "#cbd5e1",
-              marginBottom: 16,
-              fontWeight: 500,
-            }}
-          >
-            Batch Order Management System
-          </Text>
-          <Text
-            size="md"
-            style={{
-              color: "#94a3b8",
-              maxWidth: 500,
-              margin: "0 auto",
-              lineHeight: 1.6,
-            }}
-          >
-            Manufacturing order management with real-time tracking and quality control.
-          </Text>
-        </div>
+        <NavigationCard
+          title="Customer Orders"
+          description="Manage customer purchase orders, line items, and due dates."
+          icon="📋"
+          href="/orders"
+          color={theme.pageAccents.orders}
+          size="large"
+        />
+        <NavigationCard
+          title="Batch Routing"
+          description="Track batch progress through manufacturing workstations."
+          icon="🔄"
+          href="/batches"
+          color={theme.pageAccents.batches}
+          size="large"
+        />
+        <NavigationCard
+          title="Shop Floor"
+          description="Real-time workstation status and operator confirmations."
+          icon="🏭"
+          href="/workstations"
+          color={theme.pageAccents.workstations}
+          size="large"
+        />
+        <NavigationCard
+          title="Quality Control"
+          description="Inspection workflows and quality management."
+          icon="🔍"
+          href="/qc"
+          color={theme.pageAccents.qc}
+          size="large"
+        />
+      </div>
 
-        {/* Primary Navigation Cards - Clean 2x2 Grid */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: 800,
-            margin: "0 auto 48px auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-            gap: 24,
-          }}
-        >
-          {[
-            {
-              title: "Customer Orders",
-              link: "/orders",
-              description: "Manage customer purchase orders, line items, and due dates.",
-              color: "blue",
-              icon: "📋",
-              accent: "#3b82f6",
-            },
-            {
-              title: "Batch Routing",
-              link: "/batches",
-              description: "Track batch progress through manufacturing workstations.",
-              color: "teal",
-              icon: "🔄",
-              accent: "#14b8a6",
-            },
-            {
-              title: "Shop Floor",
-              link: "/workstations",
-              description: "Real-time workstation status and operator confirmations.",
-              color: "green",
-              icon: "🏭",
-              accent: "#10b981",
-            },
-            {
-              title: "Quality Control",
-              link: "/qc",
-              description: "Inspection workflows and quality management.",
-              color: "orange",
-              icon: "🔍",
-              accent: "#f59e0b",
-            },
-          ].map((section) => (
-            <Link
-              href={section.link}
-              key={section.title}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                padding="xl"
-                style={{
-                  background: "rgba(30, 41, 59, 0.9)",
-                  border: "1px solid rgba(51, 65, 85, 0.8)",
-                  borderRadius: "16px",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  height: "200px",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.borderColor = section.accent;
-                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.3)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "rgba(51, 65, 85, 0.8)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "40px",
-                    marginBottom: "16px",
-                    filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
-                  }}
-                >
-                  {section.icon}
-                </div>
-                <Text
-                  fw={600}
-                  size="xl"
-                  style={{
-                    color: "#f1f5f9",
-                    marginBottom: "12px",
-                    fontSize: "1.25rem",
-                  }}
-                >
-                  {section.title}
-                </Text>
-                <Text
-                  size="md"
-                  style={{ 
-                    color: "#94a3b8", 
-                    lineHeight: 1.5,
-                    fontSize: "0.95rem",
-                    maxWidth: "90%",
-                  }}
-                >
-                  {section.description}
-                </Text>
-                {/* Accent border at bottom */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "4px",
-                    background: `linear-gradient(90deg, transparent, ${section.accent}, transparent)`,
-                    opacity: 0.8,
-                  }}
-                />
-              </Card>
-            </Link>
-          ))}
-        </div>
-
-        {/* Secondary Navigation - Reports & Settings */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: 600,
-            margin: "0 auto 48px auto",
-            display: "flex",
-            justifyContent: "center",
-            gap: "24px",
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            { 
-              title: "Reports", 
-              link: "/reports", 
-              icon: "📊", 
-              description: "Analytics and production reports",
-              color: "#8b5cf6" 
-            },
-            { 
-              title: "System Health", 
-              link: "/health", 
-              icon: "💚", 
-              description: "Monitor system status",
-              color: "#10b981" 
-            },
-            { 
-              title: "Settings", 
-              link: "/settings", 
-              icon: "⚙️", 
-              description: "System configuration",
-              color: "#6b7280" 
-            },
-          ].map((action) => (
-            <Link
-              href={action.link}
-              key={action.title}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                padding="lg"
-                style={{
-                  background: "rgba(30, 41, 59, 0.8)",
-                  border: "1px solid rgba(51, 65, 85, 0.7)",
-                  borderRadius: "12px",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  width: "160px",
-                  height: "120px",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background = "rgba(51, 65, 85, 0.9)";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.borderColor = action.color;
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background = "rgba(30, 41, 59, 0.8)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "rgba(51, 65, 85, 0.7)";
-                }}
-              >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>
-                  {action.icon}
-                </div>
-                <Text
-                  size="sm"
-                  fw={600}
-                  style={{ color: "#f1f5f9", marginBottom: "4px" }}
-                >
-                  {action.title}
-                </Text>
-                <Text
-                  size="xs"
-                  style={{ color: "#94a3b8", lineHeight: 1.3 }}
-                >
-                  {action.description}
-                </Text>
-              </Card>
-            </Link>
-          ))}
-        </div>
+      {/* Secondary Navigation - Reports & Settings */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 600,
+          margin: "0 auto 48px auto",
+          display: "flex",
+          justifyContent: "center",
+          gap: theme.spacing.lg,
+          flexWrap: "wrap",
+        }}
+      >
+        <NavigationCard
+          title="Reports"
+          description="Analytics and production reports"
+          icon="�"
+          href="/reports"
+          color={theme.pageAccents.reports}
+          size="small"
+        />
+        <NavigationCard
+          title="System Health"
+          description="Monitor system status"
+          icon="💚"
+          href="/health"
+          color={theme.pageAccents.workstations}
+          size="small"
+        />
+        <NavigationCard
+          title="Settings"
+          description="System configuration"
+          icon="⚙️"
+          href="/settings"
+          color={theme.pageAccents.settings}
+          size="small"
+        />
+      </div>
 
         {/* Dashboard Toggle Button */}
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -430,42 +270,19 @@ export default function HomePage() {
 
         {/* Loading State */}
         {loading && (
-          <div style={{ 
-            textAlign: "center", 
-            padding: "60px 20px",
-            background: "rgba(30, 41, 59, 0.7)",
-            borderRadius: "16px",
-            margin: "20px auto",
-            maxWidth: "400px",
-            backdropFilter: "blur(12px)",
-            border: "1px solid rgba(51, 65, 85, 0.6)",
-          }}>
-            <Loader size="xl" color="#3b82f6" />
-            <Text size="lg" style={{ color: "#cbd5e1", marginTop: 20, fontWeight: 500 }}>
-              Loading manufacturing data...
-            </Text>
-            <Text size="sm" style={{ color: "#94a3b8", marginTop: 8 }}>
-              Connecting to production systems
-            </Text>
-          </div>
+          <LoadingState
+            title="Loading manufacturing data..."
+            description="Connecting to production systems"
+            icon="🏭"
+          />
         )}
 
         {/* Error State */}
         {error && (
-          <Alert
-            color="red"
+          <ErrorState
             title="Connection Error"
-            style={{ 
-              marginBottom: 32, 
-              maxWidth: 1100, 
-              width: "100%",
-              background: "rgba(239, 68, 68, 0.1)",
-              border: "1px solid rgba(239, 68, 68, 0.3)",
-              backdropFilter: "blur(12px)",
-            }}
-          >
-            <Text style={{ color: "#fca5a5" }}>{error}</Text>
-          </Alert>
+            message={error}
+          />
         )}
 
         {/* Real-time Statistics */}
@@ -475,98 +292,53 @@ export default function HomePage() {
               <Title
                 order={2}
                 style={{ 
-                  color: "#f1f5f9", 
+                  color: theme.colors.textPrimary, 
                   marginBottom: 8, 
-                  fontSize: "1.8rem",
-                  fontWeight: 600,
+                  fontSize: theme.typography.fontSize2xl,
+                  fontWeight: theme.typography.fontWeightSemiBold,
                 }}
               >
                 Production Overview
               </Title>
-              <Text style={{ color: "#94a3b8", fontSize: "1rem" }}>
+              <Text style={{ color: theme.colors.textMuted, fontSize: theme.typography.fontSizeMd }}>
                 Real-time metrics • Updates every 30 seconds
               </Text>
             </div>
-            <div
-              style={{
-                width: "100%",
-                maxWidth: 800,
-                margin: "0 auto 32px auto",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: 24,
-              }}
-            >
-            {[
-              {
-                title: "Active Batches",
-                value: dashboardData.overview.activeBatches,
-                total: dashboardData.overview.totalBatches,
-                color: "blue",
-                icon: "⚡",
-              },
-              {
-                title: "Rush Orders",
-                value: dashboardData.overview.rushOrders,
-                total: dashboardData.overview.totalOrders,
-                color: "red",
-                icon: "🚨",
-              },
-              {
-                title: "Pending QC",
-                value: dashboardData.overview.pendingQC,
-                total: dashboardData.overview.totalBatches,
-                color: "orange",
-                icon: "🔍",
-              },
-              {
-                title: "Active Stations",
-                value: dashboardData.workstationEfficiency.filter(w => w.status === 'ACTIVE').length,
-                total: dashboardData.overview.totalWorkstations,
-                color: "green",
-                icon: "🏭",
-              },
-            ].map((stat) => (
-              <Card
-                key={stat.title}
-                padding="lg"
-                style={{
-                  background: "rgba(30, 41, 59, 0.9)",
-                  border: "1px solid rgba(51, 65, 85, 0.8)",
-                  borderRadius: "12px",
-                  textAlign: "center",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 8px 16px rgba(0, 0, 0, 0.3)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
-                }}
-              >
-                <Text size="xl" style={{ marginBottom: 8, fontSize: "1.5rem" }}>
-                  {stat.icon}
-                </Text>
-                <Text size="xl" fw={700} style={{ color: "#f1f5f9", marginBottom: 4, fontSize: "2rem" }}>
-                  {stat.value}
-                </Text>
-                <Text size="sm" style={{ color: "#cbd5e1", marginBottom: 8, fontWeight: 500 }}>
-                  {stat.title}
-                </Text>
-                <Badge
-                  color={stat.color}
-                  variant="light"
-                  size="sm"
-                  style={{ fontWeight: 600 }}
-                >
-                  {Math.round((stat.value / stat.total) * 100)}%
-                </Badge>
-              </Card>
-            ))}
-            </div>
+            
+            <StatsGrid>
+              <StatCard
+                title="Active Batches"
+                value={dashboardData.overview.activeBatches}
+                icon="⚡"
+                color={theme.colors.primary}
+                trendValue={`${Math.round((dashboardData.overview.activeBatches / dashboardData.overview.totalBatches) * 100)}%`}
+                trend="neutral"
+              />
+              <StatCard
+                title="Rush Orders"
+                value={dashboardData.overview.rushOrders}
+                icon="🚨"
+                color={theme.colors.error}
+                trendValue={`${Math.round((dashboardData.overview.rushOrders / dashboardData.overview.totalOrders) * 100)}%`}
+                trend="up"
+              />
+              <StatCard
+                title="Pending QC"
+                value={dashboardData.overview.pendingQC}
+                icon="🔍"
+                color={theme.colors.warning}
+                trendValue={`${Math.round((dashboardData.overview.pendingQC / dashboardData.overview.totalBatches) * 100)}%`}
+                trend="neutral"
+              />
+              <StatCard
+                title="Active Stations"
+                value={dashboardData.workstationEfficiency.filter(w => w.status === 'ACTIVE').length}
+                icon="🏭"
+                color={theme.colors.success}
+                trendValue={`${Math.round((dashboardData.workstationEfficiency.filter(w => w.status === 'ACTIVE').length / dashboardData.overview.totalWorkstations) * 100)}%`}
+                trend="up"
+              />
+            </StatsGrid>
           </>
         )}
 
@@ -729,7 +501,6 @@ export default function HomePage() {
 
         </div> {/* End of Collapsible Dashboard Content */}
 
-      </div>
-    </main>
+    </PageLayout>
   );
 }

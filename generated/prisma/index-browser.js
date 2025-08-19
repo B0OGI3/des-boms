@@ -229,6 +229,65 @@ exports.Prisma.BatchScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkOrderItemScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  serialNumber: 'serialNumber',
+  itemNumber: 'itemNumber',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  currentStepId: 'currentStepId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkOrderStepProgressScalarFieldEnum = {
+  id: 'id',
+  workOrderItemId: 'workOrderItemId',
+  routingStepId: 'routingStepId',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  operatorId: 'operatorId',
+  actualTime: 'actualTime',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkOrderQualityCheckScalarFieldEnum = {
+  id: 'id',
+  workOrderItemId: 'workOrderItemId',
+  routingStepId: 'routingStepId',
+  checkType: 'checkType',
+  result: 'result',
+  checkedBy: 'checkedBy',
+  checkedAt: 'checkedAt',
+  measurements: 'measurements',
+  defects: 'defects',
+  correctedBy: 'correctedBy',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkOrderMaterialUsageScalarFieldEnum = {
+  id: 'id',
+  workOrderItemId: 'workOrderItemId',
+  materialPartId: 'materialPartId',
+  routingStepId: 'routingStepId',
+  quantityUsed: 'quantityUsed',
+  unitCost: 'unitCost',
+  consumedAt: 'consumedAt',
+  operatorId: 'operatorId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MaterialConsumptionScalarFieldEnum = {
   id: 'id',
   batchId: 'batchId',
@@ -419,12 +478,27 @@ exports.BatchStatus = exports.$Enums.BatchStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.WorkOrderItemStatus = exports.$Enums.WorkOrderItemStatus = {
+  QUEUED: 'QUEUED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  ON_HOLD: 'ON_HOLD',
+  REWORK: 'REWORK',
+  SCRAPPED: 'SCRAPPED'
+};
+
 exports.StepStatus = exports.$Enums.StepStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
   SKIPPED: 'SKIPPED',
   FAILED: 'FAILED'
+};
+
+exports.QCResult = exports.$Enums.QCResult = {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  REWORK_REQUIRED: 'REWORK_REQUIRED'
 };
 
 exports.OperatorShift = exports.$Enums.OperatorShift = {
@@ -452,12 +526,6 @@ exports.ConfirmationStatus = exports.$Enums.ConfirmationStatus = {
   FLAGGED: 'FLAGGED'
 };
 
-exports.QCResult = exports.$Enums.QCResult = {
-  PASS: 'PASS',
-  FAIL: 'FAIL',
-  REWORK_REQUIRED: 'REWORK_REQUIRED'
-};
-
 exports.Prisma.ModelName = {
   Customer: 'Customer',
   PurchaseOrder: 'PurchaseOrder',
@@ -466,6 +534,10 @@ exports.Prisma.ModelName = {
   OrderLineItem: 'OrderLineItem',
   FileAttachment: 'FileAttachment',
   Batch: 'Batch',
+  WorkOrderItem: 'WorkOrderItem',
+  WorkOrderStepProgress: 'WorkOrderStepProgress',
+  WorkOrderQualityCheck: 'WorkOrderQualityCheck',
+  WorkOrderMaterialUsage: 'WorkOrderMaterialUsage',
   MaterialConsumption: 'MaterialConsumption',
   RoutingStep: 'RoutingStep',
   RoutingTemplate: 'RoutingTemplate',

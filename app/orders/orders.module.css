@@ -1,7 +1,7 @@
-/* Orders Page Styles */
+/* Orders Page Styles - Updated with DES-BOMS Theme */
 
 .main {
-  background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   min-height: 100vh;
   padding: 20px;
 }
@@ -24,9 +24,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: radial-gradient(ellipse at top, rgba(59, 130, 246, 0.02) 0%, transparent 70%);
-  border-radius: 20px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, transparent);
+  border-radius: 6px;
   pointer-events: none;
 }
 
@@ -34,17 +34,17 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.15);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .title {
-  color: #e2e8f0;
+  color: #f1f5f9;
   font-size: 2rem;
   font-weight: 700;
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
@@ -53,7 +53,7 @@
 }
 
 .subtitle {
-  color: #64748b;
+  color: #94a3b8;
   font-size: 1rem;
   margin-top: 4px;
   font-weight: 400;
@@ -99,13 +99,22 @@
 }
 
 .card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98));
-  border: 1px solid rgba(51, 65, 85, 0.4);
+  background: rgba(30, 41, 59, 0.9);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(51, 65, 85, 0.8);
   border-radius: 12px;
   backdrop-filter: blur(16px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
 .statsGrid {
@@ -116,10 +125,13 @@
 }
 
 .statCard {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
+  background: rgba(30, 41, 59, 0.9);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(51, 65, 85, 0.8);
   border-radius: 16px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(16px);
   position: relative;
   overflow: hidden;
@@ -133,13 +145,17 @@
 }
 
 .statCardActive {
-  border: 2px solid rgba(59, 130, 246, 0.5);
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(59, 130, 246, 0.5);
   transform: translateY(-2px);
 }
 
 .filtersCard {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98));
-  border: 1px solid rgba(51, 65, 85, 0.4);
+  background: rgba(30, 41, 59, 0.9);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(51, 65, 85, 0.8);
   border-radius: 12px;
   margin-bottom: 24px;
   backdrop-filter: blur(16px);
@@ -173,7 +189,9 @@
 
 .input {
   background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(51, 65, 85, 0.4);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(51, 65, 85, 0.4);
   color: #cbd5e1;
   height: 40px;
   font-size: 0.9rem;
@@ -200,8 +218,8 @@
 }
 
 .tableCard {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98));
-  border: 1px solid rgba(51, 65, 85, 0.4);
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.8);
   border-radius: 12px;
   backdrop-filter: blur(16px);
   overflow: hidden;

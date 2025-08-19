@@ -196,6 +196,36 @@ export async function DELETE(
 
     // Use a transaction to delete all related records first
     await prisma.$transaction(async (tx) => {
+      // Delete work order item related data first (individual part tracking)
+      const workOrderItems = await tx.workOrderItem.findMany({
+        where: { batchId: id },
+        select: { id: true }
+      });
+      
+      if (workOrderItems.length > 0) {
+        const itemIds = workOrderItems.map(item => item.id);
+        
+        // Delete work order step progress
+        await tx.workOrderStepProgress.deleteMany({
+          where: { workOrderItemId: { in: itemIds } }
+        });
+        
+        // Delete work order quality checks
+        await tx.workOrderQualityCheck.deleteMany({
+          where: { workOrderItemId: { in: itemIds } }
+        });
+        
+        // Delete work order material usage
+        await tx.workOrderMaterialUsage.deleteMany({
+          where: { workOrderItemId: { in: itemIds } }
+        });
+        
+        // Delete work order items
+        await tx.workOrderItem.deleteMany({
+          where: { batchId: id }
+        });
+      }
+
       // Delete step confirmations first (they reference routing steps)
       for (const step of existingBatch.routingSteps) {
         if (step.confirmations.length > 0) {
@@ -233,7 +263,8 @@ export async function DELETE(
         routingSteps: existingBatch.routingSteps.length,
         stepConfirmations: existingBatch.routingSteps.reduce((total, step) => total + step.confirmations.length, 0),
         qcRecords: existingBatch.qcRecords.length,
-        materialConsumption: existingBatch.materialConsumption.length
+        materialConsumption: existingBatch.materialConsumption.length,
+        workOrderItems: 'Deleted (count not tracked in this response)'
       }
     });
   } catch (error) {

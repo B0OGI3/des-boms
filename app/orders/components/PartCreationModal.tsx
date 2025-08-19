@@ -31,6 +31,7 @@ import {
   IconAlertCircle,
   IconInfoCircle,
   IconRefresh,
+  IconTrash,
 } from '@tabler/icons-react';
 
 // Types
@@ -49,6 +50,15 @@ interface Part {
   standardCost?: number;
   leadTime?: number;
   active?: boolean;
+  notes?: string;
+}
+
+interface BOMComponent {
+  id: string; // Unique identifier for this component entry
+  childPartId: string;
+  childPart?: Part; // Populated when part is loaded
+  quantity: number;
+  unitOfMeasure?: string;
   notes?: string;
 }
 
@@ -120,6 +130,12 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
     notes: '',
   });
 
+  // BOM composition state
+  const [bomComponents, setBomComponents] = useState<BOMComponent[]>([]);
+  const [bomEnabled, setBomEnabled] = useState(false);
+  const [availableParts, setAvailableParts] = useState<Part[]>([]);
+  const [partsLoading, setPartsLoading] = useState(false);
+
   // UI state
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -148,6 +164,11 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
       setSuccess(false);
       setAutoGeneratePN(!initialPartNumber);
       setGeneratedPartNumber('');
+      // Reset BOM state
+      setBomComponents([]);
+      setBomEnabled(false);
+      // Load available parts for BOM selection
+      loadAvailableParts();
     }
   }, [opened, initialPartNumber]);
 
@@ -157,6 +178,57 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
       generatePartNumber(formData.partType);
     }
   }, [formData.partType, autoGeneratePN]);
+
+  // Load available parts for BOM composition
+  const loadAvailableParts = async () => {
+    setPartsLoading(true);
+    try {
+      const response = await fetch('/api/parts');
+      if (response.ok) {
+        const data = await response.json();
+        // Handle different response formats
+        let partsArray = [];
+        if (Array.isArray(data)) {
+          partsArray = data;
+        } else if (data && Array.isArray(data.data)) {
+          partsArray = data.data;
+        } else if (data && Array.isArray(data.parts)) {
+          partsArray = data.parts;
+        }
+        setAvailableParts(partsArray);
+      }
+    } catch (error) {
+      console.error('Error loading parts:', error);
+    } finally {
+      setPartsLoading(false);
+    }
+  };
+
+  // BOM composition helper functions
+  const addBOMComponent = () => {
+    const newComponent: BOMComponent = {
+      id: Date.now().toString(),
+      childPartId: '',
+      quantity: 1,
+      unitOfMeasure: 'EA',
+      notes: '',
+    };
+    setBomComponents(prev => [...prev, newComponent]);
+  };
+
+  const updateBOMComponent = (id: string, field: keyof BOMComponent, value: any) => {
+    setBomComponents(prev => prev.map(comp => 
+      comp.id === id ? { ...comp, [field]: value } : comp
+    ));
+  };
+
+  const removeBOMComponent = (id: string) => {
+    setBomComponents(prev => prev.filter(comp => comp.id !== id));
+  };
+
+  const getSelectedPart = (partId: string): Part | undefined => {
+    return availableParts.find(part => part.id === partId);
+  };
 
   const generatePartNumber = async (partType: PartType) => {
     try {
@@ -210,6 +282,22 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
       newErrors.leadTime = 'Lead time cannot be negative';
     }
 
+    // BOM validation
+    if (bomEnabled && bomComponents.length > 0) {
+      const bomErrors: string[] = [];
+      bomComponents.forEach((comp, index) => {
+        if (!comp.childPartId) {
+          bomErrors.push(`Component ${index + 1}: Part selection is required`);
+        }
+        if (!comp.quantity || comp.quantity <= 0) {
+          bomErrors.push(`Component ${index + 1}: Quantity must be greater than 0`);
+        }
+      });
+      if (bomErrors.length > 0) {
+        newErrors.bom = bomErrors.join('; ');
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -221,13 +309,29 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
     setErrors({});
 
     try {
+      // Prepare part data
+      const partData = {
+        ...formData,
+        standardCost: formData.standardCost || null,
+        leadTime: formData.leadTime || null,
+      };
+
+      // Prepare BOM data if enabled
+      const bomData = bomEnabled && bomComponents.length > 0 ? {
+        components: bomComponents.map(comp => ({
+          childPartId: comp.childPartId,
+          quantity: comp.quantity,
+          unitOfMeasure: comp.unitOfMeasure || 'EA',
+          notes: comp.notes || '',
+        }))
+      } : null;
+
       const response = await fetch('/api/parts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          standardCost: formData.standardCost || null,
-          leadTime: formData.leadTime || null,
+          part: partData,
+          bom: bomData,
         }),
       });
 
@@ -481,6 +585,139 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
           minRows={2}
           maxRows={3}
         />
+
+        {/* BOM Composition Section */}
+        <Divider label="BOM Composition" labelPosition="left" />
+        
+        <Card withBorder p="md">
+          <Stack gap="sm">
+            <Group justify="space-between" align="center">
+              <Group gap="sm">
+                <Text fw={500}>Part Composition</Text>
+                <Badge 
+                  color={bomEnabled ? "green" : "gray"} 
+                  variant="light"
+                  leftSection={bomEnabled ? <IconCheck size={12} /> : undefined}
+                >
+                  {bomEnabled ? "Enabled" : "Disabled"}
+                </Badge>
+              </Group>
+              <Switch
+                checked={bomEnabled}
+                onChange={(e) => {
+                  setBomEnabled(e.currentTarget.checked);
+                  if (!e.currentTarget.checked) {
+                    setBomComponents([]);
+                  }
+                }}
+                label="This part is made of other parts"
+                size="sm"
+              />
+            </Group>
+
+            {bomEnabled && (
+              <Stack gap="sm">
+                <Text size="sm" c="dimmed">
+                  Specify the parts and quantities that make up this assembly
+                </Text>
+                
+                {errors.bom && (
+                  <Alert color="red" icon={<IconAlertCircle size={16} />}>
+                    {errors.bom}
+                  </Alert>
+                )}
+
+                {bomComponents.length > 0 && (
+                  <Card withBorder p="sm">
+                    <Stack gap="xs">
+                      {bomComponents.map((component, index) => {
+                        const selectedPart = getSelectedPart(component.childPartId);
+                        return (
+                          <Group key={component.id} gap="sm" align="flex-start">
+                            <Text size="sm" c="dimmed" style={{ minWidth: '20px' }}>
+                              {index + 1}.
+                            </Text>
+                            <div style={{ flex: 1 }}>
+                              <Select
+                                placeholder="Select component part"
+                                data={availableParts.map(part => ({
+                                  value: part.id,
+                                  label: `${part.partNumber} - ${part.partName}`,
+                                }))}
+                                value={component.childPartId}
+                                onChange={(value) => updateBOMComponent(component.id, 'childPartId', value || '')}
+                                searchable
+                                size="sm"
+                                disabled={partsLoading}
+                              />
+                              {selectedPart && (
+                                <Text size="xs" c="dimmed" mt={2}>
+                                  {selectedPart.description}
+                                </Text>
+                              )}
+                            </div>
+                            <NumberInput
+                              placeholder="Qty"
+                              value={component.quantity}
+                              onChange={(value) => updateBOMComponent(component.id, 'quantity', value || 1)}
+                              min={0.001}
+                              decimalScale={3}
+                              style={{ width: '80px' }}
+                              size="sm"
+                            />
+                            <Select
+                              placeholder="Unit"
+                              data={unitOptions}
+                              value={component.unitOfMeasure}
+                              onChange={(value) => updateBOMComponent(component.id, 'unitOfMeasure', value || 'EA')}
+                              style={{ width: '80px' }}
+                              size="sm"
+                            />
+                            <ActionIcon
+                              color="red"
+                              variant="light"
+                              onClick={() => removeBOMComponent(component.id)}
+                              size="sm"
+                            >
+                              <IconTrash size={14} />
+                            </ActionIcon>
+                          </Group>
+                        );
+                      })}
+                    </Stack>
+                  </Card>
+                )}
+
+                <Group justify="flex-start">
+                  <Button
+                    leftSection={<IconPlus size={16} />}
+                    variant="light"
+                    onClick={addBOMComponent}
+                    size="sm"
+                    disabled={partsLoading}
+                  >
+                    Add Component
+                  </Button>
+                  {partsLoading && (
+                    <Group gap="xs">
+                      <Loader size="xs" />
+                      <Text size="sm" c="dimmed">Loading parts...</Text>
+                    </Group>
+                  )}
+                </Group>
+
+                {bomComponents.length > 0 && (
+                  <Alert color="blue" icon={<IconInfoCircle size={16} />}>
+                    <Text size="sm">
+                      This part will be created with {bomComponents.length} component{bomComponents.length !== 1 ? 's' : ''}.
+                      The BOM structure will be automatically validated for hierarchy compliance.
+                    </Text>
+                  </Alert>
+                )}
+              </Stack>
+            )}
+          </Stack>
+        </Card>
 
         {/* Action Buttons */}
         <Group justify="flex-end" gap="sm" mt="md">

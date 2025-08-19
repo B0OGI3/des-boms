@@ -485,9 +485,11 @@ export function BatchTable({
                                     background: "rgba(255, 255, 255, 0.9)",
                                     padding: "12px",
                                     borderRadius: "8px",
-                                    border: step.id === currentStep?.id 
-                                      ? "2px solid #3b82f6" 
-                                      : "1px solid rgba(203, 213, 225, 0.5)",
+                                    borderWidth: step.id === currentStep?.id ? "2px" : "1px",
+                                    borderStyle: "solid",
+                                    borderColor: step.id === currentStep?.id 
+                                      ? "#3b82f6" 
+                                      : "rgba(203, 213, 225, 0.5)",
                                   }}
                                 >
                                   <Group justify="space-between" align="center" style={{ marginBottom: 6 }}>

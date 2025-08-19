@@ -1,20 +1,31 @@
 /**
  * BOM (Bill of Materials) API
- * Manages BOM structures and component relationships
+ * Manages hierarchical BOM structures with proper part type relationships
+ * - Finished Goods (FG-) can contain Semi-Finished (SF-) and Raw Materials (RM-)
+ * - Semi-Finished (SF-) can contain Raw Materials (RM-)
+ * - Raw Materials (RM-) cannot contain other components
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
+import { 
+  getFullBOMStructure, 
+  validateBOMComponentAddition, 
+  getRawMaterialsForPart,
+  getBOMManufacturingSequence
+} from '../../../lib/bomUtils';
 
 /**
- * GET /api/bom - Get BOM structure for a part
+ * GET /api/bom - Get hierarchical BOM structure for a part
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const partId = searchParams.get('partId');
     const partNumber = searchParams.get('partNumber');
-    const levels = parseInt(searchParams.get('levels') || '1');
+    const quantity = parseInt(searchParams.get('quantity') || '1');
+    const materialsOnly = searchParams.get('materialsOnly') === 'true';
+    const manufacturingSequence = searchParams.get('manufacturingSequence') === 'true';
 
     if (!partId && !partNumber) {
       return NextResponse.json(
@@ -26,87 +37,67 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Find the parent part
-    const whereClause = partId ? { id: partId } : { partNumber: partNumber! };
-    const parentPart = await prisma.part.findUnique({
-      where: whereClause,
-      include: {
-        childBOMs: {
-          include: {
-            childPart: {
-              include: {
-                childBOMs: levels > 1 ? {
-                  include: {
-                    childPart: true
-                  }
-                } : false
-              }
-            }
+    // Find the part
+    let targetPartId = partId;
+    if (!targetPartId && partNumber) {
+      const part = await prisma.part.findUnique({
+        where: { partNumber },
+        select: { id: true }
+      });
+      if (!part) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Part not found' 
           },
-          orderBy: {
-            childPart: {
-              partNumber: 'asc'
-            }
-          }
-        }
+          { status: 404 }
+        );
       }
-    });
+      targetPartId = part.id;
+    }
 
-    if (!parentPart) {
+    // Handle different response types
+    if (materialsOnly) {
+      const materials = await getRawMaterialsForPart(targetPartId!, quantity);
+      return NextResponse.json({
+        success: true,
+        data: {
+          partId: targetPartId,
+          quantity,
+          rawMaterials: materials,
+          totalRawMaterialCost: materials.reduce((sum, mat) => sum + mat.totalCost, 0)
+        }
+      });
+    }
+
+    if (manufacturingSequence) {
+      const sequence = await getBOMManufacturingSequence(targetPartId!, quantity);
+      return NextResponse.json({
+        success: true,
+        data: {
+          partId: targetPartId,
+          quantity,
+          manufacturingSteps: sequence
+        }
+      });
+    }
+
+    // Get full BOM structure
+    const bomStructure = await getFullBOMStructure(targetPartId!, quantity);
+
+    if (!bomStructure) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Part not found' 
+          error: 'Part not found or no BOM structure available' 
         },
         { status: 404 }
       );
     }
 
-    // Calculate total material costs
-    let totalMaterialCost = 0;
-    const bomStructure = parentPart.childBOMs.map((bom: any) => {
-      const componentCost = (parseFloat(bom.childPart.standardCost) || 0) * parseFloat(bom.quantity);
-      totalMaterialCost += componentCost;
-      
-      return {
-        id: bom.id,
-        quantity: bom.quantity,
-        unitOfMeasure: bom.unitOfMeasure,
-        scrapFactor: bom.scrapFactor,
-        operation: bom.operation,
-        notes: bom.notes,
-        componentCost,
-        childPart: {
-          id: bom.childPart.id,
-          partNumber: bom.childPart.partNumber,
-          partName: bom.childPart.partName,
-          partType: bom.childPart.partType,
-          description: bom.childPart.description,
-          standardCost: bom.childPart.standardCost,
-          unitOfMeasure: bom.childPart.unitOfMeasure,
-          subComponents: levels > 1 ? bom.childPart.childBOMs.length : 0
-        }
-      };
-    });
-
     return NextResponse.json({
       success: true,
-      data: {
-        parentPart: {
-          id: parentPart.id,
-          partNumber: parentPart.partNumber,
-          partName: parentPart.partName,
-          partType: parentPart.partType,
-          description: parentPart.description,
-          standardCost: parentPart.standardCost
-        },
-        bomComponents: bomStructure,
-        summary: {
-          totalComponents: bomStructure.length,
-          totalMaterialCost,
-          levels
-        }
-      }
+      data: bomStructure
     });
 
   } catch (error) {
@@ -123,7 +114,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/bom - Add a component to a BOM
+ * POST /api/bom - Add a component to a BOM with hierarchy validation
  */
 export async function POST(request: NextRequest) {
   try {
@@ -149,32 +140,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if parts exist
-    const [parentPart, childPart] = await Promise.all([
-      prisma.part.findUnique({ where: { id: parentPartId } }),
-      prisma.part.findUnique({ where: { id: childPartId } })
-    ]);
-
-    if (!parentPart || !childPart) {
+    // Validate BOM component addition (hierarchy rules + circular references)
+    const validation = await validateBOMComponentAddition(parentPartId, childPartId);
+    if (!validation.valid) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Parent part or child part not found' 
-        },
-        { status: 404 }
-      );
-    }
-
-    // Check for circular references
-    if (parentPartId === childPartId) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'A part cannot be a component of itself' 
+          error: validation.error 
         },
         { status: 400 }
       );
     }
+
+    // Get child part to inherit unit of measure if not provided
+    const childPart = await prisma.part.findUnique({ 
+      where: { id: childPartId },
+      select: { unitOfMeasure: true, partType: true, partNumber: true }
+    });
 
     // Create the BOM component
     const bomComponent = await prisma.bOMComponent.create({
@@ -182,24 +164,53 @@ export async function POST(request: NextRequest) {
         parentPartId,
         childPartId,
         quantity: parseFloat(quantity),
-        unitOfMeasure: unitOfMeasure || childPart.unitOfMeasure,
+        unitOfMeasure: unitOfMeasure || childPart?.unitOfMeasure,
         scrapFactor: scrapFactor ? parseFloat(scrapFactor) : null,
         operation,
         notes
       },
       include: {
-        parentPart: true,
-        childPart: true
+        parentPart: {
+          select: {
+            id: true,
+            partNumber: true,
+            partName: true,
+            partType: true
+          }
+        },
+        childPart: {
+          select: {
+            id: true,
+            partNumber: true,
+            partName: true,
+            partType: true,
+            standardCost: true,
+            unitOfMeasure: true
+          }
+        }
       }
     });
 
     return NextResponse.json({
       success: true,
-      data: bomComponent
+      data: bomComponent,
+      message: `Successfully added ${bomComponent.childPart.partNumber} to ${bomComponent.parentPart.partNumber} BOM`
     }, { status: 201 });
 
   } catch (error) {
     console.error('Error creating BOM component:', error);
+    
+    // Handle unique constraint violations
+    if (error instanceof Error && error.message.includes('Unique constraint')) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'This component relationship already exists in the BOM'
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { 
         success: false, 

@@ -6,6 +6,8 @@ import { QuickBooksStatus } from "../components/ui/QuickBooksStatus";
 import { QuickBooksCustomerSync } from "../components/ui/QuickBooksCustomerSync";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { usePageInitialization } from "../../hooks/usePageInitialization";
+import { PageLayout, PageHeader } from "../components/ui/StyledComponents";
+import theme from "../theme";
 
 export default function SettingsPage() {
   const { isPageReady, pageInitialization, getProgress } = usePageInitialization({
@@ -22,27 +24,25 @@ export default function SettingsPage() {
       progress={getProgress()}
     />;
   }
+  
   return (
-    <main style={{ padding: "40px 20px", minHeight: "100vh", background: "linear-gradient(135deg, #0f172a, #1e293b)" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <Title order={1} style={{ color: "#f1f5f9", fontSize: "3rem", marginBottom: 16 }}>
-            ⚙️ Settings
-          </Title>
-          <Text size="xl" style={{ color: "#94a3b8" }}>
-            System configuration and preferences
-          </Text>
-        </div>
+    <PageLayout>
+      <PageHeader
+        title="Settings"
+        subtitle="System configuration and preferences"
+        icon="⚙️"
+        accentColor={theme.pageAccents.settings}
+      />
 
         <Stack gap="lg">
           {/* QuickBooks Integration Section */}
           <Card
             padding="xl"
             style={{
-              background: "rgba(30, 41, 59, 0.85)",
-              border: "1px solid rgba(51, 65, 85, 0.7)",
-              borderRadius: "16px",
-              boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)",
+              background: theme.colors.cardPrimary,
+              border: `1px solid ${theme.colors.borderPrimary}`,
+              borderRadius: theme.borderRadius.xl,
+              boxShadow: theme.shadows.lg,
               backdropFilter: "blur(12px)",
             }}
           >
@@ -120,7 +120,6 @@ export default function SettingsPage() {
             </Link>
           </Card>
         </Stack>
-      </div>
-    </main>
+    </PageLayout>
   );
 }

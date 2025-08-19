@@ -77,12 +77,24 @@ export const DeleteOrderConfirmation: React.FC<DeleteOrderConfirmationProps> = (
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          // If response isn't JSON, use status text
+          errorData = { error: response.statusText || 'Delete failed' };
+        }
         console.error('Delete error response:', errorData);
         throw new Error(errorData.error || 'Failed to delete order');
       }
 
-      await response.json(); // Consume response
+      // Only try to consume response if it was successful
+      try {
+        await response.json();
+      } catch {
+        // Response might be empty, which is fine for a successful delete
+        console.log('Delete successful (empty response)');
+      }
 
       onOrderDeleted?.();
       onClose();

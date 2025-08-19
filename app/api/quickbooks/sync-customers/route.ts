@@ -58,37 +58,39 @@ async function deleteLocalCustomersNotInQB(qbIds: Set<string>): Promise<string[]
 }
 
 
-// --- Main Handler ---
-export async function POST() {
-  console.log('[SYNC] Starting QuickBooks sync-customers...');
-  
-  let qbService;
+// --- Service Initialization Helper ---
+async function initializeQuickBooksService(): Promise<{ service: any } | { error: NextResponse }> {
   try {
-    qbService = await getQuickBooksService();
+    const qbService = await getQuickBooksService();
     console.log('[SYNC] QuickBooks service obtained:', !!qbService);
+    
+    if (!qbService) {
+      console.log('[SYNC] QuickBooks service is null - not configured');
+      return { error: NextResponse.json({ error: "QuickBooks not configured." }, { status: 503 }) };
+    }
+    
+    return { service: qbService };
   } catch (err) {
     console.error('[SYNC] Error getting QuickBooks service:', err);
-    return NextResponse.json({ error: "Failed to get QuickBooks service", details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return { error: NextResponse.json({ error: "Failed to get QuickBooks service", details: err instanceof Error ? err.message : String(err) }, { status: 500 }) };
   }
-  
-  if (!qbService) {
-    console.log('[SYNC] QuickBooks service is null - not configured');
-    return NextResponse.json({ error: "QuickBooks not configured." }, { status: 503 });
-  }
+}
 
-  let qbCustomers: QBCustomer[] = [];
+// --- Customer Fetching Helper ---
+async function fetchQuickBooksCustomers(qbService: any): Promise<{ customers: QBCustomer[] } | { error: NextResponse }> {
   try {
     console.log('[SYNC] Calling getAllCustomers...');
-    qbCustomers = await qbService.getAllCustomers();
+    const qbCustomers = await qbService.getAllCustomers();
     console.log('[SYNC] Got customers from QuickBooks:', qbCustomers.length);
+    return { customers: qbCustomers };
   } catch (err) {
     console.error("[SYNC] QuickBooks getAllCustomers error:", err);
-    return NextResponse.json({ error: "QuickBooks API error", details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return { error: NextResponse.json({ error: "QuickBooks API error", details: err instanceof Error ? err.message : String(err) }, { status: 500 }) };
   }
+}
 
-  const qbIds = new Set<string>(qbCustomers.map((c) => c.Id).filter((id): id is string => Boolean(id)));
-
-  // Upsert customers
+// --- Customer Import Helper ---
+async function importCustomers(qbCustomers: QBCustomer[]): Promise<{ imported: number } | { error: NextResponse }> {
   let imported = 0;
   for (const qb of qbCustomers) {
     try {
@@ -96,18 +98,49 @@ export async function POST() {
       imported++;
     } catch (err) {
       console.error("Prisma upsert error for customer", qb.PrimaryEmailAddr?.Address, err);
-      return NextResponse.json({ error: "Database upsert error", details: err instanceof Error ? err.message : String(err), customer: qb.PrimaryEmailAddr?.Address }, { status: 500 });
+      return { error: NextResponse.json({ error: "Database upsert error", details: err instanceof Error ? err.message : String(err), customer: qb.PrimaryEmailAddr?.Address }, { status: 500 }) };
     }
   }
+  return { imported };
+}
 
-  // Delete local customers not in QuickBooks
-  let deleted: string[] = [];
+// --- Customer Cleanup Helper ---
+async function cleanupLocalCustomers(qbIds: Set<string>): Promise<{ deleted: string[] } | { error: NextResponse }> {
   try {
-    deleted = await deleteLocalCustomersNotInQB(qbIds);
+    const deleted = await deleteLocalCustomersNotInQB(qbIds);
+    return { deleted };
   } catch (err) {
     console.error("Prisma delete error for customer", err);
-    return NextResponse.json({ error: "Database delete error", details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return { error: NextResponse.json({ error: "Database delete error", details: err instanceof Error ? err.message : String(err) }, { status: 500 }) };
   }
+}
+
+
+// --- Main Handler ---
+export async function POST() {
+  console.log('[SYNC] Starting QuickBooks sync-customers...');
+  
+  // Initialize QuickBooks service
+  const serviceResult = await initializeQuickBooksService();
+  if ('error' in serviceResult) return serviceResult.error;
+  const qbService = serviceResult.service;
+
+  // Fetch customers from QuickBooks
+  const customersResult = await fetchQuickBooksCustomers(qbService);
+  if ('error' in customersResult) return customersResult.error;
+  const qbCustomers = customersResult.customers;
+
+  const qbIds = new Set<string>(qbCustomers.map((c: QBCustomer) => c.Id).filter((id: string | undefined): id is string => Boolean(id)));
+
+  // Import customers to database
+  const importResult = await importCustomers(qbCustomers);
+  if ('error' in importResult) return importResult.error;
+  const imported = importResult.imported;
+
+  // Clean up local customers not in QuickBooks
+  const cleanupResult = await cleanupLocalCustomers(qbIds);
+  if ('error' in cleanupResult) return cleanupResult.error;
+  const deleted = cleanupResult.deleted;
 
   return NextResponse.json({ imported, deleted });
 }

@@ -68,6 +68,17 @@ interface QCRecord {
         };
       };
     };
+    // BOM-related information for quality control
+    materialConsumption?: Array<{
+      materialPartId: string;
+      materialPart: {
+        partNumber: string;
+        partName: string;
+        partType: string;
+      };
+      quantityUsed: number;
+      unitCost: number;
+    }>;
   };
 }
 
@@ -92,6 +103,17 @@ interface Batch {
     };
   };
   qcRecords: QCRecord[];
+  // BOM-related information for quality tracking
+  materialConsumption?: Array<{
+    materialPartId: string;
+    materialPart: {
+      partNumber: string;
+      partName: string;
+      partType: string;
+    };
+    quantityUsed: number;
+    unitCost: number;
+  }>;
 }
 
 export default function QCPage() {
@@ -204,6 +226,38 @@ export default function QCPage() {
     }
   };
 
+  const getPartTypeColor = (partType: string) => {
+    switch (partType) {
+      case 'FINISHED_GOOD': return 'green';
+      case 'SEMI_FINISHED': return 'orange';
+      case 'RAW_MATERIAL': return 'purple';
+      default: return 'gray';
+    }
+  };
+
+  const getPartTypeLabel = (partType: string) => {
+    switch (partType) {
+      case 'FINISHED_GOOD': return 'FG';
+      case 'SEMI_FINISHED': return 'SF';
+      case 'RAW_MATERIAL': return 'RM';
+      default: return partType;
+    }
+  };
+
+  const getMaterialSummary = (batch: Batch | QCRecord['batch']) => {
+    if (!batch.materialConsumption || batch.materialConsumption.length === 0) {
+      return 'No material consumption data';
+    }
+    
+    const summary = batch.materialConsumption
+      .slice(0, 3) // Show first 3 materials
+      .map(mc => `${mc.materialPart.partNumber}`)
+      .join(', ');
+    
+    const more = batch.materialConsumption.length > 3 ? ` +${batch.materialConsumption.length - 3} more` : '';
+    return summary + more;
+  };
+
   const filteredRecords = qcRecords.filter(record => 
     !searchTerm || 
     record.batch.batchId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -240,10 +294,55 @@ export default function QCPage() {
           </Text>
         </div>
 
+        {/* BOM-Aware Quality Control Info */}
+        <Card style={{ 
+          background: "rgba(16, 185, 129, 0.1)",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgba(16, 185, 129, 0.3)",
+          marginBottom: 32
+        }}>
+          <Title order={4} style={{ color: "#10b981", marginBottom: 12 }}>
+            🧬 BOM-Aware Quality Control
+          </Title>
+          <Text style={{ color: "#059669", marginBottom: 8 }}>
+            <strong>Material Traceability:</strong> Quality inspection tracks both finished products and their BOM material hierarchy
+          </Text>
+          <Text size="sm" style={{ color: "#047857" }}>
+            • Finished Goods (FG-) inspections validate both the final product and underlying Semi-Finished/Raw Material quality<br/>
+            • Semi-Finished parts (SF-) quality directly impacts the Finished Goods that contain them<br/>
+            • Material consumption data shows exactly which raw materials went into each batch<br/>
+            • Quality failures can be traced back through the BOM hierarchy to source materials<br/>
+            • Pass/Fail/Rework decisions consider the material cost and BOM impact
+          </Text>
+          <Group gap="sm" mt="md">
+            <Button
+              component="a"
+              href="/parts-demo"
+              variant="light"
+              color="purple"
+              size="sm"
+            >
+              View BOM Structure
+            </Button>
+            <Button
+              component="a"
+              href="/batches"
+              variant="light"
+              color="green"
+              size="sm"
+            >
+              View Batch Materials
+            </Button>
+          </Group>
+        </Card>
+
         {/* Inspector Setup */}
-        <Card withBorder style={{ 
+        <Card style={{ 
           background: "rgba(30, 41, 59, 0.85)",
-          border: "1px solid rgba(51, 65, 85, 0.7)",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgba(51, 65, 85, 0.7)",
           marginBottom: 32
         }}>
           <Grid>
@@ -286,9 +385,11 @@ export default function QCPage() {
         <Grid>
           {/* Batches Needing Inspection */}
           <Grid.Col span={6}>
-            <Card withBorder style={{ 
+            <Card style={{ 
               background: "rgba(30, 41, 59, 0.85)",
-              border: "1px solid rgba(51, 65, 85, 0.7)",
+              borderWidth: "1px",
+              borderStyle: "solid",
+              borderColor: "rgba(51, 65, 85, 0.7)",
               height: "fit-content"
             }}>
               <Group justify="space-between" mb="md">
@@ -329,6 +430,9 @@ export default function QCPage() {
                             <Badge color={getPriorityColor(batch.priority)} size="xs">
                               {batch.priority}
                             </Badge>
+                            <Badge color={getPartTypeColor(batch.lineItem.part.partType)} size="xs">
+                              {getPartTypeLabel(batch.lineItem.part.partType)}
+                            </Badge>
                           </Group>
                           <Text size="xs" style={{ color: "#cbd5e1" }}>
                             {batch.lineItem.part.partNumber} - {batch.lineItem.part.partName}
@@ -339,6 +443,11 @@ export default function QCPage() {
                           <Text size="xs" style={{ color: "#94a3b8" }}>
                             Quantity: {batch.quantity}
                           </Text>
+                          {batch.materialConsumption && batch.materialConsumption.length > 0 && (
+                            <Text size="xs" style={{ color: "#a855f7", marginTop: 4 }}>
+                              🧬 Materials: {getMaterialSummary(batch)}
+                            </Text>
+                          )}
                         </div>
                         <Button
                           size="xs"
@@ -358,9 +467,11 @@ export default function QCPage() {
 
           {/* QC Records History */}
           <Grid.Col span={6}>
-            <Card withBorder style={{ 
+            <Card style={{ 
               background: "rgba(30, 41, 59, 0.85)",
-              border: "1px solid rgba(51, 65, 85, 0.7)",
+              borderWidth: "1px",
+              borderStyle: "solid",
+              borderColor: "rgba(51, 65, 85, 0.7)",
             }}>
               <Group justify="space-between" mb="md">
                 <Title order={3} style={{ color: "#f1f5f9" }}>
@@ -401,6 +512,9 @@ export default function QCPage() {
                               <Badge color={getResultColor(record.result)} size="xs">
                                 {record.result.replace('_', ' ')}
                               </Badge>
+                              <Badge color={getPartTypeColor(record.batch.lineItem.part.partType)} size="xs">
+                                {getPartTypeLabel(record.batch.lineItem.part.partType)}
+                              </Badge>
                             </Group>
                             <Text size="xs" style={{ color: "#cbd5e1" }}>
                               {record.batch.lineItem.part.partNumber} - {record.batch.lineItem.part.partName}
@@ -408,6 +522,11 @@ export default function QCPage() {
                             <Text size="xs" style={{ color: "#94a3b8" }}>
                               Inspector: {record.inspector} • {new Date(record.inspectionDate).toLocaleDateString()}
                             </Text>
+                            {record.batch.materialConsumption && record.batch.materialConsumption.length > 0 && (
+                              <Text size="xs" style={{ color: "#a855f7", marginTop: 4 }}>
+                                🧬 Materials: {getMaterialSummary(record.batch)}
+                              </Text>
+                            )}
                             {record.notes && (
                               <Text size="xs" style={{ color: "#94a3b8", fontStyle: "italic" }}>
                                 Notes: {record.notes}
@@ -510,9 +629,11 @@ export default function QCPage() {
         >
           <Stack gap="md">
             {newQCModal.batch && (
-              <Card withBorder style={{ 
+              <Card style={{ 
                 background: "rgba(51, 65, 85, 0.3)",
-                border: "1px solid rgba(71, 85, 105, 0.5)"
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: "rgba(71, 85, 105, 0.5)"
               }}>
                 <Text size="sm" style={{ color: "#cbd5e1" }}>
                   <strong>Batch:</strong> {newQCModal.batch.batchId}
@@ -520,12 +641,22 @@ export default function QCPage() {
                 <Text size="sm" style={{ color: "#cbd5e1" }}>
                   <strong>Part:</strong> {newQCModal.batch.lineItem.part.partNumber} - {newQCModal.batch.lineItem.part.partName}
                 </Text>
+                <Group gap="xs" style={{ marginTop: 4, marginBottom: 4 }}>
+                  <Badge color={getPartTypeColor(newQCModal.batch.lineItem.part.partType)} size="sm">
+                    {getPartTypeLabel(newQCModal.batch.lineItem.part.partType)} - {newQCModal.batch.lineItem.part.partType.replace('_', ' ')}
+                  </Badge>
+                </Group>
                 <Text size="sm" style={{ color: "#cbd5e1" }}>
                   <strong>Quantity:</strong> {newQCModal.batch.quantity}
                 </Text>
                 <Text size="sm" style={{ color: "#cbd5e1" }}>
                   <strong>Customer:</strong> {newQCModal.batch.lineItem.purchaseOrder.customer.name}
                 </Text>
+                {newQCModal.batch.materialConsumption && newQCModal.batch.materialConsumption.length > 0 && (
+                  <Text size="sm" style={{ color: "#a855f7", marginTop: 8 }}>
+                    <strong>🧬 Materials Used:</strong> {getMaterialSummary(newQCModal.batch)}
+                  </Text>
+                )}
               </Card>
             )}
             

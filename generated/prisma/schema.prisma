@@ -97,7 +97,8 @@ model Part {
   orderLineItems OrderLineItem[]
 
   // Material Consumption Relations
-  materialConsumptions MaterialConsumption[]
+  materialConsumptions   MaterialConsumption[]
+  workOrderMaterialUsage WorkOrderMaterialUsage[]
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -185,10 +186,101 @@ model Batch {
   routingSteps        RoutingStep[]
   qcRecords           QCRecord[]
   materialConsumption MaterialConsumption[] // Track raw material usage
+  workOrderItems      WorkOrderItem[] // Individual part tracking
 
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Work Order Item - Individual part tracking within a batch
+model WorkOrderItem {
+  id            String              @id @default(cuid())
+  batch         Batch               @relation(fields: [batchId], references: [id])
+  batchId       String
+  serialNumber  String              @unique // Unique identifier for this individual part
+  itemNumber    Int // Sequential number within batch (1, 2, 3...)
+  status        WorkOrderItemStatus @default(QUEUED)
+  startedAt     DateTime? // When manufacturing started for this item
+  completedAt   DateTime? // When this item was finished
+  currentStepId String? // Current routing step for this item
+  notes         String? // Item-specific notes
+
+  // Relations
+  stepProgress  WorkOrderStepProgress[] // Track progress through each step
+  qualityChecks WorkOrderQualityCheck[] // QC records for this specific item
+  materialUsage WorkOrderMaterialUsage[] // Materials used for this specific item
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([batchId, itemNumber]) // Ensure unique item numbers per batch
+}
+
+// Work Order Step Progress - Track individual item progress through routing steps
+model WorkOrderStepProgress {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  routingStep     RoutingStep   @relation(fields: [routingStepId], references: [id])
+  routingStepId   String
+  status          StepStatus    @default(PENDING)
+  startedAt       DateTime? // When this step started for this item
+  completedAt     DateTime? // When this step completed for this item
+  operatorId      String? // Who worked on this step
+  actualTime      Int? // Actual time taken in minutes
+  notes           String? // Step-specific notes for this item
+  photoUrl        String? // Photo documentation
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workOrderItemId, routingStepId]) // One progress record per item per step
+}
+
+// Work Order Quality Check - Quality control for individual items
+model WorkOrderQualityCheck {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  routingStep     RoutingStep?  @relation(fields: [routingStepId], references: [id])
+  routingStepId   String? // Optional - can be final inspection
+  checkType       String // "IN_PROCESS", "FINAL_INSPECTION", "DIMENSIONAL", etc.
+  result          QCResult
+  checkedBy       String // Inspector name/ID
+  checkedAt       DateTime      @default(now())
+  measurements    String? // JSON string of measurements
+  defects         String? // Description of any defects found
+  correctedBy     String? // Who fixed issues (if any)
+  notes           String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Work Order Material Usage - Track materials used for specific items
+model WorkOrderMaterialUsage {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  materialPart    Part          @relation(fields: [materialPartId], references: [id])
+  materialPartId  String
+  routingStep     RoutingStep?  @relation(fields: [routingStepId], references: [id])
+  routingStepId   String? // Which step consumed this material
+  quantityUsed    Decimal // Quantity used for this specific item
+  unitCost        Decimal? // Cost per unit
+  consumedAt      DateTime      @default(now())
+  operatorId      String? // Who recorded the usage
+  notes           String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workOrderItemId, materialPartId, routingStepId]) // One usage record per item per material per step
 }
 
 // Material Consumption - Track raw materials used in batches
@@ -226,7 +318,10 @@ model RoutingStep {
   status        StepStatus  @default(PENDING)
 
   // Relations
-  confirmations StepConfirmation[]
+  confirmations          StepConfirmation[]
+  workOrderProgress      WorkOrderStepProgress[]
+  workOrderQualityChecks WorkOrderQualityCheck[]
+  workOrderMaterialUsage WorkOrderMaterialUsage[]
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -494,4 +589,13 @@ enum WorkstationCategory {
   PREP // Material preparation
   FINISHING // Surface finishing, painting
   OTHER // Other specialized operations
+}
+
+enum WorkOrderItemStatus {
+  QUEUED // Waiting to start manufacturing
+  IN_PROGRESS // Currently being manufactured
+  COMPLETED // Manufacturing completed
+  ON_HOLD // Temporarily stopped
+  REWORK // Requires rework
+  SCRAPPED // Item scrapped/rejected
 }

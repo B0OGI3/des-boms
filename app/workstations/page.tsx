@@ -35,12 +35,14 @@ import {
   TextInput,
   Textarea,
   FileInput,
-  Switch
+  Switch,
+  NumberInput
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { IconPlayerPlay, IconCheck, IconFlag, IconCamera, IconRefresh, IconPlus, IconEdit } from "@tabler/icons-react";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { usePageInitialization } from "../../hooks/usePageInitialization";
+import { WorkOrderTracking } from "../components/WorkOrderTracking";
 
 interface Workstation {
   id: string;
@@ -84,6 +86,8 @@ interface RoutingStep {
       };
     };
   };
+  // BOM-aware material requirements
+  materialRequirements?: string[];
   confirmations?: Array<{
     id: string;
     operatorName: string;
@@ -117,6 +121,8 @@ export default function WorkstationsPage() {
   }>({ open: false, mode: 'add' });
   const [actionNotes, setActionNotes] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [batchMaterials, setBatchMaterials] = useState<any[]>([]);
+  const [materialConsumption, setMaterialConsumption] = useState<{[key: string]: number}>({});
   
   // Workstation form state
   const [workstationForm, setWorkstationForm] = useState({
@@ -239,6 +245,26 @@ export default function WorkstationsPage() {
     return () => clearInterval(interval);
   }, [selectedWorkstation]);
 
+  // Fetch material requirements when step modal opens
+  useEffect(() => {
+    if (stepActionModal.open && stepActionModal.step && stepActionModal.action === 'complete') {
+      fetchBatchMaterials(stepActionModal.step.batch.id);
+    }
+  }, [stepActionModal.open, stepActionModal.step, stepActionModal.action]);
+
+  // Fetch material requirements for a batch
+  const fetchBatchMaterials = async (batchId: string) => {
+    try {
+      const response = await fetch(`/api/batches/${batchId}/materials`);
+      if (response.ok) {
+        const result = await response.json();
+        setBatchMaterials(result.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching batch materials:', error);
+    }
+  };
+
   const handleStepAction = async (action: 'start' | 'complete' | 'flag') => {
     if (!stepActionModal.step) return;
 
@@ -263,6 +289,27 @@ export default function WorkstationsPage() {
       });
 
       if (response.ok) {
+        // If completing a step and we have material consumption data, record it
+        if (action === 'complete' && stepActionModal.step && Object.keys(materialConsumption).length > 0) {
+          try {
+            await fetch(`/api/batches/${stepActionModal.step.batch.id}/materials`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                consumptions: Object.entries(materialConsumption).map(([partId, actualQuantity]) => ({
+                  partId,
+                  actualQuantity,
+                  stepId: stepActionModal.step!.id
+                }))
+              }),
+            });
+          } catch (error) {
+            console.error('Error recording material consumption:', error);
+          }
+        }
+
         // Refresh routing steps
         const stepsResponse = await fetch(`/api/routing-steps?workstationId=${selectedWorkstation}&status=PENDING,IN_PROGRESS`);
         if (stepsResponse.ok) {
@@ -274,6 +321,8 @@ export default function WorkstationsPage() {
         setStepActionModal({ open: false });
         setActionNotes('');
         setUploadedFile(null);
+        setBatchMaterials([]);
+        setMaterialConsumption({});
       }
     } catch (error) {
       console.error('Error submitting step action:', error);
@@ -362,9 +411,11 @@ export default function WorkstationsPage() {
         </div>
 
         {/* Workstation Management */}
-        <Card withBorder style={{ 
+        <Card style={{ 
           background: "rgba(30, 41, 59, 0.85)",
-          border: "1px solid rgba(51, 65, 85, 0.7)",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgba(51, 65, 85, 0.7)",
           marginBottom: 32
         }}>
           <Group justify="space-between" align="center" mb="md">
@@ -384,9 +435,11 @@ export default function WorkstationsPage() {
           <Grid>
             {workstations.map((workstation) => (
               <Grid.Col span={4} key={workstation.id}>
-                <Card withBorder style={{
+                <Card style={{
                   background: "rgba(51, 65, 85, 0.5)",
-                  border: "1px solid rgba(71, 85, 105, 0.5)",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "rgba(71, 85, 105, 0.5)",
                 }}>
                   <Group justify="space-between" align="flex-start">
                     <div style={{ flex: 1 }}>
@@ -430,9 +483,11 @@ export default function WorkstationsPage() {
         </Card>
 
         {/* Workstation Selection */}
-        <Card withBorder style={{ 
+        <Card style={{ 
           background: "rgba(30, 41, 59, 0.85)",
-          border: "1px solid rgba(51, 65, 85, 0.7)",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgba(51, 65, 85, 0.7)",
           marginBottom: 32
         }}>
           <Title order={3} style={{ color: "#f1f5f9", marginBottom: 16 }}>
@@ -478,24 +533,27 @@ export default function WorkstationsPage() {
           </Grid>
         </Card>
 
-        {/* Batch Integration Info */}
+        {/* BOM Integration Info */}
         {selectedWorkstation && (
-          <Card withBorder style={{ 
+          <Card style={{ 
             background: "rgba(16, 185, 129, 0.1)",
-            border: "1px solid rgba(16, 185, 129, 0.3)",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "rgba(16, 185, 129, 0.3)",
             marginBottom: 32
           }}>
             <Title order={4} style={{ color: "#10b981", marginBottom: 12 }}>
-              📦 How Workstations Work with Batches
+              🧬 BOM-Aware Manufacturing Process
             </Title>
             <Text style={{ color: "#059669", marginBottom: 8 }}>
-              <strong>Workflow:</strong> Orders → Batches → Routing Steps → Workstations
+              <strong>Material Hierarchy:</strong> Orders → Batches → BOM Structure → Material Requirements → Workstation Steps
             </Text>
             <Text size="sm" style={{ color: "#047857" }}>
-              • Each batch (created from orders) contains routing steps assigned to specific workstations<br/>
-              • Routing steps appear in this workstation's job queue when assigned<br/>
-              • Complete routing steps here to move batches through the manufacturing process<br/>
-              • All step actions are tracked and linked back to the original batch and order
+              • Finished Goods (FG-) contain Semi-Finished + Raw Materials according to BOM hierarchy<br/>
+              • Semi-Finished parts (SF-) use Raw Materials as defined in their BOM structure<br/>
+              • Each routing step shows required materials and tracks consumption<br/>
+              • Material requirements are calculated from BOM structure and scaled by batch quantity<br/>
+              • All material consumption is tracked and linked back to source parts and costs
             </Text>
             <Group gap="sm" mt="md">
               <Button
@@ -516,8 +574,62 @@ export default function WorkstationsPage() {
               >
                 View Orders
               </Button>
+              <Button
+                component="a"
+                href="/parts-demo"
+                variant="light"
+                color="purple"
+                size="sm"
+              >
+                View BOM Structure
+              </Button>
             </Group>
           </Card>
+        )}
+
+        {/* Material Requirements Overview */}
+        {selectedWorkstation && routingSteps.length > 0 && (
+          <Card style={{ 
+            background: "rgba(30, 41, 59, 0.85)",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "rgba(51, 65, 85, 0.7)",
+            marginBottom: 24
+          }}>
+            <Group justify="space-between" align="center" mb="md">
+              <Title order={3} style={{ color: "#f1f5f9" }}>
+                🔧 Active Material Requirements
+              </Title>
+              <Text size="sm" style={{ color: "#94a3b8" }}>
+                {routingSteps.length} active step{routingSteps.length !== 1 ? 's' : ''}
+              </Text>
+            </Group>
+            
+            <Text size="sm" style={{ color: "#cbd5e1", marginBottom: 16 }}>
+              Material requirements for current manufacturing steps. Monitor BOM component consumption in real-time.
+            </Text>
+            
+            <Group gap="sm">
+              {routingSteps.slice(0, 3).map((step) => (
+                <Badge key={step.id} variant="light" color="blue" size="sm">
+                  {step.batch.lineItem?.part?.partNumber || 'N/A'}
+                </Badge>
+              ))}
+              {routingSteps.length > 3 && (
+                <Badge variant="outline" color="gray" size="sm">
+                  +{routingSteps.length - 3} more
+                </Badge>
+              )}
+            </Group>
+          </Card>
+        )}
+
+        {/* Individual Part Tracking */}
+        {selectedWorkstation && (
+          <WorkOrderTracking 
+            batchId={routingSteps[0]?.batch?.id || ''} 
+            workstationId={selectedWorkstation} 
+          />
         )}
 
         {/* Job Queue */}
@@ -541,10 +653,11 @@ export default function WorkstationsPage() {
                 {routingSteps.map((step) => (
                   <Card
                     key={step.id}
-                    withBorder
                     style={{
                       background: "rgba(30, 41, 59, 0.85)",
-                      border: "1px solid rgba(51, 65, 85, 0.7)",
+                      borderWidth: "1px",
+                      borderStyle: "solid",
+                      borderColor: "rgba(51, 65, 85, 0.7)",
                     }}
                   >
                     <Grid align="center">
@@ -561,16 +674,26 @@ export default function WorkstationsPage() {
                               <Badge color={getPriorityColor(step.batch.priority)} variant="outline">
                                 {step.batch.priority}
                               </Badge>
-                              <Badge color={getPartTypeColor(step.batch.lineItem.part.partType)} variant="light">
-                                {getPartTypeLabel(step.batch.lineItem.part.partType)}
+                              <Badge color={getPartTypeColor(step.batch.lineItem?.part?.partType)} variant="light">
+                                {getPartTypeLabel(step.batch.lineItem?.part?.partType)}
                               </Badge>
                             </Group>
                             <Text size="sm" style={{ color: "#cbd5e1" }}>
-                              Batch: {step.batch.batchId} • Part: {step.batch.lineItem.part.partNumber} ({step.batch.lineItem.part.partName})
+                              Batch: {step.batch.batchId} • Part: {step.batch.lineItem?.part?.partNumber || 'N/A'} ({step.batch.lineItem?.part?.partName || 'N/A'})
                             </Text>
                             <Text size="sm" style={{ color: "#94a3b8" }}>
-                              Customer: {step.batch.lineItem.purchaseOrder.customer.name} • Est. Time: {step.estimatedTime}min
+                              Customer: {step.batch.lineItem?.purchaseOrder?.customer?.name || 'N/A'} • Est. Time: {step.estimatedTime}min
                             </Text>
+                            {step.materialRequirements && step.materialRequirements.length > 0 && (
+                              <div style={{ marginTop: 8 }}>
+                                <Text size="xs" fw={500} style={{ color: "#a855f7", marginBottom: 4 }}>
+                                  🧬 Material Requirements:
+                                </Text>
+                                <Text size="xs" style={{ color: "#c084fc", fontFamily: "monospace" }}>
+                                  {step.materialRequirements.join(' • ')}
+                                </Text>
+                              </div>
+                            )}
                             {step.notes && (
                               <Text size="sm" style={{ color: "#94a3b8", fontStyle: "italic" }}>
                                 Notes: {step.notes}
@@ -805,7 +928,63 @@ export default function WorkstationsPage() {
                 <Text size="sm" style={{ color: "#94a3b8" }}>
                   Batch: {stepActionModal.step.batch.batchId}
                 </Text>
+                <Text size="sm" style={{ color: "#94a3b8" }}>
+                  Part: {stepActionModal.step.batch.lineItem?.part?.partNumber || 'N/A'} - {stepActionModal.step.batch.lineItem?.part?.partName || 'N/A'}
+                </Text>
               </div>
+            )}
+
+            {/* Material Requirements for Complete Action */}
+            {stepActionModal.action === 'complete' && batchMaterials.length > 0 && (
+              <Card style={{
+                background: "rgba(51, 65, 85, 0.3)",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: "rgba(71, 85, 105, 0.5)"
+              }}>
+                <Title order={4} style={{ color: "#f1f5f9", marginBottom: 12 }}>
+                  🔧 Material Consumption
+                </Title>
+                <Text size="sm" style={{ color: "#cbd5e1", marginBottom: 16 }}>
+                  Record actual material consumption for this manufacturing step:
+                </Text>
+                
+                <Stack gap="md">
+                  {batchMaterials.map((material: any) => (
+                    <Group key={material.partId} justify="space-between" align="center">
+                      <div style={{ flex: 1 }}>
+                        <Text fw={500} size="sm" style={{ color: "#f1f5f9" }}>
+                          {material.part?.partNumber} - {material.part?.partName}
+                        </Text>
+                        <Text size="xs" style={{ color: "#94a3b8" }}>
+                          Required: {material.requiredQuantity} {material.part?.unitOfMeasure || 'units'} • 
+                          Available: {material.availableQuantity || 0} • 
+                          Variance: {material.variance || 0}
+                        </Text>
+                      </div>
+                      <NumberInput
+                        placeholder="Consumed"
+                        size="sm"
+                        min={0}
+                        max={material.availableQuantity || 999}
+                        value={materialConsumption[material.partId] || 0}
+                        onChange={(value: string | number) => setMaterialConsumption(prev => ({
+                          ...prev,
+                          [material.partId]: Number(value) || 0
+                        }))}
+                        styles={{
+                          input: { 
+                            background: "rgba(51, 65, 85, 0.5)",
+                            border: "1px solid rgba(71, 85, 105, 0.5)",
+                            color: "#f1f5f9",
+                            width: "120px"
+                          }
+                        }}
+                      />
+                    </Group>
+                  ))}
+                </Stack>
+              </Card>
             )}
             
             <Textarea

@@ -49,6 +49,26 @@ export type FileAttachment = $Result.DefaultSelection<Prisma.$FileAttachmentPayl
  */
 export type Batch = $Result.DefaultSelection<Prisma.$BatchPayload>
 /**
+ * Model WorkOrderItem
+ * 
+ */
+export type WorkOrderItem = $Result.DefaultSelection<Prisma.$WorkOrderItemPayload>
+/**
+ * Model WorkOrderStepProgress
+ * 
+ */
+export type WorkOrderStepProgress = $Result.DefaultSelection<Prisma.$WorkOrderStepProgressPayload>
+/**
+ * Model WorkOrderQualityCheck
+ * 
+ */
+export type WorkOrderQualityCheck = $Result.DefaultSelection<Prisma.$WorkOrderQualityCheckPayload>
+/**
+ * Model WorkOrderMaterialUsage
+ * 
+ */
+export type WorkOrderMaterialUsage = $Result.DefaultSelection<Prisma.$WorkOrderMaterialUsagePayload>
+/**
  * Model MaterialConsumption
  * 
  */
@@ -215,6 +235,18 @@ export const WorkstationCategory: {
 
 export type WorkstationCategory = (typeof WorkstationCategory)[keyof typeof WorkstationCategory]
 
+
+export const WorkOrderItemStatus: {
+  QUEUED: 'QUEUED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  ON_HOLD: 'ON_HOLD',
+  REWORK: 'REWORK',
+  SCRAPPED: 'SCRAPPED'
+};
+
+export type WorkOrderItemStatus = (typeof WorkOrderItemStatus)[keyof typeof WorkOrderItemStatus]
+
 }
 
 export type PartType = $Enums.PartType
@@ -260,6 +292,10 @@ export const OperatorShift: typeof $Enums.OperatorShift
 export type WorkstationCategory = $Enums.WorkstationCategory
 
 export const WorkstationCategory: typeof $Enums.WorkstationCategory
+
+export type WorkOrderItemStatus = $Enums.WorkOrderItemStatus
+
+export const WorkOrderItemStatus: typeof $Enums.WorkOrderItemStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -455,6 +491,46 @@ export class PrismaClient<
     * ```
     */
   get batch(): Prisma.BatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workOrderItem`: Exposes CRUD operations for the **WorkOrderItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderItems
+    * const workOrderItems = await prisma.workOrderItem.findMany()
+    * ```
+    */
+  get workOrderItem(): Prisma.WorkOrderItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workOrderStepProgress`: Exposes CRUD operations for the **WorkOrderStepProgress** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderStepProgresses
+    * const workOrderStepProgresses = await prisma.workOrderStepProgress.findMany()
+    * ```
+    */
+  get workOrderStepProgress(): Prisma.WorkOrderStepProgressDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workOrderQualityCheck`: Exposes CRUD operations for the **WorkOrderQualityCheck** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderQualityChecks
+    * const workOrderQualityChecks = await prisma.workOrderQualityCheck.findMany()
+    * ```
+    */
+  get workOrderQualityCheck(): Prisma.WorkOrderQualityCheckDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workOrderMaterialUsage`: Exposes CRUD operations for the **WorkOrderMaterialUsage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderMaterialUsages
+    * const workOrderMaterialUsages = await prisma.workOrderMaterialUsage.findMany()
+    * ```
+    */
+  get workOrderMaterialUsage(): Prisma.WorkOrderMaterialUsageDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.materialConsumption`: Exposes CRUD operations for the **MaterialConsumption** model.
@@ -1002,6 +1078,10 @@ export namespace Prisma {
     OrderLineItem: 'OrderLineItem',
     FileAttachment: 'FileAttachment',
     Batch: 'Batch',
+    WorkOrderItem: 'WorkOrderItem',
+    WorkOrderStepProgress: 'WorkOrderStepProgress',
+    WorkOrderQualityCheck: 'WorkOrderQualityCheck',
+    WorkOrderMaterialUsage: 'WorkOrderMaterialUsage',
     MaterialConsumption: 'MaterialConsumption',
     RoutingStep: 'RoutingStep',
     RoutingTemplate: 'RoutingTemplate',
@@ -1030,7 +1110,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "customer" | "purchaseOrder" | "part" | "bOMComponent" | "orderLineItem" | "fileAttachment" | "batch" | "materialConsumption" | "routingStep" | "routingTemplate" | "routingTemplateStep" | "workstationOperator" | "operatorSession" | "workstationCapacity" | "workstation" | "stepConfirmation" | "qCRecord"
+      modelProps: "customer" | "purchaseOrder" | "part" | "bOMComponent" | "orderLineItem" | "fileAttachment" | "batch" | "workOrderItem" | "workOrderStepProgress" | "workOrderQualityCheck" | "workOrderMaterialUsage" | "materialConsumption" | "routingStep" | "routingTemplate" | "routingTemplateStep" | "workstationOperator" | "operatorSession" | "workstationCapacity" | "workstation" | "stepConfirmation" | "qCRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1549,6 +1629,302 @@ export namespace Prisma {
           count: {
             args: Prisma.BatchCountArgs<ExtArgs>
             result: $Utils.Optional<BatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderItem: {
+        payload: Prisma.$WorkOrderItemPayload<ExtArgs>
+        fields: Prisma.WorkOrderItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkOrderItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkOrderItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderItemPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderItem>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderItemCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderStepProgress: {
+        payload: Prisma.$WorkOrderStepProgressPayload<ExtArgs>
+        fields: Prisma.WorkOrderStepProgressFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderStepProgressFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderStepProgressFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderStepProgressFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderStepProgressFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderStepProgressFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderStepProgressCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderStepProgressCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderStepProgressCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderStepProgressDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderStepProgressUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderStepProgressDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderStepProgressUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkOrderStepProgressUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkOrderStepProgressUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderStepProgressPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderStepProgressAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderStepProgress>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderStepProgressGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderStepProgressGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderStepProgressCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderStepProgressCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderQualityCheck: {
+        payload: Prisma.$WorkOrderQualityCheckPayload<ExtArgs>
+        fields: Prisma.WorkOrderQualityCheckFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderQualityCheckFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderQualityCheckFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderQualityCheckFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderQualityCheckFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderQualityCheckFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderQualityCheckCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderQualityCheckCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderQualityCheckCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderQualityCheckDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderQualityCheckUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderQualityCheckDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderQualityCheckUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkOrderQualityCheckUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkOrderQualityCheckUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderQualityCheckPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderQualityCheckAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderQualityCheck>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderQualityCheckGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderQualityCheckGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderQualityCheckCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderQualityCheckCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderMaterialUsage: {
+        payload: Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>
+        fields: Prisma.WorkOrderMaterialUsageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderMaterialUsageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderMaterialUsageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderMaterialUsageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderMaterialUsageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderMaterialUsageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderMaterialUsageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderMaterialUsageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderMaterialUsageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderMaterialUsageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          update: {
+            args: Prisma.WorkOrderMaterialUsageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderMaterialUsageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderMaterialUsageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkOrderMaterialUsageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkOrderMaterialUsageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderMaterialUsagePayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderMaterialUsageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderMaterialUsage>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderMaterialUsageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderMaterialUsageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderMaterialUsageCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderMaterialUsageCountAggregateOutputType> | number
           }
         }
       }
@@ -2383,6 +2759,10 @@ export namespace Prisma {
     orderLineItem?: OrderLineItemOmit
     fileAttachment?: FileAttachmentOmit
     batch?: BatchOmit
+    workOrderItem?: WorkOrderItemOmit
+    workOrderStepProgress?: WorkOrderStepProgressOmit
+    workOrderQualityCheck?: WorkOrderQualityCheckOmit
+    workOrderMaterialUsage?: WorkOrderMaterialUsageOmit
     materialConsumption?: MaterialConsumptionOmit
     routingStep?: RoutingStepOmit
     routingTemplate?: RoutingTemplateOmit
@@ -2553,6 +2933,7 @@ export namespace Prisma {
     childBOMs: number
     orderLineItems: number
     materialConsumptions: number
+    workOrderMaterialUsage: number
   }
 
   export type PartCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2560,6 +2941,7 @@ export namespace Prisma {
     childBOMs?: boolean | PartCountOutputTypeCountChildBOMsArgs
     orderLineItems?: boolean | PartCountOutputTypeCountOrderLineItemsArgs
     materialConsumptions?: boolean | PartCountOutputTypeCountMaterialConsumptionsArgs
+    workOrderMaterialUsage?: boolean | PartCountOutputTypeCountWorkOrderMaterialUsageArgs
   }
 
   // Custom InputTypes
@@ -2599,6 +2981,13 @@ export namespace Prisma {
    */
   export type PartCountOutputTypeCountMaterialConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MaterialConsumptionWhereInput
+  }
+
+  /**
+   * PartCountOutputType without action
+   */
+  export type PartCountOutputTypeCountWorkOrderMaterialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderMaterialUsageWhereInput
   }
 
 
@@ -2650,12 +3039,14 @@ export namespace Prisma {
     routingSteps: number
     qcRecords: number
     materialConsumption: number
+    workOrderItems: number
   }
 
   export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     routingSteps?: boolean | BatchCountOutputTypeCountRoutingStepsArgs
     qcRecords?: boolean | BatchCountOutputTypeCountQcRecordsArgs
     materialConsumption?: boolean | BatchCountOutputTypeCountMaterialConsumptionArgs
+    workOrderItems?: boolean | BatchCountOutputTypeCountWorkOrderItemsArgs
   }
 
   // Custom InputTypes
@@ -2690,6 +3081,62 @@ export namespace Prisma {
     where?: MaterialConsumptionWhereInput
   }
 
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountWorkOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderItemWhereInput
+  }
+
+
+  /**
+   * Count Type WorkOrderItemCountOutputType
+   */
+
+  export type WorkOrderItemCountOutputType = {
+    stepProgress: number
+    qualityChecks: number
+    materialUsage: number
+  }
+
+  export type WorkOrderItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    stepProgress?: boolean | WorkOrderItemCountOutputTypeCountStepProgressArgs
+    qualityChecks?: boolean | WorkOrderItemCountOutputTypeCountQualityChecksArgs
+    materialUsage?: boolean | WorkOrderItemCountOutputTypeCountMaterialUsageArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkOrderItemCountOutputType without action
+   */
+  export type WorkOrderItemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItemCountOutputType
+     */
+    select?: WorkOrderItemCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderItemCountOutputType without action
+   */
+  export type WorkOrderItemCountOutputTypeCountStepProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderStepProgressWhereInput
+  }
+
+  /**
+   * WorkOrderItemCountOutputType without action
+   */
+  export type WorkOrderItemCountOutputTypeCountQualityChecksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderQualityCheckWhereInput
+  }
+
+  /**
+   * WorkOrderItemCountOutputType without action
+   */
+  export type WorkOrderItemCountOutputTypeCountMaterialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderMaterialUsageWhereInput
+  }
+
 
   /**
    * Count Type RoutingStepCountOutputType
@@ -2697,10 +3144,16 @@ export namespace Prisma {
 
   export type RoutingStepCountOutputType = {
     confirmations: number
+    workOrderProgress: number
+    workOrderQualityChecks: number
+    workOrderMaterialUsage: number
   }
 
   export type RoutingStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     confirmations?: boolean | RoutingStepCountOutputTypeCountConfirmationsArgs
+    workOrderProgress?: boolean | RoutingStepCountOutputTypeCountWorkOrderProgressArgs
+    workOrderQualityChecks?: boolean | RoutingStepCountOutputTypeCountWorkOrderQualityChecksArgs
+    workOrderMaterialUsage?: boolean | RoutingStepCountOutputTypeCountWorkOrderMaterialUsageArgs
   }
 
   // Custom InputTypes
@@ -2719,6 +3172,27 @@ export namespace Prisma {
    */
   export type RoutingStepCountOutputTypeCountConfirmationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StepConfirmationWhereInput
+  }
+
+  /**
+   * RoutingStepCountOutputType without action
+   */
+  export type RoutingStepCountOutputTypeCountWorkOrderProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderStepProgressWhereInput
+  }
+
+  /**
+   * RoutingStepCountOutputType without action
+   */
+  export type RoutingStepCountOutputTypeCountWorkOrderQualityChecksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderQualityCheckWhereInput
+  }
+
+  /**
+   * RoutingStepCountOutputType without action
+   */
+  export type RoutingStepCountOutputTypeCountWorkOrderMaterialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderMaterialUsageWhereInput
   }
 
 
@@ -5576,6 +6050,7 @@ export namespace Prisma {
     childBOMs?: boolean | Part$childBOMsArgs<ExtArgs>
     orderLineItems?: boolean | Part$orderLineItemsArgs<ExtArgs>
     materialConsumptions?: boolean | Part$materialConsumptionsArgs<ExtArgs>
+    workOrderMaterialUsage?: boolean | Part$workOrderMaterialUsageArgs<ExtArgs>
     _count?: boolean | PartCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["part"]>
 
@@ -5642,6 +6117,7 @@ export namespace Prisma {
     childBOMs?: boolean | Part$childBOMsArgs<ExtArgs>
     orderLineItems?: boolean | Part$orderLineItemsArgs<ExtArgs>
     materialConsumptions?: boolean | Part$materialConsumptionsArgs<ExtArgs>
+    workOrderMaterialUsage?: boolean | Part$workOrderMaterialUsageArgs<ExtArgs>
     _count?: boolean | PartCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PartIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5654,6 +6130,7 @@ export namespace Prisma {
       childBOMs: Prisma.$BOMComponentPayload<ExtArgs>[]
       orderLineItems: Prisma.$OrderLineItemPayload<ExtArgs>[]
       materialConsumptions: Prisma.$MaterialConsumptionPayload<ExtArgs>[]
+      workOrderMaterialUsage: Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6070,6 +6547,7 @@ export namespace Prisma {
     childBOMs<T extends Part$childBOMsArgs<ExtArgs> = {}>(args?: Subset<T, Part$childBOMsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orderLineItems<T extends Part$orderLineItemsArgs<ExtArgs> = {}>(args?: Subset<T, Part$orderLineItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderLineItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     materialConsumptions<T extends Part$materialConsumptionsArgs<ExtArgs> = {}>(args?: Subset<T, Part$materialConsumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workOrderMaterialUsage<T extends Part$workOrderMaterialUsageArgs<ExtArgs> = {}>(args?: Subset<T, Part$workOrderMaterialUsageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6596,6 +7074,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MaterialConsumptionScalarFieldEnum | MaterialConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * Part.workOrderMaterialUsage
+   */
+  export type Part$workOrderMaterialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    where?: WorkOrderMaterialUsageWhereInput
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
   }
 
   /**
@@ -10428,6 +10930,7 @@ export namespace Prisma {
     routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
     qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
     materialConsumption?: boolean | Batch$materialConsumptionArgs<ExtArgs>
+    workOrderItems?: boolean | Batch$workOrderItemsArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
@@ -10484,6 +10987,7 @@ export namespace Prisma {
     routingSteps?: boolean | Batch$routingStepsArgs<ExtArgs>
     qcRecords?: boolean | Batch$qcRecordsArgs<ExtArgs>
     materialConsumption?: boolean | Batch$materialConsumptionArgs<ExtArgs>
+    workOrderItems?: boolean | Batch$workOrderItemsArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10500,6 +11004,7 @@ export namespace Prisma {
       routingSteps: Prisma.$RoutingStepPayload<ExtArgs>[]
       qcRecords: Prisma.$QCRecordPayload<ExtArgs>[]
       materialConsumption: Prisma.$MaterialConsumptionPayload<ExtArgs>[]
+      workOrderItems: Prisma.$WorkOrderItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10912,6 +11417,7 @@ export namespace Prisma {
     routingSteps<T extends Batch$routingStepsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$routingStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     qcRecords<T extends Batch$qcRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$qcRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QCRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     materialConsumption<T extends Batch$materialConsumptionArgs<ExtArgs> = {}>(args?: Subset<T, Batch$materialConsumptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workOrderItems<T extends Batch$workOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$workOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11421,6 +11927,30 @@ export namespace Prisma {
   }
 
   /**
+   * Batch.workOrderItems
+   */
+  export type Batch$workOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    where?: WorkOrderItemWhereInput
+    orderBy?: WorkOrderItemOrderByWithRelationInput | WorkOrderItemOrderByWithRelationInput[]
+    cursor?: WorkOrderItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderItemScalarFieldEnum | WorkOrderItemScalarFieldEnum[]
+  }
+
+  /**
    * Batch without action
    */
   export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11436,6 +11966,4851 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderItem
+   */
+
+  export type AggregateWorkOrderItem = {
+    _count: WorkOrderItemCountAggregateOutputType | null
+    _avg: WorkOrderItemAvgAggregateOutputType | null
+    _sum: WorkOrderItemSumAggregateOutputType | null
+    _min: WorkOrderItemMinAggregateOutputType | null
+    _max: WorkOrderItemMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderItemAvgAggregateOutputType = {
+    itemNumber: number | null
+  }
+
+  export type WorkOrderItemSumAggregateOutputType = {
+    itemNumber: number | null
+  }
+
+  export type WorkOrderItemMinAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    serialNumber: string | null
+    itemNumber: number | null
+    status: $Enums.WorkOrderItemStatus | null
+    startedAt: Date | null
+    completedAt: Date | null
+    currentStepId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderItemMaxAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    serialNumber: string | null
+    itemNumber: number | null
+    status: $Enums.WorkOrderItemStatus | null
+    startedAt: Date | null
+    completedAt: Date | null
+    currentStepId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderItemCountAggregateOutputType = {
+    id: number
+    batchId: number
+    serialNumber: number
+    itemNumber: number
+    status: number
+    startedAt: number
+    completedAt: number
+    currentStepId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderItemAvgAggregateInputType = {
+    itemNumber?: true
+  }
+
+  export type WorkOrderItemSumAggregateInputType = {
+    itemNumber?: true
+  }
+
+  export type WorkOrderItemMinAggregateInputType = {
+    id?: true
+    batchId?: true
+    serialNumber?: true
+    itemNumber?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    currentStepId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderItemMaxAggregateInputType = {
+    id?: true
+    batchId?: true
+    serialNumber?: true
+    itemNumber?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    currentStepId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderItemCountAggregateInputType = {
+    id?: true
+    batchId?: true
+    serialNumber?: true
+    itemNumber?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    currentStepId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderItem to aggregate.
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderItems to fetch.
+     */
+    orderBy?: WorkOrderItemOrderByWithRelationInput | WorkOrderItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderItems
+    **/
+    _count?: true | WorkOrderItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkOrderItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkOrderItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderItemMaxAggregateInputType
+  }
+
+  export type GetWorkOrderItemAggregateType<T extends WorkOrderItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderItem[P]>
+      : GetScalarType<T[P], AggregateWorkOrderItem[P]>
+  }
+
+
+
+
+  export type WorkOrderItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderItemWhereInput
+    orderBy?: WorkOrderItemOrderByWithAggregationInput | WorkOrderItemOrderByWithAggregationInput[]
+    by: WorkOrderItemScalarFieldEnum[] | WorkOrderItemScalarFieldEnum
+    having?: WorkOrderItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderItemCountAggregateInputType | true
+    _avg?: WorkOrderItemAvgAggregateInputType
+    _sum?: WorkOrderItemSumAggregateInputType
+    _min?: WorkOrderItemMinAggregateInputType
+    _max?: WorkOrderItemMaxAggregateInputType
+  }
+
+  export type WorkOrderItemGroupByOutputType = {
+    id: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status: $Enums.WorkOrderItemStatus
+    startedAt: Date | null
+    completedAt: Date | null
+    currentStepId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderItemCountAggregateOutputType | null
+    _avg: WorkOrderItemAvgAggregateOutputType | null
+    _sum: WorkOrderItemSumAggregateOutputType | null
+    _min: WorkOrderItemMinAggregateOutputType | null
+    _max: WorkOrderItemMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderItemGroupByPayload<T extends WorkOrderItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderItemGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    serialNumber?: boolean
+    itemNumber?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    currentStepId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    stepProgress?: boolean | WorkOrderItem$stepProgressArgs<ExtArgs>
+    qualityChecks?: boolean | WorkOrderItem$qualityChecksArgs<ExtArgs>
+    materialUsage?: boolean | WorkOrderItem$materialUsageArgs<ExtArgs>
+    _count?: boolean | WorkOrderItemCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderItem"]>
+
+  export type WorkOrderItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    serialNumber?: boolean
+    itemNumber?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    currentStepId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderItem"]>
+
+  export type WorkOrderItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    serialNumber?: boolean
+    itemNumber?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    currentStepId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderItem"]>
+
+  export type WorkOrderItemSelectScalar = {
+    id?: boolean
+    batchId?: boolean
+    serialNumber?: boolean
+    itemNumber?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    currentStepId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "serialNumber" | "itemNumber" | "status" | "startedAt" | "completedAt" | "currentStepId" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["workOrderItem"]>
+  export type WorkOrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    stepProgress?: boolean | WorkOrderItem$stepProgressArgs<ExtArgs>
+    qualityChecks?: boolean | WorkOrderItem$qualityChecksArgs<ExtArgs>
+    materialUsage?: boolean | WorkOrderItem$materialUsageArgs<ExtArgs>
+    _count?: boolean | WorkOrderItemCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkOrderItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+  export type WorkOrderItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+
+  export type $WorkOrderItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderItem"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      stepProgress: Prisma.$WorkOrderStepProgressPayload<ExtArgs>[]
+      qualityChecks: Prisma.$WorkOrderQualityCheckPayload<ExtArgs>[]
+      materialUsage: Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchId: string
+      serialNumber: string
+      itemNumber: number
+      status: $Enums.WorkOrderItemStatus
+      startedAt: Date | null
+      completedAt: Date | null
+      currentStepId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderItem"]>
+    composites: {}
+  }
+
+  type WorkOrderItemGetPayload<S extends boolean | null | undefined | WorkOrderItemDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderItemPayload, S>
+
+  type WorkOrderItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkOrderItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkOrderItemCountAggregateInputType | true
+    }
+
+  export interface WorkOrderItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderItem'], meta: { name: 'WorkOrderItem' } }
+    /**
+     * Find zero or one WorkOrderItem that matches the filter.
+     * @param {WorkOrderItemFindUniqueArgs} args - Arguments to find a WorkOrderItem
+     * @example
+     * // Get one WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderItemFindUniqueArgs>(args: SelectSubset<T, WorkOrderItemFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkOrderItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkOrderItemFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderItem
+     * @example
+     * // Get one WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderItemFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemFindFirstArgs} args - Arguments to find a WorkOrderItem
+     * @example
+     * // Get one WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderItemFindFirstArgs>(args?: SelectSubset<T, WorkOrderItemFindFirstArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemFindFirstOrThrowArgs} args - Arguments to find a WorkOrderItem
+     * @example
+     * // Get one WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderItemFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkOrderItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderItems
+     * const workOrderItems = await prisma.workOrderItem.findMany()
+     * 
+     * // Get first 10 WorkOrderItems
+     * const workOrderItems = await prisma.workOrderItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderItemWithIdOnly = await prisma.workOrderItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderItemFindManyArgs>(args?: SelectSubset<T, WorkOrderItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkOrderItem.
+     * @param {WorkOrderItemCreateArgs} args - Arguments to create a WorkOrderItem.
+     * @example
+     * // Create one WorkOrderItem
+     * const WorkOrderItem = await prisma.workOrderItem.create({
+     *   data: {
+     *     // ... data to create a WorkOrderItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderItemCreateArgs>(args: SelectSubset<T, WorkOrderItemCreateArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkOrderItems.
+     * @param {WorkOrderItemCreateManyArgs} args - Arguments to create many WorkOrderItems.
+     * @example
+     * // Create many WorkOrderItems
+     * const workOrderItem = await prisma.workOrderItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderItemCreateManyArgs>(args?: SelectSubset<T, WorkOrderItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderItems and returns the data saved in the database.
+     * @param {WorkOrderItemCreateManyAndReturnArgs} args - Arguments to create many WorkOrderItems.
+     * @example
+     * // Create many WorkOrderItems
+     * const workOrderItem = await prisma.workOrderItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderItems and only return the `id`
+     * const workOrderItemWithIdOnly = await prisma.workOrderItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderItemCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkOrderItem.
+     * @param {WorkOrderItemDeleteArgs} args - Arguments to delete one WorkOrderItem.
+     * @example
+     * // Delete one WorkOrderItem
+     * const WorkOrderItem = await prisma.workOrderItem.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderItemDeleteArgs>(args: SelectSubset<T, WorkOrderItemDeleteArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkOrderItem.
+     * @param {WorkOrderItemUpdateArgs} args - Arguments to update one WorkOrderItem.
+     * @example
+     * // Update one WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderItemUpdateArgs>(args: SelectSubset<T, WorkOrderItemUpdateArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkOrderItems.
+     * @param {WorkOrderItemDeleteManyArgs} args - Arguments to filter WorkOrderItems to delete.
+     * @example
+     * // Delete a few WorkOrderItems
+     * const { count } = await prisma.workOrderItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderItemDeleteManyArgs>(args?: SelectSubset<T, WorkOrderItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderItems
+     * const workOrderItem = await prisma.workOrderItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderItemUpdateManyArgs>(args: SelectSubset<T, WorkOrderItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderItems and returns the data updated in the database.
+     * @param {WorkOrderItemUpdateManyAndReturnArgs} args - Arguments to update many WorkOrderItems.
+     * @example
+     * // Update many WorkOrderItems
+     * const workOrderItem = await prisma.workOrderItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkOrderItems and only return the `id`
+     * const workOrderItemWithIdOnly = await prisma.workOrderItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkOrderItemUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkOrderItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkOrderItem.
+     * @param {WorkOrderItemUpsertArgs} args - Arguments to update or create a WorkOrderItem.
+     * @example
+     * // Update or create a WorkOrderItem
+     * const workOrderItem = await prisma.workOrderItem.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderItemUpsertArgs>(args: SelectSubset<T, WorkOrderItemUpsertArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkOrderItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemCountArgs} args - Arguments to filter WorkOrderItems to count.
+     * @example
+     * // Count the number of WorkOrderItems
+     * const count = await prisma.workOrderItem.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderItemCountArgs>(
+      args?: Subset<T, WorkOrderItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderItemAggregateArgs>(args: Subset<T, WorkOrderItemAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderItemAggregateType<T>>
+
+    /**
+     * Group by WorkOrderItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderItemGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderItem model
+   */
+  readonly fields: WorkOrderItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    stepProgress<T extends WorkOrderItem$stepProgressArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItem$stepProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    qualityChecks<T extends WorkOrderItem$qualityChecksArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItem$qualityChecksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    materialUsage<T extends WorkOrderItem$materialUsageArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItem$materialUsageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderItem model
+   */
+  interface WorkOrderItemFieldRefs {
+    readonly id: FieldRef<"WorkOrderItem", 'String'>
+    readonly batchId: FieldRef<"WorkOrderItem", 'String'>
+    readonly serialNumber: FieldRef<"WorkOrderItem", 'String'>
+    readonly itemNumber: FieldRef<"WorkOrderItem", 'Int'>
+    readonly status: FieldRef<"WorkOrderItem", 'WorkOrderItemStatus'>
+    readonly startedAt: FieldRef<"WorkOrderItem", 'DateTime'>
+    readonly completedAt: FieldRef<"WorkOrderItem", 'DateTime'>
+    readonly currentStepId: FieldRef<"WorkOrderItem", 'String'>
+    readonly notes: FieldRef<"WorkOrderItem", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrderItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderItem findUnique
+   */
+  export type WorkOrderItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderItem to fetch.
+     */
+    where: WorkOrderItemWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderItem findUniqueOrThrow
+   */
+  export type WorkOrderItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderItem to fetch.
+     */
+    where: WorkOrderItemWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderItem findFirst
+   */
+  export type WorkOrderItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderItem to fetch.
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderItems to fetch.
+     */
+    orderBy?: WorkOrderItemOrderByWithRelationInput | WorkOrderItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderItems.
+     */
+    cursor?: WorkOrderItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderItems.
+     */
+    distinct?: WorkOrderItemScalarFieldEnum | WorkOrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem findFirstOrThrow
+   */
+  export type WorkOrderItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderItem to fetch.
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderItems to fetch.
+     */
+    orderBy?: WorkOrderItemOrderByWithRelationInput | WorkOrderItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderItems.
+     */
+    cursor?: WorkOrderItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderItems.
+     */
+    distinct?: WorkOrderItemScalarFieldEnum | WorkOrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem findMany
+   */
+  export type WorkOrderItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderItems to fetch.
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderItems to fetch.
+     */
+    orderBy?: WorkOrderItemOrderByWithRelationInput | WorkOrderItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderItems.
+     */
+    cursor?: WorkOrderItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderItems.
+     */
+    skip?: number
+    distinct?: WorkOrderItemScalarFieldEnum | WorkOrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem create
+   */
+  export type WorkOrderItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderItem.
+     */
+    data: XOR<WorkOrderItemCreateInput, WorkOrderItemUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderItem createMany
+   */
+  export type WorkOrderItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderItems.
+     */
+    data: WorkOrderItemCreateManyInput | WorkOrderItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderItem createManyAndReturn
+   */
+  export type WorkOrderItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderItems.
+     */
+    data: WorkOrderItemCreateManyInput | WorkOrderItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderItem update
+   */
+  export type WorkOrderItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderItem.
+     */
+    data: XOR<WorkOrderItemUpdateInput, WorkOrderItemUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderItem to update.
+     */
+    where: WorkOrderItemWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderItem updateMany
+   */
+  export type WorkOrderItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderItems.
+     */
+    data: XOR<WorkOrderItemUpdateManyMutationInput, WorkOrderItemUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderItems to update
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * Limit how many WorkOrderItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderItem updateManyAndReturn
+   */
+  export type WorkOrderItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkOrderItems.
+     */
+    data: XOR<WorkOrderItemUpdateManyMutationInput, WorkOrderItemUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderItems to update
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * Limit how many WorkOrderItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderItem upsert
+   */
+  export type WorkOrderItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderItem to update in case it exists.
+     */
+    where: WorkOrderItemWhereUniqueInput
+    /**
+     * In case the WorkOrderItem found by the `where` argument doesn't exist, create a new WorkOrderItem with this data.
+     */
+    create: XOR<WorkOrderItemCreateInput, WorkOrderItemUncheckedCreateInput>
+    /**
+     * In case the WorkOrderItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderItemUpdateInput, WorkOrderItemUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderItem delete
+   */
+  export type WorkOrderItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+    /**
+     * Filter which WorkOrderItem to delete.
+     */
+    where: WorkOrderItemWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderItem deleteMany
+   */
+  export type WorkOrderItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderItems to delete
+     */
+    where?: WorkOrderItemWhereInput
+    /**
+     * Limit how many WorkOrderItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderItem.stepProgress
+   */
+  export type WorkOrderItem$stepProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    where?: WorkOrderStepProgressWhereInput
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderStepProgressScalarFieldEnum | WorkOrderStepProgressScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem.qualityChecks
+   */
+  export type WorkOrderItem$qualityChecksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    where?: WorkOrderQualityCheckWhereInput
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderQualityCheckScalarFieldEnum | WorkOrderQualityCheckScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem.materialUsage
+   */
+  export type WorkOrderItem$materialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    where?: WorkOrderMaterialUsageWhereInput
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderItem without action
+   */
+  export type WorkOrderItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderItem
+     */
+    select?: WorkOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderItem
+     */
+    omit?: WorkOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderStepProgress
+   */
+
+  export type AggregateWorkOrderStepProgress = {
+    _count: WorkOrderStepProgressCountAggregateOutputType | null
+    _avg: WorkOrderStepProgressAvgAggregateOutputType | null
+    _sum: WorkOrderStepProgressSumAggregateOutputType | null
+    _min: WorkOrderStepProgressMinAggregateOutputType | null
+    _max: WorkOrderStepProgressMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderStepProgressAvgAggregateOutputType = {
+    actualTime: number | null
+  }
+
+  export type WorkOrderStepProgressSumAggregateOutputType = {
+    actualTime: number | null
+  }
+
+  export type WorkOrderStepProgressMinAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    routingStepId: string | null
+    status: $Enums.StepStatus | null
+    startedAt: Date | null
+    completedAt: Date | null
+    operatorId: string | null
+    actualTime: number | null
+    notes: string | null
+    photoUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderStepProgressMaxAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    routingStepId: string | null
+    status: $Enums.StepStatus | null
+    startedAt: Date | null
+    completedAt: Date | null
+    operatorId: string | null
+    actualTime: number | null
+    notes: string | null
+    photoUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderStepProgressCountAggregateOutputType = {
+    id: number
+    workOrderItemId: number
+    routingStepId: number
+    status: number
+    startedAt: number
+    completedAt: number
+    operatorId: number
+    actualTime: number
+    notes: number
+    photoUrl: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderStepProgressAvgAggregateInputType = {
+    actualTime?: true
+  }
+
+  export type WorkOrderStepProgressSumAggregateInputType = {
+    actualTime?: true
+  }
+
+  export type WorkOrderStepProgressMinAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    operatorId?: true
+    actualTime?: true
+    notes?: true
+    photoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderStepProgressMaxAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    operatorId?: true
+    actualTime?: true
+    notes?: true
+    photoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderStepProgressCountAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    status?: true
+    startedAt?: true
+    completedAt?: true
+    operatorId?: true
+    actualTime?: true
+    notes?: true
+    photoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderStepProgressAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderStepProgress to aggregate.
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderStepProgresses to fetch.
+     */
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderStepProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderStepProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderStepProgresses
+    **/
+    _count?: true | WorkOrderStepProgressCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkOrderStepProgressAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkOrderStepProgressSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderStepProgressMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderStepProgressMaxAggregateInputType
+  }
+
+  export type GetWorkOrderStepProgressAggregateType<T extends WorkOrderStepProgressAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderStepProgress]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderStepProgress[P]>
+      : GetScalarType<T[P], AggregateWorkOrderStepProgress[P]>
+  }
+
+
+
+
+  export type WorkOrderStepProgressGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderStepProgressWhereInput
+    orderBy?: WorkOrderStepProgressOrderByWithAggregationInput | WorkOrderStepProgressOrderByWithAggregationInput[]
+    by: WorkOrderStepProgressScalarFieldEnum[] | WorkOrderStepProgressScalarFieldEnum
+    having?: WorkOrderStepProgressScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderStepProgressCountAggregateInputType | true
+    _avg?: WorkOrderStepProgressAvgAggregateInputType
+    _sum?: WorkOrderStepProgressSumAggregateInputType
+    _min?: WorkOrderStepProgressMinAggregateInputType
+    _max?: WorkOrderStepProgressMaxAggregateInputType
+  }
+
+  export type WorkOrderStepProgressGroupByOutputType = {
+    id: string
+    workOrderItemId: string
+    routingStepId: string
+    status: $Enums.StepStatus
+    startedAt: Date | null
+    completedAt: Date | null
+    operatorId: string | null
+    actualTime: number | null
+    notes: string | null
+    photoUrl: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderStepProgressCountAggregateOutputType | null
+    _avg: WorkOrderStepProgressAvgAggregateOutputType | null
+    _sum: WorkOrderStepProgressSumAggregateOutputType | null
+    _min: WorkOrderStepProgressMinAggregateOutputType | null
+    _max: WorkOrderStepProgressMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderStepProgressGroupByPayload<T extends WorkOrderStepProgressGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderStepProgressGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderStepProgressGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderStepProgressGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderStepProgressGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderStepProgressSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    operatorId?: boolean
+    actualTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderStepProgress"]>
+
+  export type WorkOrderStepProgressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    operatorId?: boolean
+    actualTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderStepProgress"]>
+
+  export type WorkOrderStepProgressSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    operatorId?: boolean
+    actualTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderStepProgress"]>
+
+  export type WorkOrderStepProgressSelectScalar = {
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    status?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    operatorId?: boolean
+    actualTime?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkOrderStepProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workOrderItemId" | "routingStepId" | "status" | "startedAt" | "completedAt" | "operatorId" | "actualTime" | "notes" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["workOrderStepProgress"]>
+  export type WorkOrderStepProgressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }
+  export type WorkOrderStepProgressIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }
+  export type WorkOrderStepProgressIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | RoutingStepDefaultArgs<ExtArgs>
+  }
+
+  export type $WorkOrderStepProgressPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderStepProgress"
+    objects: {
+      workOrderItem: Prisma.$WorkOrderItemPayload<ExtArgs>
+      routingStep: Prisma.$RoutingStepPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workOrderItemId: string
+      routingStepId: string
+      status: $Enums.StepStatus
+      startedAt: Date | null
+      completedAt: Date | null
+      operatorId: string | null
+      actualTime: number | null
+      notes: string | null
+      photoUrl: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderStepProgress"]>
+    composites: {}
+  }
+
+  type WorkOrderStepProgressGetPayload<S extends boolean | null | undefined | WorkOrderStepProgressDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderStepProgressPayload, S>
+
+  type WorkOrderStepProgressCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkOrderStepProgressFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkOrderStepProgressCountAggregateInputType | true
+    }
+
+  export interface WorkOrderStepProgressDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderStepProgress'], meta: { name: 'WorkOrderStepProgress' } }
+    /**
+     * Find zero or one WorkOrderStepProgress that matches the filter.
+     * @param {WorkOrderStepProgressFindUniqueArgs} args - Arguments to find a WorkOrderStepProgress
+     * @example
+     * // Get one WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderStepProgressFindUniqueArgs>(args: SelectSubset<T, WorkOrderStepProgressFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkOrderStepProgress that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkOrderStepProgressFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderStepProgress
+     * @example
+     * // Get one WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderStepProgressFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderStepProgressFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderStepProgress that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressFindFirstArgs} args - Arguments to find a WorkOrderStepProgress
+     * @example
+     * // Get one WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderStepProgressFindFirstArgs>(args?: SelectSubset<T, WorkOrderStepProgressFindFirstArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderStepProgress that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressFindFirstOrThrowArgs} args - Arguments to find a WorkOrderStepProgress
+     * @example
+     * // Get one WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderStepProgressFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderStepProgressFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkOrderStepProgresses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderStepProgresses
+     * const workOrderStepProgresses = await prisma.workOrderStepProgress.findMany()
+     * 
+     * // Get first 10 WorkOrderStepProgresses
+     * const workOrderStepProgresses = await prisma.workOrderStepProgress.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderStepProgressWithIdOnly = await prisma.workOrderStepProgress.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderStepProgressFindManyArgs>(args?: SelectSubset<T, WorkOrderStepProgressFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkOrderStepProgress.
+     * @param {WorkOrderStepProgressCreateArgs} args - Arguments to create a WorkOrderStepProgress.
+     * @example
+     * // Create one WorkOrderStepProgress
+     * const WorkOrderStepProgress = await prisma.workOrderStepProgress.create({
+     *   data: {
+     *     // ... data to create a WorkOrderStepProgress
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderStepProgressCreateArgs>(args: SelectSubset<T, WorkOrderStepProgressCreateArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkOrderStepProgresses.
+     * @param {WorkOrderStepProgressCreateManyArgs} args - Arguments to create many WorkOrderStepProgresses.
+     * @example
+     * // Create many WorkOrderStepProgresses
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderStepProgressCreateManyArgs>(args?: SelectSubset<T, WorkOrderStepProgressCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderStepProgresses and returns the data saved in the database.
+     * @param {WorkOrderStepProgressCreateManyAndReturnArgs} args - Arguments to create many WorkOrderStepProgresses.
+     * @example
+     * // Create many WorkOrderStepProgresses
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderStepProgresses and only return the `id`
+     * const workOrderStepProgressWithIdOnly = await prisma.workOrderStepProgress.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderStepProgressCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderStepProgressCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkOrderStepProgress.
+     * @param {WorkOrderStepProgressDeleteArgs} args - Arguments to delete one WorkOrderStepProgress.
+     * @example
+     * // Delete one WorkOrderStepProgress
+     * const WorkOrderStepProgress = await prisma.workOrderStepProgress.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderStepProgress
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderStepProgressDeleteArgs>(args: SelectSubset<T, WorkOrderStepProgressDeleteArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkOrderStepProgress.
+     * @param {WorkOrderStepProgressUpdateArgs} args - Arguments to update one WorkOrderStepProgress.
+     * @example
+     * // Update one WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderStepProgressUpdateArgs>(args: SelectSubset<T, WorkOrderStepProgressUpdateArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkOrderStepProgresses.
+     * @param {WorkOrderStepProgressDeleteManyArgs} args - Arguments to filter WorkOrderStepProgresses to delete.
+     * @example
+     * // Delete a few WorkOrderStepProgresses
+     * const { count } = await prisma.workOrderStepProgress.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderStepProgressDeleteManyArgs>(args?: SelectSubset<T, WorkOrderStepProgressDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderStepProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderStepProgresses
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderStepProgressUpdateManyArgs>(args: SelectSubset<T, WorkOrderStepProgressUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderStepProgresses and returns the data updated in the database.
+     * @param {WorkOrderStepProgressUpdateManyAndReturnArgs} args - Arguments to update many WorkOrderStepProgresses.
+     * @example
+     * // Update many WorkOrderStepProgresses
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkOrderStepProgresses and only return the `id`
+     * const workOrderStepProgressWithIdOnly = await prisma.workOrderStepProgress.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkOrderStepProgressUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkOrderStepProgressUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkOrderStepProgress.
+     * @param {WorkOrderStepProgressUpsertArgs} args - Arguments to update or create a WorkOrderStepProgress.
+     * @example
+     * // Update or create a WorkOrderStepProgress
+     * const workOrderStepProgress = await prisma.workOrderStepProgress.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderStepProgress
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderStepProgress we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderStepProgressUpsertArgs>(args: SelectSubset<T, WorkOrderStepProgressUpsertArgs<ExtArgs>>): Prisma__WorkOrderStepProgressClient<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkOrderStepProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressCountArgs} args - Arguments to filter WorkOrderStepProgresses to count.
+     * @example
+     * // Count the number of WorkOrderStepProgresses
+     * const count = await prisma.workOrderStepProgress.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderStepProgresses we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderStepProgressCountArgs>(
+      args?: Subset<T, WorkOrderStepProgressCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderStepProgressCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderStepProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderStepProgressAggregateArgs>(args: Subset<T, WorkOrderStepProgressAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderStepProgressAggregateType<T>>
+
+    /**
+     * Group by WorkOrderStepProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderStepProgressGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderStepProgressGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderStepProgressGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderStepProgressGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderStepProgressGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderStepProgressGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderStepProgress model
+   */
+  readonly fields: WorkOrderStepProgressFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderStepProgress.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderStepProgressClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workOrderItem<T extends WorkOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItemDefaultArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    routingStep<T extends RoutingStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStepDefaultArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderStepProgress model
+   */
+  interface WorkOrderStepProgressFieldRefs {
+    readonly id: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly workOrderItemId: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly routingStepId: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly status: FieldRef<"WorkOrderStepProgress", 'StepStatus'>
+    readonly startedAt: FieldRef<"WorkOrderStepProgress", 'DateTime'>
+    readonly completedAt: FieldRef<"WorkOrderStepProgress", 'DateTime'>
+    readonly operatorId: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly actualTime: FieldRef<"WorkOrderStepProgress", 'Int'>
+    readonly notes: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly photoUrl: FieldRef<"WorkOrderStepProgress", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderStepProgress", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrderStepProgress", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderStepProgress findUnique
+   */
+  export type WorkOrderStepProgressFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderStepProgress to fetch.
+     */
+    where: WorkOrderStepProgressWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderStepProgress findUniqueOrThrow
+   */
+  export type WorkOrderStepProgressFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderStepProgress to fetch.
+     */
+    where: WorkOrderStepProgressWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderStepProgress findFirst
+   */
+  export type WorkOrderStepProgressFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderStepProgress to fetch.
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderStepProgresses to fetch.
+     */
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderStepProgresses.
+     */
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderStepProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderStepProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderStepProgresses.
+     */
+    distinct?: WorkOrderStepProgressScalarFieldEnum | WorkOrderStepProgressScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderStepProgress findFirstOrThrow
+   */
+  export type WorkOrderStepProgressFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderStepProgress to fetch.
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderStepProgresses to fetch.
+     */
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderStepProgresses.
+     */
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderStepProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderStepProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderStepProgresses.
+     */
+    distinct?: WorkOrderStepProgressScalarFieldEnum | WorkOrderStepProgressScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderStepProgress findMany
+   */
+  export type WorkOrderStepProgressFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderStepProgresses to fetch.
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderStepProgresses to fetch.
+     */
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderStepProgresses.
+     */
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderStepProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderStepProgresses.
+     */
+    skip?: number
+    distinct?: WorkOrderStepProgressScalarFieldEnum | WorkOrderStepProgressScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderStepProgress create
+   */
+  export type WorkOrderStepProgressCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderStepProgress.
+     */
+    data: XOR<WorkOrderStepProgressCreateInput, WorkOrderStepProgressUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderStepProgress createMany
+   */
+  export type WorkOrderStepProgressCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderStepProgresses.
+     */
+    data: WorkOrderStepProgressCreateManyInput | WorkOrderStepProgressCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderStepProgress createManyAndReturn
+   */
+  export type WorkOrderStepProgressCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderStepProgresses.
+     */
+    data: WorkOrderStepProgressCreateManyInput | WorkOrderStepProgressCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderStepProgress update
+   */
+  export type WorkOrderStepProgressUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderStepProgress.
+     */
+    data: XOR<WorkOrderStepProgressUpdateInput, WorkOrderStepProgressUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderStepProgress to update.
+     */
+    where: WorkOrderStepProgressWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderStepProgress updateMany
+   */
+  export type WorkOrderStepProgressUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderStepProgresses.
+     */
+    data: XOR<WorkOrderStepProgressUpdateManyMutationInput, WorkOrderStepProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderStepProgresses to update
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * Limit how many WorkOrderStepProgresses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderStepProgress updateManyAndReturn
+   */
+  export type WorkOrderStepProgressUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkOrderStepProgresses.
+     */
+    data: XOR<WorkOrderStepProgressUpdateManyMutationInput, WorkOrderStepProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderStepProgresses to update
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * Limit how many WorkOrderStepProgresses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderStepProgress upsert
+   */
+  export type WorkOrderStepProgressUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderStepProgress to update in case it exists.
+     */
+    where: WorkOrderStepProgressWhereUniqueInput
+    /**
+     * In case the WorkOrderStepProgress found by the `where` argument doesn't exist, create a new WorkOrderStepProgress with this data.
+     */
+    create: XOR<WorkOrderStepProgressCreateInput, WorkOrderStepProgressUncheckedCreateInput>
+    /**
+     * In case the WorkOrderStepProgress was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderStepProgressUpdateInput, WorkOrderStepProgressUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderStepProgress delete
+   */
+  export type WorkOrderStepProgressDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    /**
+     * Filter which WorkOrderStepProgress to delete.
+     */
+    where: WorkOrderStepProgressWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderStepProgress deleteMany
+   */
+  export type WorkOrderStepProgressDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderStepProgresses to delete
+     */
+    where?: WorkOrderStepProgressWhereInput
+    /**
+     * Limit how many WorkOrderStepProgresses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderStepProgress without action
+   */
+  export type WorkOrderStepProgressDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderQualityCheck
+   */
+
+  export type AggregateWorkOrderQualityCheck = {
+    _count: WorkOrderQualityCheckCountAggregateOutputType | null
+    _min: WorkOrderQualityCheckMinAggregateOutputType | null
+    _max: WorkOrderQualityCheckMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderQualityCheckMinAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    routingStepId: string | null
+    checkType: string | null
+    result: $Enums.QCResult | null
+    checkedBy: string | null
+    checkedAt: Date | null
+    measurements: string | null
+    defects: string | null
+    correctedBy: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderQualityCheckMaxAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    routingStepId: string | null
+    checkType: string | null
+    result: $Enums.QCResult | null
+    checkedBy: string | null
+    checkedAt: Date | null
+    measurements: string | null
+    defects: string | null
+    correctedBy: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderQualityCheckCountAggregateOutputType = {
+    id: number
+    workOrderItemId: number
+    routingStepId: number
+    checkType: number
+    result: number
+    checkedBy: number
+    checkedAt: number
+    measurements: number
+    defects: number
+    correctedBy: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderQualityCheckMinAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    checkType?: true
+    result?: true
+    checkedBy?: true
+    checkedAt?: true
+    measurements?: true
+    defects?: true
+    correctedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderQualityCheckMaxAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    checkType?: true
+    result?: true
+    checkedBy?: true
+    checkedAt?: true
+    measurements?: true
+    defects?: true
+    correctedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderQualityCheckCountAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    routingStepId?: true
+    checkType?: true
+    result?: true
+    checkedBy?: true
+    checkedAt?: true
+    measurements?: true
+    defects?: true
+    correctedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderQualityCheckAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderQualityCheck to aggregate.
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderQualityChecks to fetch.
+     */
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderQualityChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderQualityChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderQualityChecks
+    **/
+    _count?: true | WorkOrderQualityCheckCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderQualityCheckMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderQualityCheckMaxAggregateInputType
+  }
+
+  export type GetWorkOrderQualityCheckAggregateType<T extends WorkOrderQualityCheckAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderQualityCheck]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderQualityCheck[P]>
+      : GetScalarType<T[P], AggregateWorkOrderQualityCheck[P]>
+  }
+
+
+
+
+  export type WorkOrderQualityCheckGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderQualityCheckWhereInput
+    orderBy?: WorkOrderQualityCheckOrderByWithAggregationInput | WorkOrderQualityCheckOrderByWithAggregationInput[]
+    by: WorkOrderQualityCheckScalarFieldEnum[] | WorkOrderQualityCheckScalarFieldEnum
+    having?: WorkOrderQualityCheckScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderQualityCheckCountAggregateInputType | true
+    _min?: WorkOrderQualityCheckMinAggregateInputType
+    _max?: WorkOrderQualityCheckMaxAggregateInputType
+  }
+
+  export type WorkOrderQualityCheckGroupByOutputType = {
+    id: string
+    workOrderItemId: string
+    routingStepId: string | null
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt: Date
+    measurements: string | null
+    defects: string | null
+    correctedBy: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderQualityCheckCountAggregateOutputType | null
+    _min: WorkOrderQualityCheckMinAggregateOutputType | null
+    _max: WorkOrderQualityCheckMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderQualityCheckGroupByPayload<T extends WorkOrderQualityCheckGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderQualityCheckGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderQualityCheckGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderQualityCheckGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderQualityCheckGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderQualityCheckSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    checkType?: boolean
+    result?: boolean
+    checkedBy?: boolean
+    checkedAt?: boolean
+    measurements?: boolean
+    defects?: boolean
+    correctedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderQualityCheck"]>
+
+  export type WorkOrderQualityCheckSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    checkType?: boolean
+    result?: boolean
+    checkedBy?: boolean
+    checkedAt?: boolean
+    measurements?: boolean
+    defects?: boolean
+    correctedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderQualityCheck"]>
+
+  export type WorkOrderQualityCheckSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    checkType?: boolean
+    result?: boolean
+    checkedBy?: boolean
+    checkedAt?: boolean
+    measurements?: boolean
+    defects?: boolean
+    correctedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderQualityCheck"]>
+
+  export type WorkOrderQualityCheckSelectScalar = {
+    id?: boolean
+    workOrderItemId?: boolean
+    routingStepId?: boolean
+    checkType?: boolean
+    result?: boolean
+    checkedBy?: boolean
+    checkedAt?: boolean
+    measurements?: boolean
+    defects?: boolean
+    correctedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkOrderQualityCheckOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workOrderItemId" | "routingStepId" | "checkType" | "result" | "checkedBy" | "checkedAt" | "measurements" | "defects" | "correctedBy" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["workOrderQualityCheck"]>
+  export type WorkOrderQualityCheckInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }
+  export type WorkOrderQualityCheckIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }
+  export type WorkOrderQualityCheckIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderQualityCheck$routingStepArgs<ExtArgs>
+  }
+
+  export type $WorkOrderQualityCheckPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderQualityCheck"
+    objects: {
+      workOrderItem: Prisma.$WorkOrderItemPayload<ExtArgs>
+      routingStep: Prisma.$RoutingStepPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workOrderItemId: string
+      routingStepId: string | null
+      checkType: string
+      result: $Enums.QCResult
+      checkedBy: string
+      checkedAt: Date
+      measurements: string | null
+      defects: string | null
+      correctedBy: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderQualityCheck"]>
+    composites: {}
+  }
+
+  type WorkOrderQualityCheckGetPayload<S extends boolean | null | undefined | WorkOrderQualityCheckDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderQualityCheckPayload, S>
+
+  type WorkOrderQualityCheckCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkOrderQualityCheckFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkOrderQualityCheckCountAggregateInputType | true
+    }
+
+  export interface WorkOrderQualityCheckDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderQualityCheck'], meta: { name: 'WorkOrderQualityCheck' } }
+    /**
+     * Find zero or one WorkOrderQualityCheck that matches the filter.
+     * @param {WorkOrderQualityCheckFindUniqueArgs} args - Arguments to find a WorkOrderQualityCheck
+     * @example
+     * // Get one WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderQualityCheckFindUniqueArgs>(args: SelectSubset<T, WorkOrderQualityCheckFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkOrderQualityCheck that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkOrderQualityCheckFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderQualityCheck
+     * @example
+     * // Get one WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderQualityCheckFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderQualityCheckFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderQualityCheck that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckFindFirstArgs} args - Arguments to find a WorkOrderQualityCheck
+     * @example
+     * // Get one WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderQualityCheckFindFirstArgs>(args?: SelectSubset<T, WorkOrderQualityCheckFindFirstArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderQualityCheck that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckFindFirstOrThrowArgs} args - Arguments to find a WorkOrderQualityCheck
+     * @example
+     * // Get one WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderQualityCheckFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderQualityCheckFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkOrderQualityChecks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderQualityChecks
+     * const workOrderQualityChecks = await prisma.workOrderQualityCheck.findMany()
+     * 
+     * // Get first 10 WorkOrderQualityChecks
+     * const workOrderQualityChecks = await prisma.workOrderQualityCheck.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderQualityCheckWithIdOnly = await prisma.workOrderQualityCheck.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderQualityCheckFindManyArgs>(args?: SelectSubset<T, WorkOrderQualityCheckFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkOrderQualityCheck.
+     * @param {WorkOrderQualityCheckCreateArgs} args - Arguments to create a WorkOrderQualityCheck.
+     * @example
+     * // Create one WorkOrderQualityCheck
+     * const WorkOrderQualityCheck = await prisma.workOrderQualityCheck.create({
+     *   data: {
+     *     // ... data to create a WorkOrderQualityCheck
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderQualityCheckCreateArgs>(args: SelectSubset<T, WorkOrderQualityCheckCreateArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkOrderQualityChecks.
+     * @param {WorkOrderQualityCheckCreateManyArgs} args - Arguments to create many WorkOrderQualityChecks.
+     * @example
+     * // Create many WorkOrderQualityChecks
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderQualityCheckCreateManyArgs>(args?: SelectSubset<T, WorkOrderQualityCheckCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderQualityChecks and returns the data saved in the database.
+     * @param {WorkOrderQualityCheckCreateManyAndReturnArgs} args - Arguments to create many WorkOrderQualityChecks.
+     * @example
+     * // Create many WorkOrderQualityChecks
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderQualityChecks and only return the `id`
+     * const workOrderQualityCheckWithIdOnly = await prisma.workOrderQualityCheck.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderQualityCheckCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderQualityCheckCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkOrderQualityCheck.
+     * @param {WorkOrderQualityCheckDeleteArgs} args - Arguments to delete one WorkOrderQualityCheck.
+     * @example
+     * // Delete one WorkOrderQualityCheck
+     * const WorkOrderQualityCheck = await prisma.workOrderQualityCheck.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderQualityCheck
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderQualityCheckDeleteArgs>(args: SelectSubset<T, WorkOrderQualityCheckDeleteArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkOrderQualityCheck.
+     * @param {WorkOrderQualityCheckUpdateArgs} args - Arguments to update one WorkOrderQualityCheck.
+     * @example
+     * // Update one WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderQualityCheckUpdateArgs>(args: SelectSubset<T, WorkOrderQualityCheckUpdateArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkOrderQualityChecks.
+     * @param {WorkOrderQualityCheckDeleteManyArgs} args - Arguments to filter WorkOrderQualityChecks to delete.
+     * @example
+     * // Delete a few WorkOrderQualityChecks
+     * const { count } = await prisma.workOrderQualityCheck.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderQualityCheckDeleteManyArgs>(args?: SelectSubset<T, WorkOrderQualityCheckDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderQualityChecks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderQualityChecks
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderQualityCheckUpdateManyArgs>(args: SelectSubset<T, WorkOrderQualityCheckUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderQualityChecks and returns the data updated in the database.
+     * @param {WorkOrderQualityCheckUpdateManyAndReturnArgs} args - Arguments to update many WorkOrderQualityChecks.
+     * @example
+     * // Update many WorkOrderQualityChecks
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkOrderQualityChecks and only return the `id`
+     * const workOrderQualityCheckWithIdOnly = await prisma.workOrderQualityCheck.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkOrderQualityCheckUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkOrderQualityCheckUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkOrderQualityCheck.
+     * @param {WorkOrderQualityCheckUpsertArgs} args - Arguments to update or create a WorkOrderQualityCheck.
+     * @example
+     * // Update or create a WorkOrderQualityCheck
+     * const workOrderQualityCheck = await prisma.workOrderQualityCheck.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderQualityCheck
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderQualityCheck we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderQualityCheckUpsertArgs>(args: SelectSubset<T, WorkOrderQualityCheckUpsertArgs<ExtArgs>>): Prisma__WorkOrderQualityCheckClient<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkOrderQualityChecks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckCountArgs} args - Arguments to filter WorkOrderQualityChecks to count.
+     * @example
+     * // Count the number of WorkOrderQualityChecks
+     * const count = await prisma.workOrderQualityCheck.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderQualityChecks we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderQualityCheckCountArgs>(
+      args?: Subset<T, WorkOrderQualityCheckCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderQualityCheckCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderQualityCheck.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderQualityCheckAggregateArgs>(args: Subset<T, WorkOrderQualityCheckAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderQualityCheckAggregateType<T>>
+
+    /**
+     * Group by WorkOrderQualityCheck.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderQualityCheckGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderQualityCheckGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderQualityCheckGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderQualityCheckGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderQualityCheckGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderQualityCheckGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderQualityCheck model
+   */
+  readonly fields: WorkOrderQualityCheckFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderQualityCheck.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderQualityCheckClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workOrderItem<T extends WorkOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItemDefaultArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    routingStep<T extends WorkOrderQualityCheck$routingStepArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderQualityCheck$routingStepArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderQualityCheck model
+   */
+  interface WorkOrderQualityCheckFieldRefs {
+    readonly id: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly workOrderItemId: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly routingStepId: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly checkType: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly result: FieldRef<"WorkOrderQualityCheck", 'QCResult'>
+    readonly checkedBy: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly checkedAt: FieldRef<"WorkOrderQualityCheck", 'DateTime'>
+    readonly measurements: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly defects: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly correctedBy: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly notes: FieldRef<"WorkOrderQualityCheck", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderQualityCheck", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrderQualityCheck", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderQualityCheck findUnique
+   */
+  export type WorkOrderQualityCheckFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderQualityCheck to fetch.
+     */
+    where: WorkOrderQualityCheckWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderQualityCheck findUniqueOrThrow
+   */
+  export type WorkOrderQualityCheckFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderQualityCheck to fetch.
+     */
+    where: WorkOrderQualityCheckWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderQualityCheck findFirst
+   */
+  export type WorkOrderQualityCheckFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderQualityCheck to fetch.
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderQualityChecks to fetch.
+     */
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderQualityChecks.
+     */
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderQualityChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderQualityChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderQualityChecks.
+     */
+    distinct?: WorkOrderQualityCheckScalarFieldEnum | WorkOrderQualityCheckScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderQualityCheck findFirstOrThrow
+   */
+  export type WorkOrderQualityCheckFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderQualityCheck to fetch.
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderQualityChecks to fetch.
+     */
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderQualityChecks.
+     */
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderQualityChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderQualityChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderQualityChecks.
+     */
+    distinct?: WorkOrderQualityCheckScalarFieldEnum | WorkOrderQualityCheckScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderQualityCheck findMany
+   */
+  export type WorkOrderQualityCheckFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderQualityChecks to fetch.
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderQualityChecks to fetch.
+     */
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderQualityChecks.
+     */
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderQualityChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderQualityChecks.
+     */
+    skip?: number
+    distinct?: WorkOrderQualityCheckScalarFieldEnum | WorkOrderQualityCheckScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderQualityCheck create
+   */
+  export type WorkOrderQualityCheckCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderQualityCheck.
+     */
+    data: XOR<WorkOrderQualityCheckCreateInput, WorkOrderQualityCheckUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderQualityCheck createMany
+   */
+  export type WorkOrderQualityCheckCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderQualityChecks.
+     */
+    data: WorkOrderQualityCheckCreateManyInput | WorkOrderQualityCheckCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderQualityCheck createManyAndReturn
+   */
+  export type WorkOrderQualityCheckCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderQualityChecks.
+     */
+    data: WorkOrderQualityCheckCreateManyInput | WorkOrderQualityCheckCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderQualityCheck update
+   */
+  export type WorkOrderQualityCheckUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderQualityCheck.
+     */
+    data: XOR<WorkOrderQualityCheckUpdateInput, WorkOrderQualityCheckUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderQualityCheck to update.
+     */
+    where: WorkOrderQualityCheckWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderQualityCheck updateMany
+   */
+  export type WorkOrderQualityCheckUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderQualityChecks.
+     */
+    data: XOR<WorkOrderQualityCheckUpdateManyMutationInput, WorkOrderQualityCheckUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderQualityChecks to update
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * Limit how many WorkOrderQualityChecks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderQualityCheck updateManyAndReturn
+   */
+  export type WorkOrderQualityCheckUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkOrderQualityChecks.
+     */
+    data: XOR<WorkOrderQualityCheckUpdateManyMutationInput, WorkOrderQualityCheckUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderQualityChecks to update
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * Limit how many WorkOrderQualityChecks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderQualityCheck upsert
+   */
+  export type WorkOrderQualityCheckUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderQualityCheck to update in case it exists.
+     */
+    where: WorkOrderQualityCheckWhereUniqueInput
+    /**
+     * In case the WorkOrderQualityCheck found by the `where` argument doesn't exist, create a new WorkOrderQualityCheck with this data.
+     */
+    create: XOR<WorkOrderQualityCheckCreateInput, WorkOrderQualityCheckUncheckedCreateInput>
+    /**
+     * In case the WorkOrderQualityCheck was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderQualityCheckUpdateInput, WorkOrderQualityCheckUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderQualityCheck delete
+   */
+  export type WorkOrderQualityCheckDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    /**
+     * Filter which WorkOrderQualityCheck to delete.
+     */
+    where: WorkOrderQualityCheckWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderQualityCheck deleteMany
+   */
+  export type WorkOrderQualityCheckDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderQualityChecks to delete
+     */
+    where?: WorkOrderQualityCheckWhereInput
+    /**
+     * Limit how many WorkOrderQualityChecks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderQualityCheck.routingStep
+   */
+  export type WorkOrderQualityCheck$routingStepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    where?: RoutingStepWhereInput
+  }
+
+  /**
+   * WorkOrderQualityCheck without action
+   */
+  export type WorkOrderQualityCheckDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderMaterialUsage
+   */
+
+  export type AggregateWorkOrderMaterialUsage = {
+    _count: WorkOrderMaterialUsageCountAggregateOutputType | null
+    _avg: WorkOrderMaterialUsageAvgAggregateOutputType | null
+    _sum: WorkOrderMaterialUsageSumAggregateOutputType | null
+    _min: WorkOrderMaterialUsageMinAggregateOutputType | null
+    _max: WorkOrderMaterialUsageMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderMaterialUsageAvgAggregateOutputType = {
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+  }
+
+  export type WorkOrderMaterialUsageSumAggregateOutputType = {
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+  }
+
+  export type WorkOrderMaterialUsageMinAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    materialPartId: string | null
+    routingStepId: string | null
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+    consumedAt: Date | null
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderMaterialUsageMaxAggregateOutputType = {
+    id: string | null
+    workOrderItemId: string | null
+    materialPartId: string | null
+    routingStepId: string | null
+    quantityUsed: Decimal | null
+    unitCost: Decimal | null
+    consumedAt: Date | null
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderMaterialUsageCountAggregateOutputType = {
+    id: number
+    workOrderItemId: number
+    materialPartId: number
+    routingStepId: number
+    quantityUsed: number
+    unitCost: number
+    consumedAt: number
+    operatorId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderMaterialUsageAvgAggregateInputType = {
+    quantityUsed?: true
+    unitCost?: true
+  }
+
+  export type WorkOrderMaterialUsageSumAggregateInputType = {
+    quantityUsed?: true
+    unitCost?: true
+  }
+
+  export type WorkOrderMaterialUsageMinAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    materialPartId?: true
+    routingStepId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderMaterialUsageMaxAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    materialPartId?: true
+    routingStepId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderMaterialUsageCountAggregateInputType = {
+    id?: true
+    workOrderItemId?: true
+    materialPartId?: true
+    routingStepId?: true
+    quantityUsed?: true
+    unitCost?: true
+    consumedAt?: true
+    operatorId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderMaterialUsageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderMaterialUsage to aggregate.
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderMaterialUsages to fetch.
+     */
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderMaterialUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderMaterialUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderMaterialUsages
+    **/
+    _count?: true | WorkOrderMaterialUsageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkOrderMaterialUsageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkOrderMaterialUsageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderMaterialUsageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderMaterialUsageMaxAggregateInputType
+  }
+
+  export type GetWorkOrderMaterialUsageAggregateType<T extends WorkOrderMaterialUsageAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderMaterialUsage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderMaterialUsage[P]>
+      : GetScalarType<T[P], AggregateWorkOrderMaterialUsage[P]>
+  }
+
+
+
+
+  export type WorkOrderMaterialUsageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderMaterialUsageWhereInput
+    orderBy?: WorkOrderMaterialUsageOrderByWithAggregationInput | WorkOrderMaterialUsageOrderByWithAggregationInput[]
+    by: WorkOrderMaterialUsageScalarFieldEnum[] | WorkOrderMaterialUsageScalarFieldEnum
+    having?: WorkOrderMaterialUsageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderMaterialUsageCountAggregateInputType | true
+    _avg?: WorkOrderMaterialUsageAvgAggregateInputType
+    _sum?: WorkOrderMaterialUsageSumAggregateInputType
+    _min?: WorkOrderMaterialUsageMinAggregateInputType
+    _max?: WorkOrderMaterialUsageMaxAggregateInputType
+  }
+
+  export type WorkOrderMaterialUsageGroupByOutputType = {
+    id: string
+    workOrderItemId: string
+    materialPartId: string
+    routingStepId: string | null
+    quantityUsed: Decimal
+    unitCost: Decimal | null
+    consumedAt: Date
+    operatorId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderMaterialUsageCountAggregateOutputType | null
+    _avg: WorkOrderMaterialUsageAvgAggregateOutputType | null
+    _sum: WorkOrderMaterialUsageSumAggregateOutputType | null
+    _min: WorkOrderMaterialUsageMinAggregateOutputType | null
+    _max: WorkOrderMaterialUsageMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderMaterialUsageGroupByPayload<T extends WorkOrderMaterialUsageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderMaterialUsageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderMaterialUsageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderMaterialUsageGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderMaterialUsageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderMaterialUsageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    materialPartId?: boolean
+    routingStepId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderMaterialUsage"]>
+
+  export type WorkOrderMaterialUsageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    materialPartId?: boolean
+    routingStepId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderMaterialUsage"]>
+
+  export type WorkOrderMaterialUsageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderItemId?: boolean
+    materialPartId?: boolean
+    routingStepId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }, ExtArgs["result"]["workOrderMaterialUsage"]>
+
+  export type WorkOrderMaterialUsageSelectScalar = {
+    id?: boolean
+    workOrderItemId?: boolean
+    materialPartId?: boolean
+    routingStepId?: boolean
+    quantityUsed?: boolean
+    unitCost?: boolean
+    consumedAt?: boolean
+    operatorId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkOrderMaterialUsageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workOrderItemId" | "materialPartId" | "routingStepId" | "quantityUsed" | "unitCost" | "consumedAt" | "operatorId" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["workOrderMaterialUsage"]>
+  export type WorkOrderMaterialUsageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }
+  export type WorkOrderMaterialUsageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }
+  export type WorkOrderMaterialUsageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workOrderItem?: boolean | WorkOrderItemDefaultArgs<ExtArgs>
+    materialPart?: boolean | PartDefaultArgs<ExtArgs>
+    routingStep?: boolean | WorkOrderMaterialUsage$routingStepArgs<ExtArgs>
+  }
+
+  export type $WorkOrderMaterialUsagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderMaterialUsage"
+    objects: {
+      workOrderItem: Prisma.$WorkOrderItemPayload<ExtArgs>
+      materialPart: Prisma.$PartPayload<ExtArgs>
+      routingStep: Prisma.$RoutingStepPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workOrderItemId: string
+      materialPartId: string
+      routingStepId: string | null
+      quantityUsed: Prisma.Decimal
+      unitCost: Prisma.Decimal | null
+      consumedAt: Date
+      operatorId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderMaterialUsage"]>
+    composites: {}
+  }
+
+  type WorkOrderMaterialUsageGetPayload<S extends boolean | null | undefined | WorkOrderMaterialUsageDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload, S>
+
+  type WorkOrderMaterialUsageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkOrderMaterialUsageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkOrderMaterialUsageCountAggregateInputType | true
+    }
+
+  export interface WorkOrderMaterialUsageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderMaterialUsage'], meta: { name: 'WorkOrderMaterialUsage' } }
+    /**
+     * Find zero or one WorkOrderMaterialUsage that matches the filter.
+     * @param {WorkOrderMaterialUsageFindUniqueArgs} args - Arguments to find a WorkOrderMaterialUsage
+     * @example
+     * // Get one WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderMaterialUsageFindUniqueArgs>(args: SelectSubset<T, WorkOrderMaterialUsageFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkOrderMaterialUsage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkOrderMaterialUsageFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderMaterialUsage
+     * @example
+     * // Get one WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderMaterialUsageFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderMaterialUsageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderMaterialUsage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageFindFirstArgs} args - Arguments to find a WorkOrderMaterialUsage
+     * @example
+     * // Get one WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderMaterialUsageFindFirstArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageFindFirstArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkOrderMaterialUsage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageFindFirstOrThrowArgs} args - Arguments to find a WorkOrderMaterialUsage
+     * @example
+     * // Get one WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderMaterialUsageFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkOrderMaterialUsages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderMaterialUsages
+     * const workOrderMaterialUsages = await prisma.workOrderMaterialUsage.findMany()
+     * 
+     * // Get first 10 WorkOrderMaterialUsages
+     * const workOrderMaterialUsages = await prisma.workOrderMaterialUsage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderMaterialUsageWithIdOnly = await prisma.workOrderMaterialUsage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderMaterialUsageFindManyArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkOrderMaterialUsage.
+     * @param {WorkOrderMaterialUsageCreateArgs} args - Arguments to create a WorkOrderMaterialUsage.
+     * @example
+     * // Create one WorkOrderMaterialUsage
+     * const WorkOrderMaterialUsage = await prisma.workOrderMaterialUsage.create({
+     *   data: {
+     *     // ... data to create a WorkOrderMaterialUsage
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderMaterialUsageCreateArgs>(args: SelectSubset<T, WorkOrderMaterialUsageCreateArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkOrderMaterialUsages.
+     * @param {WorkOrderMaterialUsageCreateManyArgs} args - Arguments to create many WorkOrderMaterialUsages.
+     * @example
+     * // Create many WorkOrderMaterialUsages
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderMaterialUsageCreateManyArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderMaterialUsages and returns the data saved in the database.
+     * @param {WorkOrderMaterialUsageCreateManyAndReturnArgs} args - Arguments to create many WorkOrderMaterialUsages.
+     * @example
+     * // Create many WorkOrderMaterialUsages
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderMaterialUsages and only return the `id`
+     * const workOrderMaterialUsageWithIdOnly = await prisma.workOrderMaterialUsage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderMaterialUsageCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkOrderMaterialUsage.
+     * @param {WorkOrderMaterialUsageDeleteArgs} args - Arguments to delete one WorkOrderMaterialUsage.
+     * @example
+     * // Delete one WorkOrderMaterialUsage
+     * const WorkOrderMaterialUsage = await prisma.workOrderMaterialUsage.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderMaterialUsage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderMaterialUsageDeleteArgs>(args: SelectSubset<T, WorkOrderMaterialUsageDeleteArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkOrderMaterialUsage.
+     * @param {WorkOrderMaterialUsageUpdateArgs} args - Arguments to update one WorkOrderMaterialUsage.
+     * @example
+     * // Update one WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderMaterialUsageUpdateArgs>(args: SelectSubset<T, WorkOrderMaterialUsageUpdateArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkOrderMaterialUsages.
+     * @param {WorkOrderMaterialUsageDeleteManyArgs} args - Arguments to filter WorkOrderMaterialUsages to delete.
+     * @example
+     * // Delete a few WorkOrderMaterialUsages
+     * const { count } = await prisma.workOrderMaterialUsage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderMaterialUsageDeleteManyArgs>(args?: SelectSubset<T, WorkOrderMaterialUsageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderMaterialUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderMaterialUsages
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderMaterialUsageUpdateManyArgs>(args: SelectSubset<T, WorkOrderMaterialUsageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderMaterialUsages and returns the data updated in the database.
+     * @param {WorkOrderMaterialUsageUpdateManyAndReturnArgs} args - Arguments to update many WorkOrderMaterialUsages.
+     * @example
+     * // Update many WorkOrderMaterialUsages
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkOrderMaterialUsages and only return the `id`
+     * const workOrderMaterialUsageWithIdOnly = await prisma.workOrderMaterialUsage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkOrderMaterialUsageUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkOrderMaterialUsageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkOrderMaterialUsage.
+     * @param {WorkOrderMaterialUsageUpsertArgs} args - Arguments to update or create a WorkOrderMaterialUsage.
+     * @example
+     * // Update or create a WorkOrderMaterialUsage
+     * const workOrderMaterialUsage = await prisma.workOrderMaterialUsage.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderMaterialUsage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderMaterialUsage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderMaterialUsageUpsertArgs>(args: SelectSubset<T, WorkOrderMaterialUsageUpsertArgs<ExtArgs>>): Prisma__WorkOrderMaterialUsageClient<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkOrderMaterialUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageCountArgs} args - Arguments to filter WorkOrderMaterialUsages to count.
+     * @example
+     * // Count the number of WorkOrderMaterialUsages
+     * const count = await prisma.workOrderMaterialUsage.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderMaterialUsages we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderMaterialUsageCountArgs>(
+      args?: Subset<T, WorkOrderMaterialUsageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderMaterialUsageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderMaterialUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderMaterialUsageAggregateArgs>(args: Subset<T, WorkOrderMaterialUsageAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderMaterialUsageAggregateType<T>>
+
+    /**
+     * Group by WorkOrderMaterialUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderMaterialUsageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderMaterialUsageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderMaterialUsageGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderMaterialUsageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderMaterialUsageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderMaterialUsageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderMaterialUsage model
+   */
+  readonly fields: WorkOrderMaterialUsageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderMaterialUsage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderMaterialUsageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workOrderItem<T extends WorkOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderItemDefaultArgs<ExtArgs>>): Prisma__WorkOrderItemClient<$Result.GetResult<Prisma.$WorkOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    materialPart<T extends PartDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartDefaultArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    routingStep<T extends WorkOrderMaterialUsage$routingStepArgs<ExtArgs> = {}>(args?: Subset<T, WorkOrderMaterialUsage$routingStepArgs<ExtArgs>>): Prisma__RoutingStepClient<$Result.GetResult<Prisma.$RoutingStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderMaterialUsage model
+   */
+  interface WorkOrderMaterialUsageFieldRefs {
+    readonly id: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly workOrderItemId: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly materialPartId: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly routingStepId: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly quantityUsed: FieldRef<"WorkOrderMaterialUsage", 'Decimal'>
+    readonly unitCost: FieldRef<"WorkOrderMaterialUsage", 'Decimal'>
+    readonly consumedAt: FieldRef<"WorkOrderMaterialUsage", 'DateTime'>
+    readonly operatorId: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly notes: FieldRef<"WorkOrderMaterialUsage", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderMaterialUsage", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrderMaterialUsage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderMaterialUsage findUnique
+   */
+  export type WorkOrderMaterialUsageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderMaterialUsage to fetch.
+     */
+    where: WorkOrderMaterialUsageWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderMaterialUsage findUniqueOrThrow
+   */
+  export type WorkOrderMaterialUsageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderMaterialUsage to fetch.
+     */
+    where: WorkOrderMaterialUsageWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderMaterialUsage findFirst
+   */
+  export type WorkOrderMaterialUsageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderMaterialUsage to fetch.
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderMaterialUsages to fetch.
+     */
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderMaterialUsages.
+     */
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderMaterialUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderMaterialUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderMaterialUsages.
+     */
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderMaterialUsage findFirstOrThrow
+   */
+  export type WorkOrderMaterialUsageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderMaterialUsage to fetch.
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderMaterialUsages to fetch.
+     */
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderMaterialUsages.
+     */
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderMaterialUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderMaterialUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderMaterialUsages.
+     */
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderMaterialUsage findMany
+   */
+  export type WorkOrderMaterialUsageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderMaterialUsages to fetch.
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderMaterialUsages to fetch.
+     */
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderMaterialUsages.
+     */
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderMaterialUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderMaterialUsages.
+     */
+    skip?: number
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderMaterialUsage create
+   */
+  export type WorkOrderMaterialUsageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderMaterialUsage.
+     */
+    data: XOR<WorkOrderMaterialUsageCreateInput, WorkOrderMaterialUsageUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderMaterialUsage createMany
+   */
+  export type WorkOrderMaterialUsageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderMaterialUsages.
+     */
+    data: WorkOrderMaterialUsageCreateManyInput | WorkOrderMaterialUsageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderMaterialUsage createManyAndReturn
+   */
+  export type WorkOrderMaterialUsageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderMaterialUsages.
+     */
+    data: WorkOrderMaterialUsageCreateManyInput | WorkOrderMaterialUsageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderMaterialUsage update
+   */
+  export type WorkOrderMaterialUsageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderMaterialUsage.
+     */
+    data: XOR<WorkOrderMaterialUsageUpdateInput, WorkOrderMaterialUsageUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderMaterialUsage to update.
+     */
+    where: WorkOrderMaterialUsageWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderMaterialUsage updateMany
+   */
+  export type WorkOrderMaterialUsageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderMaterialUsages.
+     */
+    data: XOR<WorkOrderMaterialUsageUpdateManyMutationInput, WorkOrderMaterialUsageUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderMaterialUsages to update
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * Limit how many WorkOrderMaterialUsages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderMaterialUsage updateManyAndReturn
+   */
+  export type WorkOrderMaterialUsageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkOrderMaterialUsages.
+     */
+    data: XOR<WorkOrderMaterialUsageUpdateManyMutationInput, WorkOrderMaterialUsageUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderMaterialUsages to update
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * Limit how many WorkOrderMaterialUsages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkOrderMaterialUsage upsert
+   */
+  export type WorkOrderMaterialUsageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderMaterialUsage to update in case it exists.
+     */
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    /**
+     * In case the WorkOrderMaterialUsage found by the `where` argument doesn't exist, create a new WorkOrderMaterialUsage with this data.
+     */
+    create: XOR<WorkOrderMaterialUsageCreateInput, WorkOrderMaterialUsageUncheckedCreateInput>
+    /**
+     * In case the WorkOrderMaterialUsage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderMaterialUsageUpdateInput, WorkOrderMaterialUsageUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderMaterialUsage delete
+   */
+  export type WorkOrderMaterialUsageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    /**
+     * Filter which WorkOrderMaterialUsage to delete.
+     */
+    where: WorkOrderMaterialUsageWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderMaterialUsage deleteMany
+   */
+  export type WorkOrderMaterialUsageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderMaterialUsages to delete
+     */
+    where?: WorkOrderMaterialUsageWhereInput
+    /**
+     * Limit how many WorkOrderMaterialUsages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkOrderMaterialUsage.routingStep
+   */
+  export type WorkOrderMaterialUsage$routingStepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoutingStep
+     */
+    select?: RoutingStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoutingStep
+     */
+    omit?: RoutingStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoutingStepInclude<ExtArgs> | null
+    where?: RoutingStepWhereInput
+  }
+
+  /**
+   * WorkOrderMaterialUsage without action
+   */
+  export type WorkOrderMaterialUsageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
   }
 
 
@@ -12861,6 +18236,9 @@ export namespace Prisma {
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
     confirmations?: boolean | RoutingStep$confirmationsArgs<ExtArgs>
+    workOrderProgress?: boolean | RoutingStep$workOrderProgressArgs<ExtArgs>
+    workOrderQualityChecks?: boolean | RoutingStep$workOrderQualityChecksArgs<ExtArgs>
+    workOrderMaterialUsage?: boolean | RoutingStep$workOrderMaterialUsageArgs<ExtArgs>
     _count?: boolean | RoutingStepCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["routingStep"]>
 
@@ -12915,6 +18293,9 @@ export namespace Prisma {
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     workstation?: boolean | WorkstationDefaultArgs<ExtArgs>
     confirmations?: boolean | RoutingStep$confirmationsArgs<ExtArgs>
+    workOrderProgress?: boolean | RoutingStep$workOrderProgressArgs<ExtArgs>
+    workOrderQualityChecks?: boolean | RoutingStep$workOrderQualityChecksArgs<ExtArgs>
+    workOrderMaterialUsage?: boolean | RoutingStep$workOrderMaterialUsageArgs<ExtArgs>
     _count?: boolean | RoutingStepCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RoutingStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12932,6 +18313,9 @@ export namespace Prisma {
       batch: Prisma.$BatchPayload<ExtArgs>
       workstation: Prisma.$WorkstationPayload<ExtArgs>
       confirmations: Prisma.$StepConfirmationPayload<ExtArgs>[]
+      workOrderProgress: Prisma.$WorkOrderStepProgressPayload<ExtArgs>[]
+      workOrderQualityChecks: Prisma.$WorkOrderQualityCheckPayload<ExtArgs>[]
+      workOrderMaterialUsage: Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13342,6 +18726,9 @@ export namespace Prisma {
     batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     workstation<T extends WorkstationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkstationDefaultArgs<ExtArgs>>): Prisma__WorkstationClient<$Result.GetResult<Prisma.$WorkstationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     confirmations<T extends RoutingStep$confirmationsArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStep$confirmationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workOrderProgress<T extends RoutingStep$workOrderProgressArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStep$workOrderProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderStepProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workOrderQualityChecks<T extends RoutingStep$workOrderQualityChecksArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStep$workOrderQualityChecksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderQualityCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workOrderMaterialUsage<T extends RoutingStep$workOrderMaterialUsageArgs<ExtArgs> = {}>(args?: Subset<T, RoutingStep$workOrderMaterialUsageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13799,6 +19186,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StepConfirmationScalarFieldEnum | StepConfirmationScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep.workOrderProgress
+   */
+  export type RoutingStep$workOrderProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderStepProgress
+     */
+    select?: WorkOrderStepProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderStepProgress
+     */
+    omit?: WorkOrderStepProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderStepProgressInclude<ExtArgs> | null
+    where?: WorkOrderStepProgressWhereInput
+    orderBy?: WorkOrderStepProgressOrderByWithRelationInput | WorkOrderStepProgressOrderByWithRelationInput[]
+    cursor?: WorkOrderStepProgressWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderStepProgressScalarFieldEnum | WorkOrderStepProgressScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep.workOrderQualityChecks
+   */
+  export type RoutingStep$workOrderQualityChecksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderQualityCheck
+     */
+    select?: WorkOrderQualityCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderQualityCheck
+     */
+    omit?: WorkOrderQualityCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderQualityCheckInclude<ExtArgs> | null
+    where?: WorkOrderQualityCheckWhereInput
+    orderBy?: WorkOrderQualityCheckOrderByWithRelationInput | WorkOrderQualityCheckOrderByWithRelationInput[]
+    cursor?: WorkOrderQualityCheckWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderQualityCheckScalarFieldEnum | WorkOrderQualityCheckScalarFieldEnum[]
+  }
+
+  /**
+   * RoutingStep.workOrderMaterialUsage
+   */
+  export type RoutingStep$workOrderMaterialUsageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderMaterialUsage
+     */
+    select?: WorkOrderMaterialUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkOrderMaterialUsage
+     */
+    omit?: WorkOrderMaterialUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkOrderMaterialUsageInclude<ExtArgs> | null
+    where?: WorkOrderMaterialUsageWhereInput
+    orderBy?: WorkOrderMaterialUsageOrderByWithRelationInput | WorkOrderMaterialUsageOrderByWithRelationInput[]
+    cursor?: WorkOrderMaterialUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkOrderMaterialUsageScalarFieldEnum | WorkOrderMaterialUsageScalarFieldEnum[]
   }
 
   /**
@@ -23421,6 +28880,77 @@ export namespace Prisma {
   export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
 
 
+  export const WorkOrderItemScalarFieldEnum: {
+    id: 'id',
+    batchId: 'batchId',
+    serialNumber: 'serialNumber',
+    itemNumber: 'itemNumber',
+    status: 'status',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
+    currentStepId: 'currentStepId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderItemScalarFieldEnum = (typeof WorkOrderItemScalarFieldEnum)[keyof typeof WorkOrderItemScalarFieldEnum]
+
+
+  export const WorkOrderStepProgressScalarFieldEnum: {
+    id: 'id',
+    workOrderItemId: 'workOrderItemId',
+    routingStepId: 'routingStepId',
+    status: 'status',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
+    operatorId: 'operatorId',
+    actualTime: 'actualTime',
+    notes: 'notes',
+    photoUrl: 'photoUrl',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderStepProgressScalarFieldEnum = (typeof WorkOrderStepProgressScalarFieldEnum)[keyof typeof WorkOrderStepProgressScalarFieldEnum]
+
+
+  export const WorkOrderQualityCheckScalarFieldEnum: {
+    id: 'id',
+    workOrderItemId: 'workOrderItemId',
+    routingStepId: 'routingStepId',
+    checkType: 'checkType',
+    result: 'result',
+    checkedBy: 'checkedBy',
+    checkedAt: 'checkedAt',
+    measurements: 'measurements',
+    defects: 'defects',
+    correctedBy: 'correctedBy',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderQualityCheckScalarFieldEnum = (typeof WorkOrderQualityCheckScalarFieldEnum)[keyof typeof WorkOrderQualityCheckScalarFieldEnum]
+
+
+  export const WorkOrderMaterialUsageScalarFieldEnum: {
+    id: 'id',
+    workOrderItemId: 'workOrderItemId',
+    materialPartId: 'materialPartId',
+    routingStepId: 'routingStepId',
+    quantityUsed: 'quantityUsed',
+    unitCost: 'unitCost',
+    consumedAt: 'consumedAt',
+    operatorId: 'operatorId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderMaterialUsageScalarFieldEnum = (typeof WorkOrderMaterialUsageScalarFieldEnum)[keyof typeof WorkOrderMaterialUsageScalarFieldEnum]
+
+
   export const MaterialConsumptionScalarFieldEnum: {
     id: 'id',
     batchId: 'batchId',
@@ -23763,6 +29293,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'WorkOrderItemStatus'
+   */
+  export type EnumWorkOrderItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkOrderItemStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'WorkOrderItemStatus[]'
+   */
+  export type ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkOrderItemStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'StepStatus'
    */
   export type EnumStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepStatus'>
@@ -23773,6 +29317,20 @@ export namespace Prisma {
    * Reference to a field of type 'StepStatus[]'
    */
   export type ListEnumStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'QCResult'
+   */
+  export type EnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult'>
+    
+
+
+  /**
+   * Reference to a field of type 'QCResult[]'
+   */
+  export type ListEnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult[]'>
     
 
 
@@ -23815,20 +29373,6 @@ export namespace Prisma {
    * Reference to a field of type 'ConfirmationStatus[]'
    */
   export type ListEnumConfirmationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConfirmationStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'QCResult'
-   */
-  export type EnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult'>
-    
-
-
-  /**
-   * Reference to a field of type 'QCResult[]'
-   */
-  export type ListEnumQCResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QCResult[]'>
     
 
 
@@ -24086,6 +29630,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentListRelationFilter
     orderLineItems?: OrderLineItemListRelationFilter
     materialConsumptions?: MaterialConsumptionListRelationFilter
+    workOrderMaterialUsage?: WorkOrderMaterialUsageListRelationFilter
   }
 
   export type PartOrderByWithRelationInput = {
@@ -24109,6 +29654,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentOrderByRelationAggregateInput
     orderLineItems?: OrderLineItemOrderByRelationAggregateInput
     materialConsumptions?: MaterialConsumptionOrderByRelationAggregateInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageOrderByRelationAggregateInput
   }
 
   export type PartWhereUniqueInput = Prisma.AtLeast<{
@@ -24135,6 +29681,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentListRelationFilter
     orderLineItems?: OrderLineItemListRelationFilter
     materialConsumptions?: MaterialConsumptionListRelationFilter
+    workOrderMaterialUsage?: WorkOrderMaterialUsageListRelationFilter
   }, "id" | "partNumber">
 
   export type PartOrderByWithAggregationInput = {
@@ -24462,6 +30009,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepListRelationFilter
     qcRecords?: QCRecordListRelationFilter
     materialConsumption?: MaterialConsumptionListRelationFilter
+    workOrderItems?: WorkOrderItemListRelationFilter
   }
 
   export type BatchOrderByWithRelationInput = {
@@ -24481,6 +30029,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepOrderByRelationAggregateInput
     qcRecords?: QCRecordOrderByRelationAggregateInput
     materialConsumption?: MaterialConsumptionOrderByRelationAggregateInput
+    workOrderItems?: WorkOrderItemOrderByRelationAggregateInput
   }
 
   export type BatchWhereUniqueInput = Prisma.AtLeast<{
@@ -24503,6 +30052,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepListRelationFilter
     qcRecords?: QCRecordListRelationFilter
     materialConsumption?: MaterialConsumptionListRelationFilter
+    workOrderItems?: WorkOrderItemListRelationFilter
   }, "id" | "batchId">
 
   export type BatchOrderByWithAggregationInput = {
@@ -24541,6 +30091,391 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+  }
+
+  export type WorkOrderItemWhereInput = {
+    AND?: WorkOrderItemWhereInput | WorkOrderItemWhereInput[]
+    OR?: WorkOrderItemWhereInput[]
+    NOT?: WorkOrderItemWhereInput | WorkOrderItemWhereInput[]
+    id?: StringFilter<"WorkOrderItem"> | string
+    batchId?: StringFilter<"WorkOrderItem"> | string
+    serialNumber?: StringFilter<"WorkOrderItem"> | string
+    itemNumber?: IntFilter<"WorkOrderItem"> | number
+    status?: EnumWorkOrderItemStatusFilter<"WorkOrderItem"> | $Enums.WorkOrderItemStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    currentStepId?: StringNullableFilter<"WorkOrderItem"> | string | null
+    notes?: StringNullableFilter<"WorkOrderItem"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    stepProgress?: WorkOrderStepProgressListRelationFilter
+    qualityChecks?: WorkOrderQualityCheckListRelationFilter
+    materialUsage?: WorkOrderMaterialUsageListRelationFilter
+  }
+
+  export type WorkOrderItemOrderByWithRelationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    serialNumber?: SortOrder
+    itemNumber?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    currentStepId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    stepProgress?: WorkOrderStepProgressOrderByRelationAggregateInput
+    qualityChecks?: WorkOrderQualityCheckOrderByRelationAggregateInput
+    materialUsage?: WorkOrderMaterialUsageOrderByRelationAggregateInput
+  }
+
+  export type WorkOrderItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    serialNumber?: string
+    batchId_itemNumber?: WorkOrderItemBatchIdItemNumberCompoundUniqueInput
+    AND?: WorkOrderItemWhereInput | WorkOrderItemWhereInput[]
+    OR?: WorkOrderItemWhereInput[]
+    NOT?: WorkOrderItemWhereInput | WorkOrderItemWhereInput[]
+    batchId?: StringFilter<"WorkOrderItem"> | string
+    itemNumber?: IntFilter<"WorkOrderItem"> | number
+    status?: EnumWorkOrderItemStatusFilter<"WorkOrderItem"> | $Enums.WorkOrderItemStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    currentStepId?: StringNullableFilter<"WorkOrderItem"> | string | null
+    notes?: StringNullableFilter<"WorkOrderItem"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    stepProgress?: WorkOrderStepProgressListRelationFilter
+    qualityChecks?: WorkOrderQualityCheckListRelationFilter
+    materialUsage?: WorkOrderMaterialUsageListRelationFilter
+  }, "id" | "serialNumber" | "batchId_itemNumber">
+
+  export type WorkOrderItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    serialNumber?: SortOrder
+    itemNumber?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    currentStepId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderItemCountOrderByAggregateInput
+    _avg?: WorkOrderItemAvgOrderByAggregateInput
+    _max?: WorkOrderItemMaxOrderByAggregateInput
+    _min?: WorkOrderItemMinOrderByAggregateInput
+    _sum?: WorkOrderItemSumOrderByAggregateInput
+  }
+
+  export type WorkOrderItemScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderItemScalarWhereWithAggregatesInput | WorkOrderItemScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderItemScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderItemScalarWhereWithAggregatesInput | WorkOrderItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderItem"> | string
+    batchId?: StringWithAggregatesFilter<"WorkOrderItem"> | string
+    serialNumber?: StringWithAggregatesFilter<"WorkOrderItem"> | string
+    itemNumber?: IntWithAggregatesFilter<"WorkOrderItem"> | number
+    status?: EnumWorkOrderItemStatusWithAggregatesFilter<"WorkOrderItem"> | $Enums.WorkOrderItemStatus
+    startedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrderItem"> | Date | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrderItem"> | Date | string | null
+    currentStepId?: StringNullableWithAggregatesFilter<"WorkOrderItem"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"WorkOrderItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderItem"> | Date | string
+  }
+
+  export type WorkOrderStepProgressWhereInput = {
+    AND?: WorkOrderStepProgressWhereInput | WorkOrderStepProgressWhereInput[]
+    OR?: WorkOrderStepProgressWhereInput[]
+    NOT?: WorkOrderStepProgressWhereInput | WorkOrderStepProgressWhereInput[]
+    id?: StringFilter<"WorkOrderStepProgress"> | string
+    workOrderItemId?: StringFilter<"WorkOrderStepProgress"> | string
+    routingStepId?: StringFilter<"WorkOrderStepProgress"> | string
+    status?: EnumStepStatusFilter<"WorkOrderStepProgress"> | $Enums.StepStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    operatorId?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    actualTime?: IntNullableFilter<"WorkOrderStepProgress"> | number | null
+    notes?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    photoUrl?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
+  }
+
+  export type WorkOrderStepProgressOrderByWithRelationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    actualTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workOrderItem?: WorkOrderItemOrderByWithRelationInput
+    routingStep?: RoutingStepOrderByWithRelationInput
+  }
+
+  export type WorkOrderStepProgressWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    workOrderItemId_routingStepId?: WorkOrderStepProgressWorkOrderItemIdRoutingStepIdCompoundUniqueInput
+    AND?: WorkOrderStepProgressWhereInput | WorkOrderStepProgressWhereInput[]
+    OR?: WorkOrderStepProgressWhereInput[]
+    NOT?: WorkOrderStepProgressWhereInput | WorkOrderStepProgressWhereInput[]
+    workOrderItemId?: StringFilter<"WorkOrderStepProgress"> | string
+    routingStepId?: StringFilter<"WorkOrderStepProgress"> | string
+    status?: EnumStepStatusFilter<"WorkOrderStepProgress"> | $Enums.StepStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    operatorId?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    actualTime?: IntNullableFilter<"WorkOrderStepProgress"> | number | null
+    notes?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    photoUrl?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    routingStep?: XOR<RoutingStepScalarRelationFilter, RoutingStepWhereInput>
+  }, "id" | "workOrderItemId_routingStepId">
+
+  export type WorkOrderStepProgressOrderByWithAggregationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    actualTime?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderStepProgressCountOrderByAggregateInput
+    _avg?: WorkOrderStepProgressAvgOrderByAggregateInput
+    _max?: WorkOrderStepProgressMaxOrderByAggregateInput
+    _min?: WorkOrderStepProgressMinOrderByAggregateInput
+    _sum?: WorkOrderStepProgressSumOrderByAggregateInput
+  }
+
+  export type WorkOrderStepProgressScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderStepProgressScalarWhereWithAggregatesInput | WorkOrderStepProgressScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderStepProgressScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderStepProgressScalarWhereWithAggregatesInput | WorkOrderStepProgressScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderStepProgress"> | string
+    workOrderItemId?: StringWithAggregatesFilter<"WorkOrderStepProgress"> | string
+    routingStepId?: StringWithAggregatesFilter<"WorkOrderStepProgress"> | string
+    status?: EnumStepStatusWithAggregatesFilter<"WorkOrderStepProgress"> | $Enums.StepStatus
+    startedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrderStepProgress"> | Date | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrderStepProgress"> | Date | string | null
+    operatorId?: StringNullableWithAggregatesFilter<"WorkOrderStepProgress"> | string | null
+    actualTime?: IntNullableWithAggregatesFilter<"WorkOrderStepProgress"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"WorkOrderStepProgress"> | string | null
+    photoUrl?: StringNullableWithAggregatesFilter<"WorkOrderStepProgress"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderStepProgress"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderStepProgress"> | Date | string
+  }
+
+  export type WorkOrderQualityCheckWhereInput = {
+    AND?: WorkOrderQualityCheckWhereInput | WorkOrderQualityCheckWhereInput[]
+    OR?: WorkOrderQualityCheckWhereInput[]
+    NOT?: WorkOrderQualityCheckWhereInput | WorkOrderQualityCheckWhereInput[]
+    id?: StringFilter<"WorkOrderQualityCheck"> | string
+    workOrderItemId?: StringFilter<"WorkOrderQualityCheck"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    checkType?: StringFilter<"WorkOrderQualityCheck"> | string
+    result?: EnumQCResultFilter<"WorkOrderQualityCheck"> | $Enums.QCResult
+    checkedBy?: StringFilter<"WorkOrderQualityCheck"> | string
+    checkedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    measurements?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    defects?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    correctedBy?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    notes?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    routingStep?: XOR<RoutingStepNullableScalarRelationFilter, RoutingStepWhereInput> | null
+  }
+
+  export type WorkOrderQualityCheckOrderByWithRelationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrderInput | SortOrder
+    checkType?: SortOrder
+    result?: SortOrder
+    checkedBy?: SortOrder
+    checkedAt?: SortOrder
+    measurements?: SortOrderInput | SortOrder
+    defects?: SortOrderInput | SortOrder
+    correctedBy?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workOrderItem?: WorkOrderItemOrderByWithRelationInput
+    routingStep?: RoutingStepOrderByWithRelationInput
+  }
+
+  export type WorkOrderQualityCheckWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WorkOrderQualityCheckWhereInput | WorkOrderQualityCheckWhereInput[]
+    OR?: WorkOrderQualityCheckWhereInput[]
+    NOT?: WorkOrderQualityCheckWhereInput | WorkOrderQualityCheckWhereInput[]
+    workOrderItemId?: StringFilter<"WorkOrderQualityCheck"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    checkType?: StringFilter<"WorkOrderQualityCheck"> | string
+    result?: EnumQCResultFilter<"WorkOrderQualityCheck"> | $Enums.QCResult
+    checkedBy?: StringFilter<"WorkOrderQualityCheck"> | string
+    checkedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    measurements?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    defects?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    correctedBy?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    notes?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    routingStep?: XOR<RoutingStepNullableScalarRelationFilter, RoutingStepWhereInput> | null
+  }, "id">
+
+  export type WorkOrderQualityCheckOrderByWithAggregationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrderInput | SortOrder
+    checkType?: SortOrder
+    result?: SortOrder
+    checkedBy?: SortOrder
+    checkedAt?: SortOrder
+    measurements?: SortOrderInput | SortOrder
+    defects?: SortOrderInput | SortOrder
+    correctedBy?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderQualityCheckCountOrderByAggregateInput
+    _max?: WorkOrderQualityCheckMaxOrderByAggregateInput
+    _min?: WorkOrderQualityCheckMinOrderByAggregateInput
+  }
+
+  export type WorkOrderQualityCheckScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderQualityCheckScalarWhereWithAggregatesInput | WorkOrderQualityCheckScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderQualityCheckScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderQualityCheckScalarWhereWithAggregatesInput | WorkOrderQualityCheckScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderQualityCheck"> | string
+    workOrderItemId?: StringWithAggregatesFilter<"WorkOrderQualityCheck"> | string
+    routingStepId?: StringNullableWithAggregatesFilter<"WorkOrderQualityCheck"> | string | null
+    checkType?: StringWithAggregatesFilter<"WorkOrderQualityCheck"> | string
+    result?: EnumQCResultWithAggregatesFilter<"WorkOrderQualityCheck"> | $Enums.QCResult
+    checkedBy?: StringWithAggregatesFilter<"WorkOrderQualityCheck"> | string
+    checkedAt?: DateTimeWithAggregatesFilter<"WorkOrderQualityCheck"> | Date | string
+    measurements?: StringNullableWithAggregatesFilter<"WorkOrderQualityCheck"> | string | null
+    defects?: StringNullableWithAggregatesFilter<"WorkOrderQualityCheck"> | string | null
+    correctedBy?: StringNullableWithAggregatesFilter<"WorkOrderQualityCheck"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"WorkOrderQualityCheck"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderQualityCheck"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderQualityCheck"> | Date | string
+  }
+
+  export type WorkOrderMaterialUsageWhereInput = {
+    AND?: WorkOrderMaterialUsageWhereInput | WorkOrderMaterialUsageWhereInput[]
+    OR?: WorkOrderMaterialUsageWhereInput[]
+    NOT?: WorkOrderMaterialUsageWhereInput | WorkOrderMaterialUsageWhereInput[]
+    id?: StringFilter<"WorkOrderMaterialUsage"> | string
+    workOrderItemId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    materialPartId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    quantityUsed?: DecimalFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    operatorId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    notes?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    materialPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+    routingStep?: XOR<RoutingStepNullableScalarRelationFilter, RoutingStepWhereInput> | null
+  }
+
+  export type WorkOrderMaterialUsageOrderByWithRelationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    materialPartId?: SortOrder
+    routingStepId?: SortOrderInput | SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrderInput | SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workOrderItem?: WorkOrderItemOrderByWithRelationInput
+    materialPart?: PartOrderByWithRelationInput
+    routingStep?: RoutingStepOrderByWithRelationInput
+  }
+
+  export type WorkOrderMaterialUsageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    workOrderItemId_materialPartId_routingStepId?: WorkOrderMaterialUsageWorkOrderItemIdMaterialPartIdRoutingStepIdCompoundUniqueInput
+    AND?: WorkOrderMaterialUsageWhereInput | WorkOrderMaterialUsageWhereInput[]
+    OR?: WorkOrderMaterialUsageWhereInput[]
+    NOT?: WorkOrderMaterialUsageWhereInput | WorkOrderMaterialUsageWhereInput[]
+    workOrderItemId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    materialPartId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    quantityUsed?: DecimalFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    operatorId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    notes?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    workOrderItem?: XOR<WorkOrderItemScalarRelationFilter, WorkOrderItemWhereInput>
+    materialPart?: XOR<PartScalarRelationFilter, PartWhereInput>
+    routingStep?: XOR<RoutingStepNullableScalarRelationFilter, RoutingStepWhereInput> | null
+  }, "id" | "workOrderItemId_materialPartId_routingStepId">
+
+  export type WorkOrderMaterialUsageOrderByWithAggregationInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    materialPartId?: SortOrder
+    routingStepId?: SortOrderInput | SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrderInput | SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderMaterialUsageCountOrderByAggregateInput
+    _avg?: WorkOrderMaterialUsageAvgOrderByAggregateInput
+    _max?: WorkOrderMaterialUsageMaxOrderByAggregateInput
+    _min?: WorkOrderMaterialUsageMinOrderByAggregateInput
+    _sum?: WorkOrderMaterialUsageSumOrderByAggregateInput
+  }
+
+  export type WorkOrderMaterialUsageScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderMaterialUsageScalarWhereWithAggregatesInput | WorkOrderMaterialUsageScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderMaterialUsageScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderMaterialUsageScalarWhereWithAggregatesInput | WorkOrderMaterialUsageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderMaterialUsage"> | string
+    workOrderItemId?: StringWithAggregatesFilter<"WorkOrderMaterialUsage"> | string
+    materialPartId?: StringWithAggregatesFilter<"WorkOrderMaterialUsage"> | string
+    routingStepId?: StringNullableWithAggregatesFilter<"WorkOrderMaterialUsage"> | string | null
+    quantityUsed?: DecimalWithAggregatesFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableWithAggregatesFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeWithAggregatesFilter<"WorkOrderMaterialUsage"> | Date | string
+    operatorId?: StringNullableWithAggregatesFilter<"WorkOrderMaterialUsage"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"WorkOrderMaterialUsage"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderMaterialUsage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderMaterialUsage"> | Date | string
   }
 
   export type MaterialConsumptionWhereInput = {
@@ -24647,6 +30582,9 @@ export namespace Prisma {
     batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
     workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
     confirmations?: StepConfirmationListRelationFilter
+    workOrderProgress?: WorkOrderStepProgressListRelationFilter
+    workOrderQualityChecks?: WorkOrderQualityCheckListRelationFilter
+    workOrderMaterialUsage?: WorkOrderMaterialUsageListRelationFilter
   }
 
   export type RoutingStepOrderByWithRelationInput = {
@@ -24664,6 +30602,9 @@ export namespace Prisma {
     batch?: BatchOrderByWithRelationInput
     workstation?: WorkstationOrderByWithRelationInput
     confirmations?: StepConfirmationOrderByRelationAggregateInput
+    workOrderProgress?: WorkOrderStepProgressOrderByRelationAggregateInput
+    workOrderQualityChecks?: WorkOrderQualityCheckOrderByRelationAggregateInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageOrderByRelationAggregateInput
   }
 
   export type RoutingStepWhereUniqueInput = Prisma.AtLeast<{
@@ -24685,6 +30626,9 @@ export namespace Prisma {
     batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
     workstation?: XOR<WorkstationScalarRelationFilter, WorkstationWhereInput>
     confirmations?: StepConfirmationListRelationFilter
+    workOrderProgress?: WorkOrderStepProgressListRelationFilter
+    workOrderQualityChecks?: WorkOrderQualityCheckListRelationFilter
+    workOrderMaterialUsage?: WorkOrderMaterialUsageListRelationFilter
   }, "id" | "batchId_stepNumber">
 
   export type RoutingStepOrderByWithAggregationInput = {
@@ -25703,6 +31647,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUncheckedCreateInput = {
@@ -25726,6 +31671,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUpdateInput = {
@@ -25749,6 +31695,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUncheckedUpdateInput = {
@@ -25772,6 +31719,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartCreateManyInput = {
@@ -26123,6 +32071,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateInput = {
@@ -26141,6 +32090,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUpdateInput = {
@@ -26159,6 +32109,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateInput = {
@@ -26177,6 +32128,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchCreateManyInput = {
@@ -26218,6 +32170,423 @@ export namespace Prisma {
     actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
     status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderItemCreateInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutWorkOrderItemsInput
+    stepProgress?: WorkOrderStepProgressCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUncheckedCreateInput = {
+    id?: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutWorkOrderItemsNestedInput
+    stepProgress?: WorkOrderStepProgressUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemCreateManyInput = {
+    id?: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressCreateInput = {
+    id?: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutStepProgressInput
+    routingStep: RoutingStepCreateNestedOneWithoutWorkOrderProgressInput
+  }
+
+  export type WorkOrderStepProgressUncheckedCreateInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutStepProgressNestedInput
+    routingStep?: RoutingStepUpdateOneRequiredWithoutWorkOrderProgressNestedInput
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressCreateManyInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateInput = {
+    id?: string
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutQualityChecksInput
+    routingStep?: RoutingStepCreateNestedOneWithoutWorkOrderQualityChecksInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedCreateInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId?: string | null
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutQualityChecksNestedInput
+    routingStep?: RoutingStepUpdateOneWithoutWorkOrderQualityChecksNestedInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateManyInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId?: string | null
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutMaterialUsageInput
+    materialPart: PartCreateNestedOneWithoutWorkOrderMaterialUsageInput
+    routingStep?: RoutingStepCreateNestedOneWithoutWorkOrderMaterialUsageInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateInput = {
+    id?: string
+    workOrderItemId: string
+    materialPartId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutMaterialUsageNestedInput
+    materialPart?: PartUpdateOneRequiredWithoutWorkOrderMaterialUsageNestedInput
+    routingStep?: RoutingStepUpdateOneWithoutWorkOrderMaterialUsageNestedInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateManyInput = {
+    id?: string
+    workOrderItemId: string
+    materialPartId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26325,6 +32694,9 @@ export namespace Prisma {
     batch: BatchCreateNestedOneWithoutRoutingStepsInput
     workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
     confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepUncheckedCreateInput = {
@@ -26340,6 +32712,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepUpdateInput = {
@@ -26355,6 +32730,9 @@ export namespace Prisma {
     batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
     workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
     confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateInput = {
@@ -26370,6 +32748,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepCreateManyInput = {
@@ -27545,11 +33926,21 @@ export namespace Prisma {
     none?: MaterialConsumptionWhereInput
   }
 
+  export type WorkOrderMaterialUsageListRelationFilter = {
+    every?: WorkOrderMaterialUsageWhereInput
+    some?: WorkOrderMaterialUsageWhereInput
+    none?: WorkOrderMaterialUsageWhereInput
+  }
+
   export type BOMComponentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type MaterialConsumptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkOrderMaterialUsageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27935,11 +34326,21 @@ export namespace Prisma {
     none?: QCRecordWhereInput
   }
 
+  export type WorkOrderItemListRelationFilter = {
+    every?: WorkOrderItemWhereInput
+    some?: WorkOrderItemWhereInput
+    none?: WorkOrderItemWhereInput
+  }
+
   export type RoutingStepOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type QCRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkOrderItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28016,9 +34417,314 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
+  export type EnumWorkOrderItemStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkOrderItemStatus | EnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel> | $Enums.WorkOrderItemStatus
+  }
+
   export type BatchScalarRelationFilter = {
     is?: BatchWhereInput
     isNot?: BatchWhereInput
+  }
+
+  export type WorkOrderStepProgressListRelationFilter = {
+    every?: WorkOrderStepProgressWhereInput
+    some?: WorkOrderStepProgressWhereInput
+    none?: WorkOrderStepProgressWhereInput
+  }
+
+  export type WorkOrderQualityCheckListRelationFilter = {
+    every?: WorkOrderQualityCheckWhereInput
+    some?: WorkOrderQualityCheckWhereInput
+    none?: WorkOrderQualityCheckWhereInput
+  }
+
+  export type WorkOrderStepProgressOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkOrderQualityCheckOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkOrderItemBatchIdItemNumberCompoundUniqueInput = {
+    batchId: string
+    itemNumber: number
+  }
+
+  export type WorkOrderItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    serialNumber?: SortOrder
+    itemNumber?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    currentStepId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderItemAvgOrderByAggregateInput = {
+    itemNumber?: SortOrder
+  }
+
+  export type WorkOrderItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    serialNumber?: SortOrder
+    itemNumber?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    currentStepId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    serialNumber?: SortOrder
+    itemNumber?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    currentStepId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderItemSumOrderByAggregateInput = {
+    itemNumber?: SortOrder
+  }
+
+  export type EnumWorkOrderItemStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkOrderItemStatus | EnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkOrderItemStatusWithAggregatesFilter<$PrismaModel> | $Enums.WorkOrderItemStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel>
+    _max?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel>
+  }
+
+  export type EnumStepStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
+  }
+
+  export type WorkOrderItemScalarRelationFilter = {
+    is?: WorkOrderItemWhereInput
+    isNot?: WorkOrderItemWhereInput
+  }
+
+  export type RoutingStepScalarRelationFilter = {
+    is?: RoutingStepWhereInput
+    isNot?: RoutingStepWhereInput
+  }
+
+  export type WorkOrderStepProgressWorkOrderItemIdRoutingStepIdCompoundUniqueInput = {
+    workOrderItemId: string
+    routingStepId: string
+  }
+
+  export type WorkOrderStepProgressCountOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    operatorId?: SortOrder
+    actualTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderStepProgressAvgOrderByAggregateInput = {
+    actualTime?: SortOrder
+  }
+
+  export type WorkOrderStepProgressMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    operatorId?: SortOrder
+    actualTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderStepProgressMinOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    status?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    operatorId?: SortOrder
+    actualTime?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderStepProgressSumOrderByAggregateInput = {
+    actualTime?: SortOrder
+  }
+
+  export type EnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepStatusWithAggregatesFilter<$PrismaModel> | $Enums.StepStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStepStatusFilter<$PrismaModel>
+    _max?: NestedEnumStepStatusFilter<$PrismaModel>
+  }
+
+  export type EnumQCResultFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
+  }
+
+  export type RoutingStepNullableScalarRelationFilter = {
+    is?: RoutingStepWhereInput | null
+    isNot?: RoutingStepWhereInput | null
+  }
+
+  export type WorkOrderQualityCheckCountOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    checkType?: SortOrder
+    result?: SortOrder
+    checkedBy?: SortOrder
+    checkedAt?: SortOrder
+    measurements?: SortOrder
+    defects?: SortOrder
+    correctedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderQualityCheckMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    checkType?: SortOrder
+    result?: SortOrder
+    checkedBy?: SortOrder
+    checkedAt?: SortOrder
+    measurements?: SortOrder
+    defects?: SortOrder
+    correctedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderQualityCheckMinOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    routingStepId?: SortOrder
+    checkType?: SortOrder
+    result?: SortOrder
+    checkedBy?: SortOrder
+    checkedAt?: SortOrder
+    measurements?: SortOrder
+    defects?: SortOrder
+    correctedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQCResultFilter<$PrismaModel>
+    _max?: NestedEnumQCResultFilter<$PrismaModel>
+  }
+
+  export type WorkOrderMaterialUsageWorkOrderItemIdMaterialPartIdRoutingStepIdCompoundUniqueInput = {
+    workOrderItemId: string
+    materialPartId: string
+    routingStepId: string
+  }
+
+  export type WorkOrderMaterialUsageCountOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    materialPartId?: SortOrder
+    routingStepId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderMaterialUsageAvgOrderByAggregateInput = {
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+  }
+
+  export type WorkOrderMaterialUsageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    materialPartId?: SortOrder
+    routingStepId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderMaterialUsageMinOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderItemId?: SortOrder
+    materialPartId?: SortOrder
+    routingStepId?: SortOrder
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
+    consumedAt?: SortOrder
+    operatorId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderMaterialUsageSumOrderByAggregateInput = {
+    quantityUsed?: SortOrder
+    unitCost?: SortOrder
   }
 
   export type MaterialConsumptionBatchIdMaterialPartIdCompoundUniqueInput = {
@@ -28073,13 +34779,6 @@ export namespace Prisma {
   export type MaterialConsumptionSumOrderByAggregateInput = {
     quantityUsed?: SortOrder
     unitCost?: SortOrder
-  }
-
-  export type EnumStepStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStepStatusFilter<$PrismaModel> | $Enums.StepStatus
   }
 
   export type WorkstationScalarRelationFilter = {
@@ -28152,16 +34851,6 @@ export namespace Prisma {
   export type RoutingStepSumOrderByAggregateInput = {
     stepNumber?: SortOrder
     estimatedTime?: SortOrder
-  }
-
-  export type EnumStepStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStepStatusWithAggregatesFilter<$PrismaModel> | $Enums.StepStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStepStatusFilter<$PrismaModel>
-    _max?: NestedEnumStepStatusFilter<$PrismaModel>
   }
 
   export type RoutingTemplateStepListRelationFilter = {
@@ -28551,11 +35240,6 @@ export namespace Prisma {
     not?: NestedEnumConfirmationStatusFilter<$PrismaModel> | $Enums.ConfirmationStatus
   }
 
-  export type RoutingStepScalarRelationFilter = {
-    is?: RoutingStepWhereInput
-    isNot?: RoutingStepWhereInput
-  }
-
   export type WorkstationOperatorNullableScalarRelationFilter = {
     is?: WorkstationOperatorWhereInput | null
     isNot?: WorkstationOperatorWhereInput | null
@@ -28619,13 +35303,6 @@ export namespace Prisma {
     _max?: NestedEnumConfirmationStatusFilter<$PrismaModel>
   }
 
-  export type EnumQCResultFilter<$PrismaModel = never> = {
-    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
-    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
-  }
-
   export type QCRecordCountOrderByAggregateInput = {
     id?: SortOrder
     batchId?: SortOrder
@@ -28657,16 +35334,6 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type EnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
-    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumQCResultFilter<$PrismaModel>
-    _max?: NestedEnumQCResultFilter<$PrismaModel>
   }
 
   export type PurchaseOrderCreateNestedManyWithoutCustomerInput = {
@@ -28823,6 +35490,13 @@ export namespace Prisma {
     connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
   }
 
+  export type WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput> | WorkOrderMaterialUsageCreateWithoutMaterialPartInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput | WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyMaterialPartInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+  }
+
   export type BOMComponentUncheckedCreateNestedManyWithoutParentPartInput = {
     create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
     connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
@@ -28849,6 +35523,13 @@ export namespace Prisma {
     connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutMaterialPartInput | MaterialConsumptionCreateOrConnectWithoutMaterialPartInput[]
     createMany?: MaterialConsumptionCreateManyMaterialPartInputEnvelope
     connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput> | WorkOrderMaterialUsageCreateWithoutMaterialPartInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput | WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyMaterialPartInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
   }
 
   export type EnumPartTypeFieldUpdateOperationsInput = {
@@ -28931,6 +35612,20 @@ export namespace Prisma {
     deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
   }
 
+  export type WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput> | WorkOrderMaterialUsageCreateWithoutMaterialPartInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput | WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutMaterialPartInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutMaterialPartInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyMaterialPartInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutMaterialPartInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutMaterialPartInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutMaterialPartInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutMaterialPartInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+  }
+
   export type BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput = {
     create?: XOR<BOMComponentCreateWithoutParentPartInput, BOMComponentUncheckedCreateWithoutParentPartInput> | BOMComponentCreateWithoutParentPartInput[] | BOMComponentUncheckedCreateWithoutParentPartInput[]
     connectOrCreate?: BOMComponentCreateOrConnectWithoutParentPartInput | BOMComponentCreateOrConnectWithoutParentPartInput[]
@@ -28985,6 +35680,20 @@ export namespace Prisma {
     update?: MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput | MaterialConsumptionUpdateWithWhereUniqueWithoutMaterialPartInput[]
     updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput | MaterialConsumptionUpdateManyWithWhereWithoutMaterialPartInput[]
     deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput> | WorkOrderMaterialUsageCreateWithoutMaterialPartInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput | WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutMaterialPartInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutMaterialPartInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyMaterialPartInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutMaterialPartInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutMaterialPartInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutMaterialPartInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutMaterialPartInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
   }
 
   export type PartCreateNestedOneWithoutParentBOMsInput = {
@@ -29184,6 +35893,13 @@ export namespace Prisma {
     connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
   }
 
+  export type WorkOrderItemCreateNestedManyWithoutBatchInput = {
+    create?: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput> | WorkOrderItemCreateWithoutBatchInput[] | WorkOrderItemUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutBatchInput | WorkOrderItemCreateOrConnectWithoutBatchInput[]
+    createMany?: WorkOrderItemCreateManyBatchInputEnvelope
+    connect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+  }
+
   export type RoutingStepUncheckedCreateNestedManyWithoutBatchInput = {
     create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
@@ -29203,6 +35919,13 @@ export namespace Prisma {
     connectOrCreate?: MaterialConsumptionCreateOrConnectWithoutBatchInput | MaterialConsumptionCreateOrConnectWithoutBatchInput[]
     createMany?: MaterialConsumptionCreateManyBatchInputEnvelope
     connect?: MaterialConsumptionWhereUniqueInput | MaterialConsumptionWhereUniqueInput[]
+  }
+
+  export type WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput> | WorkOrderItemCreateWithoutBatchInput[] | WorkOrderItemUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutBatchInput | WorkOrderItemCreateOrConnectWithoutBatchInput[]
+    createMany?: WorkOrderItemCreateManyBatchInputEnvelope
+    connect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
   }
 
   export type EnumBatchPriorityFieldUpdateOperationsInput = {
@@ -29263,6 +35986,20 @@ export namespace Prisma {
     deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
   }
 
+  export type WorkOrderItemUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput> | WorkOrderItemCreateWithoutBatchInput[] | WorkOrderItemUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutBatchInput | WorkOrderItemCreateOrConnectWithoutBatchInput[]
+    upsert?: WorkOrderItemUpsertWithWhereUniqueWithoutBatchInput | WorkOrderItemUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: WorkOrderItemCreateManyBatchInputEnvelope
+    set?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    disconnect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    delete?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    connect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    update?: WorkOrderItemUpdateWithWhereUniqueWithoutBatchInput | WorkOrderItemUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: WorkOrderItemUpdateManyWithWhereWithoutBatchInput | WorkOrderItemUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: WorkOrderItemScalarWhereInput | WorkOrderItemScalarWhereInput[]
+  }
+
   export type RoutingStepUncheckedUpdateManyWithoutBatchNestedInput = {
     create?: XOR<RoutingStepCreateWithoutBatchInput, RoutingStepUncheckedCreateWithoutBatchInput> | RoutingStepCreateWithoutBatchInput[] | RoutingStepUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: RoutingStepCreateOrConnectWithoutBatchInput | RoutingStepCreateOrConnectWithoutBatchInput[]
@@ -29303,6 +36040,274 @@ export namespace Prisma {
     update?: MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput | MaterialConsumptionUpdateWithWhereUniqueWithoutBatchInput[]
     updateMany?: MaterialConsumptionUpdateManyWithWhereWithoutBatchInput | MaterialConsumptionUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: MaterialConsumptionScalarWhereInput | MaterialConsumptionScalarWhereInput[]
+  }
+
+  export type WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput> | WorkOrderItemCreateWithoutBatchInput[] | WorkOrderItemUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutBatchInput | WorkOrderItemCreateOrConnectWithoutBatchInput[]
+    upsert?: WorkOrderItemUpsertWithWhereUniqueWithoutBatchInput | WorkOrderItemUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: WorkOrderItemCreateManyBatchInputEnvelope
+    set?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    disconnect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    delete?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    connect?: WorkOrderItemWhereUniqueInput | WorkOrderItemWhereUniqueInput[]
+    update?: WorkOrderItemUpdateWithWhereUniqueWithoutBatchInput | WorkOrderItemUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: WorkOrderItemUpdateManyWithWhereWithoutBatchInput | WorkOrderItemUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: WorkOrderItemScalarWhereInput | WorkOrderItemScalarWhereInput[]
+  }
+
+  export type BatchCreateNestedOneWithoutWorkOrderItemsInput = {
+    create?: XOR<BatchCreateWithoutWorkOrderItemsInput, BatchUncheckedCreateWithoutWorkOrderItemsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutWorkOrderItemsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type WorkOrderStepProgressCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderStepProgressCreateWithoutWorkOrderItemInput[] | WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput | WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderStepProgressCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+  }
+
+  export type WorkOrderQualityCheckCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderQualityCheckCreateWithoutWorkOrderItemInput[] | WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput | WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderQualityCheckCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+  }
+
+  export type WorkOrderMaterialUsageCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput | WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+  }
+
+  export type WorkOrderStepProgressUncheckedCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderStepProgressCreateWithoutWorkOrderItemInput[] | WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput | WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderStepProgressCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+  }
+
+  export type WorkOrderQualityCheckUncheckedCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderQualityCheckCreateWithoutWorkOrderItemInput[] | WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput | WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderQualityCheckCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutWorkOrderItemInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput | WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyWorkOrderItemInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+  }
+
+  export type EnumWorkOrderItemStatusFieldUpdateOperationsInput = {
+    set?: $Enums.WorkOrderItemStatus
+  }
+
+  export type BatchUpdateOneRequiredWithoutWorkOrderItemsNestedInput = {
+    create?: XOR<BatchCreateWithoutWorkOrderItemsInput, BatchUncheckedCreateWithoutWorkOrderItemsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutWorkOrderItemsInput
+    upsert?: BatchUpsertWithoutWorkOrderItemsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutWorkOrderItemsInput, BatchUpdateWithoutWorkOrderItemsInput>, BatchUncheckedUpdateWithoutWorkOrderItemsInput>
+  }
+
+  export type WorkOrderStepProgressUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderStepProgressCreateWithoutWorkOrderItemInput[] | WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput | WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderStepProgressUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderStepProgressUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderStepProgressCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    disconnect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    delete?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    update?: WorkOrderStepProgressUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderStepProgressUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderStepProgressUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderStepProgressUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+  }
+
+  export type WorkOrderQualityCheckUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderQualityCheckCreateWithoutWorkOrderItemInput[] | WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput | WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderQualityCheckUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderQualityCheckUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderQualityCheckCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    disconnect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    delete?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    update?: WorkOrderQualityCheckUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderQualityCheckUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderQualityCheckUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderQualityCheckUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput | WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderStepProgressCreateWithoutWorkOrderItemInput[] | WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput | WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderStepProgressUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderStepProgressUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderStepProgressCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    disconnect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    delete?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    update?: WorkOrderStepProgressUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderStepProgressUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderStepProgressUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderStepProgressUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderQualityCheckCreateWithoutWorkOrderItemInput[] | WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput | WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderQualityCheckUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderQualityCheckUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderQualityCheckCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    disconnect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    delete?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    update?: WorkOrderQualityCheckUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderQualityCheckUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderQualityCheckUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderQualityCheckUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput> | WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput | WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutWorkOrderItemInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyWorkOrderItemInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutWorkOrderItemInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutWorkOrderItemInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutWorkOrderItemInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+  }
+
+  export type WorkOrderItemCreateNestedOneWithoutStepProgressInput = {
+    create?: XOR<WorkOrderItemCreateWithoutStepProgressInput, WorkOrderItemUncheckedCreateWithoutStepProgressInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutStepProgressInput
+    connect?: WorkOrderItemWhereUniqueInput
+  }
+
+  export type RoutingStepCreateNestedOneWithoutWorkOrderProgressInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderProgressInput, RoutingStepUncheckedCreateWithoutWorkOrderProgressInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderProgressInput
+    connect?: RoutingStepWhereUniqueInput
+  }
+
+  export type EnumStepStatusFieldUpdateOperationsInput = {
+    set?: $Enums.StepStatus
+  }
+
+  export type WorkOrderItemUpdateOneRequiredWithoutStepProgressNestedInput = {
+    create?: XOR<WorkOrderItemCreateWithoutStepProgressInput, WorkOrderItemUncheckedCreateWithoutStepProgressInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutStepProgressInput
+    upsert?: WorkOrderItemUpsertWithoutStepProgressInput
+    connect?: WorkOrderItemWhereUniqueInput
+    update?: XOR<XOR<WorkOrderItemUpdateToOneWithWhereWithoutStepProgressInput, WorkOrderItemUpdateWithoutStepProgressInput>, WorkOrderItemUncheckedUpdateWithoutStepProgressInput>
+  }
+
+  export type RoutingStepUpdateOneRequiredWithoutWorkOrderProgressNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderProgressInput, RoutingStepUncheckedCreateWithoutWorkOrderProgressInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderProgressInput
+    upsert?: RoutingStepUpsertWithoutWorkOrderProgressInput
+    connect?: RoutingStepWhereUniqueInput
+    update?: XOR<XOR<RoutingStepUpdateToOneWithWhereWithoutWorkOrderProgressInput, RoutingStepUpdateWithoutWorkOrderProgressInput>, RoutingStepUncheckedUpdateWithoutWorkOrderProgressInput>
+  }
+
+  export type WorkOrderItemCreateNestedOneWithoutQualityChecksInput = {
+    create?: XOR<WorkOrderItemCreateWithoutQualityChecksInput, WorkOrderItemUncheckedCreateWithoutQualityChecksInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutQualityChecksInput
+    connect?: WorkOrderItemWhereUniqueInput
+  }
+
+  export type RoutingStepCreateNestedOneWithoutWorkOrderQualityChecksInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedCreateWithoutWorkOrderQualityChecksInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderQualityChecksInput
+    connect?: RoutingStepWhereUniqueInput
+  }
+
+  export type EnumQCResultFieldUpdateOperationsInput = {
+    set?: $Enums.QCResult
+  }
+
+  export type WorkOrderItemUpdateOneRequiredWithoutQualityChecksNestedInput = {
+    create?: XOR<WorkOrderItemCreateWithoutQualityChecksInput, WorkOrderItemUncheckedCreateWithoutQualityChecksInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutQualityChecksInput
+    upsert?: WorkOrderItemUpsertWithoutQualityChecksInput
+    connect?: WorkOrderItemWhereUniqueInput
+    update?: XOR<XOR<WorkOrderItemUpdateToOneWithWhereWithoutQualityChecksInput, WorkOrderItemUpdateWithoutQualityChecksInput>, WorkOrderItemUncheckedUpdateWithoutQualityChecksInput>
+  }
+
+  export type RoutingStepUpdateOneWithoutWorkOrderQualityChecksNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedCreateWithoutWorkOrderQualityChecksInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderQualityChecksInput
+    upsert?: RoutingStepUpsertWithoutWorkOrderQualityChecksInput
+    disconnect?: RoutingStepWhereInput | boolean
+    delete?: RoutingStepWhereInput | boolean
+    connect?: RoutingStepWhereUniqueInput
+    update?: XOR<XOR<RoutingStepUpdateToOneWithWhereWithoutWorkOrderQualityChecksInput, RoutingStepUpdateWithoutWorkOrderQualityChecksInput>, RoutingStepUncheckedUpdateWithoutWorkOrderQualityChecksInput>
+  }
+
+  export type WorkOrderItemCreateNestedOneWithoutMaterialUsageInput = {
+    create?: XOR<WorkOrderItemCreateWithoutMaterialUsageInput, WorkOrderItemUncheckedCreateWithoutMaterialUsageInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutMaterialUsageInput
+    connect?: WorkOrderItemWhereUniqueInput
+  }
+
+  export type PartCreateNestedOneWithoutWorkOrderMaterialUsageInput = {
+    create?: XOR<PartCreateWithoutWorkOrderMaterialUsageInput, PartUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    connectOrCreate?: PartCreateOrConnectWithoutWorkOrderMaterialUsageInput
+    connect?: PartWhereUniqueInput
+  }
+
+  export type RoutingStepCreateNestedOneWithoutWorkOrderMaterialUsageInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderMaterialUsageInput
+    connect?: RoutingStepWhereUniqueInput
+  }
+
+  export type WorkOrderItemUpdateOneRequiredWithoutMaterialUsageNestedInput = {
+    create?: XOR<WorkOrderItemCreateWithoutMaterialUsageInput, WorkOrderItemUncheckedCreateWithoutMaterialUsageInput>
+    connectOrCreate?: WorkOrderItemCreateOrConnectWithoutMaterialUsageInput
+    upsert?: WorkOrderItemUpsertWithoutMaterialUsageInput
+    connect?: WorkOrderItemWhereUniqueInput
+    update?: XOR<XOR<WorkOrderItemUpdateToOneWithWhereWithoutMaterialUsageInput, WorkOrderItemUpdateWithoutMaterialUsageInput>, WorkOrderItemUncheckedUpdateWithoutMaterialUsageInput>
+  }
+
+  export type PartUpdateOneRequiredWithoutWorkOrderMaterialUsageNestedInput = {
+    create?: XOR<PartCreateWithoutWorkOrderMaterialUsageInput, PartUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    connectOrCreate?: PartCreateOrConnectWithoutWorkOrderMaterialUsageInput
+    upsert?: PartUpsertWithoutWorkOrderMaterialUsageInput
+    connect?: PartWhereUniqueInput
+    update?: XOR<XOR<PartUpdateToOneWithWhereWithoutWorkOrderMaterialUsageInput, PartUpdateWithoutWorkOrderMaterialUsageInput>, PartUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
+  }
+
+  export type RoutingStepUpdateOneWithoutWorkOrderMaterialUsageNestedInput = {
+    create?: XOR<RoutingStepCreateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    connectOrCreate?: RoutingStepCreateOrConnectWithoutWorkOrderMaterialUsageInput
+    upsert?: RoutingStepUpsertWithoutWorkOrderMaterialUsageInput
+    disconnect?: RoutingStepWhereInput | boolean
+    delete?: RoutingStepWhereInput | boolean
+    connect?: RoutingStepWhereUniqueInput
+    update?: XOR<XOR<RoutingStepUpdateToOneWithWhereWithoutWorkOrderMaterialUsageInput, RoutingStepUpdateWithoutWorkOrderMaterialUsageInput>, RoutingStepUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
   }
 
   export type BatchCreateNestedOneWithoutMaterialConsumptionInput = {
@@ -29352,6 +36357,27 @@ export namespace Prisma {
     connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
   }
 
+  export type WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput> | WorkOrderStepProgressCreateWithoutRoutingStepInput[] | WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput | WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderStepProgressCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+  }
+
+  export type WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput> | WorkOrderQualityCheckCreateWithoutRoutingStepInput[] | WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput | WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderQualityCheckCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+  }
+
+  export type WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput> | WorkOrderMaterialUsageCreateWithoutRoutingStepInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput | WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+  }
+
   export type StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput = {
     create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
     connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
@@ -29359,8 +36385,25 @@ export namespace Prisma {
     connect?: StepConfirmationWhereUniqueInput | StepConfirmationWhereUniqueInput[]
   }
 
-  export type EnumStepStatusFieldUpdateOperationsInput = {
-    set?: $Enums.StepStatus
+  export type WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput> | WorkOrderStepProgressCreateWithoutRoutingStepInput[] | WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput | WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderStepProgressCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+  }
+
+  export type WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput> | WorkOrderQualityCheckCreateWithoutRoutingStepInput[] | WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput | WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderQualityCheckCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput> | WorkOrderMaterialUsageCreateWithoutRoutingStepInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput | WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyRoutingStepInputEnvelope
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
   }
 
   export type BatchUpdateOneRequiredWithoutRoutingStepsNestedInput = {
@@ -29393,6 +36436,48 @@ export namespace Prisma {
     deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
   }
 
+  export type WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput> | WorkOrderStepProgressCreateWithoutRoutingStepInput[] | WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput | WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderStepProgressUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderStepProgressUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderStepProgressCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    disconnect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    delete?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    update?: WorkOrderStepProgressUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderStepProgressUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderStepProgressUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderStepProgressUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+  }
+
+  export type WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput> | WorkOrderQualityCheckCreateWithoutRoutingStepInput[] | WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput | WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderQualityCheckUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderQualityCheckUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderQualityCheckCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    disconnect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    delete?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    update?: WorkOrderQualityCheckUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderQualityCheckUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderQualityCheckUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderQualityCheckUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput> | WorkOrderMaterialUsageCreateWithoutRoutingStepInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput | WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+  }
+
   export type StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput = {
     create?: XOR<StepConfirmationCreateWithoutRoutingStepInput, StepConfirmationUncheckedCreateWithoutRoutingStepInput> | StepConfirmationCreateWithoutRoutingStepInput[] | StepConfirmationUncheckedCreateWithoutRoutingStepInput[]
     connectOrCreate?: StepConfirmationCreateOrConnectWithoutRoutingStepInput | StepConfirmationCreateOrConnectWithoutRoutingStepInput[]
@@ -29405,6 +36490,48 @@ export namespace Prisma {
     update?: StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput | StepConfirmationUpdateWithWhereUniqueWithoutRoutingStepInput[]
     updateMany?: StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput | StepConfirmationUpdateManyWithWhereWithoutRoutingStepInput[]
     deleteMany?: StepConfirmationScalarWhereInput | StepConfirmationScalarWhereInput[]
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput> | WorkOrderStepProgressCreateWithoutRoutingStepInput[] | WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput | WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderStepProgressUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderStepProgressUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderStepProgressCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    disconnect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    delete?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    connect?: WorkOrderStepProgressWhereUniqueInput | WorkOrderStepProgressWhereUniqueInput[]
+    update?: WorkOrderStepProgressUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderStepProgressUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderStepProgressUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderStepProgressUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput> | WorkOrderQualityCheckCreateWithoutRoutingStepInput[] | WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput | WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderQualityCheckUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderQualityCheckUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderQualityCheckCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    disconnect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    delete?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    connect?: WorkOrderQualityCheckWhereUniqueInput | WorkOrderQualityCheckWhereUniqueInput[]
+    update?: WorkOrderQualityCheckUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderQualityCheckUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderQualityCheckUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderQualityCheckUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput = {
+    create?: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput> | WorkOrderMaterialUsageCreateWithoutRoutingStepInput[] | WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput[]
+    connectOrCreate?: WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput | WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput[]
+    upsert?: WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutRoutingStepInput | WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutRoutingStepInput[]
+    createMany?: WorkOrderMaterialUsageCreateManyRoutingStepInputEnvelope
+    set?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    disconnect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    delete?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    connect?: WorkOrderMaterialUsageWhereUniqueInput | WorkOrderMaterialUsageWhereUniqueInput[]
+    update?: WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutRoutingStepInput | WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutRoutingStepInput[]
+    updateMany?: WorkOrderMaterialUsageUpdateManyWithWhereWithoutRoutingStepInput | WorkOrderMaterialUsageUpdateManyWithWhereWithoutRoutingStepInput[]
+    deleteMany?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
   }
 
   export type RoutingTemplateStepCreateNestedManyWithoutTemplateInput = {
@@ -29932,10 +37059,6 @@ export namespace Prisma {
     connect?: BatchWhereUniqueInput
   }
 
-  export type EnumQCResultFieldUpdateOperationsInput = {
-    set?: $Enums.QCResult
-  }
-
   export type BatchUpdateOneRequiredWithoutQcRecordsNestedInput = {
     create?: XOR<BatchCreateWithoutQcRecordsInput, BatchUncheckedCreateWithoutQcRecordsInput>
     connectOrCreate?: BatchCreateOrConnectWithoutQcRecordsInput
@@ -30301,6 +37424,23 @@ export namespace Prisma {
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumWorkOrderItemStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkOrderItemStatus | EnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel> | $Enums.WorkOrderItemStatus
+  }
+
+  export type NestedEnumWorkOrderItemStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkOrderItemStatus | EnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkOrderItemStatus[] | ListEnumWorkOrderItemStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkOrderItemStatusWithAggregatesFilter<$PrismaModel> | $Enums.WorkOrderItemStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel>
+    _max?: NestedEnumWorkOrderItemStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumStepStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.StepStatus | EnumStepStatusFieldRefInput<$PrismaModel>
     in?: $Enums.StepStatus[] | ListEnumStepStatusFieldRefInput<$PrismaModel>
@@ -30316,6 +37456,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStepStatusFilter<$PrismaModel>
     _max?: NestedEnumStepStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumQCResultFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
+  }
+
+  export type NestedEnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
+    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
+    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQCResultFilter<$PrismaModel>
+    _max?: NestedEnumQCResultFilter<$PrismaModel>
   }
 
   export type NestedEnumOperatorShiftFilter<$PrismaModel = never> = {
@@ -30367,23 +37524,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumConfirmationStatusFilter<$PrismaModel>
     _max?: NestedEnumConfirmationStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumQCResultFilter<$PrismaModel = never> = {
-    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
-    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    not?: NestedEnumQCResultFilter<$PrismaModel> | $Enums.QCResult
-  }
-
-  export type NestedEnumQCResultWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.QCResult | EnumQCResultFieldRefInput<$PrismaModel>
-    in?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QCResult[] | ListEnumQCResultFieldRefInput<$PrismaModel>
-    not?: NestedEnumQCResultWithAggregatesFilter<$PrismaModel> | $Enums.QCResult
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumQCResultFilter<$PrismaModel>
-    _max?: NestedEnumQCResultFilter<$PrismaModel>
   }
 
   export type PurchaseOrderCreateWithoutCustomerInput = {
@@ -30761,6 +37901,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WorkOrderMaterialUsageCreateWithoutMaterialPartInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutMaterialUsageInput
+    routingStep?: RoutingStepCreateNestedOneWithoutWorkOrderMaterialUsageInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateOrConnectWithoutMaterialPartInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    create: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput>
+  }
+
+  export type WorkOrderMaterialUsageCreateManyMaterialPartInputEnvelope = {
+    data: WorkOrderMaterialUsageCreateManyMaterialPartInput | WorkOrderMaterialUsageCreateManyMaterialPartInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BOMComponentUpsertWithWhereUniqueWithoutParentPartInput = {
     where: BOMComponentWhereUniqueInput
     update: XOR<BOMComponentUpdateWithoutParentPartInput, BOMComponentUncheckedUpdateWithoutParentPartInput>
@@ -30857,6 +38033,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"MaterialConsumption"> | Date | string
   }
 
+  export type WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutMaterialPartInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    update: XOR<WorkOrderMaterialUsageUpdateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedUpdateWithoutMaterialPartInput>
+    create: XOR<WorkOrderMaterialUsageCreateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedCreateWithoutMaterialPartInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutMaterialPartInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    data: XOR<WorkOrderMaterialUsageUpdateWithoutMaterialPartInput, WorkOrderMaterialUsageUncheckedUpdateWithoutMaterialPartInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyWithWhereWithoutMaterialPartInput = {
+    where: WorkOrderMaterialUsageScalarWhereInput
+    data: XOR<WorkOrderMaterialUsageUpdateManyMutationInput, WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartInput>
+  }
+
+  export type WorkOrderMaterialUsageScalarWhereInput = {
+    AND?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+    OR?: WorkOrderMaterialUsageScalarWhereInput[]
+    NOT?: WorkOrderMaterialUsageScalarWhereInput | WorkOrderMaterialUsageScalarWhereInput[]
+    id?: StringFilter<"WorkOrderMaterialUsage"> | string
+    workOrderItemId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    materialPartId?: StringFilter<"WorkOrderMaterialUsage"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    quantityUsed?: DecimalFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string
+    unitCost?: DecimalNullableFilter<"WorkOrderMaterialUsage"> | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    operatorId?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    notes?: StringNullableFilter<"WorkOrderMaterialUsage"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderMaterialUsage"> | Date | string
+  }
+
   export type PartCreateWithoutParentBOMsInput = {
     id?: string
     partNumber: string
@@ -30877,6 +38086,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUncheckedCreateWithoutParentBOMsInput = {
@@ -30899,6 +38109,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartCreateOrConnectWithoutParentBOMsInput = {
@@ -30926,6 +38137,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
     orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUncheckedCreateWithoutChildBOMsInput = {
@@ -30948,6 +38160,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
     orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
     materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartCreateOrConnectWithoutChildBOMsInput = {
@@ -30986,6 +38199,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUncheckedUpdateWithoutParentBOMsInput = {
@@ -31008,6 +38222,7 @@ export namespace Prisma {
     childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUpsertWithoutChildBOMsInput = {
@@ -31041,6 +38256,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
     orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUncheckedUpdateWithoutChildBOMsInput = {
@@ -31063,6 +38279,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
     orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
     materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PurchaseOrderCreateWithoutLineItemsInput = {
@@ -31128,6 +38345,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
     childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
     materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUncheckedCreateWithoutOrderLineItemsInput = {
@@ -31150,6 +38368,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
     childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
     materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartCreateOrConnectWithoutOrderLineItemsInput = {
@@ -31208,6 +38427,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutLineItemInput = {
@@ -31225,6 +38445,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutLineItemInput = {
@@ -31317,6 +38538,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
     childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
     materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUncheckedUpdateWithoutOrderLineItemsInput = {
@@ -31339,6 +38561,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
     childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
     materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type FileAttachmentUpsertWithWhereUniqueWithoutLineItemInput = {
@@ -31519,6 +38742,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
     confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepUncheckedCreateWithoutBatchInput = {
@@ -31533,6 +38759,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepCreateOrConnectWithoutBatchInput = {
@@ -31606,6 +38835,48 @@ export namespace Prisma {
 
   export type MaterialConsumptionCreateManyBatchInputEnvelope = {
     data: MaterialConsumptionCreateManyBatchInput | MaterialConsumptionCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkOrderItemCreateWithoutBatchInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepProgress?: WorkOrderStepProgressCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUncheckedCreateWithoutBatchInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemCreateOrConnectWithoutBatchInput = {
+    where: WorkOrderItemWhereUniqueInput
+    create: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput>
+  }
+
+  export type WorkOrderItemCreateManyBatchInputEnvelope = {
+    data: WorkOrderItemCreateManyBatchInput | WorkOrderItemCreateManyBatchInput[]
     skipDuplicates?: boolean
   }
 
@@ -31725,6 +38996,926 @@ export namespace Prisma {
     data: XOR<MaterialConsumptionUpdateManyMutationInput, MaterialConsumptionUncheckedUpdateManyWithoutBatchInput>
   }
 
+  export type WorkOrderItemUpsertWithWhereUniqueWithoutBatchInput = {
+    where: WorkOrderItemWhereUniqueInput
+    update: XOR<WorkOrderItemUpdateWithoutBatchInput, WorkOrderItemUncheckedUpdateWithoutBatchInput>
+    create: XOR<WorkOrderItemCreateWithoutBatchInput, WorkOrderItemUncheckedCreateWithoutBatchInput>
+  }
+
+  export type WorkOrderItemUpdateWithWhereUniqueWithoutBatchInput = {
+    where: WorkOrderItemWhereUniqueInput
+    data: XOR<WorkOrderItemUpdateWithoutBatchInput, WorkOrderItemUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type WorkOrderItemUpdateManyWithWhereWithoutBatchInput = {
+    where: WorkOrderItemScalarWhereInput
+    data: XOR<WorkOrderItemUpdateManyMutationInput, WorkOrderItemUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type WorkOrderItemScalarWhereInput = {
+    AND?: WorkOrderItemScalarWhereInput | WorkOrderItemScalarWhereInput[]
+    OR?: WorkOrderItemScalarWhereInput[]
+    NOT?: WorkOrderItemScalarWhereInput | WorkOrderItemScalarWhereInput[]
+    id?: StringFilter<"WorkOrderItem"> | string
+    batchId?: StringFilter<"WorkOrderItem"> | string
+    serialNumber?: StringFilter<"WorkOrderItem"> | string
+    itemNumber?: IntFilter<"WorkOrderItem"> | number
+    status?: EnumWorkOrderItemStatusFilter<"WorkOrderItem"> | $Enums.WorkOrderItemStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderItem"> | Date | string | null
+    currentStepId?: StringNullableFilter<"WorkOrderItem"> | string | null
+    notes?: StringNullableFilter<"WorkOrderItem"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderItem"> | Date | string
+  }
+
+  export type BatchCreateWithoutWorkOrderItemsInput = {
+    id?: string
+    batchId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
+    routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutWorkOrderItemsInput = {
+    id?: string
+    batchId: string
+    lineItemId: string
+    quantity: number
+    startDate?: Date | string | null
+    estimatedCompletion?: Date | string | null
+    actualCompletion?: Date | string | null
+    priority?: $Enums.BatchPriority
+    status?: $Enums.BatchStatus
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
+    qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+    materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutWorkOrderItemsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutWorkOrderItemsInput, BatchUncheckedCreateWithoutWorkOrderItemsInput>
+  }
+
+  export type WorkOrderStepProgressCreateWithoutWorkOrderItemInput = {
+    id?: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingStep: RoutingStepCreateNestedOneWithoutWorkOrderProgressInput
+  }
+
+  export type WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput = {
+    id?: string
+    routingStepId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressCreateOrConnectWithoutWorkOrderItemInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    create: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderStepProgressCreateManyWorkOrderItemInputEnvelope = {
+    data: WorkOrderStepProgressCreateManyWorkOrderItemInput | WorkOrderStepProgressCreateManyWorkOrderItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkOrderQualityCheckCreateWithoutWorkOrderItemInput = {
+    id?: string
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    routingStep?: RoutingStepCreateNestedOneWithoutWorkOrderQualityChecksInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput = {
+    id?: string
+    routingStepId?: string | null
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateOrConnectWithoutWorkOrderItemInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    create: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderQualityCheckCreateManyWorkOrderItemInputEnvelope = {
+    data: WorkOrderQualityCheckCreateManyWorkOrderItemInput | WorkOrderQualityCheckCreateManyWorkOrderItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materialPart: PartCreateNestedOneWithoutWorkOrderMaterialUsageInput
+    routingStep?: RoutingStepCreateNestedOneWithoutWorkOrderMaterialUsageInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput = {
+    id?: string
+    materialPartId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateOrConnectWithoutWorkOrderItemInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    create: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderMaterialUsageCreateManyWorkOrderItemInputEnvelope = {
+    data: WorkOrderMaterialUsageCreateManyWorkOrderItemInput | WorkOrderMaterialUsageCreateManyWorkOrderItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchUpsertWithoutWorkOrderItemsInput = {
+    update: XOR<BatchUpdateWithoutWorkOrderItemsInput, BatchUncheckedUpdateWithoutWorkOrderItemsInput>
+    create: XOR<BatchCreateWithoutWorkOrderItemsInput, BatchUncheckedCreateWithoutWorkOrderItemsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutWorkOrderItemsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutWorkOrderItemsInput, BatchUncheckedUpdateWithoutWorkOrderItemsInput>
+  }
+
+  export type BatchUpdateWithoutWorkOrderItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
+    routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutWorkOrderItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lineItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    actualCompletion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: EnumBatchPriorityFieldUpdateOperationsInput | $Enums.BatchPriority
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
+    qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+    materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type WorkOrderStepProgressUpsertWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    update: XOR<WorkOrderStepProgressUpdateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedUpdateWithoutWorkOrderItemInput>
+    create: XOR<WorkOrderStepProgressCreateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderStepProgressUpdateWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    data: XOR<WorkOrderStepProgressUpdateWithoutWorkOrderItemInput, WorkOrderStepProgressUncheckedUpdateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderStepProgressUpdateManyWithWhereWithoutWorkOrderItemInput = {
+    where: WorkOrderStepProgressScalarWhereInput
+    data: XOR<WorkOrderStepProgressUpdateManyMutationInput, WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderStepProgressScalarWhereInput = {
+    AND?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+    OR?: WorkOrderStepProgressScalarWhereInput[]
+    NOT?: WorkOrderStepProgressScalarWhereInput | WorkOrderStepProgressScalarWhereInput[]
+    id?: StringFilter<"WorkOrderStepProgress"> | string
+    workOrderItemId?: StringFilter<"WorkOrderStepProgress"> | string
+    routingStepId?: StringFilter<"WorkOrderStepProgress"> | string
+    status?: EnumStepStatusFilter<"WorkOrderStepProgress"> | $Enums.StepStatus
+    startedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"WorkOrderStepProgress"> | Date | string | null
+    operatorId?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    actualTime?: IntNullableFilter<"WorkOrderStepProgress"> | number | null
+    notes?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    photoUrl?: StringNullableFilter<"WorkOrderStepProgress"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderStepProgress"> | Date | string
+  }
+
+  export type WorkOrderQualityCheckUpsertWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    update: XOR<WorkOrderQualityCheckUpdateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedUpdateWithoutWorkOrderItemInput>
+    create: XOR<WorkOrderQualityCheckCreateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderQualityCheckUpdateWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    data: XOR<WorkOrderQualityCheckUpdateWithoutWorkOrderItemInput, WorkOrderQualityCheckUncheckedUpdateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderQualityCheckUpdateManyWithWhereWithoutWorkOrderItemInput = {
+    where: WorkOrderQualityCheckScalarWhereInput
+    data: XOR<WorkOrderQualityCheckUpdateManyMutationInput, WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderQualityCheckScalarWhereInput = {
+    AND?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+    OR?: WorkOrderQualityCheckScalarWhereInput[]
+    NOT?: WorkOrderQualityCheckScalarWhereInput | WorkOrderQualityCheckScalarWhereInput[]
+    id?: StringFilter<"WorkOrderQualityCheck"> | string
+    workOrderItemId?: StringFilter<"WorkOrderQualityCheck"> | string
+    routingStepId?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    checkType?: StringFilter<"WorkOrderQualityCheck"> | string
+    result?: EnumQCResultFilter<"WorkOrderQualityCheck"> | $Enums.QCResult
+    checkedBy?: StringFilter<"WorkOrderQualityCheck"> | string
+    checkedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    measurements?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    defects?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    correctedBy?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    notes?: StringNullableFilter<"WorkOrderQualityCheck"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderQualityCheck"> | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    update: XOR<WorkOrderMaterialUsageUpdateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedUpdateWithoutWorkOrderItemInput>
+    create: XOR<WorkOrderMaterialUsageCreateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedCreateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutWorkOrderItemInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    data: XOR<WorkOrderMaterialUsageUpdateWithoutWorkOrderItemInput, WorkOrderMaterialUsageUncheckedUpdateWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyWithWhereWithoutWorkOrderItemInput = {
+    where: WorkOrderMaterialUsageScalarWhereInput
+    data: XOR<WorkOrderMaterialUsageUpdateManyMutationInput, WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemInput>
+  }
+
+  export type WorkOrderItemCreateWithoutStepProgressInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutWorkOrderItemsInput
+    qualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUncheckedCreateWithoutStepProgressInput = {
+    id?: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    qualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemCreateOrConnectWithoutStepProgressInput = {
+    where: WorkOrderItemWhereUniqueInput
+    create: XOR<WorkOrderItemCreateWithoutStepProgressInput, WorkOrderItemUncheckedCreateWithoutStepProgressInput>
+  }
+
+  export type RoutingStepCreateWithoutWorkOrderProgressInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutWorkOrderProgressInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepCreateOrConnectWithoutWorkOrderProgressInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutWorkOrderProgressInput, RoutingStepUncheckedCreateWithoutWorkOrderProgressInput>
+  }
+
+  export type WorkOrderItemUpsertWithoutStepProgressInput = {
+    update: XOR<WorkOrderItemUpdateWithoutStepProgressInput, WorkOrderItemUncheckedUpdateWithoutStepProgressInput>
+    create: XOR<WorkOrderItemCreateWithoutStepProgressInput, WorkOrderItemUncheckedCreateWithoutStepProgressInput>
+    where?: WorkOrderItemWhereInput
+  }
+
+  export type WorkOrderItemUpdateToOneWithWhereWithoutStepProgressInput = {
+    where?: WorkOrderItemWhereInput
+    data: XOR<WorkOrderItemUpdateWithoutStepProgressInput, WorkOrderItemUncheckedUpdateWithoutStepProgressInput>
+  }
+
+  export type WorkOrderItemUpdateWithoutStepProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutWorkOrderItemsNestedInput
+    qualityChecks?: WorkOrderQualityCheckUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateWithoutStepProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    qualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type RoutingStepUpsertWithoutWorkOrderProgressInput = {
+    update: XOR<RoutingStepUpdateWithoutWorkOrderProgressInput, RoutingStepUncheckedUpdateWithoutWorkOrderProgressInput>
+    create: XOR<RoutingStepCreateWithoutWorkOrderProgressInput, RoutingStepUncheckedCreateWithoutWorkOrderProgressInput>
+    where?: RoutingStepWhereInput
+  }
+
+  export type RoutingStepUpdateToOneWithWhereWithoutWorkOrderProgressInput = {
+    where?: RoutingStepWhereInput
+    data: XOR<RoutingStepUpdateWithoutWorkOrderProgressInput, RoutingStepUncheckedUpdateWithoutWorkOrderProgressInput>
+  }
+
+  export type RoutingStepUpdateWithoutWorkOrderProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutWorkOrderProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type WorkOrderItemCreateWithoutQualityChecksInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutWorkOrderItemsInput
+    stepProgress?: WorkOrderStepProgressCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUncheckedCreateWithoutQualityChecksInput = {
+    id?: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemCreateOrConnectWithoutQualityChecksInput = {
+    where: WorkOrderItemWhereUniqueInput
+    create: XOR<WorkOrderItemCreateWithoutQualityChecksInput, WorkOrderItemUncheckedCreateWithoutQualityChecksInput>
+  }
+
+  export type RoutingStepCreateWithoutWorkOrderQualityChecksInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutWorkOrderQualityChecksInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepCreateOrConnectWithoutWorkOrderQualityChecksInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedCreateWithoutWorkOrderQualityChecksInput>
+  }
+
+  export type WorkOrderItemUpsertWithoutQualityChecksInput = {
+    update: XOR<WorkOrderItemUpdateWithoutQualityChecksInput, WorkOrderItemUncheckedUpdateWithoutQualityChecksInput>
+    create: XOR<WorkOrderItemCreateWithoutQualityChecksInput, WorkOrderItemUncheckedCreateWithoutQualityChecksInput>
+    where?: WorkOrderItemWhereInput
+  }
+
+  export type WorkOrderItemUpdateToOneWithWhereWithoutQualityChecksInput = {
+    where?: WorkOrderItemWhereInput
+    data: XOR<WorkOrderItemUpdateWithoutQualityChecksInput, WorkOrderItemUncheckedUpdateWithoutQualityChecksInput>
+  }
+
+  export type WorkOrderItemUpdateWithoutQualityChecksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutWorkOrderItemsNestedInput
+    stepProgress?: WorkOrderStepProgressUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateWithoutQualityChecksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type RoutingStepUpsertWithoutWorkOrderQualityChecksInput = {
+    update: XOR<RoutingStepUpdateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedUpdateWithoutWorkOrderQualityChecksInput>
+    create: XOR<RoutingStepCreateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedCreateWithoutWorkOrderQualityChecksInput>
+    where?: RoutingStepWhereInput
+  }
+
+  export type RoutingStepUpdateToOneWithWhereWithoutWorkOrderQualityChecksInput = {
+    where?: RoutingStepWhereInput
+    data: XOR<RoutingStepUpdateWithoutWorkOrderQualityChecksInput, RoutingStepUncheckedUpdateWithoutWorkOrderQualityChecksInput>
+  }
+
+  export type RoutingStepUpdateWithoutWorkOrderQualityChecksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutWorkOrderQualityChecksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type WorkOrderItemCreateWithoutMaterialUsageInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutWorkOrderItemsInput
+    stepProgress?: WorkOrderStepProgressCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemUncheckedCreateWithoutMaterialUsageInput = {
+    id?: string
+    batchId: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutWorkOrderItemInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutWorkOrderItemInput
+  }
+
+  export type WorkOrderItemCreateOrConnectWithoutMaterialUsageInput = {
+    where: WorkOrderItemWhereUniqueInput
+    create: XOR<WorkOrderItemCreateWithoutMaterialUsageInput, WorkOrderItemUncheckedCreateWithoutMaterialUsageInput>
+  }
+
+  export type PartCreateWithoutWorkOrderMaterialUsageInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    recommendedRoutingTemplateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartUncheckedCreateWithoutWorkOrderMaterialUsageInput = {
+    id?: string
+    partNumber: string
+    partName: string
+    partType: $Enums.PartType
+    drawingNumber?: string | null
+    revisionLevel?: string | null
+    description?: string | null
+    materialSpec?: string | null
+    unitOfMeasure?: string | null
+    standardCost?: Decimal | DecimalJsLike | number | string | null
+    leadTime?: number | null
+    active?: boolean
+    notes?: string | null
+    recommendedRoutingTemplateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
+    childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
+    orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+    materialConsumptions?: MaterialConsumptionUncheckedCreateNestedManyWithoutMaterialPartInput
+  }
+
+  export type PartCreateOrConnectWithoutWorkOrderMaterialUsageInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutWorkOrderMaterialUsageInput, PartUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+  }
+
+  export type RoutingStepCreateWithoutWorkOrderMaterialUsageInput = {
+    id?: string
+    stepNumber: number
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batch: BatchCreateNestedOneWithoutRoutingStepsInput
+    workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepUncheckedCreateWithoutWorkOrderMaterialUsageInput = {
+    id?: string
+    batchId: string
+    stepNumber: number
+    workstationId: string
+    description: string
+    required?: boolean
+    estimatedTime?: number | null
+    notes?: string | null
+    status?: $Enums.StepStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+  }
+
+  export type RoutingStepCreateOrConnectWithoutWorkOrderMaterialUsageInput = {
+    where: RoutingStepWhereUniqueInput
+    create: XOR<RoutingStepCreateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+  }
+
+  export type WorkOrderItemUpsertWithoutMaterialUsageInput = {
+    update: XOR<WorkOrderItemUpdateWithoutMaterialUsageInput, WorkOrderItemUncheckedUpdateWithoutMaterialUsageInput>
+    create: XOR<WorkOrderItemCreateWithoutMaterialUsageInput, WorkOrderItemUncheckedCreateWithoutMaterialUsageInput>
+    where?: WorkOrderItemWhereInput
+  }
+
+  export type WorkOrderItemUpdateToOneWithWhereWithoutMaterialUsageInput = {
+    where?: WorkOrderItemWhereInput
+    data: XOR<WorkOrderItemUpdateWithoutMaterialUsageInput, WorkOrderItemUncheckedUpdateWithoutMaterialUsageInput>
+  }
+
+  export type WorkOrderItemUpdateWithoutMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutWorkOrderItemsNestedInput
+    stepProgress?: WorkOrderStepProgressUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateWithoutMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type PartUpsertWithoutWorkOrderMaterialUsageInput = {
+    update: XOR<PartUpdateWithoutWorkOrderMaterialUsageInput, PartUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
+    create: XOR<PartCreateWithoutWorkOrderMaterialUsageInput, PartUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    where?: PartWhereInput
+  }
+
+  export type PartUpdateToOneWithWhereWithoutWorkOrderMaterialUsageInput = {
+    where?: PartWhereInput
+    data: XOR<PartUpdateWithoutWorkOrderMaterialUsageInput, PartUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
+  }
+
+  export type PartUpdateWithoutWorkOrderMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type PartUncheckedUpdateWithoutWorkOrderMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partNumber?: StringFieldUpdateOperationsInput | string
+    partName?: StringFieldUpdateOperationsInput | string
+    partType?: EnumPartTypeFieldUpdateOperationsInput | $Enums.PartType
+    drawingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    revisionLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    materialSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasure?: NullableStringFieldUpdateOperationsInput | string | null
+    standardCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leadTime?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recommendedRoutingTemplateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
+    childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
+    orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+    materialConsumptions?: MaterialConsumptionUncheckedUpdateManyWithoutMaterialPartNestedInput
+  }
+
+  export type RoutingStepUpsertWithoutWorkOrderMaterialUsageInput = {
+    update: XOR<RoutingStepUpdateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
+    create: XOR<RoutingStepCreateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedCreateWithoutWorkOrderMaterialUsageInput>
+    where?: RoutingStepWhereInput
+  }
+
+  export type RoutingStepUpdateToOneWithWhereWithoutWorkOrderMaterialUsageInput = {
+    where?: RoutingStepWhereInput
+    data: XOR<RoutingStepUpdateWithoutWorkOrderMaterialUsageInput, RoutingStepUncheckedUpdateWithoutWorkOrderMaterialUsageInput>
+  }
+
+  export type RoutingStepUpdateWithoutWorkOrderMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+  }
+
+  export type RoutingStepUncheckedUpdateWithoutWorkOrderMaterialUsageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    stepNumber?: IntFieldUpdateOperationsInput | number
+    workstationId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+  }
+
   export type BatchCreateWithoutMaterialConsumptionInput = {
     id?: string
     batchId: string
@@ -31740,6 +39931,7 @@ export namespace Prisma {
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutMaterialConsumptionInput = {
@@ -31757,6 +39949,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutMaterialConsumptionInput = {
@@ -31784,6 +39977,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentCreateNestedManyWithoutParentPartInput
     childBOMs?: BOMComponentCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemCreateNestedManyWithoutPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartUncheckedCreateWithoutMaterialConsumptionsInput = {
@@ -31806,6 +40000,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedCreateNestedManyWithoutParentPartInput
     childBOMs?: BOMComponentUncheckedCreateNestedManyWithoutChildPartInput
     orderLineItems?: OrderLineItemUncheckedCreateNestedManyWithoutPartInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutMaterialPartInput
   }
 
   export type PartCreateOrConnectWithoutMaterialConsumptionsInput = {
@@ -31839,6 +40034,7 @@ export namespace Prisma {
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutMaterialConsumptionInput = {
@@ -31856,6 +40052,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type PartUpsertWithoutMaterialConsumptionsInput = {
@@ -31889,6 +40086,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUpdateManyWithoutParentPartNestedInput
     childBOMs?: BOMComponentUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUpdateManyWithoutPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type PartUncheckedUpdateWithoutMaterialConsumptionsInput = {
@@ -31911,6 +40109,7 @@ export namespace Prisma {
     parentBOMs?: BOMComponentUncheckedUpdateManyWithoutParentPartNestedInput
     childBOMs?: BOMComponentUncheckedUpdateManyWithoutChildPartNestedInput
     orderLineItems?: OrderLineItemUncheckedUpdateManyWithoutPartNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartNestedInput
   }
 
   export type BatchCreateWithoutRoutingStepsInput = {
@@ -31928,6 +40127,7 @@ export namespace Prisma {
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     qcRecords?: QCRecordCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutRoutingStepsInput = {
@@ -31945,6 +40145,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     qcRecords?: QCRecordUncheckedCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutRoutingStepsInput = {
@@ -32035,6 +40236,120 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WorkOrderStepProgressCreateWithoutRoutingStepInput = {
+    id?: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutStepProgressInput
+  }
+
+  export type WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressCreateOrConnectWithoutRoutingStepInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    create: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderStepProgressCreateManyRoutingStepInputEnvelope = {
+    data: WorkOrderStepProgressCreateManyRoutingStepInput | WorkOrderStepProgressCreateManyRoutingStepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkOrderQualityCheckCreateWithoutRoutingStepInput = {
+    id?: string
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutQualityChecksInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateOrConnectWithoutRoutingStepInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    create: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderQualityCheckCreateManyRoutingStepInputEnvelope = {
+    data: WorkOrderQualityCheckCreateManyRoutingStepInput | WorkOrderQualityCheckCreateManyRoutingStepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkOrderMaterialUsageCreateWithoutRoutingStepInput = {
+    id?: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workOrderItem: WorkOrderItemCreateNestedOneWithoutMaterialUsageInput
+    materialPart: PartCreateNestedOneWithoutWorkOrderMaterialUsageInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateOrConnectWithoutRoutingStepInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    create: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderMaterialUsageCreateManyRoutingStepInputEnvelope = {
+    data: WorkOrderMaterialUsageCreateManyRoutingStepInput | WorkOrderMaterialUsageCreateManyRoutingStepInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BatchUpsertWithoutRoutingStepsInput = {
     update: XOR<BatchUpdateWithoutRoutingStepsInput, BatchUncheckedUpdateWithoutRoutingStepsInput>
     create: XOR<BatchCreateWithoutRoutingStepsInput, BatchUncheckedCreateWithoutRoutingStepsInput>
@@ -32061,6 +40376,7 @@ export namespace Prisma {
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutRoutingStepsInput = {
@@ -32078,6 +40394,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type WorkstationUpsertWithoutRoutingStepsInput = {
@@ -32162,6 +40479,54 @@ export namespace Prisma {
     status?: EnumConfirmationStatusFilter<"StepConfirmation"> | $Enums.ConfirmationStatus
     createdAt?: DateTimeFilter<"StepConfirmation"> | Date | string
     updatedAt?: DateTimeFilter<"StepConfirmation"> | Date | string
+  }
+
+  export type WorkOrderStepProgressUpsertWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    update: XOR<WorkOrderStepProgressUpdateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedUpdateWithoutRoutingStepInput>
+    create: XOR<WorkOrderStepProgressCreateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderStepProgressUpdateWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderStepProgressWhereUniqueInput
+    data: XOR<WorkOrderStepProgressUpdateWithoutRoutingStepInput, WorkOrderStepProgressUncheckedUpdateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderStepProgressUpdateManyWithWhereWithoutRoutingStepInput = {
+    where: WorkOrderStepProgressScalarWhereInput
+    data: XOR<WorkOrderStepProgressUpdateManyMutationInput, WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderQualityCheckUpsertWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    update: XOR<WorkOrderQualityCheckUpdateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedUpdateWithoutRoutingStepInput>
+    create: XOR<WorkOrderQualityCheckCreateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderQualityCheckUpdateWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderQualityCheckWhereUniqueInput
+    data: XOR<WorkOrderQualityCheckUpdateWithoutRoutingStepInput, WorkOrderQualityCheckUncheckedUpdateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderQualityCheckUpdateManyWithWhereWithoutRoutingStepInput = {
+    where: WorkOrderQualityCheckScalarWhereInput
+    data: XOR<WorkOrderQualityCheckUpdateManyMutationInput, WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderMaterialUsageUpsertWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    update: XOR<WorkOrderMaterialUsageUpdateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedUpdateWithoutRoutingStepInput>
+    create: XOR<WorkOrderMaterialUsageCreateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedCreateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateWithWhereUniqueWithoutRoutingStepInput = {
+    where: WorkOrderMaterialUsageWhereUniqueInput
+    data: XOR<WorkOrderMaterialUsageUpdateWithoutRoutingStepInput, WorkOrderMaterialUsageUncheckedUpdateWithoutRoutingStepInput>
+  }
+
+  export type WorkOrderMaterialUsageUpdateManyWithWhereWithoutRoutingStepInput = {
+    where: WorkOrderMaterialUsageScalarWhereInput
+    data: XOR<WorkOrderMaterialUsageUpdateManyMutationInput, WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepInput>
   }
 
   export type RoutingTemplateStepCreateWithoutTemplateInput = {
@@ -32869,6 +41234,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     batch: BatchCreateNestedOneWithoutRoutingStepsInput
     confirmations?: StepConfirmationCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepUncheckedCreateWithoutWorkstationInput = {
@@ -32883,6 +41251,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     confirmations?: StepConfirmationUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepCreateOrConnectWithoutWorkstationInput = {
@@ -33235,6 +41606,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     batch: BatchCreateNestedOneWithoutRoutingStepsInput
     workstation: WorkstationCreateNestedOneWithoutRoutingStepsInput
+    workOrderProgress?: WorkOrderStepProgressCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepUncheckedCreateWithoutConfirmationsInput = {
@@ -33249,6 +41623,9 @@ export namespace Prisma {
     status?: $Enums.StepStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    workOrderProgress?: WorkOrderStepProgressUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedCreateNestedManyWithoutRoutingStepInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedCreateNestedManyWithoutRoutingStepInput
   }
 
   export type RoutingStepCreateOrConnectWithoutConfirmationsInput = {
@@ -33363,6 +41740,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
     workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateWithoutConfirmationsInput = {
@@ -33377,6 +41757,9 @@ export namespace Prisma {
     status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type WorkstationUpsertWithoutConfirmationsInput = {
@@ -33490,6 +41873,7 @@ export namespace Prisma {
     lineItem: OrderLineItemCreateNestedOneWithoutBatchesInput
     routingSteps?: RoutingStepCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutQcRecordsInput = {
@@ -33507,6 +41891,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     routingSteps?: RoutingStepUncheckedCreateNestedManyWithoutBatchInput
     materialConsumption?: MaterialConsumptionUncheckedCreateNestedManyWithoutBatchInput
+    workOrderItems?: WorkOrderItemUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutQcRecordsInput = {
@@ -33540,6 +41925,7 @@ export namespace Prisma {
     lineItem?: OrderLineItemUpdateOneRequiredWithoutBatchesNestedInput
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutQcRecordsInput = {
@@ -33557,6 +41943,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type PurchaseOrderCreateManyCustomerInput = {
@@ -33728,6 +42115,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type WorkOrderMaterialUsageCreateManyMaterialPartInput = {
+    id?: string
+    workOrderItemId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type BOMComponentUpdateWithoutParentPartInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -33873,6 +42273,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WorkOrderMaterialUsageUpdateWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutMaterialUsageNestedInput
+    routingStep?: RoutingStepUpdateOneWithoutWorkOrderMaterialUsageNestedInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutMaterialPartInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FileAttachmentCreateManyLineItemInput = {
     id?: string
     fileName: string
@@ -33954,6 +42393,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutLineItemInput = {
@@ -33971,6 +42411,7 @@ export namespace Prisma {
     routingSteps?: RoutingStepUncheckedUpdateManyWithoutBatchNestedInput
     qcRecords?: QCRecordUncheckedUpdateManyWithoutBatchNestedInput
     materialConsumption?: MaterialConsumptionUncheckedUpdateManyWithoutBatchNestedInput
+    workOrderItems?: WorkOrderItemUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateManyWithoutLineItemInput = {
@@ -34022,6 +42463,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type WorkOrderItemCreateManyBatchInput = {
+    id?: string
+    serialNumber: string
+    itemNumber: number
+    status?: $Enums.WorkOrderItemStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    currentStepId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type RoutingStepUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     stepNumber?: IntFieldUpdateOperationsInput | number
@@ -34034,6 +42488,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workstation?: WorkstationUpdateOneRequiredWithoutRoutingStepsNestedInput
     confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateWithoutBatchInput = {
@@ -34048,6 +42505,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateManyWithoutBatchInput = {
@@ -34129,6 +42589,219 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WorkOrderItemUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepProgress?: WorkOrderStepProgressUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    stepProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    qualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+    materialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemNestedInput
+  }
+
+  export type WorkOrderItemUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    itemNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumWorkOrderItemStatusFieldUpdateOperationsInput | $Enums.WorkOrderItemStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressCreateManyWorkOrderItemInput = {
+    id?: string
+    routingStepId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateManyWorkOrderItemInput = {
+    id?: string
+    routingStepId?: string | null
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateManyWorkOrderItemInput = {
+    id?: string
+    materialPartId: string
+    routingStepId?: string | null
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingStep?: RoutingStepUpdateOneRequiredWithoutWorkOrderProgressNestedInput
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    routingStepId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateManyWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    routingStepId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    routingStep?: RoutingStepUpdateOneWithoutWorkOrderQualityChecksNestedInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateManyWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materialPart?: PartUpdateOneRequiredWithoutWorkOrderMaterialUsageNestedInput
+    routingStep?: RoutingStepUpdateOneWithoutWorkOrderMaterialUsageNestedInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutWorkOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    routingStepId?: NullableStringFieldUpdateOperationsInput | string | null
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StepConfirmationCreateManyRoutingStepInput = {
     id?: string
     workstationId: string
@@ -34140,6 +42813,48 @@ export namespace Prisma {
     photoUrl?: string | null
     flagged?: boolean
     status?: $Enums.ConfirmationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderStepProgressCreateManyRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    status?: $Enums.StepStatus
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    operatorId?: string | null
+    actualTime?: number | null
+    notes?: string | null
+    photoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderQualityCheckCreateManyRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    checkType: string
+    result: $Enums.QCResult
+    checkedBy: string
+    checkedAt?: Date | string
+    measurements?: string | null
+    defects?: string | null
+    correctedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderMaterialUsageCreateManyRoutingStepInput = {
+    id?: string
+    workOrderItemId: string
+    materialPartId: string
+    quantityUsed: Decimal | DecimalJsLike | number | string
+    unitCost?: Decimal | DecimalJsLike | number | string | null
+    consumedAt?: Date | string
+    operatorId?: string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34185,6 +42900,132 @@ export namespace Prisma {
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     flagged?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumConfirmationStatusFieldUpdateOperationsInput | $Enums.ConfirmationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutStepProgressNestedInput
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStepStatusFieldUpdateOperationsInput | $Enums.StepStatus
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actualTime?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutQualityChecksNestedInput
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    checkType?: StringFieldUpdateOperationsInput | string
+    result?: EnumQCResultFieldUpdateOperationsInput | $Enums.QCResult
+    checkedBy?: StringFieldUpdateOperationsInput | string
+    checkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    measurements?: NullableStringFieldUpdateOperationsInput | string | null
+    defects?: NullableStringFieldUpdateOperationsInput | string | null
+    correctedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workOrderItem?: WorkOrderItemUpdateOneRequiredWithoutMaterialUsageNestedInput
+    materialPart?: PartUpdateOneRequiredWithoutWorkOrderMaterialUsageNestedInput
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderItemId?: StringFieldUpdateOperationsInput | string
+    materialPartId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    consumedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    operatorId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34420,6 +43261,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batch?: BatchUpdateOneRequiredWithoutRoutingStepsNestedInput
     confirmations?: StepConfirmationUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateWithoutWorkstationInput = {
@@ -34434,6 +43278,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmations?: StepConfirmationUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderProgress?: WorkOrderStepProgressUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderQualityChecks?: WorkOrderQualityCheckUncheckedUpdateManyWithoutRoutingStepNestedInput
+    workOrderMaterialUsage?: WorkOrderMaterialUsageUncheckedUpdateManyWithoutRoutingStepNestedInput
   }
 
   export type RoutingStepUncheckedUpdateManyWithoutWorkstationInput = {

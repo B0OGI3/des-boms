@@ -195,9 +195,11 @@ export default function RoutingTemplatesPage() {
           </Text>
         </Alert>
       ) : (
-        <Card withBorder style={{
+        <Card style={{
           background: "rgba(30, 41, 59, 0.85)",
-          border: "1px solid rgba(51, 65, 85, 0.7)",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgba(51, 65, 85, 0.7)",
         }}>
           <Table>
             <Table.Thead>
@@ -314,9 +316,11 @@ export default function RoutingTemplatesPage() {
 
             <Stack gap="md">
               {templateForm.steps.map((step, index) => (
-                <Card key={`step-${index}-${step.workstationId || 'new'}`} withBorder style={{
+                <Card key={`step-${index}-${step.workstationId || 'new'}`} style={{
                   background: "rgba(51, 65, 85, 0.3)",
-                  border: "1px solid rgba(71, 85, 105, 0.3)",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "rgba(71, 85, 105, 0.3)",
                 }}>
                   <Group justify="space-between" mb="md">
                     <Text fw={500} style={{ color: "#f1f5f9" }}>

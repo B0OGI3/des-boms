@@ -1,6 +1,7 @@
 /**
  * Parts Master Demo Page
  * Demonstrates the new Parts Master system with unique part IDs and BOM structure
+ * Fixed: Number conversion for toFixed() calls
  */
 
 'use client';
@@ -188,7 +189,7 @@ export default function PartsDemo() {
                     </div>
                     <div className="text-right text-sm text-gray-500">
                       {part.standardCost && (
-                        <p>${part.standardCost.toFixed(2)}</p>
+                        <p>${Number(part.standardCost).toFixed(2)}</p>
                       )}
                       <p>{part._count.childBOMs} components</p>
                       <p>{part._count.orderLineItems} orders</p>
@@ -212,29 +213,29 @@ export default function PartsDemo() {
                 <p className="text-sm text-blue-600">{selectedPart.partTypeDescription}</p>
               </div>
 
-              {bomStructure ? (
+              {bomStructure?.summary ? (
                 <div>
                   <div className="bg-gray-50 p-3 rounded mb-4">
                     <div className="flex justify-between text-sm">
                       <span>Total Components: {bomStructure.summary.totalComponents}</span>
-                      <span>Material Cost: ${bomStructure.summary.totalMaterialCost.toFixed(2)}</span>
+                      <span>Material Cost: ${Number(bomStructure.summary.totalMaterialCost).toFixed(2)}</span>
                     </div>
                   </div>
 
                   <div className="space-y-2 max-h-80 overflow-y-auto">
-                    {bomStructure.bomComponents.map((component) => (
+                    {bomStructure.bomComponents?.map((component) => (
                       <div key={component.id} className="p-3 border rounded">
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-mono text-sm font-bold text-purple-600">
-                                {component.childPart.partNumber}
+                                {component.childPart?.partNumber || 'N/A'}
                               </span>
-                              <span className={`px-2 py-1 rounded-full text-xs ${getPartTypeColor(component.childPart.partType)}`}>
-                                {component.childPart.partType.replace('_', ' ')}
+                              <span className={`px-2 py-1 rounded-full text-xs ${getPartTypeColor(component.childPart?.partType)}`}>
+                                {component.childPart?.partType?.replace('_', ' ') || 'N/A'}
                               </span>
                             </div>
-                            <h4 className="font-medium">{component.childPart.partName}</h4>
+                            <h4 className="font-medium">{component.childPart?.partName || 'N/A'}</h4>
                             {component.operation && (
                               <p className="text-xs text-gray-500">Operation: {component.operation}</p>
                             )}
@@ -246,7 +247,7 @@ export default function PartsDemo() {
                             <p className="font-semibold">
                               {component.quantity.toString()} {component.unitOfMeasure || 'EA'}
                             </p>
-                            <p className="text-green-600">${component.componentCost.toFixed(2)}</p>
+                            <p className="text-green-600">${Number(component.componentCost).toFixed(2)}</p>
                             {component.scrapFactor && (
                               <p className="text-orange-600">
                                 {(parseFloat(component.scrapFactor.toString()) * 100).toFixed(1)}% scrap

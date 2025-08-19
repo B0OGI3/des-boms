@@ -104,7 +104,9 @@ export const Pagination = <T,>({
     background: isActive 
       ? "linear-gradient(135deg, #1e40af, #1e3a8a)"
       : "rgba(30, 41, 59, 0.7)",
-    border: "1px solid rgba(51, 65, 85, 0.4)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "rgba(51, 65, 85, 0.4)",
     borderRadius: "6px",
     color: isActive ? "#ffffff" : "#cbd5e1",
     cursor: "pointer",

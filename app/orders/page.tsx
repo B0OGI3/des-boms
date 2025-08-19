@@ -205,6 +205,18 @@ const useOrderModals = () => {
   const smartBatchModal = useModal();
   
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedLineItem, setSelectedLineItem] = useState<{
+    part: {
+      id: string;
+      partNumber: string;
+      partName: string;
+      partType: string;
+      drawingNumber?: string;
+      revisionLevel?: string;
+    };
+    quantity: number;
+    id?: string;
+  } | null>(null);
 
   return {
     modals: {
@@ -218,7 +230,9 @@ const useOrderModals = () => {
       smartBatchModal
     },
     selectedOrder,
-    setSelectedOrder
+    setSelectedOrder,
+    selectedLineItem,
+    setSelectedLineItem
   };
 };
 
@@ -236,7 +250,11 @@ const useOrderStats = (orders: Order[]) => {
 };
 
 // Custom hook for order action handlers
-const useOrderActions = (modals: ReturnType<typeof useOrderModals>['modals'], setSelectedOrder: (order: Order | null) => void) => {
+const useOrderActions = (
+  modals: ReturnType<typeof useOrderModals>['modals'], 
+  setSelectedOrder: (order: Order | null) => void,
+  setSelectedLineItem: (lineItem: any) => void
+) => {
   const handleNewOrder = () => {
     modals.newOrderModal.open();
   };
@@ -276,6 +294,20 @@ const useOrderActions = (modals: ReturnType<typeof useOrderModals>['modals'], se
     modals.smartBatchModal.open();
   };
 
+  const handleEditPart = (order: Order, lineItem: any) => {
+    setSelectedOrder(order);
+    setSelectedLineItem(lineItem);
+    // Open edit part modal (to be created)
+    console.log('Edit part:', lineItem, 'in order:', order.orderId);
+  };
+
+  const handleDeletePart = (order: Order, lineItem: any) => {
+    setSelectedOrder(order);
+    setSelectedLineItem(lineItem);
+    // Open delete part confirmation (to be created)
+    console.log('Delete part:', lineItem, 'from order:', order.orderId);
+  };
+
   return {
     handleNewOrder,
     handleViewOrder,
@@ -284,7 +316,9 @@ const useOrderActions = (modals: ReturnType<typeof useOrderModals>['modals'], se
     handleCompleteOrder,
     handleShipOrder,
     handleBatchIntegration,
-    handleSmartBatch
+    handleSmartBatch,
+    handleEditPart,
+    handleDeletePart
   };
 };
 
@@ -531,6 +565,8 @@ const OrdersPageContent = ({
             onShipOrder={actions.handleShipOrder}
             onViewBatches={actions.handleBatchIntegration}
             onSmartGenerate={actions.handleSmartBatch}
+            onEditPart={actions.handleEditPart}
+            onDeletePart={actions.handleDeletePart}
             loading={orderSearch.loading}
             emptyMessage="No orders found matching your criteria"
           />
@@ -663,10 +699,10 @@ const LoadingScreen = ({ pageInitialization }: { pageInitialization: Record<stri
 
 export default function CustomerOrdersPage() {
   const { mounted, isPageReady, pageInitialization, orderSearch } = usePageInitialization();
-  const { modals, selectedOrder, setSelectedOrder } = useOrderModals();
+  const { modals, selectedOrder, setSelectedOrder, setSelectedLineItem } = useOrderModals();
   const stats = useOrderStats(orderSearch.orders);
   const pagination = usePagination(orderSearch.orders, { initialPage: 1, initialItemsPerPage: 10 });
-  const actions = useOrderActions(modals, setSelectedOrder);
+  const actions = useOrderActions(modals, setSelectedOrder, setSelectedLineItem);
   const { handleNavigateToBatch, handleNavigateToWorkstation } = createNavigationHandlers();
   
   const handleStatClick = (statType: StatType) => handleStatFiltering(statType, orderSearch);

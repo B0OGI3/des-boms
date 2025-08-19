@@ -64,6 +64,8 @@ export interface OrdersTableProps {
   onShipOrder?: (order: OrderTableItem) => void;
   onViewBatches?: (order: OrderTableItem) => void;
   onSmartGenerate?: (order: OrderTableItem) => void;
+  onEditPart?: (order: OrderTableItem, lineItem: any) => void;
+  onDeletePart?: (order: OrderTableItem, lineItem: any) => void;
   loading?: boolean;
   emptyMessage?: string;
 }
@@ -121,6 +123,8 @@ interface OrderRowProps {
   onShipOrder?: (order: OrderTableItem) => void;
   onViewBatches?: (order: OrderTableItem) => void;
   onSmartGenerate?: (order: OrderTableItem) => void;
+  onEditPart?: (order: OrderTableItem, lineItem: any) => void;
+  onDeletePart?: (order: OrderTableItem, lineItem: any) => void;
 }
 
 const OrderRow: React.FC<OrderRowProps> = ({ 
@@ -131,7 +135,9 @@ const OrderRow: React.FC<OrderRowProps> = ({
   onCompleteOrder,
   onShipOrder,
   onViewBatches,
-  onSmartGenerate
+  onSmartGenerate,
+  onEditPart,
+  onDeletePart
 }) => {
   const [expanded, setExpanded] = useState(false);
   
@@ -377,6 +383,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                             <Table.Th style={{ color: '#374151', fontWeight: 600 }}>Drawing</Table.Th>
                             <Table.Th style={{ color: '#374151', fontWeight: 600 }}>Revision</Table.Th>
                             <Table.Th style={{ color: '#374151', fontWeight: 600 }}>Quantity</Table.Th>
+                            <Table.Th style={{ color: '#374151', fontWeight: 600, width: '120px' }}>Actions</Table.Th>
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
@@ -407,6 +414,36 @@ const OrderRow: React.FC<OrderRowProps> = ({
                                   {item.quantity}
                                 </Text>
                               </Table.Td>
+                              <Table.Td>
+                                <Group gap="xs">
+                                  <Tooltip label="Edit Part">
+                                    <ActionIcon
+                                      size="sm"
+                                      variant="subtle"
+                                      color="blue"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onEditPart?.(order, item);
+                                      }}
+                                    >
+                                      <IconEdit size={14} />
+                                    </ActionIcon>
+                                  </Tooltip>
+                                  <Tooltip label="Delete Part">
+                                    <ActionIcon
+                                      size="sm"
+                                      variant="subtle"
+                                      color="red"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onDeletePart?.(order, item);
+                                      }}
+                                    >
+                                      <IconTrash size={14} />
+                                    </ActionIcon>
+                                  </Tooltip>
+                                </Group>
+                              </Table.Td>
                             </Table.Tr>
                           ))}
                         </Table.Tbody>
@@ -433,6 +470,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
   onShipOrder,
   onViewBatches,
   onSmartGenerate,
+  onEditPart,
+  onDeletePart,
   loading = false,
   emptyMessage = "No orders found"
 }) => {
@@ -518,6 +557,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 onShipOrder={onShipOrder}
                 onViewBatches={onViewBatches}
                 onSmartGenerate={onSmartGenerate}
+                onEditPart={onEditPart}
+                onDeletePart={onDeletePart}
               />
             ))}
           </Table.Tbody>

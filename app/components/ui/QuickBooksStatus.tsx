@@ -35,6 +35,7 @@ export function QuickBooksStatus({
   const [status, setStatus] = useState<QuickBooksStatusData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [autoRefreshing, setAutoRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchStatus = async () => {
@@ -102,21 +103,113 @@ export function QuickBooksStatus({
     window.addEventListener('message', handleMessage);
   };
 
+  const handleValidationResult = (result: any) => {
+    if (result.status === 'token_expired') {
+      console.log('Token validation failed - expired tokens');
+      setError('QuickBooks tokens have expired. Please reconnect.');
+      setStatus(prev => prev ? {...prev, status: 'token_expired', message: 'QuickBooks tokens have expired'} : null);
+      setTimeout(() => setError(null), 10000);
+      return true; // Handled
+    }
+    return false; // Not handled
+  };
+
+  const handleValidationError = (response: Response, errorData: any) => {
+    if (errorData.status === 'token_expired') {
+      setError('QuickBooks authentication expired. Please reconnect.');
+      setStatus(prev => prev ? {...prev, status: 'token_expired', message: 'QuickBooks authentication expired'} : null);
+      setTimeout(() => setError(null), 10000);
+      return true; // Handled
+    }
+    return false; // Not handled
+  };
+
   const handleTestConnection = async () => {
     setRefreshing(true);
     try {
-      const response = await fetch('/api/quickbooks/sync-customers', { method: 'POST' });
+      console.log('[QB Status] Starting connection test...');
+      // Use the lightweight token validation endpoint instead of full sync
+      const response = await fetch('/api/quickbooks/validate-token', { method: 'GET' });
+      
       if (response.ok) {
-        await fetchStatus();
-      } else {
-        throw new Error('Connection test failed');
+        const result = await response.json();
+        console.log('[QB Status] Validation result:', result);
+        
+        if (result.valid) {
+          console.log('[QB Status] Token validation successful, fetching latest status...');
+          await fetchStatus();
+          setError(null);
+          console.log('[QB Status] Status updated successfully');
+          return;
+        }
+        
+        // Handle invalid token cases
+        if (handleValidationResult(result)) return;
+        throw new Error(result.error || 'Token validation failed');
       }
+      
+      // If validation endpoint failed, get error details
+      let errorData: any = {};
+      try {
+        errorData = await response.json();
+        console.error('[QB Status] Token validation failed:', response.status, errorData);
+      } catch (jsonError) {
+        console.error('[QB Status] Token validation failed (no JSON response):', response.status, response.statusText);
+        console.error('[QB Status] JSON parse error:', jsonError);
+        errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+      }
+      
+      // Check if it's a token expiration issue
+      if (handleValidationError(response, errorData)) return;
+      throw new Error(`Connection test failed: ${errorData.error || 'Unknown error'}`);
+      
     } catch (err) {
-      console.error('Connection test error:', err);
-      setError('Connection test failed');
+      console.error('[QB Status] Connection test error:', err);
+      setError(err instanceof Error ? err.message : 'Connection test failed');
       setTimeout(() => setError(null), 5000);
     } finally {
       setRefreshing(false);
+      console.log('[QB Status] Connection test completed');
+    }
+  };
+
+  const handleAutoRefresh = async () => {
+    setAutoRefreshing(true);
+    try {
+      console.log('[QB Status] Starting auto token refresh...');
+      const response = await fetch('/api/quickbooks/refresh-tokens', { method: 'GET' });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('[QB Status] Auto refresh result:', result);
+        
+        if (result.success) {
+          if (result.refreshed) {
+            setError(null);
+            console.log('[QB Status] Tokens refreshed, updating status...');
+            // Give the server time to load new tokens
+            setTimeout(() => {
+              fetchStatus();
+            }, 2000);
+          } else {
+            console.log('[QB Status] Tokens were already valid');
+            await fetchStatus();
+          }
+          return;
+        }
+        
+        throw new Error(result.message || 'Auto refresh failed');
+      }
+      
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Auto refresh failed');
+      
+    } catch (err) {
+      console.error('[QB Status] Auto refresh error:', err);
+      setError(err instanceof Error ? err.message : 'Auto refresh failed');
+      setTimeout(() => setError(null), 8000);
+    } finally {
+      setAutoRefreshing(false);
     }
   };
 
@@ -219,15 +312,31 @@ export function QuickBooksStatus({
         </Tooltip>
         
         {showActions && (status.status === 'configured' || status.status === 'token_expired') && (
-          <Button
-            size="xs"
-            variant="light"
-            color="blue"
-            onClick={handleConnect}
-            disabled={refreshing}
-          >
-            {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
-          </Button>
+          <Group gap="xs">
+            <Button
+              size="xs"
+              variant="light"
+              color="blue"
+              onClick={handleConnect}
+              disabled={refreshing || autoRefreshing}
+            >
+              {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
+            </Button>
+            {status.status === 'token_expired' && (
+              <Tooltip label="Automatically refresh expired tokens">
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  color="orange"
+                  onClick={handleAutoRefresh}
+                  loading={autoRefreshing}
+                  disabled={refreshing}
+                >
+                  Auto-Fix
+                </Button>
+              </Tooltip>
+            )}
+          </Group>
         )}
       </Group>
     );
@@ -256,10 +365,25 @@ export function QuickBooksStatus({
               variant="light"
               color="blue"
               onClick={handleConnect}
-              disabled={refreshing}
+              disabled={refreshing || autoRefreshing}
             >
               {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
             </Button>
+          )}
+          
+          {status.status === 'token_expired' && (
+            <Tooltip label="Automatically refresh expired tokens">
+              <Button
+                size="xs"
+                variant="subtle"
+                color="orange"
+                onClick={handleAutoRefresh}
+                loading={autoRefreshing}
+                disabled={refreshing}
+              >
+                Auto-Fix
+              </Button>
+            </Tooltip>
           )}
           
           {status.status === 'connected' && (
@@ -269,6 +393,7 @@ export function QuickBooksStatus({
               color="green"
               onClick={handleTestConnection}
               loading={refreshing}
+              disabled={autoRefreshing}
             >
               Test
             </Button>
@@ -280,6 +405,7 @@ export function QuickBooksStatus({
             color="gray"
             onClick={handleRefresh}
             loading={refreshing}
+            disabled={autoRefreshing}
           >
             <IconRefresh size={12} />
           </Button>

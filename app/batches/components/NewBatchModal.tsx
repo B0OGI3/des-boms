@@ -390,7 +390,9 @@ export function NewBatchModal({ opened, onClose, onBatchCreated }: Readonly<NewB
               styles={{
                 input: {
                   background: "rgba(30, 41, 59, 0.6)",
-                  border: `1px solid ${quantityError ? '#ef4444' : 'rgba(51, 65, 85, 0.5)'}`,
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: quantityError ? '#ef4444' : 'rgba(51, 65, 85, 0.5)',
                   color: "#e2e8f0",
                 },
               }}

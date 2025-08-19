@@ -107,10 +107,6 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
               option: {
                 borderRadius: '6px',
                 margin: '2px',
-                '&[data-selected]': {
-                  background: 'rgba(20, 184, 166, 0.1)',
-                  color: '#111827',
-                },
                 '&:hover': {
                   background: 'rgba(248, 250, 252, 0.8)',
                 },

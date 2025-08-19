@@ -137,8 +137,23 @@ export function FileAttachmentManager({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        let error;
+        try {
+          error = await response.json();
+        } catch {
+          // If response isn't JSON, use status text
+          error = { error: response.statusText || 'Delete failed' };
+        }
+        console.error('Delete file error response:', error);
         throw new Error(error.error || 'Delete failed');
+      }
+
+      // Try to consume response if successful
+      try {
+        await response.json();
+      } catch {
+        // Response might be empty, which is fine for a successful delete
+        console.log('Delete file successful (empty response)');
       }
 
       notifications.show({

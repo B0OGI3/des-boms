@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
 import { generatePartNumber, getPartTypeDescription } from '../../../lib/partNumberGenerator';
+import { validateBOMHierarchy } from '../../../lib/bomUtils';
 
 interface WhereClause {
   partType?: 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
@@ -107,14 +108,117 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * POST /api/parts - Create a new part
- */
-export async function POST(request: NextRequest) {
+// Helper function to validate BOM components
+async function validateBOMComponents(bomData: any, partType: string) {
+  if (!bomData?.components?.length) {
+    return { isValid: true };
+  }
+
   try {
-    const body = await request.json();
-    const {
-      partNumber: providedPartNumber,
+    // Get child parts for validation
+    const childPartIds = bomData.components.map((comp: any) => comp.childPartId);
+    const childParts = await prisma.part.findMany({
+      where: { id: { in: childPartIds } },
+      select: { id: true, partType: true, partNumber: true }
+    });
+
+    // Validate that all child parts exist
+    const foundPartIds = childParts.map(p => p.id);
+    const missingPartIds = childPartIds.filter((id: string) => !foundPartIds.includes(id));
+    if (missingPartIds.length > 0) {
+      return {
+        isValid: false,
+        error: 'Some component parts not found',
+        details: `Missing part IDs: ${missingPartIds.join(', ')}`
+      };
+    }
+
+    // Basic hierarchy validation - prevent infinite loops
+    for (const childPart of childParts) {
+      const hierarchyCheck = validateBOMHierarchy(partType as any, childPart.partType);
+      if (!hierarchyCheck.valid) {
+        return {
+          isValid: false,
+          error: 'BOM hierarchy validation failed',
+          details: `${childPart.partNumber}: ${hierarchyCheck.error || 'Hierarchy validation failed'}`
+        };
+      }
+    }
+
+    return { isValid: true };
+  } catch (error) {
+    return {
+      isValid: false,
+      error: 'BOM validation failed',
+      details: error instanceof Error ? error.message : 'Unknown validation error'
+    };
+  }
+}
+
+// Helper function to create BOM entries
+async function createBOMEntries(tx: any, parentPartId: string, bomData: any) {
+  if (!bomData?.components?.length) {
+    return;
+  }
+
+  const bomEntries = bomData.components.map((comp: any) => ({
+    parentPartId,
+    childPartId: comp.childPartId,
+    quantity: parseFloat(comp.quantity.toString()),
+    unitOfMeasure: comp.unitOfMeasure || 'EA',
+    notes: comp.notes || null
+  }));
+
+  await tx.bOMComponent.createMany({
+    data: bomEntries
+  });
+}
+
+// Helper function to parse request body
+function parseRequestBody(body: any) {
+  let partData;
+  let bomData = null;
+  
+  if (body.part && body.bom !== undefined) {
+    // New format: { part: {...}, bom: {...} }
+    partData = body.part;
+    bomData = body.bom;
+  } else {
+    // Old format: direct part properties
+    partData = body;
+  }
+  
+  return { partData, bomData };
+}
+
+// Helper function to validate part data
+function validatePartData(partData: any) {
+  const {
+    partNumber: providedPartNumber,
+    partName,
+    partType,
+    drawingNumber,
+    revisionLevel,
+    description,
+    materialSpec,
+    unitOfMeasure,
+    standardCost,
+    leadTime,
+    active = true,
+    notes
+  } = partData;
+
+  if (!partName || !partType) {
+    return {
+      isValid: false,
+      error: 'Missing required fields: partName, partType'
+    };
+  }
+
+  return {
+    isValid: true,
+    data: {
+      providedPartNumber,
       partName,
       partType,
       drawingNumber,
@@ -124,25 +228,58 @@ export async function POST(request: NextRequest) {
       unitOfMeasure,
       standardCost,
       leadTime,
-      active = true,
+      active,
       notes
-    } = body;
+    }
+  };
+}
 
-    // Validate required fields
-    if (!partName || !partType) {
+// Helper function to create part data object
+function createPartDataObject(validatedData: any, partNumber: string) {
+  return {
+    partNumber,
+    partName: validatedData.partName,
+    partType: validatedData.partType,
+    drawingNumber: validatedData.drawingNumber || null,
+    revisionLevel: validatedData.revisionLevel || null,
+    description: validatedData.description || null,
+    materialSpec: validatedData.materialSpec || null,
+    unitOfMeasure: validatedData.unitOfMeasure || null,
+    standardCost: validatedData.standardCost ? parseFloat(validatedData.standardCost.toString()) : null,
+    leadTime: validatedData.leadTime ? parseInt(validatedData.leadTime.toString()) : null,
+    active: Boolean(validatedData.active),
+    notes: validatedData.notes || null
+  };
+}
+
+/**
+ * POST /api/parts - Create a new part with optional BOM
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    // Parse request body format
+    const { partData, bomData } = parseRequestBody(body);
+
+    // Validate part data
+    const validation = validatePartData(partData);
+    if (!validation.isValid) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Missing required fields: partName, partType' 
+          error: validation.error
         },
         { status: 400 }
       );
     }
 
+    const validatedData = validation.data!;
+
     // Use provided part number or generate one
-    let partNumber = providedPartNumber;
+    let partNumber = validatedData.providedPartNumber;
     if (!partNumber) {
-      partNumber = await generatePartNumber({ partType });
+      partNumber = await generatePartNumber({ partType: validatedData.partType });
     }
 
     // Check if part number already exists
@@ -162,31 +299,59 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the part
-    const newPart = await prisma.part.create({
-      data: {
-        partNumber,
-        partName,
-        partType,
-        drawingNumber: drawingNumber || null,
-        revisionLevel: revisionLevel || null,
-        description: description || null,
-        materialSpec: materialSpec || null,
-        unitOfMeasure: unitOfMeasure || null,
-        standardCost: standardCost ? parseFloat(standardCost.toString()) : null,
-        leadTime: leadTime ? parseInt(leadTime.toString()) : null,
-        active: Boolean(active),
-        notes: notes || null
+    // Validate BOM components if provided
+    const bomValidation = await validateBOMComponents(bomData, validatedData.partType);
+    if (!bomValidation.isValid) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: bomValidation.error || 'BOM validation failed',
+          details: bomValidation.details
+        },
+        { status: 400 }
+      );
+    }
+
+    // Use transaction to create part and BOM atomically
+    const result = await prisma.$transaction(async (tx) => {
+      // Create the part
+      const partDataObj = createPartDataObject(validatedData, partNumber);
+      const newPart = await tx.part.create({ data: partDataObj });
+
+      // Create BOM entries if provided
+      await createBOMEntries(tx, newPart.id, bomData);
+
+      return newPart;
+    });
+
+    // Fetch the complete part with BOM for response
+    const partWithBOM = await prisma.part.findUnique({
+      where: { id: result.id },
+      include: {
+        parentBOMs: {
+          include: {
+            childPart: {
+              select: {
+                id: true,
+                partNumber: true,
+                partName: true,
+                partType: true
+              }
+            }
+          }
+        }
       }
     });
 
     return NextResponse.json({
       success: true,
       data: {
-        ...newPart,
-        partTypeDescription: getPartTypeDescription(newPart.partType)
+        ...partWithBOM,
+        partTypeDescription: getPartTypeDescription(result.partType)
       },
-      message: 'Part created successfully'
+      message: bomData?.components?.length 
+        ? `Part created successfully with ${bomData.components.length} BOM components`
+        : 'Part created successfully'
     }, { status: 201 });
 
   } catch (error) {

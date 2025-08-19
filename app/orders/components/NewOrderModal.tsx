@@ -22,6 +22,7 @@ import {
   Collapse,
   Badge,
   Box,
+  Switch,
 } from '@mantine/core';
 import { 
   IconPlus, 
@@ -36,13 +37,13 @@ import { QuickBooksStatus } from '../../components/ui/QuickBooksStatus';
 import { PartSelector } from './PartSelector';
 
 // Types
-type PartType = 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+type ExtendedPartType = 'FINISHED' | 'RAW_MATERIAL' | 'COMPONENT' | 'SUBASSEMBLY' | 'CONSUMABLE';
 
 interface Part {
   id: string;
   partNumber: string;
   partName: string;
-  partType: PartType;
+  partType: ExtendedPartType;
   drawingNumber?: string;
   revisionLevel?: string;
   description?: string;
@@ -58,12 +59,18 @@ interface LineItemForm {
   partId?: string; // When selecting existing part
   partNumber: string;
   partName: string;
+  partType?: ExtendedPartType; // Part type for new parts
   drawingNumber: string;
   revisionLevel: string;
+  description?: string; // Detailed description
+  materialSpec?: string; // Material specification
+  unitOfMeasure?: string; // Unit of measure
   quantity: number;
   unitPrice: number;
   dueDate: string;
   notes: string;
+  isNewPart?: boolean; // Flag to track if this is a new part being created
+  editMode?: boolean; // Flag to enable editing of selected part details
 }
 
 interface CustomerForm {
@@ -263,12 +270,18 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
         partId: '',
         partNumber: '',
         partName: '',
+        partType: 'FINISHED' as ExtendedPartType,
         drawingNumber: '',
         revisionLevel: '',
+        description: '',
+        materialSpec: '',
+        unitOfMeasure: 'EA',
         quantity: 1,
         unitPrice: 0,
         dueDate: '',
         notes: '',
+        isNewPart: false,
+        editMode: false,
       }
     ],
   });
@@ -349,6 +362,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
           unitPrice: 0,
           dueDate: '',
           notes: '',
+          editMode: false,
         }
       ]
     });
@@ -359,13 +373,19 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     setOrderData({ ...orderData, lineItems: newLineItems });
   };
 
-  const updateLineItem = (index: number, field: keyof LineItemForm, value: string | number) => {
+  const updateLineItem = (index: number, field: keyof LineItemForm, value: string | number | boolean) => {
     const newLineItems = [...orderData.lineItems];
     newLineItems[index] = { ...newLineItems[index], [field]: value };
     setOrderData({ ...orderData, lineItems: newLineItems });
   };
 
-  const handlePartSelect = (index: number, part: Part | null) => {
+  const toggleEditMode = (index: number) => {
+    const newLineItems = [...orderData.lineItems];
+    newLineItems[index] = { ...newLineItems[index], editMode: !newLineItems[index].editMode };
+    setOrderData({ ...orderData, lineItems: newLineItems });
+  };
+
+  const handlePartSelect = (index: number, part: any) => {
     const newLineItems = [...orderData.lineItems];
     if (part) {
       newLineItems[index] = {
@@ -375,7 +395,13 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
         partName: part.partName,
         drawingNumber: part.drawingNumber || '',
         revisionLevel: part.revisionLevel || '',
+        description: part.description || '',
+        materialSpec: part.materialSpec || '',
+        unitOfMeasure: part.unitOfMeasure || 'EA',
         unitPrice: part.standardCost || newLineItems[index].unitPrice,
+        // Convert the part type to our extended type
+        partType: part.partType === 'SEMI_FINISHED' ? 'COMPONENT' : (part.partType as ExtendedPartType) || 'FINISHED',
+        editMode: false, // Disable edit mode when part is selected
       };
     } else {
       // Clear part data when no part selected
@@ -386,6 +412,11 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
         partName: '',
         drawingNumber: '',
         revisionLevel: '',
+        description: '',
+        materialSpec: '',
+        unitOfMeasure: 'EA',
+        partType: 'FINISHED' as ExtendedPartType,
+        editMode: false, // Reset edit mode when part is cleared
       };
     }
     setOrderData({ ...orderData, lineItems: newLineItems });
@@ -528,7 +559,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
 
             <Group grow>
               <div>
-                <Group gap="xs" mb="xs" align="end">
+                <Group gap="xs" mb="xs" align="flex-start">
                   <div style={{ flex: 1 }}>
                     <Select
                       label="Customer"
@@ -545,14 +576,16 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       <QuickBooksStatus compact={true} showActions={true} />
                     </Group>
                   </div>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    onClick={() => setShowNewCustomer(!showNewCustomer)}
-                    leftSection={showNewCustomer ? <IconChevronDown size={16} /> : <IconPlus size={16} />}
-                  >
-                    {showNewCustomer ? 'Cancel' : 'New Customer'}
-                  </Button>
+                  <div style={{ paddingTop: '25px' }}>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      onClick={() => setShowNewCustomer(!showNewCustomer)}
+                      leftSection={showNewCustomer ? <IconChevronDown size={16} /> : <IconPlus size={16} />}
+                    >
+                      {showNewCustomer ? 'Cancel' : 'New Customer'}
+                    </Button>
+                  </div>
                 </Group>
 
                 <Collapse in={showNewCustomer}>
@@ -665,7 +698,9 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                         id: item.partId,
                         partNumber: item.partNumber,
                         partName: item.partName,
-                        partType: 'FINISHED' as PartType,
+                        partType: (item.partType === 'COMPONENT' || item.partType === 'SUBASSEMBLY' || item.partType === 'CONSUMABLE') 
+                          ? 'FINISHED' 
+                          : item.partType as any,
                         drawingNumber: item.drawingNumber,
                         revisionLevel: item.revisionLevel,
                       } : null}
@@ -676,18 +711,98 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       isPageReady={isPageReady}
                     />
 
-                    {/* Manual part details - only show if no part selected or for editing */}
-                    {!item.partId && (
-                      <Group grow>
-                        <TextInput
-                          label="Part Name"
-                          placeholder="Description of the part"
-                          required
-                          value={item.partName}
-                          onChange={(e) => updateLineItem(index, 'partName', e.target.value)}
-                          error={errors[`lineItems.${index}.partName`]}
-                        />
+                    {/* Edit button for selected parts */}
+                    {item.partId && !item.editMode && (
+                      <Group justify="flex-end">
+                        <Button
+                          variant="light"
+                          size="xs"
+                          onClick={() => toggleEditMode(index)}
+                        >
+                          Edit Part Details
+                        </Button>
                       </Group>
+                    )}
+
+                    {/* Save changes button when in edit mode */}
+                    {item.partId && item.editMode && (
+                      <Group justify="flex-end">
+                        <Button
+                          variant="light"
+                          size="xs"
+                          color="green"
+                          onClick={() => toggleEditMode(index)}
+                        >
+                          Save Changes
+                        </Button>
+                      </Group>
+                    )}
+
+                    {/* Manual part details - show if no part selected OR if editing mode is enabled */}
+                    {(!item.partId || item.editMode) && (
+                      <>
+                        <Group grow>
+                          <TextInput
+                            label="Part Name"
+                            placeholder="Description of the part"
+                            required
+                            value={item.partName}
+                            onChange={(e) => updateLineItem(index, 'partName', e.target.value)}
+                            error={errors[`lineItems.${index}.partName`]}
+                          />
+                          <Select
+                            label="Part Type"
+                            placeholder="Select part type"
+                            data={[
+                              { value: 'FINISHED', label: 'Finished Good' },
+                              { value: 'RAW_MATERIAL', label: 'Raw Material' },
+                              { value: 'COMPONENT', label: 'Component' },
+                              { value: 'SUBASSEMBLY', label: 'Subassembly' },
+                              { value: 'CONSUMABLE', label: 'Consumable' },
+                            ]}
+                            value={item.partType || 'FINISHED'}
+                            onChange={(value) => updateLineItem(index, 'partType', value as ExtendedPartType)}
+                          />
+                        </Group>
+                        <Group grow>
+                          <Textarea
+                            label="Description"
+                            placeholder="Detailed part description"
+                            value={item.description || ''}
+                            onChange={(e) => updateLineItem(index, 'description', e.target.value)}
+                            minRows={2}
+                          />
+                          <TextInput
+                            label="Material Specification"
+                            placeholder="Material specs (e.g., 6061-T6 Aluminum)"
+                            value={item.materialSpec || ''}
+                            onChange={(e) => updateLineItem(index, 'materialSpec', e.target.value)}
+                          />
+                        </Group>
+                        <Group grow>
+                          <Select
+                            label="Unit of Measure"
+                            placeholder="Select unit"
+                            data={[
+                              { value: 'EA', label: 'Each (EA)' },
+                              { value: 'LB', label: 'Pounds (LB)' },
+                              { value: 'FT', label: 'Feet (FT)' },
+                              { value: 'IN', label: 'Inches (IN)' },
+                              { value: 'SQ FT', label: 'Square Feet (SQ FT)' },
+                              { value: 'PC', label: 'Pieces (PC)' },
+                              { value: 'SET', label: 'Sets (SET)' },
+                            ]}
+                            value={item.unitOfMeasure || 'EA'}
+                            onChange={(value) => updateLineItem(index, 'unitOfMeasure', value || 'EA')}
+                          />
+                          <Switch
+                            label="New Part"
+                            description="This is a new part to be added to inventory"
+                            checked={item.isNewPart}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => updateLineItem(index, 'isNewPart', event.currentTarget.checked)}
+                          />
+                        </Group>
+                      </>
                     )}
 
                     {/* Drawing and revision - always editable */}
@@ -695,13 +810,13 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       <TextInput
                         label="Drawing Number"
                         placeholder="Engineering drawing reference"
-                        value={item.drawingNumber}
+                        value={item.drawingNumber || ''}
                         onChange={(e) => updateLineItem(index, 'drawingNumber', e.target.value)}
                       />
                       <TextInput
                         label="Revision Level"
                         placeholder="Rev A, Rev 01, etc."
-                        value={item.revisionLevel}
+                        value={item.revisionLevel || ''}
                         onChange={(e) => updateLineItem(index, 'revisionLevel', e.target.value)}
                       />
                     </Group>

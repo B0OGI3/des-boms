@@ -50,6 +50,8 @@ import {
 } from "@tabler/icons-react";
 import { RoutingEditorModal } from "../../batches/components/RoutingEditorModal";
 
+type PartType = 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+
 interface WorkflowStep {
   id: string;
   stepNumber: number;
@@ -57,13 +59,29 @@ interface WorkflowStep {
   description: string;
   estimatedTime: number; // Changed from estimatedMinutes to match batch system
   status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED';
+  partType?: PartType;
+  partNumber?: string;
+  materialRequirements?: string[];
+}
+
+interface MaterialRequirement {
+  partId: string;
+  partNumber: string;
+  partName: string;
+  partType: PartType;
+  totalQuantityRequired: number;
+  unitOfMeasure?: string;
+  standardCost?: number;
+  totalCost: number;
 }
 
 interface BatchSuggestion {
   lineItemId: string;
   partNumber: string;
   partName: string;
+  partType?: PartType;
   totalQuantity: number;
+  materialRequirements?: MaterialRequirement[];
   suggestedBatches: Array<{
     batchNumber: number;
     quantity: number;
@@ -933,9 +951,11 @@ export const SmartBatchGenerationModal: React.FC<SmartBatchGenerationModalProps>
 
         {/* Summary and Action Section */}
         {suggestions && approvedSuggestions.length > 0 && (
-          <Card withBorder p="lg" style={{
+          <Card p="lg" style={{
             background: "rgba(30, 41, 59, 0.8)",
-            border: "1px solid rgba(59, 130, 246, 0.3)",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "rgba(59, 130, 246, 0.3)",
             borderRadius: "12px"
           }}>
             <Stack gap="md">
