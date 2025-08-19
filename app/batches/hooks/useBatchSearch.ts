@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useDebounce } from 'hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import type { 
   Batch, 
   BatchSearchParams, 

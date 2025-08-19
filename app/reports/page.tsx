@@ -3,7 +3,7 @@
 import { Title, Text, Card } from "@mantine/core";
 import Link from "next/link";
 import { LoadingScreen } from "../components/LoadingScreen";
-import { usePageInitialization } from "../../hooks/usePageInitialization";
+import { usePageInitialization } from "@/hooks/usePageInitialization";
 
 export default function ReportsPage() {
   const { isPageReady, pageInitialization, getProgress } = usePageInitialization({

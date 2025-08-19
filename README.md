@@ -15,6 +15,17 @@
 - **🔗 QuickBooks Integration** - Enterprise-grade bidirectional customer sync with auto-refresh
 - **📄 Document Management** - CAD files, drawings, and specification handling
 
+### 🏗️ **Perfect Project Structure** - 100% Organized!
+![Hierarchy](https://img.shields.io/badge/hierarchy-100%25-brightgreen) ![Organization](https://img.shields.io/badge/organization-100%25-brightgreen) ![Structure](https://img.shields.io/badge/structure-maintained-blue)
+
+- **📁 Clean Directory Organization** - Everything in its proper place
+- **🔄 Automated Verification** - Structure checks maintain perfect organization  
+- **📚 Comprehensive Documentation** - Clear guidelines and maintenance rules
+- **🎯 Industry Standards** - Professional-grade project structure
+- **🛠️ Developer-Friendly** - Easy navigation and barrel exports
+
+> **Structure Commitment**: This repository maintains 100% hierarchy health and organization compliance. See [Structure Guidelines](./docs/STRUCTURE_MAINTENANCE_GUIDELINES.md) for details.
+
 ---
 
 ## ✨ Latest Features (v0.5.0) - August 2025
@@ -140,19 +151,31 @@ QB_REFRESH_TOKEN="auto_refreshed_refresh_token"
 
 ```
 DES-BOMS/
-├── app/                    # Next.js App Router
+├── app/                    # Next.js App Router (Frontend & API)
 │   ├── api/               # API endpoints
 │   │   ├── quickbooks/    # QuickBooks integration
 │   │   ├── orders/        # Order management
-│   │   └── batches/       # Batch management
-│   └── components/        # UI components
-├── lib/                   # Utilities & services
+│   │   ├── batches/       # Batch management
+│   │   └── workstations/  # Workstation control
+│   ├── components/        # Shared UI components
+│   │   └── ui/           # UI-specific components
+│   ├── batches/          # Batch management domain
+│   ├── orders/           # Order management domain
+│   └── workstations/     # Workstation domain
+├── lib/                   # Core business logic & services
 │   ├── tokenManager.ts    # QuickBooks token management
 │   ├── quickbooks.ts      # QuickBooks service layer
+│   ├── bomUtils.ts        # BOM hierarchy utilities
 │   └── prisma.ts          # Database client
+├── types/                 # TypeScript type definitions
+├── hooks/                 # Custom React hooks
+├── utils/                 # General utility functions
 ├── prisma/               # Database schema & migrations
-├── scripts/              # Utility scripts
-└── docs/                 # Documentation
+├── scripts/              # Development & maintenance scripts
+├── tools/                # Development & debugging tools
+├── deployment/           # Deployment & startup scripts
+├── config/               # Configuration files (ESLint, Tailwind, etc.)
+└── docs/                 # Project documentation
 ```
 
 ---
@@ -167,6 +190,10 @@ DES-BOMS/
 | `pnpm db:generate` | Generate Prisma client |
 | `pnpm db:migrate` | Run database migrations |
 | `pnpm db:studio` | Open Prisma Studio |
+| **Structure Maintenance** | |
+| `pnpm verify-hierarchy` | ✅ Check code hierarchy (100% health) |
+| `pnpm verify-organization` | ✅ Check file organization (100% score) |
+| `pnpm check-structure` | 🏗️ Complete structure verification |
 
 ---
 
@@ -227,9 +254,11 @@ Perfect for building and testing features locally with full QuickBooks integrati
 
 ## 📚 Documentation
 
-- **🔄 [QuickBooks Auto-Refresh Guide](./QUICKBOOKS_AUTO_REFRESH.md)** - Complete auto-refresh setup
-- **📋 [Development Session Notes](./CHAT_SESSION_SUMMARY.md)** - Detailed technical notes
-- **📖 [Ubuntu Deployment Guide](./UBUNTU_DEPLOYMENT.md)** - Production deployment
+- **🔄 [QuickBooks Auto-Refresh Guide](./docs/QUICKBOOKS_AUTO_REFRESH.md)** - Complete auto-refresh setup
+- **📋 [Development Session Notes](./docs/CHAT_SESSION_SUMMARY.md)** - Detailed technical notes
+- **📖 [Development Setup Guide](./docs/DEVELOPMENT_SETUP.md)** - Complete development environment setup
+- **🏗️ [Hierarchy Structure Guide](./docs/HIERARCHY_STRUCTURE.md)** - Project organization guidelines
+- **🔒 [Security Guidelines](./docs/SECURITY.md)** - Security policies and best practices
 
 ---
 

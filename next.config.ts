@@ -20,8 +20,26 @@ const nextConfig: NextConfig = {
     // Add case-sensitive handling for Windows filesystem
     config.resolve.cache = false;
     
+    // Add path aliases for proper module resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': require('path').resolve(__dirname),
+      '@/app': require('path').resolve(__dirname, 'app'),
+      '@/components': require('path').resolve(__dirname, 'app/components'),
+      '@/ui': require('path').resolve(__dirname, 'app/components/ui'),
+      '@/lib': require('path').resolve(__dirname, 'lib'),
+      '@/types': require('path').resolve(__dirname, 'types'),
+      '@/hooks': require('path').resolve(__dirname, 'hooks'),
+      '@/utils': require('path').resolve(__dirname, 'utils'),
+      '@/prisma': require('path').resolve(__dirname, 'prisma'),
+      '@/batches': require('path').resolve(__dirname, 'app/batches'),
+      '@/orders': require('path').resolve(__dirname, 'app/orders'),
+      '@/api': require('path').resolve(__dirname, 'app/api'),
+    };
+    
     // Handle PDFKit font files properly
     if (isServer) {
+      // Add server-specific aliases without overriding path aliases
       config.resolve.alias = {
         ...config.resolve.alias,
         canvas: false, // Disable canvas for server-side

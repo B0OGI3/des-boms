@@ -30,8 +30,8 @@ import { useEffect, useState } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 
 // Shared utilities and components
-import { usePagination } from "../../hooks/usePagination";
-import { useModal } from "../../hooks/useModal";
+import { usePagination } from "@/hooks/usePagination";
+import { useModal } from "@/hooks/useModal";
 import { StatisticsCards } from "../components/ui/StatisticsCards";
 import { FilterBar } from "../components/ui/FilterBar";
 import { Pagination } from "../components/ui/Pagination";

@@ -6,8 +6,8 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useDebounce } from 'hooks/useDebounce';
-import type { StatusType, PriorityType, BaseEntity } from '../../../types/shared';
+import { useDebounce } from '@/hooks/useDebounce';
+import type { StatusType, PriorityType, BaseEntity } from '@/types/shared';
 
 type PriorityFilterType = PriorityType | 'ALL';
 type StatusFilterType = StatusType | 'ALL';

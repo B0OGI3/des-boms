@@ -27,7 +27,7 @@ import {
 import { useEffect, useState } from "react";
 import { IconPlus, IconSettings, IconClock, IconTrash } from "@tabler/icons-react";
 import { LoadingScreen } from "../components/LoadingScreen";
-import { usePageInitialization } from "../../hooks/usePageInitialization";
+import { usePageInitialization } from "@/hooks/usePageInitialization";
 
 interface RoutingTemplate {
   id: string;

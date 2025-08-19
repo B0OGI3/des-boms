@@ -40,9 +40,8 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { IconPlayerPlay, IconCheck, IconFlag, IconCamera, IconRefresh, IconPlus, IconEdit } from "@tabler/icons-react";
-import { LoadingScreen } from "../components/LoadingScreen";
-import { usePageInitialization } from "../../hooks/usePageInitialization";
-import { WorkOrderTracking } from "../components/WorkOrderTracking";
+import { LoadingScreen, WorkOrderTracking } from "../components";
+import { usePageInitialization } from "../../hooks";
 
 interface Workstation {
   id: string;

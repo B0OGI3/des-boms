@@ -40,7 +40,7 @@ import {
 import { useEffect, useState } from "react";
 import { IconPlus, IconEye, IconSearch, IconFileText } from "@tabler/icons-react";
 import { LoadingScreen } from "../components/LoadingScreen";
-import { usePageInitialization } from "../../hooks/usePageInitialization";
+import { usePageInitialization } from "@/hooks/usePageInitialization";
 
 interface QCRecord {
   id: string;

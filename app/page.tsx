@@ -18,7 +18,7 @@ import {
   StatsGrid, 
   StatCard, 
   NavigationCard 
-} from "./components/ui/StyledComponents";
+} from "./components/ui";
 import theme from "./theme";
 
 interface DashboardData {

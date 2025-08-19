@@ -5,8 +5,8 @@ import Link from "next/link";
 import { QuickBooksStatus } from "../components/ui/QuickBooksStatus";
 import { QuickBooksCustomerSync } from "../components/ui/QuickBooksCustomerSync";
 import { LoadingScreen } from "../components/LoadingScreen";
-import { usePageInitialization } from "../../hooks/usePageInitialization";
-import { PageLayout, PageHeader } from "../components/ui/StyledComponents";
+import { usePageInitialization } from "@/hooks/usePageInitialization";
+import { PageLayout, PageHeader } from "../components/ui";
 import theme from "../theme";
 
 export default function SettingsPage() {
