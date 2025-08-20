@@ -22,33 +22,43 @@
  * - Manufacturing-focused dashboard with batch progress tracking
  */
 
-"use client";
+'use client';
 
-import { Title, Text, Group, Loader, Alert, Button, Progress } from "@mantine/core";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import {
+  Title,
+  Text,
+  Group,
+  Loader,
+  Alert,
+  Button,
+  Progress,
+} from '@mantine/core';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 // Shared utilities and components
-import { usePagination } from "@/hooks/usePagination";
-import { useModal } from "@/hooks/useModal";
-import { StatisticsCards } from "../components/ui/StatisticsCards";
-import { FilterBar } from "../components/ui/FilterBar";
-import { Pagination } from "../components/ui/Pagination";
-import { OrdersTable } from "./components/OrdersTable";
-import { NewOrderModal } from "./components/NewOrderModal";
-import { OrderDetailsModal } from "./components/OrderDetailsModal";
-import { EditOrderModal } from "./components/EditOrderModal";
-import { DeleteOrderConfirmation } from "./components/DeleteOrderConfirmation";
-import { CompleteOrderModal } from "./components/CompleteOrderModal";
-import { ShipOrderModal } from "./components/ShipOrderModal";
-import { OrderBatchIntegrationModal } from "./components/OrderBatchIntegrationModal";
-import { SmartBatchGenerationModal } from "./components/SmartBatchGenerationModal";
-import { useOrderSearch } from "./hooks/useOrderSearch";
-import type { Order } from "./hooks/useOrderSearch";
+import { usePagination } from '@/hooks/usePagination';
+import { useModal } from '@/hooks/useModal';
+import { StatisticsCards } from '../components/ui/StatisticsCards';
+import { FilterBar } from '../components/ui/FilterBar';
+import { Pagination } from '../components/ui/Pagination';
+import { OrdersTable } from './components/OrdersTable';
+import { NewOrderModal } from './components/NewOrderModal';
+import { OrderDetailsModal } from './components/OrderDetailsModal';
+import { EditOrderModal } from './components/EditOrderModal';
+import { DeleteOrderConfirmation } from './components/DeleteOrderConfirmation';
+import { DeletePartConfirmation } from './components/DeletePartConfirmation';
+import { PartCreationModal } from './components/PartCreationModal';
+import { CompleteOrderModal } from './components/CompleteOrderModal';
+import { ShipOrderModal } from './components/ShipOrderModal';
+import { OrderBatchIntegrationModal } from './components/OrderBatchIntegrationModal';
+import { SmartBatchGenerationModal } from './components/SmartBatchGenerationModal';
+import { useOrderSearch } from './hooks/useOrderSearch';
+import type { Order } from './hooks/useOrderSearch';
 
 // Local types extending shared types
-import styles from "./orders.module.css";
+import styles from './orders.module.css';
 
 interface OrderStats {
   totalOrders: number;
@@ -66,16 +76,23 @@ type StatType = 'all' | 'pending' | 'inProgress' | 'completed' | 'rush';
 
 // Helper function to calculate order statistics (moved outside component)
 const calculateOrderStats = (orders: Order[]): OrderStats => {
-  const pendingOrders = orders.filter(order => order.status === 'PENDING').length;
-  const inProgressOrders = orders.filter(order => order.status === 'IN_PROGRESS').length;
-  const completedOrders = orders.filter(order => order.status === 'COMPLETED').length;
+  const pendingOrders = orders.filter(
+    order => order.status === 'PENDING'
+  ).length;
+  const inProgressOrders = orders.filter(
+    order => order.status === 'IN_PROGRESS'
+  ).length;
+  const completedOrders = orders.filter(
+    order => order.status === 'COMPLETED'
+  ).length;
   const rushOrders = orders.filter(order => order.priority === 'RUSH').length;
-  const overdueOrders = orders.filter(order => 
-    new Date(order.dueDate) < new Date() && order.status !== 'COMPLETED'
+  const overdueOrders = orders.filter(
+    order =>
+      new Date(order.dueDate) < new Date() && order.status !== 'COMPLETED'
   ).length;
   const totalValue = orders.reduce((sum, order) => sum + order.totalValue, 0);
   const avgOrderValue = orders.length > 0 ? totalValue / orders.length : 0;
-  
+
   return {
     totalOrders: orders.length,
     pendingOrders,
@@ -117,7 +134,7 @@ const handleStatFiltering = (statType: StatType, orderSearch: any) => {
 // Initialization helpers (moved outside component)
 const createDelayedStateUpdate = (delay: number = 100) => {
   return (updateFn: () => void): Promise<void> => {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         updateFn();
         resolve();
@@ -126,23 +143,25 @@ const createDelayedStateUpdate = (delay: number = 100) => {
   };
 };
 
-const createPreloadParts = (updateInitializationState: (updates: any) => void) => async () => {
-  try {
-    await fetch('/api/parts');
-  } catch (error) {
-    console.warn('Parts preload failed:', error);
-  }
-  updateInitializationState({ parts: true });
-};
+const createPreloadParts =
+  (updateInitializationState: (updates: any) => void) => async () => {
+    try {
+      await fetch('/api/parts');
+    } catch (error) {
+      console.warn('Parts preload failed:', error);
+    }
+    updateInitializationState({ parts: true });
+  };
 
-const createSyncCustomers = (updateInitializationState: (updates: any) => void) => async () => {
-  try {
-    await fetch('/api/quickbooks/sync-customers', { method: 'POST' });
-  } catch (error) {
-    console.warn('QuickBooks sync failed:', error);
-  }
-  updateInitializationState({ customers: true, quickbooks: true });
-};
+const createSyncCustomers =
+  (updateInitializationState: (updates: any) => void) => async () => {
+    try {
+      await fetch('/api/quickbooks/sync-customers', { method: 'POST' });
+    } catch (error) {
+      console.warn('QuickBooks sync failed:', error);
+    }
+    updateInitializationState({ customers: true, quickbooks: true });
+  };
 
 // Custom hook for page initialization
 const usePageInitialization = () => {
@@ -152,12 +171,14 @@ const usePageInitialization = () => {
     orders: false,
     parts: false,
     customers: false,
-    quickbooks: false
+    quickbooks: false,
   });
 
   const orderSearch = useOrderSearch();
 
-  const updateInitializationState = (updates: Partial<typeof pageInitialization>) => {
+  const updateInitializationState = (
+    updates: Partial<typeof pageInitialization>
+  ) => {
     setPageInitialization(prev => ({ ...prev, ...updates }));
   };
 
@@ -170,12 +191,18 @@ const usePageInitialization = () => {
     const syncCustomers = createSyncCustomers(updateInitializationState);
     const initializeOrders = async () => {
       orderSearch.refetch();
-      return delayedStateUpdate(() => updateInitializationState({ orders: true }));
+      return delayedStateUpdate(() =>
+        updateInitializationState({ orders: true })
+      );
     };
 
     const initializePage = async () => {
       setMounted(true);
-      await Promise.allSettled([preloadParts(), syncCustomers(), initializeOrders()]);
+      await Promise.allSettled([
+        preloadParts(),
+        syncCustomers(),
+        initializeOrders(),
+      ]);
       return delayedStateUpdate(() => setIsPageReady(true));
     };
 
@@ -183,13 +210,13 @@ const usePageInitialization = () => {
       console.error('Page initialization error:', error);
       delayedStateUpdate(() => setIsPageReady(true));
     });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     mounted,
     isPageReady,
     pageInitialization,
-    orderSearch
+    orderSearch,
   };
 };
 
@@ -199,11 +226,13 @@ const useOrderModals = () => {
   const detailsModal = useModal();
   const editModal = useModal();
   const deleteModal = useModal();
+  const deletePartModal = useModal();
+  const advancedPartModal = useModal();
   const completeModal = useModal();
   const shipModal = useModal();
   const batchIntegrationModal = useModal();
   const smartBatchModal = useModal();
-  
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedLineItem, setSelectedLineItem] = useState<{
     part: {
@@ -224,15 +253,17 @@ const useOrderModals = () => {
       detailsModal,
       editModal,
       deleteModal,
+      deletePartModal,
+      advancedPartModal,
       completeModal,
       shipModal,
       batchIntegrationModal,
-      smartBatchModal
+      smartBatchModal,
     },
     selectedOrder,
     setSelectedOrder,
     selectedLineItem,
-    setSelectedLineItem
+    setSelectedLineItem,
   };
 };
 
@@ -251,12 +282,16 @@ const useOrderStats = (orders: Order[]) => {
 
 // Custom hook for order action handlers
 const useOrderActions = (
-  modals: ReturnType<typeof useOrderModals>['modals'], 
+  modals: ReturnType<typeof useOrderModals>['modals'],
   setSelectedOrder: (order: Order | null) => void,
   setSelectedLineItem: (lineItem: any) => void
 ) => {
   const handleNewOrder = () => {
     modals.newOrderModal.open();
+  };
+
+  const handleAdvancedPartCreation = () => {
+    modals.advancedPartModal.open();
   };
 
   const handleViewOrder = (order: Order) => {
@@ -304,12 +339,12 @@ const useOrderActions = (
   const handleDeletePart = (order: Order, lineItem: any) => {
     setSelectedOrder(order);
     setSelectedLineItem(lineItem);
-    // Open delete part confirmation (to be created)
-    console.log('Delete part:', lineItem, 'from order:', order.orderId);
+    modals.deletePartModal.open();
   };
 
   return {
     handleNewOrder,
+    handleAdvancedPartCreation,
     handleViewOrder,
     handleEditOrder,
     handleDeleteOrder,
@@ -318,7 +353,7 @@ const useOrderActions = (
     handleBatchIntegration,
     handleSmartBatch,
     handleEditPart,
-    handleDeletePart
+    handleDeletePart,
   };
 };
 
@@ -348,7 +383,10 @@ const isStatActive = (
 ): boolean => {
   switch (statType) {
     case 'all':
-      return orderSearch.statusFilter === 'ALL' && orderSearch.priorityFilter === 'ALL';
+      return (
+        orderSearch.statusFilter === 'ALL' &&
+        orderSearch.priorityFilter === 'ALL'
+      );
     case 'pending':
       return orderSearch.statusFilter === 'PENDING';
     case 'inProgress':
@@ -363,51 +401,59 @@ const isStatActive = (
 };
 
 // Helper function to create stats cards configuration
-const createStatsCards = (stats: OrderStats | null, orderSearch: ReturnType<typeof useOrderSearch>, handleStatClick: (statType: StatType) => void) => {
+const createStatsCards = (
+  stats: OrderStats | null,
+  orderSearch: ReturnType<typeof useOrderSearch>,
+  handleStatClick: (statType: StatType) => void
+) => {
   if (!stats) return [];
-  
+
   return [
     {
       id: 'all',
-      title: "Total Orders",
+      title: 'Total Orders',
       value: stats.totalOrders,
       subtitle: `$${(stats.totalValue / 1000).toFixed(0)}K total value`,
-      gradient: "linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1a365d 100%)",
-      bgAccent: "rgba(30, 64, 175, 0.04)",
-      shadowColor: "rgba(30, 64, 175, 0.2)",
+      gradient:
+        'linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1a365d 100%)',
+      bgAccent: 'rgba(30, 64, 175, 0.04)',
+      shadowColor: 'rgba(30, 64, 175, 0.2)',
       onClick: () => handleStatClick('all'),
       isActive: isStatActive('all', orderSearch),
     },
     {
       id: 'inProgress',
-      title: "In Progress",
+      title: 'In Progress',
       value: stats.inProgressOrders,
-      subtitle: "Currently active",
-      gradient: "linear-gradient(135deg, #0e7490 0%, #0c6478 50%, #155e75 100%)",
-      bgAccent: "rgba(14, 116, 144, 0.04)",
-      shadowColor: "rgba(14, 116, 144, 0.2)",
+      subtitle: 'Currently active',
+      gradient:
+        'linear-gradient(135deg, #0e7490 0%, #0c6478 50%, #155e75 100%)',
+      bgAccent: 'rgba(14, 116, 144, 0.04)',
+      shadowColor: 'rgba(14, 116, 144, 0.2)',
       onClick: () => handleStatClick('inProgress'),
       isActive: isStatActive('inProgress', orderSearch),
     },
     {
       id: 'rush',
-      title: "Rush Orders",
+      title: 'Rush Orders',
       value: stats.rushOrders,
-      subtitle: "High priority",
-      gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)",
-      bgAccent: "rgba(220, 38, 38, 0.04)",
-      shadowColor: "rgba(220, 38, 38, 0.2)",
+      subtitle: 'High priority',
+      gradient:
+        'linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)',
+      bgAccent: 'rgba(220, 38, 38, 0.04)',
+      shadowColor: 'rgba(220, 38, 38, 0.2)',
       onClick: () => handleStatClick('rush'),
       isActive: isStatActive('rush', orderSearch),
     },
     {
       id: 'completed',
-      title: "Completed",
+      title: 'Completed',
       value: stats.completedOrders,
-      subtitle: "This period",
-      gradient: "linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%)",
-      bgAccent: "rgba(5, 150, 105, 0.04)",
-      shadowColor: "rgba(5, 150, 105, 0.2)",
+      subtitle: 'This period',
+      gradient:
+        'linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%)',
+      bgAccent: 'rgba(5, 150, 105, 0.04)',
+      shadowColor: 'rgba(5, 150, 105, 0.2)',
       onClick: () => handleStatClick('completed'),
       isActive: isStatActive('completed', orderSearch),
     },
@@ -415,18 +461,20 @@ const createStatsCards = (stats: OrderStats | null, orderSearch: ReturnType<type
 };
 
 // Main page content component to reduce cognitive complexity
-const OrdersPageContent = ({ 
-  stats, 
-  statsCards, 
-  orderSearch, 
-  paginatedOrders, 
-  pagination, 
+const OrdersPageContent = ({
+  stats,
+  statsCards,
+  orderSearch,
+  paginatedOrders,
+  pagination,
   actions,
   modals,
   selectedOrder,
+  selectedLineItem,
   setSelectedOrder,
-  handleNavigateToBatch, 
-  handleNavigateToWorkstation
+  setSelectedLineItem,
+  handleNavigateToBatch,
+  handleNavigateToWorkstation,
 }: {
   stats: OrderStats | null;
   statsCards: ReturnType<typeof createStatsCards>;
@@ -436,7 +484,9 @@ const OrdersPageContent = ({
   actions: ReturnType<typeof useOrderActions>;
   modals: ReturnType<typeof useOrderModals>['modals'];
   selectedOrder: Order | null;
+  selectedLineItem: any;
   setSelectedOrder: (order: Order | null) => void;
+  setSelectedLineItem: (lineItem: any) => void;
   handleNavigateToBatch: (batchId: string) => void;
   handleNavigateToWorkstation: (workstationId: string) => void;
 }) => {
@@ -445,9 +495,9 @@ const OrdersPageContent = ({
       <div className={styles.container}>
         {/* Header Section */}
         <div className={styles.header}>
-          <Group justify="space-between" align="center">
+          <Group justify='space-between' align='center'>
             <div className={styles.headerContent}>
-              <Group align="center" gap="lg">
+              <Group align='center' gap='lg'>
                 <div className={styles.titleSection}>
                   <h1 className={styles.title}>Customer Orders</h1>
                   <Text className={styles.subtitle}>
@@ -456,24 +506,29 @@ const OrdersPageContent = ({
                 </div>
               </Group>
             </div>
-            <Link href="/" style={{ textDecoration: "none" }}>
+            <Link href='/' style={{ textDecoration: 'none' }}>
               <Button
-                size="md"
-                variant="light"
-                leftSection={<span style={{ fontSize: "16px", marginRight: "4px" }}>←</span>}
+                size='md'
+                variant='light'
+                leftSection={
+                  <span style={{ fontSize: '16px', marginRight: '4px' }}>
+                    ←
+                  </span>
+                }
                 style={{
-                  background: "linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8))",
-                  border: "1px solid rgba(51, 65, 85, 0.4)",
-                  color: "#cbd5e1",
-                  backdropFilter: "blur(16px)",
-                  height: "40px",
-                  fontSize: "0.9rem",
+                  background:
+                    'linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8))',
+                  border: '1px solid rgba(51, 65, 85, 0.4)',
+                  color: '#cbd5e1',
+                  backdropFilter: 'blur(16px)',
+                  height: '40px',
+                  fontSize: '0.9rem',
                   fontWeight: 600,
-                  borderRadius: "8px",
-                  paddingLeft: "16px",
-                  paddingRight: "20px",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-                  transition: "all 0.2s ease",
+                  borderRadius: '8px',
+                  paddingLeft: '16px',
+                  paddingRight: '20px',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                  transition: 'all 0.2s ease',
                 }}
               >
                 Back to Dashboard
@@ -485,8 +540,8 @@ const OrdersPageContent = ({
         {/* Loading State */}
         {orderSearch.loading && (
           <div className={styles.loadingContainer}>
-            <Loader size="lg" color="#1e40af" />
-            <Text size="md" className={styles.loadingText}>
+            <Loader size='lg' color='#1e40af' />
+            <Text size='md' className={styles.loadingText}>
               Loading order data...
             </Text>
           </div>
@@ -495,13 +550,13 @@ const OrdersPageContent = ({
         {/* Error State */}
         {orderSearch.error && (
           <Alert
-            color="red"
-            title="Error Loading Orders"
-            style={{ 
+            color='red'
+            title='Error Loading Orders'
+            style={{
               marginBottom: 32,
-              background: "rgba(239, 68, 68, 0.1)",
-              border: "1px solid rgba(239, 68, 68, 0.3)",
-              backdropFilter: "blur(12px)",
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              backdropFilter: 'blur(12px)',
             }}
           >
             {orderSearch.error}
@@ -509,17 +564,13 @@ const OrdersPageContent = ({
         )}
 
         {/* Order Statistics using shared component */}
-        {stats && (
-          <StatisticsCards
-            cards={statsCards}
-          />
-        )}
+        {stats && <StatisticsCards cards={statsCards} />}
 
         {/* Filters using shared component */}
         <FilterBar
           searchTerm={orderSearch.searchTerm}
           onSearchChange={orderSearch.setSearchTerm}
-          searchPlaceholder="Search by customer, order number, part number, or drawing..."
+          searchPlaceholder='Search by customer, order number, part number, or drawing...'
           statusFilter={orderSearch.statusFilter}
           onStatusChange={orderSearch.setStatusFilter}
           statusOptions={[
@@ -528,7 +579,7 @@ const OrdersPageContent = ({
             { value: 'IN_PROGRESS', label: 'In Progress' },
             { value: 'COMPLETED', label: 'Completed' },
             { value: 'SHIPPED', label: 'Shipped' },
-            { value: 'CANCELLED', label: 'Cancelled' }
+            { value: 'CANCELLED', label: 'Cancelled' },
           ]}
           priorityFilter={orderSearch.priorityFilter}
           onPriorityChange={orderSearch.setPriorityFilter}
@@ -536,22 +587,31 @@ const OrdersPageContent = ({
             { value: 'ALL', label: 'All Priority' },
             { value: 'STANDARD', label: 'Standard' },
             { value: 'RUSH', label: 'Rush' },
-            { value: 'URGENT', label: 'Urgent' }
+            { value: 'URGENT', label: 'Urgent' },
           ]}
         />
 
-        {/* New Order Button */}
+        {/* Action Buttons */}
         <div style={{ marginBottom: '1rem' }}>
-          <Button
-            onClick={actions.handleNewOrder}
-            style={{
-              background: "#1e40af",
-              border: "none",
-              color: "white",
-            }}
-          >
-            New Order
-          </Button>
+          <Group gap='sm'>
+            <Button
+              onClick={actions.handleNewOrder}
+              style={{
+                background: '#1e40af',
+                border: 'none',
+                color: 'white',
+              }}
+            >
+              New Order
+            </Button>
+            <Button
+              variant='light'
+              color='blue'
+              onClick={actions.handleAdvancedPartCreation}
+            >
+              Advanced Part Creation
+            </Button>
+          </Group>
         </div>
 
         {/* Orders Table - Using shared error boundary */}
@@ -568,7 +628,7 @@ const OrdersPageContent = ({
             onEditPart={actions.handleEditPart}
             onDeletePart={actions.handleDeletePart}
             loading={orderSearch.loading}
-            emptyMessage="No orders found matching your criteria"
+            emptyMessage='No orders found matching your criteria'
           />
 
           {/* Pagination using shared component */}
@@ -589,15 +649,16 @@ const OrdersPageContent = ({
             orderSearch.refetch();
           }}
           isPageReady={true}
+          onAdvancedPartCreation={actions.handleAdvancedPartCreation}
         />
-        
+
         <OrderDetailsModal
           opened={modals.detailsModal.isOpen}
           onClose={modals.detailsModal.close}
           order={selectedOrder}
           onEdit={actions.handleEditOrder}
         />
-        
+
         <EditOrderModal
           opened={modals.editModal.isOpen}
           onClose={modals.editModal.close}
@@ -608,7 +669,7 @@ const OrdersPageContent = ({
             setSelectedOrder(null);
           }}
         />
-        
+
         <DeleteOrderConfirmation
           opened={modals.deleteModal.isOpen}
           onClose={modals.deleteModal.close}
@@ -619,7 +680,7 @@ const OrdersPageContent = ({
             setSelectedOrder(null);
           }}
         />
-        
+
         <CompleteOrderModal
           opened={modals.completeModal.isOpen}
           onClose={modals.completeModal.close}
@@ -630,7 +691,7 @@ const OrdersPageContent = ({
             setSelectedOrder(null);
           }}
         />
-        
+
         <ShipOrderModal
           opened={modals.shipModal.isOpen}
           onClose={modals.shipModal.close}
@@ -641,7 +702,7 @@ const OrdersPageContent = ({
             setSelectedOrder(null);
           }}
         />
-        
+
         <OrderBatchIntegrationModal
           opened={modals.batchIntegrationModal.isOpen}
           onClose={modals.batchIntegrationModal.close}
@@ -659,36 +720,75 @@ const OrdersPageContent = ({
             orderSearch.refetch();
           }}
         />
+
+        <DeletePartConfirmation
+          opened={modals.deletePartModal.isOpen}
+          onClose={modals.deletePartModal.close}
+          order={selectedOrder}
+          lineItem={selectedLineItem}
+          onPartDeleted={() => {
+            // Refresh the orders data when a part is deleted
+            orderSearch.refetch();
+            setSelectedOrder(null);
+            setSelectedLineItem(null);
+          }}
+        />
+
+        <PartCreationModal
+          opened={modals.advancedPartModal.isOpen}
+          onClose={modals.advancedPartModal.close}
+          onPartCreated={() => {
+            // Close the modal when part is created
+            modals.advancedPartModal.close();
+          }}
+          simpleMode={false}
+          title='Advanced Part Creation'
+        />
       </div>
     </main>
   );
 };
 
 // Simple loading screen component
-const LoadingScreen = ({ pageInitialization }: { pageInitialization: Record<string, boolean> }) => {
-  const completedTasks = Object.values(pageInitialization).filter(Boolean).length;
+const LoadingScreen = ({
+  pageInitialization,
+}: {
+  pageInitialization: Record<string, boolean>;
+}) => {
+  const completedTasks =
+    Object.values(pageInitialization).filter(Boolean).length;
   const totalTasks = Object.keys(pageInitialization).length;
   const progress = (completedTasks / totalTasks) * 100;
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))',
-      color: '#cbd5e1'
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        background:
+          'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))',
+        color: '#cbd5e1',
+      }}
+    >
       <div style={{ textAlign: 'center', maxWidth: '400px' }}>
         <div style={{ marginBottom: '24px', fontSize: '3rem' }}>📋</div>
         <Title order={2} style={{ marginBottom: '16px', fontWeight: 700 }}>
           Loading Orders System
         </Title>
-        <Text style={{ marginBottom: '32px', opacity: 0.8, fontSize: '1.1rem' }}>
+        <Text
+          style={{ marginBottom: '32px', opacity: 0.8, fontSize: '1.1rem' }}
+        >
           Initializing customer orders and system components...
         </Text>
-        <Progress value={progress} size="lg" radius="xl" style={{ marginBottom: '20px' }} />
+        <Progress
+          value={progress}
+          size='lg'
+          radius='xl'
+          style={{ marginBottom: '20px' }}
+        />
         <Text style={{ fontSize: '0.95rem', opacity: 0.6 }}>
           {completedTasks} of {totalTasks} components ready
         </Text>
@@ -698,14 +798,30 @@ const LoadingScreen = ({ pageInitialization }: { pageInitialization: Record<stri
 };
 
 export default function CustomerOrdersPage() {
-  const { mounted, isPageReady, pageInitialization, orderSearch } = usePageInitialization();
-  const { modals, selectedOrder, setSelectedOrder, setSelectedLineItem } = useOrderModals();
+  const { mounted, isPageReady, pageInitialization, orderSearch } =
+    usePageInitialization();
+  const {
+    modals,
+    selectedOrder,
+    setSelectedOrder,
+    selectedLineItem,
+    setSelectedLineItem,
+  } = useOrderModals();
   const stats = useOrderStats(orderSearch.orders);
-  const pagination = usePagination(orderSearch.orders, { initialPage: 1, initialItemsPerPage: 10 });
-  const actions = useOrderActions(modals, setSelectedOrder, setSelectedLineItem);
-  const { handleNavigateToBatch, handleNavigateToWorkstation } = createNavigationHandlers();
-  
-  const handleStatClick = (statType: StatType) => handleStatFiltering(statType, orderSearch);
+  const pagination = usePagination(orderSearch.orders, {
+    initialPage: 1,
+    initialItemsPerPage: 10,
+  });
+  const actions = useOrderActions(
+    modals,
+    setSelectedOrder,
+    setSelectedLineItem
+  );
+  const { handleNavigateToBatch, handleNavigateToWorkstation } =
+    createNavigationHandlers();
+
+  const handleStatClick = (statType: StatType) =>
+    handleStatFiltering(statType, orderSearch);
   const paginatedOrders = pagination.getPaginatedData(orderSearch.orders);
   const statsCards = createStatsCards(stats, orderSearch, handleStatClick);
 
@@ -723,7 +839,9 @@ export default function CustomerOrdersPage() {
       actions={actions}
       modals={modals}
       selectedOrder={selectedOrder}
+      selectedLineItem={selectedLineItem}
       setSelectedOrder={setSelectedOrder}
+      setSelectedLineItem={setSelectedLineItem}
       handleNavigateToBatch={handleNavigateToBatch}
       handleNavigateToWorkstation={handleNavigateToWorkstation}
     />

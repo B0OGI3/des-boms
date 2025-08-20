@@ -3,10 +3,10 @@ import { prisma } from '../../../../../lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const batchId = params.id;
+    const { id: batchId } = await params;
 
     const workOrderItems = await prisma.workOrderItem.findMany({
       where: { batchId },
@@ -18,61 +18,60 @@ export async function GET(
                 part: true,
                 purchaseOrder: {
                   include: {
-                    customer: true
-                  }
-                }
-              }
-            }
-          }
+                    customer: true,
+                  },
+                },
+              },
+            },
+          },
         },
         stepProgress: {
           include: {
             routingStep: {
               include: {
-                workstation: true
-              }
-            }
+                workstation: true,
+              },
+            },
           },
           orderBy: {
             routingStep: {
-              stepNumber: 'asc'
-            }
-          }
+              stepNumber: 'asc',
+            },
+          },
         },
         qualityChecks: {
           orderBy: {
-            checkedAt: 'desc'
-          }
+            checkedAt: 'desc',
+          },
         },
         materialUsage: {
           include: {
             materialPart: true,
             routingStep: {
               include: {
-                workstation: true
-              }
-            }
-          }
-        }
+                workstation: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        itemNumber: 'asc'
-      }
+        itemNumber: 'asc',
+      },
     });
 
     return NextResponse.json({
       success: true,
       data: workOrderItems,
-      message: `Found ${workOrderItems.length} work order items`
+      message: `Found ${workOrderItems.length} work order items`,
     });
-
   } catch (error) {
     console.error('[WORK_ORDER_ITEMS_GET]', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: 'Failed to fetch work order items',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -81,10 +80,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const batchId = params.id;
+    const { id: batchId } = await params;
     const body = await request.json();
     const { quantity = 1, generateSerialNumbers = true } = body;
 
@@ -94,15 +93,15 @@ export async function POST(
       include: {
         lineItem: {
           include: {
-            part: true
-          }
+            part: true,
+          },
         },
         routingSteps: {
           orderBy: {
-            stepNumber: 'asc'
-          }
-        }
-      }
+            stepNumber: 'asc',
+          },
+        },
+      },
     });
 
     if (!batch) {
@@ -117,7 +116,7 @@ export async function POST(
     const stepProgressRecords = [];
 
     for (let i = 1; i <= quantity; i++) {
-      const serialNumber = generateSerialNumbers 
+      const serialNumber = generateSerialNumbers
         ? `${batch.batchId}-${String(i).padStart(3, '0')}`
         : `${batch.batchId}-ITEM-${i}`;
 
@@ -128,8 +127,8 @@ export async function POST(
           serialNumber,
           itemNumber: i,
           status: 'QUEUED',
-          notes: `Individual tracking for ${batch.lineItem.part.partNumber}`
-        }
+          notes: `Individual tracking for ${batch.lineItem.part.partNumber}`,
+        },
       });
 
       workOrderItems.push(workOrderItem);
@@ -140,8 +139,8 @@ export async function POST(
           data: {
             workOrderItemId: workOrderItem.id,
             routingStepId: step.id,
-            status: 'PENDING'
-          }
+            status: 'PENDING',
+          },
         });
         stepProgressRecords.push(stepProgress);
       }
@@ -152,17 +151,16 @@ export async function POST(
       data: {
         workOrderItems,
         stepProgressCount: stepProgressRecords.length,
-        message: `Created ${workOrderItems.length} work order items with ${stepProgressRecords.length} step progress records`
-      }
+        message: `Created ${workOrderItems.length} work order items with ${stepProgressRecords.length} step progress records`,
+      },
     });
-
   } catch (error) {
     console.error('[WORK_ORDER_ITEMS_CREATE]', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: 'Failed to create work order items',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -171,48 +169,47 @@ export async function POST(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const batchId = params.id;
+    const { id: batchId } = await params;
     const body = await request.json();
     const { workOrderItemId, updates } = body;
 
     const updatedItem = await prisma.workOrderItem.update({
-      where: { 
+      where: {
         id: workOrderItemId,
-        batchId // Ensure item belongs to this batch
+        batchId, // Ensure item belongs to this batch
       },
       data: {
         ...updates,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       include: {
         stepProgress: {
           include: {
             routingStep: {
               include: {
-                workstation: true
-              }
-            }
-          }
-        }
-      }
+                workstation: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return NextResponse.json({
       success: true,
       data: updatedItem,
-      message: 'Work order item updated successfully'
+      message: 'Work order item updated successfully',
     });
-
   } catch (error) {
     console.error('[WORK_ORDER_ITEM_UPDATE]', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: 'Failed to update work order item',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

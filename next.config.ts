@@ -1,25 +1,24 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
-  
+
   // Enable standalone output for Docker
   output: 'standalone',
-  
-  // Performance optimizations
-  compress: true,
+
+  // Skip static optimization for problematic pages
   trailingSlash: false,
-  
+
   // Webpack configuration to resolve case sensitivity issues
   webpack: (config, { dev, isServer }) => {
     // Ensure case-sensitive module resolution
     config.resolve.symlinks = false;
-    
+
     // Add case-sensitive handling for Windows filesystem
     config.resolve.cache = false;
-    
+
     // Add path aliases for proper module resolution
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -36,7 +35,7 @@ const nextConfig: NextConfig = {
       '@/orders': require('path').resolve(__dirname, 'app/orders'),
       '@/api': require('path').resolve(__dirname, 'app/api'),
     };
-    
+
     // Handle PDFKit font files properly
     if (isServer) {
       // Add server-specific aliases without overriding path aliases
@@ -44,7 +43,7 @@ const nextConfig: NextConfig = {
         ...config.resolve.alias,
         canvas: false, // Disable canvas for server-side
       };
-      
+
       // Copy PDFKit font files to the build
       config.module.rules.push({
         test: /\.(afm)$/,
@@ -54,13 +53,13 @@ const nextConfig: NextConfig = {
         },
       });
     }
-    
+
     // Suppress case sensitivity warnings in development
     if (dev && !isServer) {
       config.infrastructureLogging = {
         level: 'error',
       };
-      
+
       // Ignore case sensitivity warnings
       config.ignoreWarnings = [
         {
@@ -69,10 +68,10 @@ const nextConfig: NextConfig = {
         },
       ];
     }
-    
+
     return config;
   },
-  
+
   // Security headers
   async headers() {
     return [

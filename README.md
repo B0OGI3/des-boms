@@ -7,15 +7,38 @@
 **DES-BOMS** is a comprehensive **Batch Order Management System** designed for modern manufacturing operations. It provides complete order lifecycle management, AI-powered batch generation, workstation routing, quality control, and enterprise-grade QuickBooks integration.
 
 ### ⚡ Key Capabilities
+
 - **📋 Order Management** - Complete purchase order lifecycle from receipt to delivery
 - **🤖 AI-Powered Smart Batch Generation** - Intelligent batch sizing with full customization
 - **🏭 Workstation Control** - Operator confirmations and step-by-step processing
 - **🔍 Quality Control** - Built-in inspection and QC record management
 - **📊 Production Monitoring** - Real-time shop floor dashboards and status tracking
 - **🔗 QuickBooks Integration** - Enterprise-grade bidirectional customer sync with auto-refresh
-- **📄 Document Management** - CAD files, drawings, and specification handling
+- **� Document Management** - CAD files, drawings, and specification handling
 
-### 🏗️ **Perfect Project Structure** - 100% Organized!
+## �🗄️ Database Schema Overview
+
+### Order Management
+
+- **Customer** - Manufacturing customers with QuickBooks sync
+- **PurchaseOrder** - Customer POs with system-generated order IDs  
+- **OrderLineItem** - Individual parts with drawings and specifications
+- **FileAttachment** - CAD files, drawings, and documentation
+
+### Smart Batch Generation
+
+- **Batch** - Manufacturing batches with AI-optimized sizing (DES-YYYY-MMDD-###)
+- **RoutingStep** - Sequential workstation steps with time estimates
+- **BatchGeneration** - AI-powered optimization parameters
+
+### Production Management
+
+- **Workstation** - Manufacturing stations with capacity tracking
+- **StepConfirmation** - Operator login, start/end times, photo uploads
+- **QCRecord** - Quality control inspections with Pass/Fail/Rework results
+
+### 🏗️ **Perfect Project Structure** - 100% Organized
+
 ![Hierarchy](https://img.shields.io/badge/hierarchy-100%25-brightgreen) ![Organization](https://img.shields.io/badge/organization-100%25-brightgreen) ![Structure](https://img.shields.io/badge/structure-maintained-blue)
 
 - **📁 Clean Directory Organization** - Everything in its proper place
@@ -31,6 +54,7 @@
 ## ✨ Latest Features (v0.5.0) - August 2025
 
 ### 🔄 **Enterprise QuickBooks Auto-Refresh System** 🆕
+
 - **Zero-Touch Token Management** - Automatic token refresh on API failures with .env.local updates
 - **UI Auto-Fix Integration** - One-click token refresh button in QuickBooks status component
 - **Multiple Refresh Methods** - Built-in automatic, UI manual, API endpoints, and scheduled refresh
@@ -38,12 +62,14 @@
 - **Production-Ready Security** - Enterprise-grade token lifecycle management with comprehensive error handling
 
 ### 🎨 **Enhanced UI/UX & Code Quality**
+
 - **React Warning Elimination** - Resolved all border property conflicts and React warnings
 - **Enhanced Part Editing** - Comprehensive part editing functionality in order management
 - **Component Standardization** - Centralized theme system with consistent styling
 - **SonarLint Compliance** - All code quality issues resolved with TypeScript best practices
 
 ### 🤖 **AI-Powered Smart Batch Generation**
+
 - **Intelligent Batch Sizing** - AI-driven optimal batch size calculation based on machine capacity
 - **Complete Customization** - Full control over batch parameters with real-time editing
 - **Manufacturing Optimization** - Consider machine setup times, operator efficiency, and material flow
@@ -53,11 +79,13 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
 - **Node.js 20+** (for local development)
 - **pnpm** (recommended package manager)
 
 ### Option 1: Docker (Recommended)
+
 ```bash
 # Windows
 start-docker.bat
@@ -70,6 +98,7 @@ docker-compose up -d
 ```
 
 ### Option 2: Local Development
+
 ```bash
 # Install dependencies
 pnpm install
@@ -85,7 +114,8 @@ pnpm dev
 ```
 
 ### 🌐 Access Points
-- **Application**: http://localhost:3000
+
+- **Application**: <http://localhost:3000>
 - **Database**: localhost:5432 (Prisma Studio: `pnpm db:studio`)
 
 ---
@@ -97,6 +127,7 @@ pnpm dev
 DES-BOMS includes enterprise-grade QuickBooks integration with **zero-touch token management**:
 
 #### ✅ **Automatic Token Refresh** - *Always Active*
+
 - Detects 401 authentication errors automatically
 - Refreshes both access and refresh tokens
 - Updates `.env.local` file automatically
@@ -104,11 +135,13 @@ DES-BOMS includes enterprise-grade QuickBooks integration with **zero-touch toke
 - **Zero user intervention required**
 
 #### ✅ **UI Auto-Fix Button** - *One-Click Solution*
+
 - Appears when tokens expire: "QuickBooks Token Expired" → "Auto-Fix" button
 - One-click token refresh from Settings page
 - Real-time status updates after refresh
 
 #### ✅ **Scheduled Refresh** - *Proactive Management*
+
 - Windows Task Scheduler integration (`refresh-qb-tokens-scheduler.bat`)
 - Linux/Mac cron job support (`refresh-qb-tokens.js`)
 - Runs every 30 minutes to prevent expiration
@@ -116,11 +149,13 @@ DES-BOMS includes enterprise-grade QuickBooks integration with **zero-touch toke
 ### Setup Instructions
 
 #### Quick Setup (Recommended)
+
 1. **Complete OAuth Flow**: Visit your app's QuickBooks auth endpoint
 2. **Copy Tokens**: Use provided tokens to update `.env.local`
 3. **Auto-Refresh Active**: System automatically manages tokens from this point forward
 
 #### Environment Configuration
+
 ```env
 # QuickBooks Integration
 QB_CLIENT_ID="your_quickbooks_client_id"
@@ -149,7 +184,7 @@ QB_REFRESH_TOKEN="auto_refreshed_refresh_token"
 
 ## 📁 Project Structure
 
-```
+```text
 DES-BOMS/
 ├── app/                    # Next.js App Router (Frontend & API)
 │   ├── api/               # API endpoints
@@ -200,6 +235,7 @@ DES-BOMS/
 ## 📊 API Endpoints
 
 ### QuickBooks Integration
+
 - `GET /api/quickbooks/status` — Real-time connection status with token validation
 - `GET /api/quickbooks/validate-token` — Lightweight token validation
 - `GET /api/quickbooks/refresh-tokens` — Manual token refresh with .env.local update
@@ -207,6 +243,7 @@ DES-BOMS/
 - `POST /api/quickbooks/sync-customers` — Bidirectional customer sync
 
 ### Manufacturing Operations
+
 - `POST /api/orders/[id]/generate-batches` — AI-powered batch generation
 - `POST /api/orders/[id]/complete` — Order completion workflow
 - `GET /api/batches` — Batch management
@@ -218,6 +255,7 @@ DES-BOMS/
 ## 🐛 Troubleshooting
 
 ### Database Issues
+
 ```bash
 docker-compose ps                    # Check container status
 docker-compose logs db              # View database logs
@@ -225,12 +263,14 @@ docker-compose restart db           # Restart database
 ```
 
 ### Build Issues
+
 ```bash
 docker-compose build --no-cache     # Clean rebuild
 docker-compose down -v && docker-compose up -d  # Reset volumes
 ```
 
 ### Port Conflicts
+
 ```bash
 netstat -an | find "3000"           # Check port usage
 netstat -an | find "5432"
@@ -241,14 +281,97 @@ netstat -an | find "5432"
 ## 🚀 Deployment
 
 ### Local Development
+
 Perfect for building and testing features locally with full QuickBooks integration support.
 
 ### Production Options
+
 - **🐧 Ubuntu Server**: Complete deployment guide with QuickBooks integration
 - **☁️ Cloud**: Vercel, Docker Registry, VPS deployment
 - **🔒 Security**: SSL certificates, domain setup, secure token storage
+- **💾 Automated Backups**: Enterprise-grade backup system with systemd integration
 
 **📖 [Complete Ubuntu Server Deployment Guide](./UBUNTU_DEPLOYMENT.md)**
+
+---
+
+## 💾 Automated Backup System
+
+### 🎯 **Enterprise-Grade Backup Solution**
+
+DES-BOMS includes a comprehensive backup system designed for Linux server deployment with **zero-maintenance operation**:
+
+#### ✅ **Automatic Daily Backups** - *Set It and Forget It*
+
+- **Daily at 2:00 AM**: PostgreSQL database dump with gzip compression
+- **30-day retention**: Automatic cleanup of old backups to manage disk space
+- **Systemd integration**: Modern Linux task scheduling with restart resilience
+- **Full logging**: Complete audit trail of all backup operations
+- **Space efficient**: Compressed backups typically 90% smaller than raw data
+
+#### ✅ **Manual Backup Controls** - *On-Demand Backups*
+
+- **Settings Page Integration**: Create manual backups via web interface
+- **Real-time Status**: Live backup progress and completion notifications
+- **Backup History**: View recent backups with sizes and timestamps
+- **API Endpoints**: Programmatic backup creation and management
+
+#### ✅ **Ubuntu Server Setup** - *One-Time Configuration*
+
+```bash
+# Deploy your DES-BOMS application to Ubuntu server
+# Run the automated setup script (one-time only)
+sudo bash deployment/setup-backup-linux.sh
+
+# Update your database connection (edit once)
+sudo nano /etc/systemd/system/des-boms-backup.service
+
+# Test the backup system
+sudo systemctl start des-boms-backup.service
+
+# ✅ Done! Backups now run automatically forever
+```
+
+### 🔧 **Backup Management Commands**
+
+```bash
+# Monitor backup status
+sudo systemctl status des-boms-backup.timer
+
+# View backup logs
+sudo journalctl -u des-boms-backup.service
+
+# List all backups
+ls -la /opt/des-boms/backups/
+
+# Manual backup (anytime)
+sudo systemctl start des-boms-backup.service
+```
+
+### 📊 **What Gets Backed Up**
+
+- **Complete Database**: All tables, indexes, and data
+- **Manufacturing Data**: Orders, batches, workstation records
+- **Quality Control**: QC records, inspections, measurements
+- **Customer Data**: Customer info, QuickBooks sync data
+- **System Configuration**: Settings, routing templates
+- **Audit Trail**: Complete operation history
+
+### 🛡️ **Backup Security & Reliability**
+
+- **PostgreSQL pg_dump**: Industry-standard database backup method
+- **Compressed Storage**: Gzip compression for efficient storage
+- **Proper Permissions**: Secure file permissions and user isolation
+- **Error Handling**: Comprehensive error detection and logging
+- **Service Monitoring**: Integration with Ubuntu's systemd for reliability
+
+### 🎯 **Perfect for Production**
+
+- **Zero Maintenance**: Set up once, runs automatically forever
+- **Server Restart Resilient**: Continues working after Ubuntu reboots
+- **Scalable**: Handles databases from MB to GB efficiently
+- **Monitoring Ready**: Full integration with system logs and monitoring
+- **Enterprise Ready**: Production-tested backup strategy
 
 ---
 
@@ -265,18 +388,22 @@ Perfect for building and testing features locally with full QuickBooks integrati
 ## 📈 Version History
 
 ### v0.5.0 (August 2025) - Enterprise QuickBooks Integration
+
 - 🔄 Enterprise auto-refresh system with zero-touch token management
 - 🎯 UI auto-fix integration with one-click token refresh
 - 🛡️ Production-ready security with comprehensive error handling
 - 🎨 React warning resolution and enhanced part editing
 - 📚 Complete documentation and setup guides
+- 💾 **Automated backup system with Ubuntu server integration**
 
 ### v0.4.0 - Smart Manufacturing & AI Integration
+
 - 🤖 AI-powered smart batch generation
 - 📋 Advanced order completion workflow
 - 🎨 Production-ready architecture
 
 ### v0.3.0 - QuickBooks Integration & Enhanced Batch Management
+
 - 🔗 Complete QuickBooks Online integration
 - 🔄 Enhanced batch management system
 - 🎨 Modern UI/UX with dark theme
@@ -300,79 +427,3 @@ This project is licensed under the MIT License.
 ---
 
 **Status**: ✅ Production-ready v0.5.0 with Enterprise QuickBooks Auto-Refresh System!
-
----
-
-## �️ Database Schema Overview
-
-### Order Management
-- **Customer** - Manufacturing customers with QuickBooks sync
-- **PurchaseOrder** - Customer POs with system-generated order IDs  
-- **OrderLineItem** - Individual parts with drawings and specifications
-- **FileAttachment** - CAD files, drawings, and documentation
-
-### Smart Batch Generation
-- **Batch** - Manufacturing batches with AI-optimized sizing (DES-YYYY-MMDD-###)
-- **RoutingStep** - Sequential workstation steps with time estimates
-- **BatchGeneration** - AI-powered optimization parameters
-
-### Production Management  
-- **Workstation** - Manufacturing stations with capacity tracking
-- **StepConfirmation** - Operator login, start/end times, photo uploads
-- **QCRecord** - Quality control inspections with Pass/Fail/Rework results
-
----
-
-## � Environment Variables
-
-### Development (.env.local)
-```env
-# Database
-DATABASE_URL="postgresql://desadmin:DES6040@localhost:5432/boms"
-
-# QuickBooks Integration
-QB_CLIENT_ID="your_quickbooks_client_id"
-QB_CLIENT_SECRET="your_quickbooks_client_secret"
-QB_SANDBOX="true"
-QB_REDIRECT_URI="http://localhost:3000/api/quickbooks/callback"
-
-# OAuth Tokens (auto-updated by refresh system)
-QB_ACCESS_TOKEN=""
-QB_COMPANY_ID=""
-QB_REFRESH_TOKEN=""
-```
-
-### Production (.env)
-```env
-# Database
-DATABASE_URL="postgresql://desadmin:DES6040@localhost:5432/boms"
-
-# QuickBooks Integration (Production)
-QB_CLIENT_ID="your_production_qb_key"
-QB_CLIENT_SECRET="your_production_qb_secret"
-QB_SANDBOX="false"
-QB_REDIRECT_URI="https://yourdomain.com/api/quickbooks/callback"
-QB_ACCESS_TOKEN="your_production_access_token"
-QB_COMPANY_ID="your_production_company_id"
-QB_REFRESH_TOKEN="your_production_refresh_token"
-```
-
----
-
-## 🆘 ngrok Setup for Local Development
-
-For QuickBooks OAuth callbacks during local development:
-
-```bash
-# Install ngrok from https://ngrok.com/download
-# Start your development server
-pnpm dev
-
-# In a separate terminal, expose your local server
-ngrok http 3000
-
-# Use the HTTPS URL in your QuickBooks app settings:
-# https://<random-id>.ngrok.io/api/quickbooks/callback
-```
-
-**Note**: Update your QuickBooks app settings and environment variables when the ngrok URL changes.

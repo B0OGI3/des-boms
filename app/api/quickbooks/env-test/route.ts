@@ -1,10 +1,12 @@
 /**
  * Basic Environment Test API
- * 
+ *
  * Simple test endpoint to check environment variables without importing QuickBooks service
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import axios from 'axios';
+import OAuthClient from 'intuit-oauth';
 
 /**
  * GET /api/quickbooks/env-test - Test environment variables only
@@ -12,7 +14,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     console.log('[ENV-TEST] Checking environment variables...');
-    
+
     const envCheck = {
       QB_CLIENT_ID: !!process.env.QB_CLIENT_ID,
       QB_CLIENT_SECRET: !!process.env.QB_CLIENT_SECRET,
@@ -20,7 +22,7 @@ export async function GET() {
       QB_REFRESH_TOKEN: !!process.env.QB_REFRESH_TOKEN,
       QB_COMPANY_ID: !!process.env.QB_COMPANY_ID,
       QB_SANDBOX: process.env.QB_SANDBOX,
-      QB_REDIRECT_URI: !!process.env.QB_REDIRECT_URI
+      QB_REDIRECT_URI: !!process.env.QB_REDIRECT_URI,
     };
 
     console.log('[ENV-TEST] Environment check result:', envCheck);
@@ -28,7 +30,6 @@ export async function GET() {
     // Test basic axios import
     let axiosTest;
     try {
-      const axios = require('axios');
       axiosTest = !!axios;
       console.log('[ENV-TEST] Axios import:', axiosTest);
     } catch (err) {
@@ -39,7 +40,6 @@ export async function GET() {
     // Test intuit-oauth import
     let oauthTest;
     try {
-      const OAuthClient = require('intuit-oauth');
       oauthTest = !!OAuthClient;
       console.log('[ENV-TEST] intuit-oauth import:', oauthTest);
     } catch (err) {
@@ -47,23 +47,25 @@ export async function GET() {
       oauthTest = false;
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      message: "Environment test completed",
+      message: 'Environment test completed',
       environment: envCheck,
       dependencies: {
         axios: axiosTest,
-        'intuit-oauth': oauthTest
-      }
+        'intuit-oauth': oauthTest,
+      },
     });
-
   } catch (error) {
     console.error('[ENV-TEST] Error occurred:', error);
-    
-    return NextResponse.json({ 
-      error: "Environment test failed",
-      details: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        error: 'Environment test failed',
+        details: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+      { status: 500 }
+    );
   }
 }

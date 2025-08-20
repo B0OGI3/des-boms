@@ -22,6 +22,8 @@ import {
 import { IconCalendar, IconUser, IconFileText, IconPackage, IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { Order } from '../hooks/useOrderSearch';
 import { FileAttachmentManager } from './FileAttachmentManager';
+import { MaterialRequirementsPanel } from '../../components/ui/MaterialRequirementsPanel';
+import { PartTypeIndicator } from '../../components/ui/PartTypeIndicator';
 
 // Type aliases for union types
 type PartType = 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
@@ -424,8 +426,14 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                           {/* Line Item Header */}
                           <Group justify="space-between" align="flex-start">
                             <Stack gap="xs" style={{ flex: 1 }}>
-                              <Group gap="md">
+                              <Group gap="md" align="center">
                                 <Text fw={600} size="md">{item.part.partNumber}</Text>
+                                <PartTypeIndicator
+                                  partType={item.part.partType as 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL'}
+                                  partNumber={item.part.partNumber}
+                                  size="sm"
+                                  showDetails={false}
+                                />
                                 <Text c="dimmed">-</Text>
                                 <Text>{item.part.partName}</Text>
                               </Group>
@@ -439,6 +447,11 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                                 <Text size="sm" fw={500} c="blue">
                                   Qty: {item.quantity.toLocaleString()}
                                 </Text>
+                                {item.part.description && (
+                                  <Text size="sm" c="dimmed">
+                                    {item.part.description}
+                                  </Text>
+                                )}
                               </Group>
                             </Stack>
                             
@@ -457,11 +470,25 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                             )}
                           </Group>
                           
-                          {/* File Attachments - Only show if we have enhanced data and item is expanded */}
+                          {/* Expanded Content - File Attachments and Material Requirements */}
                           {isEnhanced && (
                             <Collapse in={expandedItems.has(itemId)}>
                               <Box pt="md">
                                 <Divider mb="md" />
+                                
+                                {/* Material Requirements Section */}
+                                <Stack gap="md" mb="md">
+                                  <Text fw={500} size="sm">Material Requirements</Text>
+                                  <MaterialRequirementsPanel
+                                    lineItemId={itemId}
+                                    showCosts={true}
+                                    compact={true}
+                                  />
+                                </Stack>
+                                
+                                <Divider mb="md" />
+                                
+                                {/* File Attachments Section */}
                                 <Text fw={500} size="sm" mb="sm">File Attachments</Text>
                                 <FileAttachmentManager
                                   lineItemId={itemId}

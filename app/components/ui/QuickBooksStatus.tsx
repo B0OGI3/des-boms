@@ -2,21 +2,39 @@
 
 /**
  * QuickBooks Connection Status Component
- * 
+ *
  * Displays the current QuickBooks integration status with real-time updates.
  * Shows connection status, provides connection/reconnection actions.
  */
 
 import { useEffect, useState } from 'react';
-import { Badge, Button, Group, Loader, Text, Tooltip, Alert } from '@mantine/core';
-import { IconRefresh, IconPlugConnected, IconPlugConnectedX, IconAlertTriangle } from '@tabler/icons-react';
+import {
+  Badge,
+  Button,
+  Group,
+  Loader,
+  Text,
+  Tooltip,
+  Alert,
+} from '@mantine/core';
+import {
+  IconRefresh,
+  IconPlugConnected,
+  IconPlugConnectedX,
+  IconAlertTriangle,
+} from '@tabler/icons-react';
 
 interface QuickBooksStatusData {
   isConfigured: boolean;
   hasValidTokens: boolean;
   hasTokensInEnv: boolean;
   isSandbox: boolean;
-  status: 'connected' | 'configured' | 'not_configured' | 'token_expired' | 'error';
+  status:
+    | 'connected'
+    | 'configured'
+    | 'not_configured'
+    | 'token_expired'
+    | 'error';
   message: string;
   connectionTestError?: string;
 }
@@ -27,10 +45,10 @@ interface QuickBooksStatusProps {
   readonly onConnectionChange?: (connected: boolean) => void;
 }
 
-export function QuickBooksStatus({ 
-  compact = false, 
+export function QuickBooksStatus({
+  compact = false,
   showActions = true,
-  onConnectionChange 
+  onConnectionChange,
 }: QuickBooksStatusProps) {
   const [status, setStatus] = useState<QuickBooksStatusData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,13 +65,14 @@ export function QuickBooksStatus({
       }
       const data: QuickBooksStatusData = await response.json();
       setStatus(data);
-      
+
       // Notify parent component of connection status
       if (onConnectionChange) {
         onConnectionChange(data.status === 'connected');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch status';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch status';
       setError(errorMessage);
       console.error('Error fetching QuickBooks status:', err);
     } finally {
@@ -64,11 +83,11 @@ export function QuickBooksStatus({
 
   useEffect(() => {
     fetchStatus();
-    
+
     // Refresh status every 30 seconds to detect token changes
     const interval = setInterval(fetchStatus, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -78,19 +97,23 @@ export function QuickBooksStatus({
   const handleConnect = () => {
     // For development, use ngrok URL; for production, use current origin
     const isDev = window.location.hostname === 'localhost';
-    const baseUrl = isDev 
+    const baseUrl = isDev
       ? 'https://noticeably-full-llama.ngrok-free.app'
       : window.location.origin;
-    
+
     // Open QuickBooks OAuth in new window
-    window.open(`${baseUrl}/api/quickbooks/auth`, '_blank', 'width=600,height=700');
-    
+    window.open(
+      `${baseUrl}/api/quickbooks/auth`,
+      '_blank',
+      'width=600,height=700'
+    );
+
     // Listen for the OAuth completion
     const handleMessage = (event: MessageEvent) => {
       // Accept messages from either localhost or ngrok
       const validOrigins = [window.location.origin, baseUrl];
       if (!validOrigins.includes(event.origin)) return;
-      
+
       if (event.data.type === 'quickbooks-oauth-complete') {
         // Refresh status after OAuth completion
         setTimeout(() => {
@@ -99,7 +122,7 @@ export function QuickBooksStatus({
         window.removeEventListener('message', handleMessage);
       }
     };
-    
+
     window.addEventListener('message', handleMessage);
   };
 
@@ -107,7 +130,15 @@ export function QuickBooksStatus({
     if (result.status === 'token_expired') {
       console.log('Token validation failed - expired tokens');
       setError('QuickBooks tokens have expired. Please reconnect.');
-      setStatus(prev => prev ? {...prev, status: 'token_expired', message: 'QuickBooks tokens have expired'} : null);
+      setStatus(prev =>
+        prev
+          ? {
+              ...prev,
+              status: 'token_expired',
+              message: 'QuickBooks tokens have expired',
+            }
+          : null
+      );
       setTimeout(() => setError(null), 10000);
       return true; // Handled
     }
@@ -117,7 +148,15 @@ export function QuickBooksStatus({
   const handleValidationError = (response: Response, errorData: any) => {
     if (errorData.status === 'token_expired') {
       setError('QuickBooks authentication expired. Please reconnect.');
-      setStatus(prev => prev ? {...prev, status: 'token_expired', message: 'QuickBooks authentication expired'} : null);
+      setStatus(prev =>
+        prev
+          ? {
+              ...prev,
+              status: 'token_expired',
+              message: 'QuickBooks authentication expired',
+            }
+          : null
+      );
       setTimeout(() => setError(null), 10000);
       return true; // Handled
     }
@@ -129,40 +168,55 @@ export function QuickBooksStatus({
     try {
       console.log('[QB Status] Starting connection test...');
       // Use the lightweight token validation endpoint instead of full sync
-      const response = await fetch('/api/quickbooks/validate-token', { method: 'GET' });
-      
+      const response = await fetch('/api/quickbooks/validate-token', {
+        method: 'GET',
+      });
+
       if (response.ok) {
         const result = await response.json();
         console.log('[QB Status] Validation result:', result);
-        
+
         if (result.valid) {
-          console.log('[QB Status] Token validation successful, fetching latest status...');
+          console.log(
+            '[QB Status] Token validation successful, fetching latest status...'
+          );
           await fetchStatus();
           setError(null);
           console.log('[QB Status] Status updated successfully');
           return;
         }
-        
+
         // Handle invalid token cases
         if (handleValidationResult(result)) return;
         throw new Error(result.error || 'Token validation failed');
       }
-      
+
       // If validation endpoint failed, get error details
       let errorData: any = {};
       try {
         errorData = await response.json();
-        console.error('[QB Status] Token validation failed:', response.status, errorData);
+        console.error(
+          '[QB Status] Token validation failed:',
+          response.status,
+          errorData
+        );
       } catch (jsonError) {
-        console.error('[QB Status] Token validation failed (no JSON response):', response.status, response.statusText);
+        console.error(
+          '[QB Status] Token validation failed (no JSON response):',
+          response.status,
+          response.statusText
+        );
         console.error('[QB Status] JSON parse error:', jsonError);
-        errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+        errorData = {
+          error: `HTTP ${response.status}: ${response.statusText}`,
+        };
       }
-      
+
       // Check if it's a token expiration issue
       if (handleValidationError(response, errorData)) return;
-      throw new Error(`Connection test failed: ${errorData.error || 'Unknown error'}`);
-      
+      throw new Error(
+        `Connection test failed: ${errorData.error || 'Unknown error'}`
+      );
     } catch (err) {
       console.error('[QB Status] Connection test error:', err);
       setError(err instanceof Error ? err.message : 'Connection test failed');
@@ -177,12 +231,14 @@ export function QuickBooksStatus({
     setAutoRefreshing(true);
     try {
       console.log('[QB Status] Starting auto token refresh...');
-      const response = await fetch('/api/quickbooks/refresh-tokens', { method: 'GET' });
-      
+      const response = await fetch('/api/quickbooks/refresh-tokens', {
+        method: 'GET',
+      });
+
       if (response.ok) {
         const result = await response.json();
         console.log('[QB Status] Auto refresh result:', result);
-        
+
         if (result.success) {
           if (result.refreshed) {
             setError(null);
@@ -197,13 +253,12 @@ export function QuickBooksStatus({
           }
           return;
         }
-        
+
         throw new Error(result.message || 'Auto refresh failed');
       }
-      
+
       const errorData = await response.json();
       throw new Error(errorData.message || 'Auto refresh failed');
-      
     } catch (err) {
       console.error('[QB Status] Auto refresh error:', err);
       setError(err instanceof Error ? err.message : 'Auto refresh failed');
@@ -216,9 +271,11 @@ export function QuickBooksStatus({
   // Loading state
   if (loading) {
     return (
-      <Group gap="xs">
-        <Loader size="xs" />
-        <Text size="sm" c="dimmed">Checking QuickBooks...</Text>
+      <Group gap='xs'>
+        <Loader size='xs' />
+        <Text size='sm' c='dimmed'>
+          Checking QuickBooks...
+        </Text>
       </Group>
     );
   }
@@ -226,14 +283,16 @@ export function QuickBooksStatus({
   // Error state
   if (error) {
     return (
-      <Group gap="xs">
-        <IconAlertTriangle size={16} color="red" />
-        <Text size="sm" c="red">QB Status Error</Text>
+      <Group gap='xs'>
+        <IconAlertTriangle size={16} color='red' />
+        <Text size='sm' c='red'>
+          QB Status Error
+        </Text>
         {showActions && (
           <Button
-            size="xs"
-            variant="subtle"
-            color="red"
+            size='xs'
+            variant='subtle'
+            color='red'
             onClick={handleRefresh}
             loading={refreshing}
           >
@@ -254,42 +313,42 @@ export function QuickBooksStatus({
           color: 'green',
           variant: 'filled' as const,
           icon: <IconPlugConnected size={12} />,
-          text: compact ? 'QB Connected' : 'QuickBooks Connected'
+          text: compact ? 'QB Connected' : 'QuickBooks Connected',
         };
       case 'token_expired':
         return {
           color: 'orange',
           variant: 'filled' as const,
           icon: <IconAlertTriangle size={12} />,
-          text: compact ? 'QB Expired' : 'QuickBooks Token Expired'
+          text: compact ? 'QB Expired' : 'QuickBooks Token Expired',
         };
       case 'configured':
         return {
           color: 'yellow',
           variant: 'filled' as const,
           icon: <IconPlugConnectedX size={12} />,
-          text: compact ? 'QB Ready' : 'QuickBooks Ready (Not Connected)'
+          text: compact ? 'QB Ready' : 'QuickBooks Ready (Not Connected)',
         };
       case 'not_configured':
         return {
           color: 'gray',
           variant: 'outline' as const,
           icon: <IconPlugConnectedX size={12} />,
-          text: compact ? 'QB Not Setup' : 'QuickBooks Not Configured'
+          text: compact ? 'QB Not Setup' : 'QuickBooks Not Configured',
         };
       case 'error':
         return {
           color: 'red',
           variant: 'filled' as const,
           icon: <IconAlertTriangle size={12} />,
-          text: compact ? 'QB Error' : 'QuickBooks Error'
+          text: compact ? 'QB Error' : 'QuickBooks Error',
         };
       default:
         return {
           color: 'gray',
           variant: 'outline' as const,
           icon: <IconPlugConnectedX size={12} />,
-          text: 'Unknown Status'
+          text: 'Unknown Status',
         };
     }
   };
@@ -299,58 +358,60 @@ export function QuickBooksStatus({
   // Compact view - badge with optional action button
   if (compact) {
     return (
-      <Group gap="xs" align="center">
-        <Tooltip label={status.message} position="bottom">
+      <Group gap='xs' align='center'>
+        <Tooltip label={status.message} position='bottom'>
           <Badge
             color={badgeProps.color}
             variant={badgeProps.variant}
             leftSection={badgeProps.icon}
-            size="sm"
+            size='sm'
           >
             {badgeProps.text}
           </Badge>
         </Tooltip>
-        
-        {showActions && (status.status === 'configured' || status.status === 'token_expired') && (
-          <Group gap="xs">
-            <Button
-              size="xs"
-              variant="light"
-              color="blue"
-              onClick={handleConnect}
-              disabled={refreshing || autoRefreshing}
-            >
-              {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
-            </Button>
-            {status.status === 'token_expired' && (
-              <Tooltip label="Automatically refresh expired tokens">
-                <Button
-                  size="xs"
-                  variant="subtle"
-                  color="orange"
-                  onClick={handleAutoRefresh}
-                  loading={autoRefreshing}
-                  disabled={refreshing}
-                >
-                  Auto-Fix
-                </Button>
-              </Tooltip>
-            )}
-          </Group>
-        )}
+
+        {showActions &&
+          (status.status === 'configured' ||
+            status.status === 'token_expired') && (
+            <Group gap='xs'>
+              <Button
+                size='xs'
+                variant='light'
+                color='blue'
+                onClick={handleConnect}
+                disabled={refreshing || autoRefreshing}
+              >
+                {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
+              </Button>
+              {status.status === 'token_expired' && (
+                <Tooltip label='Automatically refresh expired tokens'>
+                  <Button
+                    size='xs'
+                    variant='subtle'
+                    color='orange'
+                    onClick={handleAutoRefresh}
+                    loading={autoRefreshing}
+                    disabled={refreshing}
+                  >
+                    Auto-Fix
+                  </Button>
+                </Tooltip>
+              )}
+            </Group>
+          )}
       </Group>
     );
   }
 
   // Full view with actions
   return (
-    <Group gap="md" align="center">
-      <Tooltip label={status.message} position="bottom">
+    <Group gap='md' align='center'>
+      <Tooltip label={status.message} position='bottom'>
         <Badge
           color={badgeProps.color}
           variant={badgeProps.variant}
           leftSection={badgeProps.icon}
-          size="md"
+          size='md'
         >
           {badgeProps.text}
           {status.isSandbox && ' (Sandbox)'}
@@ -358,25 +419,26 @@ export function QuickBooksStatus({
       </Tooltip>
 
       {showActions && (
-        <Group gap="xs">
-          {(status.status === 'configured' || status.status === 'token_expired') && (
+        <Group gap='xs'>
+          {(status.status === 'configured' ||
+            status.status === 'token_expired') && (
             <Button
-              size="xs"
-              variant="light"
-              color="blue"
+              size='xs'
+              variant='light'
+              color='blue'
               onClick={handleConnect}
               disabled={refreshing || autoRefreshing}
             >
               {status.status === 'token_expired' ? 'Reconnect' : 'Connect'}
             </Button>
           )}
-          
+
           {status.status === 'token_expired' && (
-            <Tooltip label="Automatically refresh expired tokens">
+            <Tooltip label='Automatically refresh expired tokens'>
               <Button
-                size="xs"
-                variant="subtle"
-                color="orange"
+                size='xs'
+                variant='subtle'
+                color='orange'
                 onClick={handleAutoRefresh}
                 loading={autoRefreshing}
                 disabled={refreshing}
@@ -385,12 +447,12 @@ export function QuickBooksStatus({
               </Button>
             </Tooltip>
           )}
-          
+
           {status.status === 'connected' && (
             <Button
-              size="xs"
-              variant="subtle"
-              color="green"
+              size='xs'
+              variant='subtle'
+              color='green'
               onClick={handleTestConnection}
               loading={refreshing}
               disabled={autoRefreshing}
@@ -398,11 +460,11 @@ export function QuickBooksStatus({
               Test
             </Button>
           )}
-          
+
           <Button
-            size="xs"
-            variant="subtle"
-            color="gray"
+            size='xs'
+            variant='subtle'
+            color='gray'
             onClick={handleRefresh}
             loading={refreshing}
             disabled={autoRefreshing}
@@ -413,20 +475,22 @@ export function QuickBooksStatus({
       )}
 
       {/* Show error alert if there's a connection issue */}
-      {(status.status === 'error' || status.status === 'token_expired') && !compact && (
-        <Alert
-          color={status.status === 'token_expired' ? 'orange' : 'red'}
-          variant="light"
-          style={{ marginTop: 8 }}
-        >
-          <Text size="xs">{status.message}</Text>
-          {status.status === 'token_expired' && (
-            <Text size="xs" c="dimmed" style={{ marginTop: 4 }}>
-              Click &quot;Reconnect&quot; to renew your QuickBooks authorization.
-            </Text>
-          )}
-        </Alert>
-      )}
+      {(status.status === 'error' || status.status === 'token_expired') &&
+        !compact && (
+          <Alert
+            color={status.status === 'token_expired' ? 'orange' : 'red'}
+            variant='light'
+            style={{ marginTop: 8 }}
+          >
+            <Text size='xs'>{status.message}</Text>
+            {status.status === 'token_expired' && (
+              <Text size='xs' c='dimmed' style={{ marginTop: 4 }}>
+                Click &quot;Reconnect&quot; to renew your QuickBooks
+                authorization.
+              </Text>
+            )}
+          </Alert>
+        )}
     </Group>
   );
 }

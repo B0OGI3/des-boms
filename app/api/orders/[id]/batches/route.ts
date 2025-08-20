@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma';
 // GET /api/orders/[id]/batches - Get all batches for a specific order
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const orderId = params.id;
+    const { id: orderId } = await params;
 
     // Get the order with all its line items and their batches
     const order = await prisma.purchaseOrder.findUnique({
@@ -124,7 +124,6 @@ export async function GET(
         orderStatus: order.orderStatus,
       },
     });
-
   } catch (error) {
     console.error('Error fetching order batches:', error);
     return NextResponse.json(

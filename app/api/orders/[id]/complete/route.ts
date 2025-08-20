@@ -4,16 +4,13 @@ import { prisma } from '@/lib/prisma';
 // POST /api/orders/[id]/complete - Mark order as complete
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
-    const {
-      completedBy,
-      completionNotes,
-    } = body;
+    const { completedBy, completionNotes } = body;
 
-    const orderId = params.id;
+    const { id: orderId } = await params;
 
     // Validate required fields
     if (!completedBy) {
@@ -58,7 +55,10 @@ export async function POST(
     }
 
     // Check if order is already completed or shipped
-    if (existingOrder.orderStatus === 'COMPLETED' || existingOrder.orderStatus === 'SHIPPED') {
+    if (
+      existingOrder.orderStatus === 'COMPLETED' ||
+      existingOrder.orderStatus === 'SHIPPED'
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -70,7 +70,7 @@ export async function POST(
 
     // Validate that all batches are completed and passed QC
     const allBatches = existingOrder.lineItems.flatMap(item => item.batches);
-    
+
     if (allBatches.length === 0) {
       return NextResponse.json(
         {
@@ -81,7 +81,9 @@ export async function POST(
       );
     }
 
-    const incompleteBatches = allBatches.filter(batch => batch.status !== 'COMPLETED');
+    const incompleteBatches = allBatches.filter(
+      batch => batch.status !== 'COMPLETED'
+    );
     if (incompleteBatches.length > 0) {
       return NextResponse.json(
         {
@@ -94,8 +96,11 @@ export async function POST(
 
     // Check QC status - ensure all batches have passed QC
     const batchesWithFailedQC = allBatches.filter(batch => {
-      const sortedQCRecords = batch.qcRecords
-        .toSorted((a, b) => new Date(b.inspectionDate).getTime() - new Date(a.inspectionDate).getTime());
+      const sortedQCRecords = batch.qcRecords.toSorted(
+        (a, b) =>
+          new Date(b.inspectionDate).getTime() -
+          new Date(a.inspectionDate).getTime()
+      );
       const latestQC = sortedQCRecords[0];
       return latestQC && latestQC.result === 'FAIL';
     });
@@ -104,7 +109,8 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          error: 'Cannot complete order: Some batches have failed QC inspection',
+          error:
+            'Cannot complete order: Some batches have failed QC inspection',
         },
         { status: 400 }
       );
@@ -145,7 +151,6 @@ export async function POST(
       data: updatedOrder,
       message: 'Order marked as completed successfully',
     });
-
   } catch (error) {
     console.error('Error completing order:', error);
     return NextResponse.json(
@@ -162,13 +167,13 @@ export async function POST(
 // DELETE /api/orders/[id]/complete - Reopen a completed order (undo completion)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
     const { reopenedBy, reopenNotes } = body;
 
-    const orderId = params.id;
+    const { id: orderId } = await params;
 
     // Validate required fields
     if (!reopenedBy) {
@@ -196,7 +201,10 @@ export async function DELETE(
       );
     }
 
-    if (existingOrder.orderStatus !== 'COMPLETED' && existingOrder.orderStatus !== 'SHIPPED') {
+    if (
+      existingOrder.orderStatus !== 'COMPLETED' &&
+      existingOrder.orderStatus !== 'SHIPPED'
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -223,7 +231,9 @@ export async function DELETE(
         orderStatus: 'ACTIVE',
         completedAt: null,
         completedBy: null,
-        completionNotes: reopenNotes ? `Reopened by ${reopenedBy}: ${reopenNotes}` : `Reopened by ${reopenedBy}`,
+        completionNotes: reopenNotes
+          ? `Reopened by ${reopenedBy}: ${reopenNotes}`
+          : `Reopened by ${reopenedBy}`,
       },
       include: {
         customer: true,
@@ -241,7 +251,6 @@ export async function DELETE(
       data: updatedOrder,
       message: 'Order reopened successfully',
     });
-
   } catch (error) {
     console.error('Error reopening order:', error);
     return NextResponse.json(

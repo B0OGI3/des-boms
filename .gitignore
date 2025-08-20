@@ -22,20 +22,16 @@
 /build
 /dist
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+# Environment variables (CRITICAL - Never commit tokens!)
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
+# QuickBooks sensitive data (NEVER commit these!)
+qb-tokens.json
+quickbooks-config.json
 
 # Logs
 logs
@@ -55,12 +51,14 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Environment variables
-.env*
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
 
 # Vercel
 .vercel
@@ -73,14 +71,25 @@ next-env.d.ts
 docker-compose.override.yml
 .dockerignore
 
-# Database
+# Database files
 *.db
 *.sqlite
 *.sqlite3
 
+# Database backups (exclude from repo - too large)
+/backups/
+*.sql
+*.dump
+*.backup
+
+# File uploads (user content - exclude from repo)
+/uploads/*
+!/uploads/.gitkeep
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 *.swp
 *.swo
@@ -115,3 +124,20 @@ generated/prisma/query_engine-windows.dll.node.tmp*
 # Backup files
 *.bak
 *.backup
+
+# Manufacturing specific files
+/temp-exports/
+/batch-reports/
+*.xlsx
+*.xls
+*.csv
+
+# Development tools output
+/tools/output/
+/scripts/temp/
+
+# Security keys and certificates
+*.pem
+*.key
+*.crt
+*.p12

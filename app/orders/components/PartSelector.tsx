@@ -53,15 +53,19 @@ interface PartSelectorProps {
 
 const partTypeOptions = [
   { value: 'FINISHED', label: 'Finished Goods/Assemblies', color: 'blue' },
-  { value: 'SEMI_FINISHED', label: 'Semi-Finished Parts/Sub-assemblies', color: 'orange' },
+  {
+    value: 'SEMI_FINISHED',
+    label: 'Semi-Finished Parts/Sub-assemblies',
+    color: 'orange',
+  },
   { value: 'RAW_MATERIAL', label: 'Raw Materials/Stock', color: 'green' },
 ];
 
 const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   value,
   onChange,
-  onPartCreated,
-  placeholder = "Select or create a part",
+  onPartCreated: _onPartCreated,
+  placeholder = 'Select or create a part',
   error,
   required = false,
   isPageReady = true,
@@ -86,14 +90,14 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   const fetchParts = async () => {
     setLoading(true);
     setFetchError(null);
-    
+
     try {
       const response = await fetch('/api/parts');
       if (!response.ok) {
         throw new Error(`Failed to fetch parts: ${response.statusText}`);
       }
       const data = await response.json();
-      
+
       // Handle different response formats
       let partsArray = [];
       if (Array.isArray(data)) {
@@ -106,7 +110,7 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
         console.warn('Unexpected response format:', data);
         partsArray = [];
       }
-      
+
       setParts(partsArray);
     } catch (error) {
       console.error('Error fetching parts:', error);
@@ -118,28 +122,29 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   };
 
   // Transform parts to Select options
-  const partOptions = Array.isArray(parts) ? parts.map(part => ({
-    value: part.id,
-    label: `${part.partNumber} - ${part.partName}`,
-    part: part,
-  })) : [];
+  const partOptions = Array.isArray(parts)
+    ? parts.map(part => ({
+        value: part.id,
+        label: `${part.partNumber} - ${part.partName}`,
+        part: part,
+      }))
+    : [];
 
   // Filtered options based on search term
   const filteredOptions = searchTerm
-    ? partOptions.filter(option =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        option.part.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    ? partOptions.filter(
+        option =>
+          option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          option.part.description
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
       )
     : partOptions;
 
   const getPartTypeBadge = (partType: string) => {
     const typeConfig = partTypeOptions.find(opt => opt.value === partType);
     return typeConfig ? (
-      <Badge 
-        color={typeConfig.color} 
-        variant="light" 
-        size="sm"
-      >
+      <Badge color={typeConfig.color} variant='light' size='sm'>
         {typeConfig.label.split('/')[0]}
       </Badge>
     ) : null;
@@ -149,9 +154,11 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   const renderSearchResults = () => {
     if (loading) {
       return (
-        <Group justify="center" py="md">
-          <Loader size="sm" />
-          <Text size="sm" c="dimmed">Searching...</Text>
+        <Group justify='center' py='md'>
+          <Loader size='sm' />
+          <Text size='sm' c='dimmed'>
+            Searching...
+          </Text>
         </Group>
       );
     }
@@ -160,13 +167,16 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
       return filteredOptions.slice(0, 10).map(option => (
         <Group
           key={option.value}
-          justify="space-between"
-          p="xs"
+          justify='space-between'
+          p='xs'
           style={{
             border: '1px solid var(--mantine-color-gray-3)',
             borderRadius: 'var(--mantine-radius-sm)',
             cursor: 'pointer',
-            backgroundColor: value?.id === option.value ? 'var(--mantine-color-blue-0)' : undefined,
+            backgroundColor:
+              value?.id === option.value
+                ? 'var(--mantine-color-blue-0)'
+                : undefined,
           }}
           onClick={() => {
             onChange(option.part);
@@ -174,13 +184,17 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
           }}
         >
           <div>
-            <Group gap="xs">
-              <Text fw={500} size="sm">{option.part.partNumber}</Text>
+            <Group gap='xs'>
+              <Text fw={500} size='sm'>
+                {option.part.partNumber}
+              </Text>
               {getPartTypeBadge(option.part.partType)}
             </Group>
-            <Text size="xs" c="dimmed">{option.part.partName}</Text>
+            <Text size='xs' c='dimmed'>
+              {option.part.partName}
+            </Text>
             {option.part.description && (
-              <Text size="xs" c="dimmed" lineClamp={1}>
+              <Text size='xs' c='dimmed' lineClamp={1}>
                 {option.part.description}
               </Text>
             )}
@@ -190,11 +204,13 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
     }
 
     return (
-      <Group justify="center" py="md">
-        <Text size="sm" c="dimmed">No parts found</Text>
+      <Group justify='center' py='md'>
+        <Text size='sm' c='dimmed'>
+          No parts found
+        </Text>
         <Button
-          size="xs"
-          variant="light"
+          size='xs'
+          variant='light'
           leftSection={<IconPlus size={14} />}
           onClick={() => onOpenPartCreation?.(searchTerm)}
         >
@@ -206,10 +222,10 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
 
   if (fetchError) {
     return (
-      <Alert color="red" title="Error Loading Parts">
-        <Stack gap="sm">
-          <Text size="sm">{fetchError}</Text>
-          <Button size="xs" variant="light" onClick={fetchParts}>
+      <Alert color='red' title='Error Loading Parts'>
+        <Stack gap='sm'>
+          <Text size='sm'>{fetchError}</Text>
+          <Button size='xs' variant='light' onClick={fetchParts}>
             Try Again
           </Button>
         </Stack>
@@ -218,28 +234,28 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   }
 
   return (
-    <Stack gap="xs">
+    <Stack gap='xs'>
       {/* Mode Toggle */}
-      <Group gap="xs">
-        <Button 
-          size="xs" 
-          variant={useDropdown ? "filled" : "light"}
+      <Group gap='xs'>
+        <Button
+          size='xs'
+          variant={useDropdown ? 'filled' : 'light'}
           onClick={() => setUseDropdown(true)}
         >
           Select Existing
         </Button>
-        <Button 
-          size="xs" 
-          variant={!useDropdown ? "filled" : "light"}
+        <Button
+          size='xs'
+          variant={!useDropdown ? 'filled' : 'light'}
           onClick={() => setUseDropdown(false)}
         >
           Search/Create
         </Button>
         <ActionIcon
-          variant="light"
+          variant='light'
           onClick={fetchParts}
           loading={loading}
-          size="sm"
+          size='sm'
         >
           <IconRefresh size={14} />
         </ActionIcon>
@@ -247,15 +263,17 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
 
       {useDropdown ? (
         /* Dropdown Mode */
-        <Stack gap="xs">
-          <Group gap="xs">
+        <Stack gap='xs'>
+          <Group gap='xs'>
             <div style={{ flex: 1 }}>
               <Select
                 placeholder={placeholder}
-                value={typeof value === 'string' ? value : (value?.id || '')}
-                onChange={(partId) => {
+                value={typeof value === 'string' ? value : value?.id || ''}
+                onChange={partId => {
                   if (typeof partId === 'string') {
-                    const selectedPart = parts.find(p => p.id === partId || p.partNumber === partId);
+                    const selectedPart = parts.find(
+                      p => p.id === partId || p.partNumber === partId
+                    );
                     onChange(selectedPart || null);
                   } else {
                     onChange(null);
@@ -266,7 +284,7 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
                 error={error}
                 required={required}
                 disabled={loading}
-                rightSection={loading ? <Loader size="sm" /> : undefined}
+                rightSection={loading ? <Loader size='sm' /> : undefined}
                 maxDropdownHeight={200}
                 comboboxProps={{
                   withinPortal: true,
@@ -275,53 +293,70 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
             </div>
             <Button
               leftSection={<IconPlus size={16} />}
-              variant="light"
-              size="sm"
+              variant='light'
+              size='sm'
               onClick={() => onOpenPartCreation?.()}
             >
               New Part
             </Button>
           </Group>
-          
+
           {/* Selected Part Info in Dropdown Mode */}
           {value && (
-            <Group justify="space-between" p="xs" style={{
-              border: '1px solid var(--mantine-color-green-3)',
-              borderRadius: 'var(--mantine-radius-sm)',
-              backgroundColor: 'var(--mantine-color-green-0)',
-            }}>
+            <Group
+              justify='space-between'
+              p='xs'
+              style={{
+                border: '1px solid var(--mantine-color-green-3)',
+                borderRadius: 'var(--mantine-radius-sm)',
+                backgroundColor: 'var(--mantine-color-green-0)',
+              }}
+            >
               <div style={{ flex: 1 }}>
                 {typeof value === 'string' ? (
                   /* If value is a string (part number), find the actual part */
                   (() => {
-                    const actualPart = parts.find(p => p.id === value || p.partNumber === value);
+                    const actualPart = parts.find(
+                      p => p.id === value || p.partNumber === value
+                    );
                     return actualPart ? (
                       <>
-                        <Group gap="xs">
-                          <Text fw={500} size="sm">{actualPart.partNumber}</Text>
-                          {actualPart.partType && getPartTypeBadge(actualPart.partType)}
+                        <Group gap='xs'>
+                          <Text fw={500} size='sm'>
+                            {actualPart.partNumber}
+                          </Text>
+                          {actualPart.partType &&
+                            getPartTypeBadge(actualPart.partType)}
                         </Group>
-                        <Text size="xs" c="dimmed">{actualPart.partName}</Text>
+                        <Text size='xs' c='dimmed'>
+                          {actualPart.partName}
+                        </Text>
                         {actualPart.description && (
-                          <Text size="xs" c="dimmed" lineClamp={1}>
+                          <Text size='xs' c='dimmed' lineClamp={1}>
                             {actualPart.description}
                           </Text>
                         )}
                       </>
                     ) : (
-                      <Text size="sm" c="dimmed">Part: {value}</Text>
+                      <Text size='sm' c='dimmed'>
+                        Part: {value}
+                      </Text>
                     );
                   })()
                 ) : (
                   /* If value is a Part object */
                   <>
-                    <Group gap="xs">
-                      <Text fw={500} size="sm">{value.partNumber}</Text>
+                    <Group gap='xs'>
+                      <Text fw={500} size='sm'>
+                        {value.partNumber}
+                      </Text>
                       {value.partType && getPartTypeBadge(value.partType)}
                     </Group>
-                    <Text size="xs" c="dimmed">{value.partName}</Text>
+                    <Text size='xs' c='dimmed'>
+                      {value.partName}
+                    </Text>
                     {value.description && (
-                      <Text size="xs" c="dimmed" lineClamp={1}>
+                      <Text size='xs' c='dimmed' lineClamp={1}>
                         {value.description}
                       </Text>
                     )}
@@ -329,9 +364,9 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
                 )}
               </div>
               <Button
-                size="xs"
-                variant="subtle"
-                color="red"
+                size='xs'
+                variant='subtle'
+                color='red'
                 onClick={() => onChange(null)}
               >
                 Clear
@@ -341,12 +376,12 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
         </Stack>
       ) : (
         /* Search/Create Mode */
-        <Group gap="xs">
+        <Group gap='xs'>
           <div style={{ flex: 1 }}>
             <TextInput
-              placeholder="Enter part number or search..."
+              placeholder='Enter part number or search...'
               value={searchTerm || ''}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               leftSection={<IconSearch size={16} />}
               error={error}
               required={required}
@@ -354,8 +389,8 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
           </div>
           <Button
             leftSection={<IconPlus size={16} />}
-            variant="light"
-            size="sm"
+            variant='light'
+            size='sm'
             onClick={() => onOpenPartCreation?.(searchTerm)}
           >
             New Part
@@ -365,34 +400,42 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
 
       {/* Search Results (when in search mode) */}
       {!useDropdown && searchTerm && (
-        <Stack gap="xs" style={{ maxHeight: 200, overflowY: 'auto' }}>
+        <Stack gap='xs' style={{ maxHeight: 200, overflowY: 'auto' }}>
           {renderSearchResults()}
         </Stack>
       )}
 
       {/* Selected Part Display - Only show in search/create mode */}
       {value && !useDropdown && (
-        <Group justify="space-between" p="xs" style={{
-          border: '1px solid var(--mantine-color-blue-3)',
-          borderRadius: 'var(--mantine-radius-sm)',
-          backgroundColor: 'var(--mantine-color-blue-0)',
-        }}>
+        <Group
+          justify='space-between'
+          p='xs'
+          style={{
+            border: '1px solid var(--mantine-color-blue-3)',
+            borderRadius: 'var(--mantine-radius-sm)',
+            backgroundColor: 'var(--mantine-color-blue-0)',
+          }}
+        >
           <div>
-            <Group gap="xs">
-              <Text fw={500} size="sm">{value.partNumber}</Text>
+            <Group gap='xs'>
+              <Text fw={500} size='sm'>
+                {value.partNumber}
+              </Text>
               {getPartTypeBadge(value.partType)}
             </Group>
-            <Text size="xs" c="dimmed">{value.partName}</Text>
+            <Text size='xs' c='dimmed'>
+              {value.partName}
+            </Text>
             {value.description && (
-              <Text size="xs" c="dimmed" lineClamp={1}>
+              <Text size='xs' c='dimmed' lineClamp={1}>
                 {value.description}
               </Text>
             )}
           </div>
           <Button
-            size="xs"
-            variant="subtle"
-            color="red"
+            size='xs'
+            variant='subtle'
+            color='red'
             onClick={() => onChange(null)}
           >
             Remove
@@ -404,15 +447,26 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
 };
 
 // Wrapper component with modal management
-type WrapperProps = Omit<PartSelectorProps, 'onOpenPartCreation'>;
+type WrapperProps = Omit<PartSelectorProps, 'onOpenPartCreation'> & {
+  onAdvancedPartCreation?: () => void; // Optional handler for advanced part creation
+};
 
-export const PartSelector: React.FC<WrapperProps> = (props) => {
+export const PartSelector: React.FC<WrapperProps> = ({
+  onAdvancedPartCreation,
+  ...props
+}) => {
   const [showPartCreationModal, setShowPartCreationModal] = useState(false);
   const [partCreationInitialPN, setPartCreationInitialPN] = useState('');
 
   const handleOpenPartCreation = (initialPartNumber?: string) => {
-    setPartCreationInitialPN(initialPartNumber || '');
-    setShowPartCreationModal(true);
+    if (onAdvancedPartCreation) {
+      // Use external advanced part creation modal
+      onAdvancedPartCreation();
+    } else {
+      // Use internal simple modal as fallback
+      setPartCreationInitialPN(initialPartNumber || '');
+      setShowPartCreationModal(true);
+    }
   };
 
   const handlePartCreated = (newPart: Part) => {
@@ -427,13 +481,18 @@ export const PartSelector: React.FC<WrapperProps> = (props) => {
         {...props}
         onOpenPartCreation={handleOpenPartCreation}
       />
-      
-      <PartCreationModal
-        opened={showPartCreationModal}
-        onClose={() => setShowPartCreationModal(false)}
-        onPartCreated={handlePartCreated}
-        initialPartNumber={partCreationInitialPN}
-      />
+
+      {/* Only show internal modal if no external handler is provided */}
+      {!onAdvancedPartCreation && (
+        <PartCreationModal
+          opened={showPartCreationModal}
+          onClose={() => setShowPartCreationModal(false)}
+          onPartCreated={handlePartCreated}
+          initialPartNumber={partCreationInitialPN}
+          simpleMode={true}
+          title='Create New Part'
+        />
+      )}
     </>
   );
 };

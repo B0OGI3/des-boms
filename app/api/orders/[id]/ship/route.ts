@@ -4,18 +4,13 @@ import { prisma } from '@/lib/prisma';
 // POST /api/orders/[id]/ship - Mark order as shipped
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
-    const {
-      shippedBy,
-      shippingNotes,
-      trackingNumber,
-      carrier,
-    } = body;
+    const { shippedBy, shippingNotes, trackingNumber, carrier } = body;
 
-    const orderId = params.id;
+    const { id: orderId } = await params;
 
     // Validate required fields
     if (!shippedBy) {
@@ -98,7 +93,6 @@ export async function POST(
       data: updatedOrder,
       message: 'Order marked as shipped successfully',
     });
-
   } catch (error) {
     console.error('Error shipping order:', error);
     return NextResponse.json(

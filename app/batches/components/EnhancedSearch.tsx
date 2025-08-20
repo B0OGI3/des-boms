@@ -5,15 +5,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Autocomplete, Text, Group, ActionIcon, Tooltip } from '@mantine/core';
 import { IconSearch, IconFilter, IconClearAll } from '@tabler/icons-react';
-
-// Simple debounce implementation
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
-  let timeout: NodeJS.Timeout;
-  return ((...args: any[]) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  }) as T;
-}
+import { useDebounce } from '../../../hooks/useDebounce';
 
 interface EnhancedSearchProps {
   value: string;
@@ -27,7 +19,7 @@ interface EnhancedSearchProps {
 export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   value,
   onChange,
-  placeholder = "Search batches, parts, customers, orders...",
+  placeholder = 'Search batches, parts, customers, orders...',
   onFilterToggle,
   onClearFilters,
   showAdvancedFilters = false,
@@ -42,7 +34,9 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     }
 
     try {
-      const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(searchTerm)}`);
+      const response = await fetch(
+        `/api/search/suggestions?q=${encodeURIComponent(searchTerm)}`
+      );
       if (response.ok) {
         const data = await response.json();
         setSuggestions(data.suggestions || []);
@@ -54,15 +48,18 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   }, []);
 
   // Debounced function to fetch suggestions
-  const fetchSuggestions = useCallback(
-    debounce(fetchSuggestionsImpl, 300),
-    [fetchSuggestionsImpl]
-  );
+  const debouncedValue = useDebounce(value, 300);
 
-  // Fetch suggestions when search term changes
+  const fetchSuggestions = useCallback(() => {
+    if (debouncedValue) {
+      fetchSuggestionsImpl(debouncedValue);
+    }
+  }, [debouncedValue, fetchSuggestionsImpl]);
+
+  // Fetch suggestions when debounced value changes
   useEffect(() => {
-    fetchSuggestions(value);
-  }, [value, fetchSuggestions]);
+    fetchSuggestions();
+  }, [fetchSuggestions]);
 
   const handleSelect = (selectedValue: string) => {
     onChange(selectedValue);
@@ -70,9 +67,12 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
   return (
     <div style={{ position: 'relative', flex: 1, minWidth: '300px' }}>
-      <Group gap="xs" align="flex-end" style={{ width: '100%' }}>
+      <Group gap='xs' align='flex-end' style={{ width: '100%' }}>
         <div style={{ flex: 1 }}>
-          <Text size="sm" style={{ color: "#94a3b8", marginBottom: "8px", fontWeight: 500 }}>
+          <Text
+            size='sm'
+            style={{ color: '#94a3b8', marginBottom: '8px', fontWeight: 500 }}
+          >
             Search Batches
           </Text>
           <Autocomplete
@@ -117,15 +117,19 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
         {/* Advanced Filters Toggle */}
         {onFilterToggle && (
-          <Tooltip label={showAdvancedFilters ? "Hide Filters" : "Show Advanced Filters"}>
+          <Tooltip
+            label={
+              showAdvancedFilters ? 'Hide Filters' : 'Show Advanced Filters'
+            }
+          >
             <ActionIcon
-              variant={showAdvancedFilters ? "filled" : "light"}
-              size="lg"
+              variant={showAdvancedFilters ? 'filled' : 'light'}
+              size='lg'
               onClick={onFilterToggle}
               style={{
                 height: '44px',
                 width: '44px',
-                background: showAdvancedFilters 
+                background: showAdvancedFilters
                   ? 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)'
                   : 'rgba(59, 130, 246, 0.1)',
                 border: '1px solid rgba(59, 130, 246, 0.3)',
@@ -139,10 +143,10 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
         {/* Clear Filters */}
         {onClearFilters && (value || showAdvancedFilters) && (
-          <Tooltip label="Clear All Filters">
+          <Tooltip label='Clear All Filters'>
             <ActionIcon
-              variant="light"
-              size="lg"
+              variant='light'
+              size='lg'
               onClick={onClearFilters}
               style={{
                 height: '44px',

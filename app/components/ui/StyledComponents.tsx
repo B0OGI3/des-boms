@@ -13,25 +13,34 @@ type TrendDirection = 'up' | 'down' | 'neutral';
 // Helper functions for trend styling
 const getTrendBackground = (trend: TrendDirection) => {
   switch (trend) {
-    case 'up': return 'rgba(16, 185, 129, 0.1)';
-    case 'down': return 'rgba(239, 68, 68, 0.1)';
-    default: return 'rgba(107, 114, 128, 0.1)';
+    case 'up':
+      return 'rgba(16, 185, 129, 0.1)';
+    case 'down':
+      return 'rgba(239, 68, 68, 0.1)';
+    default:
+      return 'rgba(107, 114, 128, 0.1)';
   }
 };
 
 const getTrendColor = (trend: TrendDirection) => {
   switch (trend) {
-    case 'up': return theme.colors.success;
-    case 'down': return theme.colors.error;
-    default: return theme.colors.textMuted;
+    case 'up':
+      return theme.colors.success;
+    case 'down':
+      return theme.colors.error;
+    default:
+      return theme.colors.textMuted;
   }
 };
 
 const getTrendIcon = (trend: TrendDirection) => {
   switch (trend) {
-    case 'up': return '↗';
-    case 'down': return '↘';
-    default: return '→';
+    case 'up':
+      return '↗';
+    case 'down':
+      return '↘';
+    default:
+      return '→';
   }
 };
 
@@ -40,14 +49,12 @@ interface PageLayoutProps {
   maxWidth?: string;
 }
 
-export const PageLayout: React.FC<PageLayoutProps> = ({ 
-  children, 
-  maxWidth = '1400px' 
+export const PageLayout: React.FC<PageLayoutProps> = ({
+  children,
+  maxWidth = '1400px',
 }) => (
   <main style={theme.components.page}>
-    <div style={{ ...theme.components.container, maxWidth }}>
-      {children}
-    </div>
+    <div style={{ ...theme.components.container, maxWidth }}>{children}</div>
   </main>
 );
 
@@ -59,12 +66,12 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ 
-  title, 
-  subtitle, 
-  icon, 
+export const PageHeader: React.FC<PageHeaderProps> = ({
+  title,
+  subtitle,
+  icon,
   accentColor = theme.colors.primary,
-  children 
+  children,
 }) => (
   <div style={theme.components.pageHeader}>
     {/* Header accent */}
@@ -79,8 +86,15 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         borderRadius: theme.borderRadius.sm,
       }}
     />
-    
-    <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing.md, marginBottom: theme.spacing.md }}>
+
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing.md,
+        marginBottom: theme.spacing.md,
+      }}
+    >
       {icon && (
         <div
           style={{
@@ -104,13 +118,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           {title}
         </Title>
         {subtitle && (
-          <Text style={theme.components.headerSubtitle}>
-            {subtitle}
-          </Text>
+          <Text style={theme.components.headerSubtitle}>{subtitle}</Text>
         )}
       </div>
     </div>
-    
+
     {children}
   </div>
 );
@@ -124,16 +136,16 @@ interface ThemedCardProps {
   onClick?: () => void;
 }
 
-export const ThemedCard: React.FC<ThemedCardProps> = ({ 
-  children, 
+export const ThemedCard: React.FC<ThemedCardProps> = ({
+  children,
   padding = 'xl',
   hover = false,
   className,
   style = {},
-  onClick
+  onClick,
 }) => {
   const [isHovered, setIsHovered] = React.useState(false);
-  
+
   const cardStyle = {
     ...theme.components.card,
     ...(hover && isHovered ? theme.components.cardHover : {}),
@@ -165,23 +177,36 @@ interface ThemedButtonProps {
   style?: React.CSSProperties;
 }
 
-export const ThemedButton: React.FC<ThemedButtonProps> = ({ 
+export const ThemedButton: React.FC<ThemedButtonProps> = ({
   children,
   variant = 'primary',
   size = 'md',
   onClick,
   disabled = false,
   type = 'button',
-  style = {}
+  style = {},
 }) => {
-  const baseStyle = variant === 'primary' 
-    ? theme.components.buttonPrimary 
-    : theme.components.buttonSecondary;
-    
+  const baseStyle =
+    variant === 'primary'
+      ? theme.components.buttonPrimary
+      : theme.components.buttonSecondary;
+
   const sizeStyles = {
-    sm: { height: '32px', fontSize: theme.typography.fontSizeSm, padding: '0 12px' },
-    md: { height: '40px', fontSize: theme.typography.fontSizeMd, padding: '0 16px' },
-    lg: { height: '48px', fontSize: theme.typography.fontSizeLg, padding: '0 24px' },
+    sm: {
+      height: '32px',
+      fontSize: theme.typography.fontSizeSm,
+      padding: '0 12px',
+    },
+    md: {
+      height: '40px',
+      fontSize: theme.typography.fontSizeMd,
+      padding: '0 16px',
+    },
+    lg: {
+      height: '48px',
+      fontSize: theme.typography.fontSizeLg,
+      padding: '0 24px',
+    },
   };
 
   return (
@@ -207,10 +232,10 @@ interface LoadingStateProps {
   icon?: string;
 }
 
-export const LoadingState: React.FC<LoadingStateProps> = ({ 
+export const LoadingState: React.FC<LoadingStateProps> = ({
   title = 'Loading...',
   description,
-  icon
+  icon,
 }) => (
   <div style={theme.components.loadingContainer}>
     {icon && (
@@ -218,23 +243,23 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         {icon}
       </div>
     )}
-    <Loader size="xl" color={theme.colors.primary} />
-    <Text 
-      size="lg" 
-      style={{ 
-        color: theme.colors.textSecondary, 
-        marginTop: theme.spacing.lg, 
-        fontWeight: theme.typography.fontWeightMedium 
+    <Loader size='xl' color={theme.colors.primary} />
+    <Text
+      size='lg'
+      style={{
+        color: theme.colors.textSecondary,
+        marginTop: theme.spacing.lg,
+        fontWeight: theme.typography.fontWeightMedium,
       }}
     >
       {title}
     </Text>
     {description && (
-      <Text 
-        size="sm" 
-        style={{ 
-          color: theme.colors.textMuted, 
-          marginTop: theme.spacing.sm 
+      <Text
+        size='sm'
+        style={{
+          color: theme.colors.textMuted,
+          marginTop: theme.spacing.sm,
         }}
       >
         {description}
@@ -250,14 +275,14 @@ interface ErrorStateProps {
   retryLabel?: string;
 }
 
-export const ErrorState: React.FC<ErrorStateProps> = ({ 
+export const ErrorState: React.FC<ErrorStateProps> = ({
   title = 'Error',
   message,
   onRetry,
-  retryLabel = 'Try Again'
+  retryLabel = 'Try Again',
 }) => (
   <Alert
-    color="red"
+    color='red'
     title={title}
     style={{
       marginBottom: theme.spacing.xl,
@@ -266,11 +291,13 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       backdropFilter: 'blur(12px)',
     }}
   >
-    <Text style={{ color: '#fca5a5', marginBottom: onRetry ? theme.spacing.md : 0 }}>
+    <Text
+      style={{ color: '#fca5a5', marginBottom: onRetry ? theme.spacing.md : 0 }}
+    >
       {message}
     </Text>
     {onRetry && (
-      <ThemedButton variant="secondary" size="sm" onClick={onRetry}>
+      <ThemedButton variant='secondary' size='sm' onClick={onRetry}>
         {retryLabel}
       </ThemedButton>
     )}
@@ -282,14 +309,14 @@ interface StatsGridProps {
   columns?: number;
 }
 
-export const StatsGrid: React.FC<StatsGridProps> = ({ 
-  children, 
-  columns = 4 
+export const StatsGrid: React.FC<StatsGridProps> = ({
+  children,
+  columns = 4,
 }) => (
   <div
     style={{
       display: 'grid',
-      gridTemplateColumns: `repeat(auto-fit, minmax(${Math.floor(220 / columns * 4)}px, 1fr))`,
+      gridTemplateColumns: `repeat(auto-fit, minmax(${Math.floor((220 / columns) * 4)}px, 1fr))`,
       gap: theme.spacing.lg,
       marginBottom: theme.spacing.xl,
     }}
@@ -308,14 +335,14 @@ interface StatCardProps {
   onClick?: () => void;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ 
+export const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
   icon,
-  color = theme.colors.primary,
+  color: _color = theme.colors.primary,
   trend,
   trendValue,
-  onClick
+  onClick,
 }) => (
   <ThemedCard hover={!!onClick} onClick={onClick}>
     <div style={{ textAlign: 'center', padding: theme.spacing.md }}>
@@ -324,23 +351,23 @@ export const StatCard: React.FC<StatCardProps> = ({
           {icon}
         </div>
       )}
-      <Text 
-        size="xl" 
-        fw={700} 
-        style={{ 
-          color: theme.colors.textPrimary, 
+      <Text
+        size='xl'
+        fw={700}
+        style={{
+          color: theme.colors.textPrimary,
           marginBottom: theme.spacing.xs,
-          fontSize: theme.typography.fontSize2xl
+          fontSize: theme.typography.fontSize2xl,
         }}
       >
         {value}
       </Text>
-      <Text 
-        size="sm" 
-        style={{ 
-          color: theme.colors.textSecondary, 
+      <Text
+        size='sm'
+        style={{
+          color: theme.colors.textSecondary,
           marginBottom: theme.spacing.xs,
-          fontWeight: theme.typography.fontWeightMedium
+          fontWeight: theme.typography.fontWeightMedium,
         }}
       >
         {title}
@@ -376,25 +403,37 @@ interface NavigationCardProps {
   size?: 'small' | 'medium' | 'large';
 }
 
-export const NavigationCard: React.FC<NavigationCardProps> = ({ 
+export const NavigationCard: React.FC<NavigationCardProps> = ({
   title,
   description,
   icon,
   href,
   color,
-  size = 'medium'
+  size = 'medium',
 }) => {
   const sizes = {
-    small: { height: '120px', iconSize: '24px', titleSize: theme.typography.fontSizeMd },
-    medium: { height: '160px', iconSize: '32px', titleSize: theme.typography.fontSizeLg },
-    large: { height: '200px', iconSize: '40px', titleSize: theme.typography.fontSizeXl },
+    small: {
+      height: '120px',
+      iconSize: '24px',
+      titleSize: theme.typography.fontSizeMd,
+    },
+    medium: {
+      height: '160px',
+      iconSize: '32px',
+      titleSize: theme.typography.fontSizeLg,
+    },
+    large: {
+      height: '200px',
+      iconSize: '40px',
+      titleSize: theme.typography.fontSizeXl,
+    },
   };
-  
+
   return (
     <a href={href} style={{ textDecoration: 'none' }}>
-      <ThemedCard 
-        hover 
-        style={{ 
+      <ThemedCard
+        hover
+        style={{
           height: sizes[size].height,
           display: 'flex',
           flexDirection: 'column',
@@ -405,7 +444,12 @@ export const NavigationCard: React.FC<NavigationCardProps> = ({
           overflow: 'hidden',
         }}
       >
-        <div style={{ fontSize: sizes[size].iconSize, marginBottom: theme.spacing.md }}>
+        <div
+          style={{
+            fontSize: sizes[size].iconSize,
+            marginBottom: theme.spacing.md,
+          }}
+        >
           {icon}
         </div>
         <Text
@@ -419,9 +463,9 @@ export const NavigationCard: React.FC<NavigationCardProps> = ({
           {title}
         </Text>
         <Text
-          size="sm"
-          style={{ 
-            color: theme.colors.textMuted, 
+          size='sm'
+          style={{
+            color: theme.colors.textMuted,
             lineHeight: theme.typography.lineHeightNormal,
             maxWidth: '90%',
           }}

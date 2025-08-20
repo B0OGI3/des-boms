@@ -283,7 +283,7 @@ export async function PUT(
       );
 
       // Update batch status if needed
-      let updateData: any = {};
+      const updateData: any = {};
       
       // If adding routing steps to a queued batch, keep it queued
       // The routing update itself doesn't change status

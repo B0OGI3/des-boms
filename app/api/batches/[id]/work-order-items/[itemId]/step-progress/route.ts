@@ -2,15 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../../../lib/prisma';
 
 // Helper function to handle 'start' action
-async function handleStartAction(stepProgress: any, itemId: string, routingStepId: string, operatorId: string, notes?: string) {
+async function handleStartAction(
+  stepProgress: any,
+  itemId: string,
+  routingStepId: string,
+  operatorId: string,
+  notes?: string
+) {
   const updatedStepProgress = await prisma.workOrderStepProgress.update({
     where: { id: stepProgress.id },
     data: {
       status: 'IN_PROGRESS',
       startedAt: new Date(),
       operatorId,
-      notes
-    }
+      notes,
+    },
   });
 
   let updatedWorkOrderItem;
@@ -20,15 +26,15 @@ async function handleStartAction(stepProgress: any, itemId: string, routingStepI
       data: {
         status: 'IN_PROGRESS',
         startedAt: new Date(),
-        currentStepId: routingStepId
-      }
+        currentStepId: routingStepId,
+      },
     });
   } else {
     updatedWorkOrderItem = await prisma.workOrderItem.update({
       where: { id: itemId },
       data: {
-        currentStepId: routingStepId
-      }
+        currentStepId: routingStepId,
+      },
     });
   }
 
@@ -36,9 +42,14 @@ async function handleStartAction(stepProgress: any, itemId: string, routingStepI
 }
 
 // Helper function to create quality check record
-async function createQualityCheck(qualityData: any, itemId: string, routingStepId: string, operatorId: string) {
+async function createQualityCheck(
+  qualityData: any,
+  itemId: string,
+  routingStepId: string,
+  operatorId: string
+) {
   if (!qualityData) return;
-  
+
   await prisma.workOrderQualityCheck.create({
     data: {
       workOrderItemId: itemId,
@@ -46,17 +57,24 @@ async function createQualityCheck(qualityData: any, itemId: string, routingStepI
       checkType: qualityData.checkType || 'IN_PROCESS',
       result: qualityData.result,
       checkedBy: qualityData.checkedBy || operatorId,
-      measurements: qualityData.measurements ? JSON.stringify(qualityData.measurements) : null,
+      measurements: qualityData.measurements
+        ? JSON.stringify(qualityData.measurements)
+        : null,
       defects: qualityData.defects,
-      notes: qualityData.notes
-    }
+      notes: qualityData.notes,
+    },
   });
 }
 
 // Helper function to create material usage records
-async function createMaterialUsageRecords(materialUsage: any[], itemId: string, routingStepId: string, operatorId: string) {
+async function createMaterialUsageRecords(
+  materialUsage: any[],
+  itemId: string,
+  routingStepId: string,
+  operatorId: string
+) {
   if (!materialUsage?.length) return;
-  
+
   for (const usage of materialUsage) {
     await prisma.workOrderMaterialUsage.create({
       data: {
@@ -66,8 +84,8 @@ async function createMaterialUsageRecords(materialUsage: any[], itemId: string, 
         quantityUsed: usage.quantityUsed,
         unitCost: usage.unitCost,
         operatorId,
-        notes: usage.notes
-      }
+        notes: usage.notes,
+      },
     });
   }
 }
@@ -76,10 +94,12 @@ async function createMaterialUsageRecords(materialUsage: any[], itemId: string, 
 async function updateWorkOrderItemAfterCompletion(itemId: string) {
   const allStepProgress = await prisma.workOrderStepProgress.findMany({
     where: { workOrderItemId: itemId },
-    include: { routingStep: true }
+    include: { routingStep: true },
   });
 
-  const completedSteps = allStepProgress.filter((sp: any) => sp.status === 'COMPLETED');
+  const completedSteps = allStepProgress.filter(
+    (sp: any) => sp.status === 'COMPLETED'
+  );
   const totalSteps = allStepProgress.length;
 
   if (completedSteps.length === totalSteps) {
@@ -88,29 +108,31 @@ async function updateWorkOrderItemAfterCompletion(itemId: string) {
       data: {
         status: 'COMPLETED',
         completedAt: new Date(),
-        currentStepId: null
-      }
+        currentStepId: null,
+      },
     });
   } else {
     // Find next step
     const nextStep = allStepProgress
       .filter((sp: any) => sp.status === 'PENDING')
-      .sort((a: any, b: any) => a.routingStep.stepNumber - b.routingStep.stepNumber)[0];
+      .sort(
+        (a: any, b: any) => a.routingStep.stepNumber - b.routingStep.stepNumber
+      )[0];
 
     return await prisma.workOrderItem.update({
       where: { id: itemId },
       data: {
-        currentStepId: nextStep?.routingStepId || null
-      }
+        currentStepId: nextStep?.routingStepId || null,
+      },
     });
   }
 }
 
 // Helper function to handle 'complete' action
 async function handleCompleteAction(
-  stepProgress: any, 
-  itemId: string, 
-  routingStepId: string, 
+  stepProgress: any,
+  itemId: string,
+  routingStepId: string,
   options: {
     operatorId: string;
     actualTime?: number;
@@ -120,7 +142,7 @@ async function handleCompleteAction(
   }
 ) {
   const { operatorId, actualTime, notes, qualityData, materialUsage } = options;
-  
+
   const updatedStepProgress = await prisma.workOrderStepProgress.update({
     where: { id: stepProgress.id },
     data: {
@@ -128,15 +150,20 @@ async function handleCompleteAction(
       completedAt: new Date(),
       operatorId,
       actualTime,
-      notes
-    }
+      notes,
+    },
   });
 
   // Record quality check if provided
   await createQualityCheck(qualityData, itemId, routingStepId, operatorId);
 
   // Record material usage if provided
-  await createMaterialUsageRecords(materialUsage || [], itemId, routingStepId, operatorId);
+  await createMaterialUsageRecords(
+    materialUsage || [],
+    itemId,
+    routingStepId,
+    operatorId
+  );
 
   // Update work order item status
   const updatedWorkOrderItem = await updateWorkOrderItemAfterCompletion(itemId);
@@ -145,36 +172,47 @@ async function handleCompleteAction(
 }
 
 // Helper function to handle 'hold' action
-async function handleHoldAction(stepProgress: any, itemId: string, operatorId: string, notes?: string) {
+async function handleHoldAction(
+  stepProgress: any,
+  itemId: string,
+  operatorId: string,
+  notes?: string
+) {
   const updatedStepProgress = await prisma.workOrderStepProgress.update({
     where: { id: stepProgress.id },
     data: {
       status: 'PENDING',
       operatorId,
-      notes
-    }
+      notes,
+    },
   });
 
   const updatedWorkOrderItem = await prisma.workOrderItem.update({
     where: { id: itemId },
     data: {
       status: 'ON_HOLD',
-      notes: notes || 'Item placed on hold'
-    }
+      notes: notes || 'Item placed on hold',
+    },
   });
 
   return { updatedStepProgress, updatedWorkOrderItem };
 }
 
 // Helper function to handle 'rework' action
-async function handleReworkAction(stepProgress: any, itemId: string, routingStepId: string, operatorId: string, notes?: string) {
+async function handleReworkAction(
+  stepProgress: any,
+  itemId: string,
+  routingStepId: string,
+  operatorId: string,
+  notes?: string
+) {
   const updatedStepProgress = await prisma.workOrderStepProgress.update({
     where: { id: stepProgress.id },
     data: {
       status: 'PENDING',
       operatorId,
-      notes
-    }
+      notes,
+    },
   });
 
   const updatedWorkOrderItem = await prisma.workOrderItem.update({
@@ -182,8 +220,8 @@ async function handleReworkAction(stepProgress: any, itemId: string, routingStep
     data: {
       status: 'REWORK',
       currentStepId: routingStepId,
-      notes: notes || 'Item requires rework'
-    }
+      notes: notes || 'Item requires rework',
+    },
   });
 
   return { updatedStepProgress, updatedWorkOrderItem };
@@ -191,37 +229,37 @@ async function handleReworkAction(stepProgress: any, itemId: string, routingStep
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string; itemId: string } }
+  { params }: { params: Promise<{ id: string; itemId: string }> }
 ) {
   try {
-    const { id: batchId, itemId } = params;
+    const { id: batchId, itemId } = await params;
     const body = await request.json();
-    const { 
-      routingStepId, 
+    const {
+      routingStepId,
       action, // 'start', 'complete', 'hold', 'rework'
-      operatorId, 
-      notes, 
+      operatorId,
+      notes,
       actualTime,
       qualityData,
-      materialUsage 
+      materialUsage,
     } = body;
 
     // Verify work order item exists and belongs to batch
     const workOrderItem = await prisma.workOrderItem.findFirst({
       where: {
         id: itemId,
-        batchId
+        batchId,
       },
       include: {
         stepProgress: {
           where: {
-            routingStepId
+            routingStepId,
           },
           include: {
-            routingStep: true
-          }
-        }
-      }
+            routingStep: true,
+          },
+        },
+      },
     });
 
     if (!workOrderItem) {
@@ -244,30 +282,47 @@ export async function POST(
     // Handle different actions using helper functions
     switch (action) {
       case 'start':
-        result = await handleStartAction(stepProgress, itemId, routingStepId, operatorId, notes);
+        result = await handleStartAction(
+          stepProgress,
+          itemId,
+          routingStepId,
+          operatorId,
+          notes
+        );
         break;
 
       case 'complete':
         result = await handleCompleteAction(
-          stepProgress, 
-          itemId, 
-          routingStepId, 
+          stepProgress,
+          itemId,
+          routingStepId,
           {
             operatorId,
             actualTime,
             notes,
             qualityData,
-            materialUsage
+            materialUsage,
           }
         );
         break;
 
       case 'hold':
-        result = await handleHoldAction(stepProgress, itemId, operatorId, notes);
+        result = await handleHoldAction(
+          stepProgress,
+          itemId,
+          operatorId,
+          notes
+        );
         break;
 
       case 'rework':
-        result = await handleReworkAction(stepProgress, itemId, routingStepId, operatorId, notes);
+        result = await handleReworkAction(
+          stepProgress,
+          itemId,
+          routingStepId,
+          operatorId,
+          notes
+        );
         break;
 
       default:
@@ -282,18 +337,17 @@ export async function POST(
       data: {
         stepProgress: result.updatedStepProgress,
         workOrderItem: result.updatedWorkOrderItem,
-        action
+        action,
       },
-      message: `Successfully ${action}ed step for work order item ${workOrderItem.serialNumber}`
+      message: `Successfully ${action}ed step for work order item ${workOrderItem.serialNumber}`,
     });
-
   } catch (error) {
     console.error('[WORK_ORDER_STEP_PROGRESS]', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: 'Failed to update step progress',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
