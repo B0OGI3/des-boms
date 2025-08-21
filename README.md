@@ -2,6 +2,29 @@
 
 ![Version](https://img.shields.io/badge/version-v0.5.0-blue) ![Status](https://img.shields.io/badge/status-production--ready-green) ![QuickBooks](https://img.shields.io/badge/QuickBooks-integrated-orange)
 
+---
+
+## 📚 Table of Contents
+
+- [What is DES-BOMS?](#-what-is-des-boms)
+- [Key Capabilities](#-key-capabilities)
+- [🗄️ Database Schema Overview](#️-database-schema-overview)
+- [Perfect Project Structure](#️-perfect-project-structure---100-organized)
+- [Latest Features](#-latest-features-v050---august-2025)
+- [Quick Start](#-quick-start)
+- [QuickBooks Integration](#-quickbooks-integration)
+- [Tech Stack](#️-tech-stack)
+- [Project Structure](#-project-structure)
+- [Available Scripts](#-available-scripts)
+- [API Endpoints](#-api-endpoints)
+- [Troubleshooting](#-troubleshooting)
+- [Deployment](#-deployment)
+- [Automated Backup System](#-automated-backup-system)
+- [Documentation](#-documentation)
+- [Version History](#-version-history)
+- [Contributing](#-contributing)
+- [License](#-license)
+
 ## 🎯 What is DES-BOMS?
 
 **DES-BOMS** is a comprehensive **Batch Order Management System** designed for modern manufacturing operations. It provides complete order lifecycle management, AI-powered batch generation, workstation routing, quality control, and enterprise-grade QuickBooks integration.
@@ -14,14 +37,14 @@
 - **🔍 Quality Control** - Built-in inspection and QC record management
 - **📊 Production Monitoring** - Real-time shop floor dashboards and status tracking
 - **🔗 QuickBooks Integration** - Enterprise-grade bidirectional customer sync with auto-refresh
-- **� Document Management** - CAD files, drawings, and specification handling
+- **📁 Document Management** - CAD files, drawings, and specification handling
 
-## �🗄️ Database Schema Overview
+## 🗄️ Database Schema Overview
 
 ### Order Management
 
 - **Customer** - Manufacturing customers with QuickBooks sync
-- **PurchaseOrder** - Customer POs with system-generated order IDs  
+- **PurchaseOrder** - Customer POs with system-generated order IDs
 - **OrderLineItem** - Individual parts with drawings and specifications
 - **FileAttachment** - CAD files, drawings, and documentation
 
@@ -42,7 +65,7 @@
 ![Hierarchy](https://img.shields.io/badge/hierarchy-100%25-brightgreen) ![Organization](https://img.shields.io/badge/organization-100%25-brightgreen) ![Structure](https://img.shields.io/badge/structure-maintained-blue)
 
 - **📁 Clean Directory Organization** - Everything in its proper place
-- **🔄 Automated Verification** - Structure checks maintain perfect organization  
+- **🔄 Automated Verification** - Structure checks maintain perfect organization
 - **📚 Comprehensive Documentation** - Clear guidelines and maintenance rules
 - **🎯 Industry Standards** - Professional-grade project structure
 - **🛠️ Developer-Friendly** - Easy navigation and barrel exports
@@ -126,7 +149,7 @@ pnpm dev
 
 DES-BOMS includes enterprise-grade QuickBooks integration with **zero-touch token management**:
 
-#### ✅ **Automatic Token Refresh** - *Always Active*
+#### ✅ **Automatic Token Refresh** - _Always Active_
 
 - Detects 401 authentication errors automatically
 - Refreshes both access and refresh tokens
@@ -134,13 +157,13 @@ DES-BOMS includes enterprise-grade QuickBooks integration with **zero-touch toke
 - Retries original API call seamlessly
 - **Zero user intervention required**
 
-#### ✅ **UI Auto-Fix Button** - *One-Click Solution*
+#### ✅ **UI Auto-Fix Button** - _One-Click Solution_
 
 - Appears when tokens expire: "QuickBooks Token Expired" → "Auto-Fix" button
 - One-click token refresh from Settings page
 - Real-time status updates after refresh
 
-#### ✅ **Scheduled Refresh** - *Proactive Management*
+#### ✅ **Scheduled Refresh** - _Proactive Management_
 
 - Windows Task Scheduler integration (`refresh-qb-tokens-scheduler.bat`)
 - Linux/Mac cron job support (`refresh-qb-tokens.js`)
@@ -217,18 +240,18 @@ DES-BOMS/
 
 ## 🔧 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build for production |
-| `pnpm start` | Start production server |
-| `pnpm db:generate` | Generate Prisma client |
-| `pnpm db:migrate` | Run database migrations |
-| `pnpm db:studio` | Open Prisma Studio |
-| **Structure Maintenance** | |
-| `pnpm verify-hierarchy` | ✅ Check code hierarchy (100% health) |
+| Command                    | Description                             |
+| -------------------------- | --------------------------------------- |
+| `pnpm dev`                 | Start development server                |
+| `pnpm build`               | Build for production                    |
+| `pnpm start`               | Start production server                 |
+| `pnpm db:generate`         | Generate Prisma client                  |
+| `pnpm db:migrate`          | Run database migrations                 |
+| `pnpm db:studio`           | Open Prisma Studio                      |
+| **Structure Maintenance**  |                                         |
+| `pnpm verify-hierarchy`    | ✅ Check code hierarchy (100% health)   |
 | `pnpm verify-organization` | ✅ Check file organization (100% score) |
-| `pnpm check-structure` | 🏗️ Complete structure verification |
+| `pnpm check-structure`     | 🏗️ Complete structure verification      |
 
 ---
 
@@ -301,7 +324,7 @@ Perfect for building and testing features locally with full QuickBooks integrati
 
 DES-BOMS includes a comprehensive backup system designed for Linux server deployment with **zero-maintenance operation**:
 
-#### ✅ **Automatic Daily Backups** - *Set It and Forget It*
+#### ✅ **Automatic Daily Backups** - _Set It and Forget It_
 
 - **Daily at 2:00 AM**: PostgreSQL database dump with gzip compression
 - **30-day retention**: Automatic cleanup of old backups to manage disk space
@@ -309,14 +332,14 @@ DES-BOMS includes a comprehensive backup system designed for Linux server deploy
 - **Full logging**: Complete audit trail of all backup operations
 - **Space efficient**: Compressed backups typically 90% smaller than raw data
 
-#### ✅ **Manual Backup Controls** - *On-Demand Backups*
+#### ✅ **Manual Backup Controls** - _On-Demand Backups_
 
 - **Settings Page Integration**: Create manual backups via web interface
 - **Real-time Status**: Live backup progress and completion notifications
 - **Backup History**: View recent backups with sizes and timestamps
 - **API Endpoints**: Programmatic backup creation and management
 
-#### ✅ **Ubuntu Server Setup** - *One-Time Configuration*
+#### ✅ **Ubuntu Server Setup** - _One-Time Configuration_
 
 ```bash
 # Deploy your DES-BOMS application to Ubuntu server
