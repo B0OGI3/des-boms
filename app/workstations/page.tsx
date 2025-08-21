@@ -25,7 +25,6 @@ import {
   Badge,
   Group,
   Stack,
-  Loader,
   Alert,
   Button,
   Select,
@@ -48,7 +47,8 @@ import {
   IconPlus,
   IconEdit,
 } from '@tabler/icons-react';
-import { LoadingScreen, WorkOrderTracking } from '../components';
+import { LoadingScreen } from '../components/LoadingScreen';
+import { WorkOrderTracking } from '../components';
 import { StandardPage } from '../components/ui';
 import { usePageInitialization } from '../../hooks';
 import theme from '../theme';
@@ -109,7 +109,7 @@ interface RoutingStep {
 
 export default function WorkstationsPage() {
   // Page initialization
-  const { isPageReady, pageInitialization, initializePage, getProgress } =
+  const { isPageReady, pageInitialization, initializePage } =
     usePageInitialization({
       initialTasks: ['workstations', 'routing', 'components'],
       autoStart: false,
@@ -415,32 +415,13 @@ export default function WorkstationsPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          background:
-            'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-          minHeight: '100vh',
-          padding: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Loader size='xl' color='#3b82f6' />
-      </div>
-    );
-  }
-
-  if (!isPageReady) {
+  if (!isPageReady || loading) {
     return (
       <LoadingScreen
         title='Loading Workstations'
         description='Initializing workstation management...'
         icon='🏭'
         pageInitialization={pageInitialization}
-        progress={getProgress()}
       />
     );
   }

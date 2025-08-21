@@ -36,8 +36,6 @@ import {
   Textarea,
   Radio,
   ScrollArea,
-  Collapse,
-  ActionIcon,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import {
@@ -45,10 +43,10 @@ import {
   IconEye,
   IconSearch,
   IconFileText,
-  IconChevronDown,
-  IconChevronUp,
 } from '@tabler/icons-react';
-import { LoadingState, StandardPage } from '../components/ui';
+import { LoadingScreen } from '../components/LoadingScreen';
+import { StandardPage } from '../components/ui';
+import { usePageInitialization } from '@/hooks/usePageInitialization';
 import theme from '../theme';
 
 interface QCRecord {
@@ -156,6 +154,12 @@ interface Batch {
 }
 
 export default function QCPage() {
+  // Page initialization for consistent loading experience
+  const { isPageReady: pageReady, pageInitialization } = usePageInitialization({
+    initialTasks: ['qc', 'batches', 'records'],
+    autoStart: true,
+  });
+
   const [qcRecords, setQCRecords] = useState<QCRecord[]>([]);
   const [batchesForInspection, setBatchesForInspection] = useState<Batch[]>([]);
   const [loading, setLoading] = useState(true);
@@ -178,17 +182,6 @@ export default function QCPage() {
     failRate: 0,
     averageInspectionTime: 0,
   });
-
-  const [isPageReady, setIsPageReady] = useState(false);
-
-  // Collapsible sections state
-  const [bomInfoOpen, setBomInfoOpen] = useState(false);
-  const [integrationInfoOpen, setIntegrationInfoOpen] = useState(false);
-
-  useEffect(() => {
-    // Simple page initialization
-    setIsPageReady(true);
-  }, []);
 
   // Calculate QC statistics
   const calculateQCStats = (records: QCRecord[]) => {
@@ -366,21 +359,14 @@ export default function QCPage() {
       record.inspector.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (!isPageReady || loading) {
+  if (!pageReady || loading) {
     return (
-      <StandardPage
-        title='Quality Control'
-        subtitle='Inspection records and quality control management'
+      <LoadingScreen
+        title='Loading Quality Control'
+        description='Initializing QC records and batch inspection data...'
         icon='🔍'
-        accentColor={theme.pageAccents.qc}
-        showBackButton={false}
-      >
-        <LoadingState
-          title='Loading Quality Control'
-          description='Initializing QC records and batch inspection data...'
-          icon='🔍'
-        />
-      </StandardPage>
+        pageInitialization={pageInitialization}
+      />
     );
   }
 
@@ -391,194 +377,12 @@ export default function QCPage() {
       icon='🔍'
       accentColor={theme.pageAccents.qc}
     >
-      {/* BOM-Aware Quality Control Info - Collapsible */}
+      {/* Inspector Input */}
       <Card
+        mb='md'
         style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'rgba(16, 185, 129, 0.3)',
-          marginBottom: 20,
-        }}
-      >
-        <Group
-          justify='space-between'
-          style={{ cursor: 'pointer' }}
-          onClick={() => setBomInfoOpen(!bomInfoOpen)}
-        >
-          <Group gap='sm'>
-            <Title order={4} style={{ color: '#10b981', marginBottom: 0 }}>
-              🧬 BOM-Aware Quality Control
-            </Title>
-            <Badge variant='light' color='green' size='sm'>
-              Material Traceability
-            </Badge>
-            {!bomInfoOpen && (
-              <Text size='xs' style={{ color: '#6b7280', fontStyle: 'italic' }}>
-                Click to expand
-              </Text>
-            )}
-          </Group>
-          <ActionIcon variant='subtle' color='green' size='sm'>
-            {bomInfoOpen ? (
-              <IconChevronUp size={16} />
-            ) : (
-              <IconChevronDown size={16} />
-            )}
-          </ActionIcon>
-        </Group>
-
-        <Collapse in={bomInfoOpen}>
-          <div style={{ paddingTop: 12 }}>
-            <Text style={{ color: '#059669', marginBottom: 8 }}>
-              <strong>Material Traceability:</strong> Quality inspection tracks
-              both finished products and their BOM material hierarchy
-            </Text>
-            <Text size='sm' style={{ color: '#047857' }}>
-              • Finished Goods (FG-) inspections validate both the final product
-              and underlying Semi-Finished/Raw Material quality
-              <br />
-              • Semi-Finished parts (SF-) quality directly impacts the Finished
-              Goods that contain them
-              <br />
-              • Material consumption data shows exactly which raw materials went
-              into each batch
-              <br />
-              • Quality failures can be traced back through the BOM hierarchy to
-              source materials
-              <br />• Pass/Fail/Rework decisions consider the material cost and
-              BOM impact
-            </Text>
-            <Group gap='sm' mt='md'>
-              <Button
-                component='a'
-                href='/parts-demo'
-                variant='light'
-                color='purple'
-                size='sm'
-              >
-                View BOM Structure
-              </Button>
-              <Button
-                component='a'
-                href='/batches'
-                variant='light'
-                color='blue'
-                size='sm'
-              >
-                View Batch Routing
-              </Button>
-            </Group>
-          </div>
-        </Collapse>
-      </Card>
-
-      {/* Workstation Integration Info */}
-      <Card
-        style={{
-          background: 'rgba(59, 130, 246, 0.1)',
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'rgba(59, 130, 246, 0.3)',
-          marginBottom: 32,
-        }}
-      >
-        <Group
-          justify='space-between'
-          style={{ cursor: 'pointer' }}
-          onClick={() => setIntegrationInfoOpen(!integrationInfoOpen)}
-        >
-          <Group gap='sm'>
-            <Title order={4} style={{ color: '#3b82f6', marginBottom: 0 }}>
-              🏭 Manufacturing & QC Integration
-            </Title>
-            <Badge variant='light' color='blue' size='sm'>
-              End-to-End Traceability
-            </Badge>
-            {!integrationInfoOpen && (
-              <Text size='xs' style={{ color: '#6b7280', fontStyle: 'italic' }}>
-                Click to expand
-              </Text>
-            )}
-          </Group>
-          <ActionIcon variant='subtle' color='blue' size='sm'>
-            {integrationInfoOpen ? (
-              <IconChevronUp size={16} />
-            ) : (
-              <IconChevronDown size={16} />
-            )}
-          </ActionIcon>
-        </Group>
-
-        <Collapse in={integrationInfoOpen}>
-          <div style={{ paddingTop: 12 }}>
-            <Text style={{ color: '#2563eb', marginBottom: 8 }}>
-              <strong>End-to-End Traceability:</strong> QC connects to the
-              complete manufacturing workflow
-            </Text>
-            <Text size='sm' style={{ color: '#1d4ed8' }}>
-              • Track which operators worked on each routing step before QC
-              inspection
-              <br />
-              • View completion status of all manufacturing steps before final
-              quality control
-              <br />
-              • Rework decisions automatically reset routing steps and operator
-              confirmations
-              <br />
-              • Failed parts link back to specific workstations and operators
-              for process improvement
-              <br />• Pass results automatically advance batches to shipping and
-              update order status
-            </Text>
-            <Group gap='sm' mt='md'>
-              <Button
-                component='a'
-                href='/workstations'
-                variant='light'
-                color='blue'
-                size='sm'
-              >
-                View Workstations
-              </Button>
-              <Button
-                component='a'
-                href='/orders'
-                variant='light'
-                color='cyan'
-                size='sm'
-              >
-                Order Management
-              </Button>
-            </Group>
-          </div>
-        </Collapse>
-      </Card>
-
-      {/* Inspector Setup */}
-      {!inspectorName && (
-        <Alert
-          color='yellow'
-          style={{
-            background: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
-            marginBottom: 20,
-          }}
-        >
-          <Text style={{ color: '#f59e0b' }}>
-            <strong>⚠️ Inspector Required:</strong> Please enter your inspector
-            name to create QC records and maintain traceability.
-          </Text>
-        </Alert>
-      )}
-
-      <Card
-        style={{
-          background: 'rgba(30, 41, 59, 0.85)',
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'rgba(51, 65, 85, 0.7)',
-          marginBottom: 32,
+          background: theme.colors.cardPrimary,
+          border: `1px solid ${theme.colors.borderPrimary}`,
         }}
       >
         <Grid>
@@ -617,6 +421,23 @@ export default function QCPage() {
           </Grid.Col>
         </Grid>
       </Card>
+
+      {/* Inspector Setup */}
+      {!inspectorName && (
+        <Alert
+          color='yellow'
+          style={{
+            background: 'rgba(245, 158, 11, 0.1)',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+            marginBottom: 20,
+          }}
+        >
+          <Text style={{ color: '#f59e0b' }}>
+            <strong>⚠️ Inspector Required:</strong> Please enter your inspector
+            name to create QC records and maintain traceability.
+          </Text>
+        </Alert>
+      )}
 
       <Grid>
         {/* Batches Needing Inspection */}
@@ -867,68 +688,73 @@ export default function QCPage() {
         </Grid.Col>
       </Grid>
 
-      {/* QC Statistics */}
-      <div style={{ marginTop: 32 }}>
-        <Title
-          order={3}
-          style={{ color: '#f1f5f9', marginBottom: 16, textAlign: 'center' }}
-        >
-          📊 Quality Metrics
-        </Title>
-        <Grid>
-          {[
-            {
-              title: 'Pass Rate',
-              value: `${qcStats.passRate}%`,
-              color: 'green',
-              icon: '✅',
-            },
-            {
-              title: 'Rework Required',
-              value: `${qcStats.reworkRate}%`,
-              color: 'orange',
-              icon: '🔄',
-            },
-            {
-              title: 'Failed Parts',
-              value: `${qcStats.failRate}%`,
-              color: 'red',
-              icon: '❌',
-            },
-            {
-              title: 'Total Inspections',
-              value: qcStats.totalInspections,
-              color: 'blue',
-              icon: '🔍',
-            },
-          ].map(metric => (
-            <Grid.Col key={metric.title} span={3}>
-              <Card
-                withBorder
-                style={{
-                  background: 'rgba(30, 41, 59, 0.85)',
-                  border: '1px solid rgba(51, 65, 85, 0.7)',
-                  textAlign: 'center',
-                }}
-              >
-                <Text size='xl' style={{ marginBottom: 8, fontSize: '2rem' }}>
-                  {metric.icon}
-                </Text>
-                <Text
-                  size='xl'
-                  fw={700}
-                  style={{ color: '#f1f5f9', marginBottom: 4 }}
-                >
-                  {metric.value}
-                </Text>
-                <Text size='sm' style={{ color: '#cbd5e1' }}>
-                  {metric.title}
-                </Text>
-              </Card>
-            </Grid.Col>
-          ))}
-        </Grid>
-      </div>
+      {/* Quick Stats Analytics */}
+      <Grid mt='xl'>
+        <Grid.Col span={3}>
+          <Card
+            style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <Text size='lg' fw='bold' style={{ color: '#f1f5f9' }}>
+              ✅ {qcStats.passRate}%
+            </Text>
+            <Text size='sm' style={{ color: '#10b981' }}>
+              Pass Rate
+            </Text>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Card
+            style={{
+              background: 'rgba(249, 115, 22, 0.1)',
+              border: '1px solid rgba(249, 115, 22, 0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <Text size='lg' fw='bold' style={{ color: '#f1f5f9' }}>
+              🔄 {qcStats.reworkRate}%
+            </Text>
+            <Text size='sm' style={{ color: '#f97316' }}>
+              Rework Required
+            </Text>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Card
+            style={{
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <Text size='lg' fw='bold' style={{ color: '#f1f5f9' }}>
+              ❌ {qcStats.failRate}%
+            </Text>
+            <Text size='sm' style={{ color: '#ef4444' }}>
+              Failed Parts
+            </Text>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Card
+            style={{
+              background: 'rgba(59, 130, 246, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <Text size='lg' fw='bold' style={{ color: '#f1f5f9' }}>
+              📊 {qcStats.totalInspections}
+            </Text>
+            <Text size='sm' style={{ color: '#3b82f6' }}>
+              Total Inspections
+            </Text>
+          </Card>
+        </Grid.Col>
+      </Grid>
 
       {/* New QC Record Modal */}
       <Modal

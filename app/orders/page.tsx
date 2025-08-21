@@ -24,17 +24,10 @@
 
 'use client';
 
-import {
-  Title,
-  Text,
-  Group,
-  Loader,
-  Alert,
-  Button,
-  Progress,
-} from '@mantine/core';
+import { Text, Group, Loader, Alert, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { LoadingScreen } from '../components/LoadingScreen';
 import { StandardPage } from '../components/ui/StandardPage';
 import theme from '../theme';
 
@@ -711,54 +704,6 @@ const OrdersPageContent = ({
   );
 };
 
-// Simple loading screen component
-const LoadingScreen = ({
-  pageInitialization,
-}: {
-  pageInitialization: Record<string, boolean>;
-}) => {
-  const completedTasks =
-    Object.values(pageInitialization).filter(Boolean).length;
-  const totalTasks = Object.keys(pageInitialization).length;
-  const progress = (completedTasks / totalTasks) * 100;
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background:
-          'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98))',
-        color: '#cbd5e1',
-      }}
-    >
-      <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-        <div style={{ marginBottom: '24px', fontSize: '3rem' }}>📋</div>
-        <Title order={2} style={{ marginBottom: '16px', fontWeight: 700 }}>
-          Loading Orders System
-        </Title>
-        <Text
-          style={{ marginBottom: '32px', opacity: 0.8, fontSize: '1.1rem' }}
-        >
-          Initializing customer orders and system components...
-        </Text>
-        <Progress
-          value={progress}
-          size='lg'
-          radius='xl'
-          style={{ marginBottom: '20px' }}
-        />
-        <Text style={{ fontSize: '0.95rem', opacity: 0.6 }}>
-          {completedTasks} of {totalTasks} components ready
-        </Text>
-      </div>
-    </div>
-  );
-};
-
 export default function CustomerOrdersPage() {
   const { mounted, isPageReady, pageInitialization, orderSearch } =
     usePageInitialization();
@@ -788,7 +733,14 @@ export default function CustomerOrdersPage() {
   const statsCards = createStatsCards(stats, orderSearch, handleStatClick);
 
   if (!mounted || !isPageReady) {
-    return <LoadingScreen pageInitialization={pageInitialization} />;
+    return (
+      <LoadingScreen
+        title='Loading Orders System'
+        description='Initializing customer orders and system components...'
+        icon='📋'
+        pageInitialization={pageInitialization}
+      />
+    );
   }
 
   return (
