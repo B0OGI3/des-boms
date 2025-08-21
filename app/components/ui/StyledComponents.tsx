@@ -447,10 +447,24 @@ export const NavigationCard: React.FC<NavigationCardProps> = ({
         <div
           style={{
             fontSize: sizes[size].iconSize,
-            marginBottom: theme.spacing.md,
+            marginBottom: theme.spacing.lg,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: sizes[size].iconSize,
+            height: sizes[size].iconSize,
+            lineHeight: 1,
+            position: 'relative',
           }}
         >
-          {icon}
+          <span
+            style={{
+              display: 'block',
+              transform: 'translateY(1px)', // Fine-tune vertical position
+            }}
+          >
+            {icon}
+          </span>
         </div>
         <Text
           fw={600}

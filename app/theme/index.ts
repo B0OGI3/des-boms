@@ -3,41 +3,46 @@
  * Centralized theming system for consistent styling across all pages
  */
 
-// Color palette
+// Color palette - Enhanced Dark Theme
 export const colors = {
-  // Background gradients
-  backgroundPrimary: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-  backgroundSecondary: 'rgba(15, 23, 42, 0.95)',
-  backgroundTertiary: 'rgba(30, 41, 59, 0.85)',
-  
-  // Card backgrounds
-  cardPrimary: 'rgba(30, 41, 59, 0.9)',
-  cardSecondary: 'rgba(15, 23, 42, 0.95)',
-  cardTertiary: 'rgba(30, 41, 59, 0.8)',
-  cardHover: 'rgba(51, 65, 85, 0.9)',
-  
-  // Text colors
-  textPrimary: '#f1f5f9',
-  textSecondary: '#cbd5e1',
+  // Background gradients - Darker theme
+  backgroundPrimary:
+    'linear-gradient(135deg, #0a0f1c 0%, #0f172a 50%, #1e293b 100%)',
+  backgroundSecondary: 'rgba(10, 15, 28, 0.98)',
+  backgroundTertiary: 'rgba(15, 23, 42, 0.95)',
+
+  // Card backgrounds - Darker and more consistent
+  cardPrimary: 'rgba(15, 23, 42, 0.95)',
+  cardSecondary: 'rgba(10, 15, 28, 0.98)',
+  cardTertiary: 'rgba(30, 41, 59, 0.85)',
+  cardHover: 'rgba(30, 41, 59, 0.95)',
+
+  // Text colors - Higher contrast for dark theme
+  textPrimary: '#f8fafc',
+  textSecondary: '#e2e8f0',
   textMuted: '#94a3b8',
   textSubtle: '#64748b',
-  
-  // Accent colors
+
+  // Primary color scheme - Blue as main color
   primary: '#3b82f6',
-  primaryDark: '#1e40af',
-  secondary: '#14b8a6',
-  secondaryDark: '#0d9488',
-  success: '#10b981',
-  warning: '#f59e0b',
-  error: '#ef4444',
-  
-  // Border colors
-  borderPrimary: 'rgba(51, 65, 85, 0.8)',
-  borderSecondary: 'rgba(51, 65, 85, 0.4)',
-  borderAccent: 'rgba(59, 130, 246, 0.5)',
-  
-  // Form elements
-  inputBackground: 'rgba(30, 41, 59, 0.7)',
+  primaryDark: '#1d4ed8',
+  primaryLight: '#60a5fa',
+
+  // Accent colors - Complementary to primary blue
+  secondary: '#0ea5e9', // Sky blue
+  success: '#10b981', // Emerald
+  warning: '#f59e0b', // Amber
+  error: '#ef4444', // Red
+  info: '#6366f1', // Indigo
+
+  // Border colors - More subtle in dark theme
+  borderPrimary: 'rgba(51, 65, 85, 0.6)',
+  borderSecondary: 'rgba(51, 65, 85, 0.3)',
+  borderAccent: 'rgba(59, 130, 246, 0.4)',
+  borderHover: 'rgba(59, 130, 246, 0.6)',
+
+  // Form elements - Darker and more consistent
+  inputBackground: 'rgba(15, 23, 42, 0.8)',
   inputBorder: 'rgba(51, 65, 85, 0.4)',
   inputFocus: 'rgba(59, 130, 246, 0.5)',
 } as const;
@@ -53,13 +58,13 @@ export const typography = {
   fontSize2xl: '1.5rem',
   fontSize3xl: '1.875rem',
   fontSize4xl: '2.25rem',
-  
+
   // Font weights
   fontWeightNormal: 400,
   fontWeightMedium: 500,
   fontWeightSemiBold: 600,
   fontWeightBold: 700,
-  
+
   // Line heights
   lineHeightTight: 1.25,
   lineHeightNormal: 1.5,
@@ -112,20 +117,20 @@ export const components = {
     minHeight: '100vh',
     padding: spacing.lg,
   },
-  
+
   container: {
     maxWidth: '1400px',
     margin: '0 auto',
     position: 'relative' as const,
   },
-  
+
   // Headers
   pageHeader: {
     marginBottom: spacing['2xl'],
     paddingTop: spacing.lg,
     position: 'relative' as const,
   },
-  
+
   headerTitle: {
     color: colors.textPrimary,
     fontSize: typography.fontSize3xl,
@@ -134,14 +139,14 @@ export const components = {
     margin: 0,
     letterSpacing: '-0.02em',
   },
-  
+
   headerSubtitle: {
     color: colors.textMuted,
     fontSize: typography.fontSizeLg,
     marginTop: spacing.xs,
     fontWeight: typography.fontWeightNormal,
   },
-  
+
   // Cards
   card: {
     background: colors.cardPrimary,
@@ -153,13 +158,13 @@ export const components = {
     boxShadow: shadows.md,
     transition: transitions.normal,
   },
-  
+
   cardHover: {
     transform: 'translateY(-2px)',
     boxShadow: shadows.lg,
     borderColor: colors.borderAccent,
   },
-  
+
   // Buttons
   buttonPrimary: {
     background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
@@ -169,7 +174,7 @@ export const components = {
     boxShadow: `0 2px 8px rgba(59, 130, 246, 0.15)`,
     transition: transitions.normal,
   },
-  
+
   buttonSecondary: {
     background: colors.cardPrimary,
     borderWidth: '1px',
@@ -180,7 +185,7 @@ export const components = {
     fontWeight: typography.fontWeightSemiBold,
     transition: transitions.normal,
   },
-  
+
   // Forms
   input: {
     background: colors.inputBackground,
@@ -194,12 +199,12 @@ export const components = {
     fontWeight: typography.fontWeightMedium,
     boxShadow: shadows.sm,
   },
-  
+
   inputFocus: {
     borderColor: colors.inputFocus,
     boxShadow: `0 0 0 2px rgba(59, 130, 246, 0.2)`,
   },
-  
+
   // Loading states
   loadingContainer: {
     textAlign: 'center' as const,
@@ -213,7 +218,7 @@ export const components = {
     borderStyle: 'solid',
     borderColor: colors.borderSecondary,
   },
-  
+
   // Tables
   table: {
     background: colors.cardSecondary,
@@ -225,7 +230,7 @@ export const components = {
     overflow: 'hidden',
     boxShadow: shadows.md,
   },
-  
+
   tableHeader: {
     background: colors.cardTertiary,
     color: colors.textSecondary,
@@ -239,7 +244,7 @@ export const components = {
     backdropFilter: 'blur(8px)',
     boxShadow: shadows.sm,
   },
-  
+
   tableCell: {
     color: colors.textMuted,
     borderWidth: '1px',
@@ -261,15 +266,15 @@ export const breakpoints = {
   '2xl': '1536px',
 } as const;
 
-// Page-specific accent colors
+// Page-specific accent colors - Simplified with primary blue theme
 export const pageAccents = {
   home: colors.primary,
   orders: colors.primary,
   batches: colors.secondary,
-  workstations: colors.success,
+  workstations: colors.info,
   qc: colors.warning,
-  reports: '#8b5cf6',
-  settings: colors.textSubtle,
+  reports: colors.success,
+  settings: colors.textMuted,
 } as const;
 
 export default {

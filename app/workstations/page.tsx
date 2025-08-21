@@ -49,7 +49,9 @@ import {
   IconEdit,
 } from '@tabler/icons-react';
 import { LoadingScreen, WorkOrderTracking } from '../components';
+import { StandardPage } from '../components/ui';
 import { usePageInitialization } from '../../hooks';
+import theme from '../theme';
 
 interface Workstation {
   id: string;
@@ -444,33 +446,24 @@ export default function WorkstationsPage() {
   }
 
   return (
-    <main
-      style={{
-        background:
-          'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-        minHeight: '100vh',
-        padding: '20px',
-      }}
+    <StandardPage
+      title='Workstation Management'
+      subtitle='Complete manufacturing job queue control and routing step management'
+      icon='🏭'
+      accentColor={theme.pageAccents.workstations}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <Title order={1} style={{ color: '#f1f5f9', marginBottom: 12 }}>
-            🏭 DES-BOMS Workstation Management
-          </Title>
-          <Text size='lg' style={{ color: '#cbd5e1' }}>
-            Complete manufacturing job queue control and routing step management
-          </Text>
-        </div>
-
         {/* Workstation Management */}
         <Card
           style={{
-            background: 'rgba(30, 41, 59, 0.85)',
+            background: theme.colors.cardPrimary,
             borderWidth: '1px',
             borderStyle: 'solid',
-            borderColor: 'rgba(51, 65, 85, 0.7)',
+            borderColor: theme.colors.borderPrimary,
             marginBottom: 32,
+            borderRadius: theme.borderRadius.lg,
+            backdropFilter: 'blur(16px)',
+            boxShadow: theme.shadows.md,
           }}
         >
           <Group justify='space-between' align='center' mb='md'>
@@ -542,14 +535,20 @@ export default function WorkstationsPage() {
         {/* Workstation Selection */}
         <Card
           style={{
-            background: 'rgba(30, 41, 59, 0.85)',
+            background: theme.colors.cardPrimary,
             borderWidth: '1px',
             borderStyle: 'solid',
-            borderColor: 'rgba(51, 65, 85, 0.7)',
+            borderColor: theme.colors.borderPrimary,
             marginBottom: 32,
+            borderRadius: theme.borderRadius.lg,
+            backdropFilter: 'blur(16px)',
+            boxShadow: theme.shadows.md,
           }}
         >
-          <Title order={3} style={{ color: '#f1f5f9', marginBottom: 16 }}>
+          <Title
+            order={3}
+            style={{ color: theme.colors.textPrimary, marginBottom: 16 }}
+          >
             🏭 Workstation Control
           </Title>
           <Grid>
@@ -1207,6 +1206,6 @@ export default function WorkstationsPage() {
           </Stack>
         </Modal>
       </div>
-    </main>
+    </StandardPage>
   );
 }

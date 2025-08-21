@@ -11,13 +11,12 @@
 import { Title, Text, Card, Badge, Group, Stack, Alert } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import {
-  PageLayout,
-  PageHeader,
   LoadingState,
   ErrorState,
   StatsGrid,
   StatCard,
   NavigationCard,
+  StandardPage,
 } from './components/ui';
 import theme from './theme';
 
@@ -65,14 +64,17 @@ export default function HomePage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDashboard, setShowDashboard] = useState(false);
 
-  // Fetch dashboard data
   useEffect(() => {
+    if (!showDashboard) return;
+
     const fetchDashboardData = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await fetch('/api/dashboard');
         if (!response.ok) {
           throw new Error('Failed to fetch dashboard data');
@@ -80,17 +82,15 @@ export default function HomePage() {
         const result = await response.json();
         setDashboardData(result.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : 'Connection error');
+        console.error('Dashboard fetch error:', err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchDashboardData();
-    // Refresh every 30 seconds for real-time updates
-    const interval = setInterval(fetchDashboardData, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  }, [showDashboard]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -108,7 +108,13 @@ export default function HomePage() {
   };
 
   return (
-    <PageLayout>
+    <StandardPage
+      title='DES-BOMS'
+      subtitle='Batch Order Management System'
+      icon='🏭'
+      accentColor={theme.pageAccents.home}
+      showBackButton={false}
+    >
       {/* Background Enhancement */}
       <div
         style={{
@@ -159,36 +165,19 @@ export default function HomePage() {
         .nav-card-secondary:nth-child(2) { animation-delay: 0.6s; }
         .nav-card-secondary:nth-child(3) { animation-delay: 0.7s; }
       `}</style>
-      {/* Header Section */}
-      <div
-        style={{
-          width: '100%',
-          margin: '0 auto',
-          paddingTop: 0,
-          paddingBottom: 0,
-        }}
-      >
-        <PageHeader
-          title='DES-BOMS'
-          subtitle='Batch Order Management System'
-          icon='🏭'
-          accentColor={theme.pageAccents.home}
-        ></PageHeader>
-      </div>
       {/* Primary Navigation Cards */}
       <div
         style={{
           width: '100%',
           maxWidth: 900,
           margin: '0 auto',
-          padding: '12px',
-          borderRadius: '16px',
-          border: '1px solid rgba(59, 130, 246, 0.15)',
-          background:
-            'linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(147, 51, 234, 0.02))',
-          boxShadow:
-            '0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-          marginBottom: theme.spacing.sm,
+          padding: theme.spacing.md,
+          borderRadius: theme.borderRadius.lg,
+          border: `1px solid ${theme.colors.borderPrimary}`,
+          background: theme.colors.cardPrimary,
+          boxShadow: theme.shadows.md,
+          backdropFilter: 'blur(16px)',
+          marginBottom: theme.spacing.xl,
         }}
       >
         <div
@@ -272,7 +261,7 @@ export default function HomePage() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: theme.spacing.md,
+            gap: theme.spacing.sm,
           }}
         >
           <div className='nav-card-secondary'>
@@ -282,7 +271,7 @@ export default function HomePage() {
               icon='📈'
               href='/reports'
               color={theme.pageAccents.reports}
-              size='small'
+              size='medium'
             />
           </div>
           <div className='nav-card-secondary'>
@@ -292,7 +281,7 @@ export default function HomePage() {
               icon='💚'
               href='/health'
               color={theme.pageAccents.workstations}
-              size='small'
+              size='medium'
             />
           </div>
           <div className='nav-card-secondary'>
@@ -302,7 +291,7 @@ export default function HomePage() {
               icon='⚙️'
               href='/settings'
               color={theme.pageAccents.settings}
-              size='small'
+              size='medium'
             />
           </div>
         </div>
@@ -367,13 +356,31 @@ export default function HomePage() {
             e.currentTarget.style.transform = 'translateY(0) scale(1)';
           }}
         >
-          <span style={{ fontSize: '16px' }}>📊</span>
+          <span
+            style={{
+              fontSize: '16px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '16px',
+              height: '16px',
+              lineHeight: 1,
+            }}
+          >
+            📊
+          </span>
           <span>{showDashboard ? 'Hide' : 'Show'} Live Dashboard</span>
           <span
             style={{
               fontSize: '12px',
               transform: showDashboard ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform 0.3s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '12px',
+              height: '12px',
+              lineHeight: 1,
             }}
           >
             ▼
@@ -391,7 +398,7 @@ export default function HomePage() {
         }}
       >
         {/* Loading State */}
-        {loading && (
+        {loading && showDashboard && (
           <LoadingState
             title='Loading manufacturing data...'
             description='Connecting to production systems'
@@ -400,10 +407,12 @@ export default function HomePage() {
         )}
 
         {/* Error State */}
-        {error && <ErrorState title='Connection Error' message={error} />}
+        {error && showDashboard && (
+          <ErrorState title='Connection Error' message={error} />
+        )}
 
         {/* Real-time Statistics */}
-        {dashboardData && (
+        {dashboardData && showDashboard && !loading && (
           <>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
               <Title
@@ -469,6 +478,8 @@ export default function HomePage() {
 
         {/* Manufacturing Alerts & Critical Information */}
         {dashboardData &&
+          showDashboard &&
+          !loading &&
           (dashboardData.alerts.flaggedSteps.length > 0 ||
             dashboardData.alerts.overdueBatches.length > 0) && (
             <div
@@ -486,9 +497,26 @@ export default function HomePage() {
                   fontSize: '1.5rem',
                   fontWeight: 600,
                   textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                ⚠️ Manufacturing Alerts
+                <span
+                  style={{
+                    fontSize: '1.2rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '1.2rem',
+                    height: '1.2rem',
+                    lineHeight: 1,
+                  }}
+                >
+                  ⚠️
+                </span>{' '}
+                Manufacturing Alerts
               </Title>
               <div
                 style={{
@@ -500,7 +528,21 @@ export default function HomePage() {
                 {/* Overdue Batches Alert */}
                 {dashboardData.alerts.overdueBatches.length > 0 && (
                   <Alert
-                    icon='🚨'
+                    icon={
+                      <span
+                        style={{
+                          fontSize: '16px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '16px',
+                          height: '16px',
+                          lineHeight: 1,
+                        }}
+                      >
+                        🚨
+                      </span>
+                    }
                     title={`${dashboardData.alerts.overdueBatches.length} Overdue Batches`}
                     color='red'
                     style={{
@@ -535,7 +577,21 @@ export default function HomePage() {
                 {/* Flagged Steps Alert */}
                 {dashboardData.alerts.flaggedSteps.length > 0 && (
                   <Alert
-                    icon='⏱️'
+                    icon={
+                      <span
+                        style={{
+                          fontSize: '16px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '16px',
+                          height: '16px',
+                          lineHeight: 1,
+                        }}
+                      >
+                        ⏱️
+                      </span>
+                    }
                     title={`${dashboardData.alerts.flaggedSteps.length} Long-Running Steps`}
                     color='yellow'
                     style={{
@@ -570,90 +626,114 @@ export default function HomePage() {
           )}
 
         {/* Live Workstation Status */}
-        {dashboardData && dashboardData.workstationEfficiency.length > 0 && (
-          <div
-            style={{
-              width: '100%',
-              maxWidth: 900,
-              margin: '0 auto 32px auto',
-            }}
-          >
-            <div style={{ textAlign: 'center', marginBottom: 24 }}>
-              <Title
-                order={3}
-                style={{
-                  color: '#f1f5f9',
-                  marginBottom: 8,
-                  fontSize: '1.5rem',
-                  fontWeight: 600,
-                }}
-              >
-                Workstation Status
-              </Title>
-            </div>
+        {dashboardData &&
+          showDashboard &&
+          !loading &&
+          dashboardData.workstationEfficiency.length > 0 && (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: 20,
+                width: '100%',
+                maxWidth: 900,
+                margin: '0 auto 32px auto',
               }}
             >
-              {dashboardData.workstationEfficiency.slice(0, 4).map(ws => (
-                <Card
-                  key={ws.workstationId}
-                  padding='md'
+              <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                <Title
+                  order={3}
                   style={{
-                    background: 'rgba(30, 41, 59, 0.9)',
-                    border: '1px solid rgba(51, 65, 85, 0.8)',
-                    borderRadius: '12px',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-                    transition: 'all 0.3s ease',
+                    color: '#f1f5f9',
+                    marginBottom: 8,
+                    fontSize: '1.5rem',
+                    fontWeight: 600,
                   }}
                 >
-                  <Stack gap='xs'>
-                    <Group justify='space-between' align='center'>
-                      <Text fw={600} size='md' style={{ color: '#f1f5f9' }}>
-                        {ws.name}
-                      </Text>
-                      <Badge
-                        color={getStatusColor(ws.status)}
-                        variant='filled'
-                        size='sm'
-                      >
-                        {ws.status}
-                      </Badge>
-                    </Group>
-                    {ws.currentOperator && (
-                      <Text size='sm' style={{ color: '#cbd5e1' }}>
-                        👤 {ws.currentOperator}
-                      </Text>
-                    )}
-                    <Group gap='md'>
-                      <div style={{ textAlign: 'center' }}>
-                        <Text size='lg' fw={700} style={{ color: '#10b981' }}>
-                          {ws.activeJobs}
+                  Workstation Status
+                </Title>
+              </div>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: 20,
+                }}
+              >
+                {dashboardData.workstationEfficiency.slice(0, 4).map(ws => (
+                  <Card
+                    key={ws.workstationId}
+                    padding='md'
+                    style={{
+                      background: 'rgba(30, 41, 59, 0.9)',
+                      border: '1px solid rgba(51, 65, 85, 0.8)',
+                      borderRadius: '12px',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <Stack gap='xs'>
+                      <Group justify='space-between' align='center'>
+                        <Text fw={600} size='md' style={{ color: '#f1f5f9' }}>
+                          {ws.name}
                         </Text>
-                        <Text size='xs' style={{ color: '#94a3b8' }}>
-                          Active
+                        <Badge
+                          color={getStatusColor(ws.status)}
+                          variant='filled'
+                          size='sm'
+                        >
+                          {ws.status}
+                        </Badge>
+                      </Group>
+                      {ws.currentOperator && (
+                        <Text
+                          size='sm'
+                          style={{
+                            color: '#cbd5e1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: '14px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '14px',
+                              height: '14px',
+                              lineHeight: 1,
+                            }}
+                          >
+                            👤
+                          </span>
+                          {ws.currentOperator}
                         </Text>
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <Text size='lg' fw={700} style={{ color: '#f59e0b' }}>
-                          {ws.queuedJobs}
-                        </Text>
-                        <Text size='xs' style={{ color: '#94a3b8' }}>
-                          Queued
-                        </Text>
-                      </div>
-                    </Group>
-                  </Stack>
-                </Card>
-              ))}
+                      )}
+                      <Group gap='md'>
+                        <div style={{ textAlign: 'center' }}>
+                          <Text size='lg' fw={700} style={{ color: '#10b981' }}>
+                            {ws.activeJobs}
+                          </Text>
+                          <Text size='xs' style={{ color: '#94a3b8' }}>
+                            Active
+                          </Text>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <Text size='lg' fw={700} style={{ color: '#f59e0b' }}>
+                            {ws.queuedJobs}
+                          </Text>
+                          <Text size='xs' style={{ color: '#94a3b8' }}>
+                            Queued
+                          </Text>
+                        </div>
+                      </Group>
+                    </Stack>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>{' '}
       {/* End of Collapsible Dashboard Content */}
-    </PageLayout>
+    </StandardPage>
   );
 }

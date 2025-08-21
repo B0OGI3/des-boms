@@ -20,13 +20,14 @@
 
 'use client';
 
-import { Title, Text, Group, Loader, Button } from '@mantine/core';
-import Link from 'next/link';
+import { Text, Group, Loader, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { usePageInitialization } from '../../hooks/usePageInitialization';
+import { StandardPage } from '../components/ui/StandardPage';
+import theme from '../theme';
 
 // Shared utilities and components
 import { usePagination } from '../../hooks/usePagination';
@@ -52,10 +53,6 @@ import { EnhancedSearch } from './components/EnhancedSearch';
 import { useBatchSearch } from './hooks/useBatchSearch';
 import { useBulkSelection } from './hooks/useBulkSelection';
 
-import {
-  useSmartNotifications,
-  BatchNotification,
-} from './components/SmartNotifications';
 import type { Batch, BatchStatusFilter, BatchPriorityFilter } from './types';
 import styles from './batches.module.css';
 
@@ -96,16 +93,6 @@ export default function BatchManagementPage() {
   //     batchSearch.refetch();
   //   }
   // });
-
-  // Smart notifications for proactive alerts
-  const smartNotifications = useSmartNotifications({
-    batches: batchSearch.batches,
-    enabled: true,
-    onNotification: (_notification: BatchNotification) => {
-      // Handle notifications - you could show them in a toast or notification system
-      // For now, notifications are processed silently
-    },
-  });
 
   // Ensure component is mounted before rendering
   useEffect(() => {
@@ -416,79 +403,14 @@ export default function BatchManagementPage() {
   }
 
   return (
-    <main className={styles.main}>
+    <StandardPage
+      title='Batch Routing Management'
+      subtitle='Track and manage manufacturing batches through workstations'
+      icon='🔄'
+      accentColor={theme.pageAccents.batches}
+      showBackButton={true}
+    >
       <div className={styles.container}>
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerAccent} />
-
-          <Group
-            justify='space-between'
-            align='center'
-            style={{ marginBottom: 20, position: 'relative' }}
-          >
-            <div>
-              <Group gap='md' align='center' style={{ marginBottom: 12 }}>
-                <div className={styles.iconBox}>🔄</div>
-                <div>
-                  <Title order={1} className={styles.title}>
-                    Batch Routing Management
-                  </Title>
-                  <Text size='md' className={styles.subtitle}>
-                    Manufacturing Batches • Routing Steps • Work Travelers •
-                    Progress Tracking
-                  </Text>
-                </div>
-
-                {/* Status indicator temporarily disabled */}
-                <Group gap='xs' style={{ marginLeft: 'auto' }}>
-                  <Button
-                    variant='subtle'
-                    size='xs'
-                    leftSection={
-                      <div style={{ color: '#3b82f6', fontSize: '10px' }}>
-                        🔔
-                      </div>
-                    }
-                    style={{ color: '#94a3b8', fontSize: '11px' }}
-                    onClick={() => smartNotifications.manualCheck()}
-                  >
-                    ALERTS
-                  </Button>
-                </Group>
-              </Group>
-            </div>
-            <Link href='/' style={{ textDecoration: 'none' }}>
-              <Button
-                size='md'
-                variant='light'
-                leftSection={
-                  <span style={{ fontSize: '16px', marginRight: '4px' }}>
-                    ←
-                  </span>
-                }
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8))',
-                  border: '1px solid rgba(51, 65, 85, 0.4)',
-                  color: '#cbd5e1',
-                  backdropFilter: 'blur(16px)',
-                  height: '40px',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  paddingLeft: '16px',
-                  paddingRight: '20px',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Back to Dashboard
-              </Button>
-            </Link>
-          </Group>
-        </div>
-
         {/* Loading State with Skeletons */}
         {batchSearch.loading && (
           <>
@@ -801,6 +723,6 @@ export default function BatchManagementPage() {
           batch={selectedBatch}
         />
       </div>
-    </main>
+    </StandardPage>
   );
 }

@@ -33,9 +33,10 @@ import {
   Button,
   Progress,
 } from '@mantine/core';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { StandardPage } from '../components/ui/StandardPage';
+import theme from '../theme';
 
 // Shared utilities and components
 import { usePagination } from '@/hooks/usePagination';
@@ -491,53 +492,14 @@ const OrdersPageContent = ({
   handleNavigateToWorkstation: (workstationId: string) => void;
 }) => {
   return (
-    <main className={styles.main}>
+    <StandardPage
+      title='Customer Orders'
+      subtitle='Manage and track all customer orders'
+      icon='📋'
+      accentColor={theme.pageAccents.orders}
+      showBackButton={true}
+    >
       <div className={styles.container}>
-        {/* Header Section */}
-        <div className={styles.header}>
-          <Group justify='space-between' align='center'>
-            <div className={styles.headerContent}>
-              <Group align='center' gap='lg'>
-                <div className={styles.titleSection}>
-                  <h1 className={styles.title}>Customer Orders</h1>
-                  <Text className={styles.subtitle}>
-                    Manage and track all customer orders
-                  </Text>
-                </div>
-              </Group>
-            </div>
-            <Link href='/' style={{ textDecoration: 'none' }}>
-              <Button
-                size='md'
-                variant='light'
-                leftSection={
-                  <span style={{ fontSize: '16px', marginRight: '4px' }}>
-                    ←
-                  </span>
-                }
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8))',
-                  border: '1px solid rgba(51, 65, 85, 0.4)',
-                  color: '#cbd5e1',
-                  backdropFilter: 'blur(16px)',
-                  height: '40px',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  paddingLeft: '16px',
-                  paddingRight: '20px',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Back to Dashboard
-              </Button>
-            </Link>
-          </Group>
-        </div>
-
-        {/* Loading State */}
         {orderSearch.loading && (
           <div className={styles.loadingContainer}>
             <Loader size='lg' color='#1e40af' />
@@ -745,7 +707,7 @@ const OrdersPageContent = ({
           title='Advanced Part Creation'
         />
       </div>
-    </main>
+    </StandardPage>
   );
 };
 

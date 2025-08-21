@@ -19,5 +19,9 @@ export {
   ErrorState,
   StatsGrid,
   StatCard,
-  NavigationCard
+  NavigationCard,
 } from './StyledComponents';
+
+// Export new standardized components
+export { StandardPageHeader } from './StandardPageHeader';
+export { StandardPage } from './StandardPage';
