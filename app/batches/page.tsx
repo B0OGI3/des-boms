@@ -21,7 +21,7 @@
 'use client';
 
 import { Text, Group, Loader, Button } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { LoadingScreen } from '../components/LoadingScreen';
@@ -68,6 +68,14 @@ interface BatchStats {
 }
 
 export default function BatchManagementPage() {
+  return (
+    <Suspense>
+      <BatchManagementPageInner />
+    </Suspense>
+  );
+}
+
+function BatchManagementPageInner() {
   const searchParams = useSearchParams();
   const [stats, setStats] = useState<BatchStats | null>(null);
   const [bulkSelectionMode, setBulkSelectionMode] = useState(false);

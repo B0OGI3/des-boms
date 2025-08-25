@@ -33,6 +33,7 @@
     "pre-commit": "npm run lint && npm run type-check && npm run format:check"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.16",
     "@mantine/core": "^8.2.5",
     "@mantine/hooks": "^8.2.5",
     "@mantine/modals": "^8.2.5",
@@ -49,7 +50,9 @@
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-qr-code": "^2.0.18"
+    "react-number-format": "^5.4.4",
+    "react-qr-code": "^2.0.18",
+    "react-remove-scroll": "^2.7.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
