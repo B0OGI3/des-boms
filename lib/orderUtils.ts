@@ -12,44 +12,44 @@ export const isOverdue = (dueDate: string): boolean => {
 };
 
 export const getUrgencyColor = (daysUntilDue: number): string => {
-  if (daysUntilDue < 0) return "#ef4444"; // Red - overdue
-  if (daysUntilDue === 0) return "#f97316"; // Orange - due today
-  if (daysUntilDue <= 2) return "#eab308"; // Yellow - due soon
-  if (daysUntilDue <= 7) return "#22c55e"; // Green - due this week
-  return "#64748b"; // Gray - not urgent
+  if (daysUntilDue < 0) return '#ef4444'; // Red - overdue
+  if (daysUntilDue === 0) return '#f97316'; // Orange - due today
+  if (daysUntilDue <= 2) return '#eab308'; // Yellow - due soon
+  if (daysUntilDue <= 7) return '#22c55e'; // Green - due this week
+  return '#64748b'; // Gray - not urgent
 };
 
 export const getStatusColor = (status: string, dueDate: string): string => {
-  if (isOverdue(dueDate)) return "red";
-  
+  if (isOverdue(dueDate)) return 'red';
+
   switch (status) {
-    case "PENDING":
-      return "yellow";
-    case "IN_PROGRESS":
-      return "blue";
-    case "COMPLETED":
-      return "green";
-    case "ON_HOLD":
-      return "orange";
-    case "CANCELLED":
-      return "red";
+    case 'PENDING':
+      return 'yellow';
+    case 'IN_PROGRESS':
+      return 'blue';
+    case 'COMPLETED':
+      return 'green';
+    case 'ON_HOLD':
+      return 'orange';
+    case 'CANCELLED':
+      return 'red';
     default:
-      return "gray";
+      return 'gray';
   }
 };
 
 export const getPriorityColor = (priority: string): string => {
   switch (priority) {
-    case "LOW":
-      return "gray";
-    case "NORMAL":
-      return "blue";
-    case "HIGH":
-      return "orange";
-    case "RUSH":
-      return "red";
+    case 'LOW':
+      return 'gray';
+    case 'NORMAL':
+      return 'blue';
+    case 'HIGH':
+      return 'orange';
+    case 'RUSH':
+      return 'red';
     default:
-      return "gray";
+      return 'gray';
   }
 };
 
@@ -63,10 +63,14 @@ export const calculateProgress = (completed: number, total: number): number => {
 };
 
 // Fetch utility with timeout
-export const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 30000) => {
+export const fetchWithTimeout = async (
+  url: string,
+  options: RequestInit = {},
+  timeout = 30000
+) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
+
   try {
     const response = await fetch(url, {
       ...options,

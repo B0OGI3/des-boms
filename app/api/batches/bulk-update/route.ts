@@ -38,15 +38,15 @@ export async function PATCH(request: NextRequest) {
     // Using any due to complex Prisma type unions for update operations
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {};
-    
+
     if (updates.priority) {
       updateData.priority = updates.priority as BatchPriority;
     }
-    
+
     if (updates.status) {
       updateData.status = updates.status as BatchStatus;
     }
-    
+
     // Add updated timestamp
     updateData.updatedAt = new Date();
 
@@ -54,10 +54,10 @@ export async function PATCH(request: NextRequest) {
     const result = await prisma.batch.updateMany({
       where: {
         id: {
-          in: batchIds
-        }
+          in: batchIds,
+        },
       },
-      data: updateData
+      data: updateData,
     });
 
     return NextResponse.json({
@@ -66,12 +66,14 @@ export async function PATCH(request: NextRequest) {
       updatedCount: result.count,
       updates,
     });
-
   } catch (error) {
     console.error('Error in bulk update:', error);
-    
+
     return NextResponse.json(
-      { error: 'Failed to update batches', message: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Failed to update batches',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }

@@ -19,37 +19,58 @@ export async function GET(request: NextRequest) {
     const priority = searchParams.get('priority');
     const overdue = searchParams.get('overdue') === 'true';
     const search = searchParams.get('search');
-    
+
     const where: Prisma.BatchWhereInput = {};
     if (status) where.status = status as Prisma.BatchWhereInput['status'];
-    if (priority) where.priority = priority as Prisma.BatchWhereInput['priority'];
-    
+    if (priority)
+      where.priority = priority as Prisma.BatchWhereInput['priority'];
+
     // Handle overdue filtering
     if (overdue) {
       where.AND = [
         {
           estimatedCompletion: {
-            lt: new Date()
-          }
+            lt: new Date(),
+          },
         },
         {
           status: {
-            in: ['QUEUED', 'IN_PROGRESS']
-          }
-        }
+            in: ['QUEUED', 'IN_PROGRESS'],
+          },
+        },
       ];
     }
-    
+
     // Handle search across multiple fields
     if (search?.trim()) {
       const searchTerm = search.trim();
       where.OR = [
         { batchId: { contains: searchTerm, mode: 'insensitive' } },
         { notes: { contains: searchTerm, mode: 'insensitive' } },
-        { lineItem: { part: { partNumber: { contains: searchTerm, mode: 'insensitive' } } } },
-        { lineItem: { part: { partName: { contains: searchTerm, mode: 'insensitive' } } } },
-        { lineItem: { purchaseOrder: { customer: { name: { contains: searchTerm, mode: 'insensitive' } } } } },
-        { lineItem: { purchaseOrder: { systemOrderId: { contains: searchTerm, mode: 'insensitive' } } } }
+        {
+          lineItem: {
+            part: { partNumber: { contains: searchTerm, mode: 'insensitive' } },
+          },
+        },
+        {
+          lineItem: {
+            part: { partName: { contains: searchTerm, mode: 'insensitive' } },
+          },
+        },
+        {
+          lineItem: {
+            purchaseOrder: {
+              customer: { name: { contains: searchTerm, mode: 'insensitive' } },
+            },
+          },
+        },
+        {
+          lineItem: {
+            purchaseOrder: {
+              systemOrderId: { contains: searchTerm, mode: 'insensitive' },
+            },
+          },
+        },
       ];
     }
 
@@ -87,10 +108,7 @@ export async function GET(request: NextRequest) {
           },
           qcRecords: true,
         },
-        orderBy: [
-          { priority: 'desc' },
-          { createdAt: 'asc' },
-        ],
+        orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
       });
     } else {
       batches = await prisma.batch.findMany({
@@ -116,10 +134,7 @@ export async function GET(request: NextRequest) {
           },
           qcRecords: true,
         },
-        orderBy: [
-          { priority: 'desc' },
-          { createdAt: 'asc' },
-        ],
+        orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
       });
     }
 
@@ -172,7 +187,7 @@ export async function POST(request: NextRequest) {
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const datePrefix = `DES-${year}-${month}${day}`;
-    
+
     // Get the next sequence number for today
     const existingBatches = await prisma.batch.findMany({
       where: {
@@ -181,7 +196,7 @@ export async function POST(request: NextRequest) {
         },
       },
     });
-    
+
     const sequenceNumber = String(existingBatches.length + 1).padStart(3, '0');
     const batchId = `${datePrefix}-${sequenceNumber}`;
 
@@ -192,7 +207,9 @@ export async function POST(request: NextRequest) {
         lineItemId,
         quantity,
         startDate: startDate ? new Date(startDate) : null,
-        estimatedCompletion: estimatedCompletion ? new Date(estimatedCompletion) : null,
+        estimatedCompletion: estimatedCompletion
+          ? new Date(estimatedCompletion)
+          : null,
         priority,
         notes,
         routingSteps: {

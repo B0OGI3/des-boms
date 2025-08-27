@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    
+
     const batch = await prisma.batch.findUnique({
       where: { id },
       include: {
@@ -78,13 +78,13 @@ async function updateBatch(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { 
-      status, 
-      priority, 
-      quantity, 
-      notes, 
-      startDate, 
-      estimatedCompletion 
+    const {
+      status,
+      priority,
+      quantity,
+      notes,
+      startDate,
+      estimatedCompletion,
     } = body;
 
     // Validate that batch exists
@@ -102,21 +102,21 @@ async function updateBatch(
     // Prepare update data - using any due to complex Prisma type unions
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {};
-    
+
     if (status !== undefined) {
       updateData.status = status;
-      
+
       // If starting the batch, set startDate
       if (status === 'IN_PROGRESS' && !existingBatch.startDate) {
         updateData.startDate = new Date();
       }
-      
+
       // If completing the batch, set actualCompletion
       if (status === 'COMPLETED') {
         updateData.actualCompletion = new Date();
       }
     }
-    
+
     if (priority !== undefined) updateData.priority = priority;
     if (quantity !== undefined) updateData.quantity = quantity;
     if (notes !== undefined) updateData.notes = notes;
@@ -172,19 +172,19 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    
+
     // Check if batch exists and get related data counts for response
     const existingBatch = await prisma.batch.findUnique({
       where: { id },
       include: {
         routingSteps: {
           include: {
-            confirmations: true
-          }
+            confirmations: true,
+          },
         },
         qcRecords: true,
-        materialConsumption: true
-      }
+        materialConsumption: true,
+      },
     });
 
     if (!existingBatch) {
@@ -195,34 +195,34 @@ export async function DELETE(
     }
 
     // Use a transaction to delete all related records first
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async tx => {
       // Delete work order item related data first (individual part tracking)
       const workOrderItems = await tx.workOrderItem.findMany({
         where: { batchId: id },
-        select: { id: true }
+        select: { id: true },
       });
-      
+
       if (workOrderItems.length > 0) {
         const itemIds = workOrderItems.map(item => item.id);
-        
+
         // Delete work order step progress
         await tx.workOrderStepProgress.deleteMany({
-          where: { workOrderItemId: { in: itemIds } }
+          where: { workOrderItemId: { in: itemIds } },
         });
-        
+
         // Delete work order quality checks
         await tx.workOrderQualityCheck.deleteMany({
-          where: { workOrderItemId: { in: itemIds } }
+          where: { workOrderItemId: { in: itemIds } },
         });
-        
+
         // Delete work order material usage
         await tx.workOrderMaterialUsage.deleteMany({
-          where: { workOrderItemId: { in: itemIds } }
+          where: { workOrderItemId: { in: itemIds } },
         });
-        
+
         // Delete work order items
         await tx.workOrderItem.deleteMany({
-          where: { batchId: id }
+          where: { batchId: id },
         });
       }
 
@@ -230,29 +230,29 @@ export async function DELETE(
       for (const step of existingBatch.routingSteps) {
         if (step.confirmations.length > 0) {
           await tx.stepConfirmation.deleteMany({
-            where: { stepId: step.id }
+            where: { stepId: step.id },
           });
         }
       }
 
       // Delete routing steps
       await tx.routingStep.deleteMany({
-        where: { batchId: id }
+        where: { batchId: id },
       });
 
       // Delete QC records
       await tx.qCRecord.deleteMany({
-        where: { batchId: id }
+        where: { batchId: id },
       });
 
       // Delete material consumption records
       await tx.materialConsumption.deleteMany({
-        where: { batchId: id }
+        where: { batchId: id },
       });
 
       // Finally delete the batch itself
       await tx.batch.delete({
-        where: { id }
+        where: { id },
       });
     });
 
@@ -261,11 +261,14 @@ export async function DELETE(
       message: 'Batch deleted successfully',
       deletedData: {
         routingSteps: existingBatch.routingSteps.length,
-        stepConfirmations: existingBatch.routingSteps.reduce((total, step) => total + step.confirmations.length, 0),
+        stepConfirmations: existingBatch.routingSteps.reduce(
+          (total, step) => total + step.confirmations.length,
+          0
+        ),
         qcRecords: existingBatch.qcRecords.length,
         materialConsumption: existingBatch.materialConsumption.length,
-        workOrderItems: 'Deleted (count not tracked in this response)'
-      }
+        workOrderItems: 'Deleted (count not tracked in this response)',
+      },
     });
   } catch (error) {
     console.error('Error deleting batch:', error);

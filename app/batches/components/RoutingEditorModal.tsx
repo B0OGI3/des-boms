@@ -1,7 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Modal, Stack, Group, Button, Text, Select, NumberInput, ActionIcon, Box, Badge, Divider } from '@mantine/core';
+import {
+  Modal,
+  Stack,
+  Group,
+  Button,
+  Text,
+  Select,
+  NumberInput,
+  ActionIcon,
+  Box,
+  Badge,
+  Divider,
+} from '@mantine/core';
 import { IconTrash, IconPlus, IconGripVertical } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 
@@ -40,7 +52,13 @@ interface RoutingEditorModalProps {
   readonly onSave: (steps: RoutingStep[]) => void;
 }
 
-export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onSave }: RoutingEditorModalProps) {
+export function RoutingEditorModal({
+  opened,
+  onClose,
+  batchId,
+  currentSteps,
+  onSave,
+}: RoutingEditorModalProps) {
   const [steps, setSteps] = useState<RoutingStep[]>(currentSteps);
   const [templates, setTemplates] = useState<RoutingTemplate[]>([]);
   const [workstations, setWorkstations] = useState<Workstation[]>([]);
@@ -58,20 +76,24 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
     try {
       const [templatesRes, workstationsRes] = await Promise.all([
         fetch('/api/routing-templates'),
-        fetch('/api/workstations')
+        fetch('/api/workstations'),
       ]);
 
       if (templatesRes.ok) {
         const templatesData = await templatesRes.json();
         // Handle both direct array and wrapped response formats
-        const templates = Array.isArray(templatesData) ? templatesData : templatesData.data || [];
+        const templates = Array.isArray(templatesData)
+          ? templatesData
+          : templatesData.data || [];
         setTemplates(templates);
       }
 
       if (workstationsRes.ok) {
         const workstationsData = await workstationsRes.json();
         // Handle both direct array and wrapped response formats
-        const workstations = Array.isArray(workstationsData) ? workstationsData : workstationsData.data || [];
+        const workstations = Array.isArray(workstationsData)
+          ? workstationsData
+          : workstationsData.data || [];
         setWorkstations(workstations);
       }
     } catch (error) {
@@ -79,7 +101,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
       notifications.show({
         title: 'Error',
         message: 'Failed to load routing templates and workstations',
-        color: 'red'
+        color: 'red',
       });
     }
   };
@@ -91,7 +113,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
         stepNumber: step.stepNumber,
         workstationId: step.workstationId,
         estimatedMinutes: step.estimatedMinutes,
-        description: step.description
+        description: step.description,
       }));
       setSteps(newSteps);
       setSelectedTemplate(templateId);
@@ -103,7 +125,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
       stepNumber: steps.length + 1,
       workstationId: workstations[0]?.id || '',
       estimatedMinutes: 60,
-      description: 'New routing step'
+      description: 'New routing step',
     };
     setSteps([...steps, newStep]);
   };
@@ -119,7 +141,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
     // Renumber steps
     const renumberedSteps = updatedSteps.map((step, i) => ({
       ...step,
-      stepNumber: i + 1
+      stepNumber: i + 1,
     }));
     setSteps(renumberedSteps);
   };
@@ -135,7 +157,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
         notifications.show({
           title: 'Success',
           message: 'Workflow steps updated',
-          color: 'green'
+          color: 'green',
         });
         return;
       }
@@ -144,9 +166,9 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
       const response = await fetch(`/api/batches/${batchId}/routing`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ steps })
+        body: JSON.stringify({ steps }),
       });
 
       if (response.ok) {
@@ -155,7 +177,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
         notifications.show({
           title: 'Success',
           message: 'Routing updated successfully',
-          color: 'green'
+          color: 'green',
         });
       } else {
         throw new Error('Failed to update routing');
@@ -165,7 +187,7 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
       notifications.show({
         title: 'Error',
         message: 'Failed to save routing changes',
-        color: 'red'
+        color: 'red',
       });
     } finally {
       setLoading(false);
@@ -176,27 +198,33 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Edit Batch Routing"
-      size="lg"
+      title='Edit Batch Routing'
+      size='lg'
       styles={{
-        title: { fontWeight: 600, fontSize: '1.2rem' }
+        title: { fontWeight: 600, fontSize: '1.2rem' },
       }}
     >
-      <Stack gap="md">
+      <Stack gap='md'>
         {/* Template Selection */}
         <Box>
-          <Text size="sm" fw={500} mb="xs">Apply Routing Template</Text>
-          <Group gap="xs">
+          <Text size='sm' fw={500} mb='xs'>
+            Apply Routing Template
+          </Text>
+          <Group gap='xs'>
             <Select
-              placeholder="Choose a template..."
-              data={Array.isArray(templates) ? templates.map(t => ({ value: t.id, label: t.name })) : []}
+              placeholder='Choose a template...'
+              data={
+                Array.isArray(templates)
+                  ? templates.map(t => ({ value: t.id, label: t.name }))
+                  : []
+              }
               value={selectedTemplate}
-              onChange={(value) => value && applyTemplate(value)}
+              onChange={value => value && applyTemplate(value)}
               style={{ flex: 1 }}
             />
             <Button
-              variant="light"
-              size="sm"
+              variant='light'
+              size='sm'
               onClick={() => {
                 setSteps([]);
                 setSelectedTemplate(null);
@@ -211,11 +239,13 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
 
         {/* Steps Editor */}
         <Box>
-          <Group justify="space-between" mb="xs">
-            <Text size="sm" fw={500}>Routing Steps</Text>
+          <Group justify='space-between' mb='xs'>
+            <Text size='sm' fw={500}>
+              Routing Steps
+            </Text>
             <Button
-              variant="light"
-              size="sm"
+              variant='light'
+              size='sm'
               leftSection={<IconPlus size={14} />}
               onClick={addStep}
             >
@@ -223,54 +253,75 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
             </Button>
           </Group>
 
-          <Stack gap="xs">
+          <Stack gap='xs'>
             {steps.map((step, index) => (
-              <Box key={`step-${step.stepNumber}-${index}`} p="md" style={{ border: '1px solid #e9ecef', borderRadius: '8px' }}>
-                <Group gap="sm" align="flex-start">
-                  <IconGripVertical size={16} style={{ color: '#adb5bd', marginTop: '8px' }} />
-                  
-                  <Stack gap="xs" style={{ flex: 1 }}>
-                    <Group gap="sm">
-                      <Badge variant="light" size="sm">
+              <Box
+                key={`step-${step.stepNumber}-${index}`}
+                p='md'
+                style={{ border: '1px solid #e9ecef', borderRadius: '8px' }}
+              >
+                <Group gap='sm' align='flex-start'>
+                  <IconGripVertical
+                    size={16}
+                    style={{ color: '#adb5bd', marginTop: '8px' }}
+                  />
+
+                  <Stack gap='xs' style={{ flex: 1 }}>
+                    <Group gap='sm'>
+                      <Badge variant='light' size='sm'>
                         Step {step.stepNumber}
                       </Badge>
                       <Select
-                        placeholder="Select workstation"
-                        data={Array.isArray(workstations) ? workstations.map(w => ({ 
-                          value: w.id, 
-                          label: `${w.name} (${w.type})` 
-                        })) : []}
+                        placeholder='Select workstation'
+                        data={
+                          Array.isArray(workstations)
+                            ? workstations.map(w => ({
+                                value: w.id,
+                                label: `${w.name} (${w.type})`,
+                              }))
+                            : []
+                        }
                         value={step.workstationId}
-                        onChange={(value) => value && updateStep(index, 'workstationId', value)}
+                        onChange={value =>
+                          value && updateStep(index, 'workstationId', value)
+                        }
                         style={{ flex: 1 }}
                       />
                       <NumberInput
-                        placeholder="Minutes"
+                        placeholder='Minutes'
                         value={step.estimatedMinutes}
-                        onChange={(value) => updateStep(index, 'estimatedMinutes', value)}
+                        onChange={value =>
+                          updateStep(index, 'estimatedMinutes', value)
+                        }
                         min={1}
                         style={{ width: '100px' }}
                       />
                       <ActionIcon
-                        color="red"
-                        variant="light"
+                        color='red'
+                        variant='light'
                         onClick={() => removeStep(index)}
                       >
                         <IconTrash size={14} />
                       </ActionIcon>
                     </Group>
-                    
+
                     <Text
-                      size="sm"
-                      style={{ 
-                        border: '1px solid #e9ecef', 
-                        borderRadius: '4px', 
+                      size='sm'
+                      style={{
+                        border: '1px solid #e9ecef',
+                        borderRadius: '4px',
                         padding: '6px 8px',
-                        backgroundColor: '#f8f9fa'
+                        backgroundColor: '#f8f9fa',
                       }}
                       contentEditable
                       suppressContentEditableWarning
-                      onBlur={(e) => updateStep(index, 'description', e.currentTarget.textContent || '')}
+                      onBlur={e =>
+                        updateStep(
+                          index,
+                          'description',
+                          e.currentTarget.textContent || ''
+                        )
+                      }
                     >
                       {step.description}
                     </Text>
@@ -278,23 +329,23 @@ export function RoutingEditorModal({ opened, onClose, batchId, currentSteps, onS
                 </Group>
               </Box>
             ))}
-            
+
             {steps.length === 0 && (
-              <Box p="xl" style={{ textAlign: 'center', color: '#adb5bd' }}>
-                <Text size="sm">No routing steps defined</Text>
-                <Text size="xs">Add steps manually or apply a template</Text>
+              <Box p='xl' style={{ textAlign: 'center', color: '#adb5bd' }}>
+                <Text size='sm'>No routing steps defined</Text>
+                <Text size='xs'>Add steps manually or apply a template</Text>
               </Box>
             )}
           </Stack>
         </Box>
 
         {/* Actions */}
-        <Group justify="flex-end" mt="md">
-          <Button variant="light" onClick={onClose}>
+        <Group justify='flex-end' mt='md'>
+          <Button variant='light' onClick={onClose}>
             Cancel
           </Button>
-          <Button 
-            onClick={handleSave} 
+          <Button
+            onClick={handleSave}
             loading={loading}
             disabled={steps.length === 0}
           >

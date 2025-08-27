@@ -1,6 +1,6 @@
 /**
  * QuickBooks OAuth Initiation Handler
- * 
+ *
  * Redirects users to QuickBooks for OAuth authorization.
  */
 
@@ -25,13 +25,12 @@ export async function GET() {
 
     // Redirect user to QuickBooks authorization page
     return NextResponse.redirect(authUri);
-
   } catch (error) {
     console.error('Error initiating QuickBooks OAuth:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to initiate QuickBooks authorization',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

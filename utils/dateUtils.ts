@@ -14,17 +14,20 @@ export const getDaysUntilDue = (dueDate: string): number => {
 };
 
 export const getUrgencyColor = (daysUntilDue: number): string => {
-  if (daysUntilDue < 0) return "#ef4444"; // Overdue - red
-  if (daysUntilDue <= 2) return "#f97316"; // Critical - orange
-  if (daysUntilDue <= 7) return "#eab308"; // Warning - yellow
-  return "#10b981"; // Good - green
+  if (daysUntilDue < 0) return '#ef4444'; // Overdue - red
+  if (daysUntilDue <= 2) return '#f97316'; // Critical - orange
+  if (daysUntilDue <= 7) return '#eab308'; // Warning - yellow
+  return '#10b981'; // Good - green
 };
 
 export const formatDate = (date: string | Date): string => {
   return new Date(date).toLocaleDateString();
 };
 
-export const formatDateRange = (startDate: string | Date, endDate: string | Date): string => {
+export const formatDateRange = (
+  startDate: string | Date,
+  endDate: string | Date
+): string => {
   const start = formatDate(startDate);
   const end = formatDate(endDate);
   return `${start} - ${end}`;

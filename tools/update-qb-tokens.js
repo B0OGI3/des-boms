@@ -1,6 +1,6 @@
 /**
  * QuickBooks Token Update Helper
- * 
+ *
  * Use this after completing the OAuth flow to update your .env.local file
  * Run with: node update-qb-tokens.js ACCESS_TOKEN COMPANY_ID [REFRESH_TOKEN]
  */
@@ -17,7 +17,9 @@ const refreshToken = args[2];
 if (!accessToken || !companyId) {
   console.log('❌ Missing required arguments');
   console.log('');
-  console.log('Usage: node update-qb-tokens.js ACCESS_TOKEN COMPANY_ID [REFRESH_TOKEN]');
+  console.log(
+    'Usage: node update-qb-tokens.js ACCESS_TOKEN COMPANY_ID [REFRESH_TOKEN]'
+  );
   console.log('');
   console.log('Example:');
   console.log('node update-qb-tokens.js "eyJ..." "9341454715237096" "RT1-..."');
@@ -28,20 +30,20 @@ if (!accessToken || !companyId) {
 async function updateEnvFile() {
   try {
     const envPath = path.join(__dirname, '.env.local');
-    
+
     // Read current .env.local file
     let envContent = '';
     if (fs.existsSync(envPath)) {
       envContent = fs.readFileSync(envPath, 'utf8');
     }
-    
+
     // Update or add QuickBooks tokens
     const lines = envContent.split('\n');
     let updatedLines = [];
     let foundAccessToken = false;
     let foundCompanyId = false;
     let foundRefreshToken = false;
-    
+
     // Update existing lines or mark as found
     for (const line of lines) {
       if (line.startsWith('QB_ACCESS_TOKEN=')) {
@@ -57,7 +59,7 @@ async function updateEnvFile() {
         updatedLines.push(line);
       }
     }
-    
+
     // Add missing lines
     if (!foundAccessToken) {
       updatedLines.push(`QB_ACCESS_TOKEN="${accessToken}"`);
@@ -68,11 +70,11 @@ async function updateEnvFile() {
     if (!foundRefreshToken && refreshToken) {
       updatedLines.push(`QB_REFRESH_TOKEN="${refreshToken}"`);
     }
-    
+
     // Write updated content
     const updatedContent = updatedLines.join('\n');
     fs.writeFileSync(envPath, updatedContent);
-    
+
     console.log('✅ Successfully updated .env.local file');
     console.log('');
     console.log('Updated variables:');
@@ -87,7 +89,6 @@ async function updateEnvFile() {
     console.log('');
     console.log('🧪 Test the integration:');
     console.log('   http://localhost:3000/settings');
-    
   } catch (error) {
     console.error('❌ Error updating .env.local file:', error.message);
     process.exit(1);

@@ -29,19 +29,19 @@ export async function GET(
                 part: true,
                 purchaseOrder: {
                   include: {
-                    customer: true
-                  }
-                }
-              }
-            }
-          }
+                    customer: true,
+                  },
+                },
+              },
+            },
+          },
         },
         confirmations: {
           orderBy: {
-            createdAt: 'desc'
-          }
-        }
-      }
+            createdAt: 'desc',
+          },
+        },
+      },
     });
 
     if (!routingStep) {
@@ -53,16 +53,15 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: routingStep
+      data: routingStep,
     });
-
   } catch (error) {
     console.error('Error fetching routing step:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch routing step',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -79,19 +78,19 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    
+
     const {
       workstationId,
       description,
       estimatedTime,
       notes,
       status,
-      required
+      required,
     } = body;
 
     // Check if routing step exists
     const existingStep = await prisma.routingStep.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingStep) {
@@ -110,7 +109,7 @@ export async function PUT(
         ...(estimatedTime !== undefined && { estimatedTime }),
         ...(notes !== undefined && { notes }),
         ...(status && { status }),
-        ...(required !== undefined && { required })
+        ...(required !== undefined && { required }),
       },
       include: {
         workstation: true,
@@ -121,34 +120,33 @@ export async function PUT(
                 part: true,
                 purchaseOrder: {
                   include: {
-                    customer: true
-                  }
-                }
-              }
-            }
-          }
+                    customer: true,
+                  },
+                },
+              },
+            },
+          },
         },
         confirmations: {
           orderBy: {
-            createdAt: 'desc'
-          }
-        }
-      }
+            createdAt: 'desc',
+          },
+        },
+      },
     });
 
     return NextResponse.json({
       success: true,
       data: updatedStep,
-      message: 'Routing step updated successfully'
+      message: 'Routing step updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating routing step:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to update routing step',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -169,8 +167,8 @@ export async function DELETE(
     const existingStep = await prisma.routingStep.findUnique({
       where: { id },
       include: {
-        confirmations: true
-      }
+        confirmations: true,
+      },
     });
 
     if (!existingStep) {
@@ -183,9 +181,9 @@ export async function DELETE(
     // Don't allow deletion if step has been started (has confirmations)
     if (existingStep.confirmations.length > 0) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Cannot delete routing step that has operator confirmations' 
+        {
+          success: false,
+          error: 'Cannot delete routing step that has operator confirmations',
         },
         { status: 400 }
       );
@@ -193,21 +191,20 @@ export async function DELETE(
 
     // Delete the routing step
     await prisma.routingStep.delete({
-      where: { id }
+      where: { id },
     });
 
     return NextResponse.json({
       success: true,
-      message: 'Routing step deleted successfully'
+      message: 'Routing step deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting routing step:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to delete routing step',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

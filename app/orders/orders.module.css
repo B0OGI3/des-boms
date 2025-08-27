@@ -47,7 +47,7 @@
   color: #f1f5f9;
   font-size: 2rem;
   font-weight: 700;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -60,7 +60,11 @@
 }
 
 .backButton {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9),
+    rgba(30, 41, 59, 0.8)
+  );
   border: 1px solid rgba(51, 65, 85, 0.4);
   color: #cbd5e1;
   backdrop-filter: blur(16px);
@@ -304,7 +308,11 @@
 }
 
 .modalContent {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.98)
+  );
   border: 1px solid rgba(51, 65, 85, 0.4);
   border-radius: 12px;
   backdrop-filter: blur(16px);
@@ -350,25 +358,25 @@
   .main {
     padding: 16px;
   }
-  
+
   .container {
     max-width: 100%;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .statsGrid {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
   }
-  
+
   .filtersContainer {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .searchInput {
     min-width: 100%;
   }
@@ -378,7 +386,7 @@
   .statsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .modalContent {
     width: 95%;
     padding: 16px;
@@ -483,23 +491,23 @@
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .paginationControls {
     justify-content: space-between;
     flex-wrap: wrap;
   }
-  
+
   .itemsPerPageContainer {
     order: 2;
     justify-content: center;
   }
-  
+
   .paginationButtons {
     order: 1;
     justify-content: center;
     flex-wrap: wrap;
   }
-  
+
   .pageButton {
     min-width: 32px;
     height: 32px;

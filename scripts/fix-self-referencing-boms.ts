@@ -5,34 +5,38 @@ const prisma = new PrismaClient();
 async function findAndFixSelfReferencingBOMs() {
   try {
     console.log('🔍 Searching for self-referencing BOM components...');
-    
+
     // Find BOM components where parentPartId === childPartId
     const selfReferencingBOMs = await prisma.bOMComponent.findMany({
       where: {
         parentPartId: {
-          equals: prisma.bOMComponent.fields.childPartId
-        }
+          equals: prisma.bOMComponent.fields.childPartId,
+        },
       },
       include: {
         parentPart: {
           select: {
             partNumber: true,
-            partName: true
-          }
+            partName: true,
+          },
         },
         childPart: {
           select: {
             partNumber: true,
-            partName: true
-          }
-        }
-      }
+            partName: true,
+          },
+        },
+      },
     });
 
-    console.log(`Found ${selfReferencingBOMs.length} self-referencing BOM components:`);
-    
+    console.log(
+      `Found ${selfReferencingBOMs.length} self-referencing BOM components:`
+    );
+
     for (const bom of selfReferencingBOMs) {
-      console.log(`❌ ${bom.parentPart.partNumber} - ${bom.parentPart.partName} references itself`);
+      console.log(
+        `❌ ${bom.parentPart.partNumber} - ${bom.parentPart.partName} references itself`
+      );
       console.log(`   BOM Component ID: ${bom.id}`);
       console.log(`   Parent Part ID: ${bom.parentPartId}`);
       console.log(`   Child Part ID: ${bom.childPartId}`);
@@ -42,21 +46,22 @@ async function findAndFixSelfReferencingBOMs() {
 
     if (selfReferencingBOMs.length > 0) {
       console.log('🔧 Fixing self-referencing BOM components...');
-      
+
       // Delete all self-referencing BOM components
       const deleteResult = await prisma.bOMComponent.deleteMany({
         where: {
           parentPartId: {
-            equals: prisma.bOMComponent.fields.childPartId
-          }
-        }
+            equals: prisma.bOMComponent.fields.childPartId,
+          },
+        },
       });
 
-      console.log(`✅ Deleted ${deleteResult.count} self-referencing BOM components`);
+      console.log(
+        `✅ Deleted ${deleteResult.count} self-referencing BOM components`
+      );
     } else {
       console.log('✅ No self-referencing BOM components found');
     }
-
   } catch (error) {
     console.error('❌ Error finding/fixing self-referencing BOMs:', error);
   } finally {
@@ -68,7 +73,7 @@ async function findAndFixSelfReferencingBOMs() {
 async function findSelfReferencingBOMsSQL() {
   try {
     console.log('🔍 Using SQL to find self-referencing BOM components...');
-    
+
     const selfReferencingBOMs = await prisma.$queryRaw`
       SELECT 
         bc.id,
@@ -83,10 +88,10 @@ async function findSelfReferencingBOMsSQL() {
     `;
 
     console.log('Self-referencing BOM components found:', selfReferencingBOMs);
-    
+
     if (Array.isArray(selfReferencingBOMs) && selfReferencingBOMs.length > 0) {
       console.log('🔧 Deleting self-referencing BOM components...');
-      
+
       const deleteResult = await prisma.$executeRaw`
         DELETE FROM "BOMComponent" 
         WHERE "parentPartId" = "childPartId"
@@ -96,7 +101,6 @@ async function findSelfReferencingBOMsSQL() {
     } else {
       console.log('✅ No self-referencing BOM components found');
     }
-
   } catch (error) {
     console.error('❌ Error with SQL method:', error);
   }
@@ -105,11 +109,11 @@ async function findSelfReferencingBOMsSQL() {
 // Run both methods
 async function main() {
   console.log('🚀 Starting self-referencing BOM cleanup...\n');
-  
+
   await findSelfReferencingBOMsSQL();
   console.log('\n' + '='.repeat(50) + '\n');
   await findAndFixSelfReferencingBOMs();
-  
+
   console.log('\n✅ Cleanup complete!');
 }
 

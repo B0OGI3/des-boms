@@ -44,14 +44,14 @@ export async function POST(request: NextRequest) {
       'model/step',
       'model/iges',
       'application/step',
-      'application/iges'
+      'application/iges',
     ];
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: `File type ${file.type} not allowed. Supported: PDF, DWG, CAD models, images, documents` 
+        {
+          success: false,
+          error: `File type ${file.type} not allowed. Supported: PDF, DWG, CAD models, images, documents`,
         },
         { status: 400 }
       );
@@ -91,13 +91,12 @@ export async function POST(request: NextRequest) {
       message: 'File uploaded successfully',
       data: fileAttachment,
     });
-
   } catch (error) {
     console.error('File upload error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Upload failed' 
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Upload failed',
       },
       { status: 500 }
     );
@@ -126,13 +125,15 @@ export async function GET(request: NextRequest) {
       success: true,
       data: attachments,
     });
-
   } catch (error) {
     console.error('Error fetching attachments:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to fetch attachments' 
+      {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch attachments',
       },
       { status: 500 }
     );
@@ -176,13 +177,15 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Attachment deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting attachment:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to delete attachment' 
+      {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to delete attachment',
       },
       { status: 500 }
     );

@@ -37,7 +37,7 @@ async function main() {
         description: 'Titanium alloy round bar, aerospace grade',
         materialSpec: 'Ti-6Al-4V, AMS 4928',
         unitOfMeasure: 'ft',
-        standardCost: 125.50,
+        standardCost: 125.5,
         leadTime: 14,
         notes: 'Aerospace grade titanium for high-stress applications',
       },
@@ -63,7 +63,7 @@ async function main() {
         description: 'Stainless steel rod for medical applications',
         materialSpec: '316L SS, 0.5" diameter',
         unitOfMeasure: 'ft',
-        standardCost: 22.30,
+        standardCost: 22.3,
         leadTime: 10,
         notes: 'Medical grade stainless steel, biocompatible',
       },
@@ -96,7 +96,7 @@ async function main() {
         description: 'Machined housing ready for anodizing',
         materialSpec: '6061-T6',
         unitOfMeasure: 'each',
-        standardCost: 58.20,
+        standardCost: 58.2,
         leadTime: 3,
         notes: 'Fully machined, ready for surface treatment',
       },
@@ -118,7 +118,7 @@ async function main() {
         description: 'Complete drive shaft assembly for aerospace applications',
         materialSpec: 'Ti-6Al-4V with keyway',
         unitOfMeasure: 'each',
-        standardCost: 485.90,
+        standardCost: 485.9,
         leadTime: 12,
         notes: 'Final assembly with keyway, surface finish Ra 0.8',
       },
@@ -133,7 +133,7 @@ async function main() {
         description: 'Complete anodized housing assembly',
         materialSpec: '6061-T6 with Type II anodizing',
         unitOfMeasure: 'each',
-        standardCost: 125.40,
+        standardCost: 125.4,
         leadTime: 8,
         notes: 'Anodized finish, all mounting holes tapped',
       },
@@ -231,7 +231,8 @@ async function main() {
         phone: '(555) 123-4567',
         billingAddress: '123 Industrial Blvd, Manufacturing City, MC 12345',
         shippingAddress: '123 Industrial Blvd, Manufacturing City, MC 12345',
-        notes: 'Aerospace components manufacturer - high precision requirements',
+        notes:
+          'Aerospace components manufacturer - high precision requirements',
       },
     }),
     prisma.customer.create({
@@ -279,14 +280,14 @@ async function main() {
           {
             partId: finishedParts[0].id, // Titanium Drive Shaft Assembly
             quantity: 12,
-            unitPrice: 485.90,
+            unitPrice: 485.9,
             dueDate: tomorrow,
             notes: 'Ti-6Al-4V material, surface finish Ra 0.8',
           },
           {
             partId: finishedParts[1].id, // Aluminum Housing Assembly
             quantity: 6,
-            unitPrice: 125.40,
+            unitPrice: 125.4,
             dueDate: tomorrow,
             notes: '6061-T6 aluminum, anodized finish required',
           },
@@ -619,7 +620,7 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error('❌ Error seeding database:', e);
     process.exit(1);
   })

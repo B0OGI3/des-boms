@@ -75,23 +75,30 @@ export function DeletePartConfirmation({
     setError('');
 
     try {
-      const response = await fetch(`/api/orders/${order.id}/line-items/${lineItem.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `/api/orders/${order.id}/line-items/${lineItem.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete part from order');
+        throw new Error(
+          errorData.message || 'Failed to delete part from order'
+        );
       }
 
       onPartDeleted();
       onClose();
     } catch (error) {
       console.error('Error deleting part:', error);
-      setError(error instanceof Error ? error.message : 'Failed to delete part');
+      setError(
+        error instanceof Error ? error.message : 'Failed to delete part'
+      );
     } finally {
       setLoading(false);
     }
@@ -113,70 +120,84 @@ export function DeletePartConfirmation({
       opened={opened}
       onClose={handleClose}
       title={
-        <Group gap="sm">
-          <IconTrash size={20} color="red" />
+        <Group gap='sm'>
+          <IconTrash size={20} color='red' />
           <Text fw={600}>Delete Part from Order</Text>
         </Group>
       }
-      size="md"
+      size='md'
       centered
     >
-      <Stack gap="md">
+      <Stack gap='md'>
         {/* Warning Alert */}
         <Alert
           icon={<IconAlertTriangle size={16} />}
-          color="red"
-          variant="light"
+          color='red'
+          variant='light'
         >
-          <Text fw={500} mb="xs">This action cannot be undone</Text>
-          <Text size="sm">
-            The part will be permanently removed from this order. Any associated batches or production records will not be affected.
+          <Text fw={500} mb='xs'>
+            This action cannot be undone
+          </Text>
+          <Text size='sm'>
+            The part will be permanently removed from this order. Any associated
+            batches or production records will not be affected.
           </Text>
         </Alert>
 
         {/* Order Information */}
-        <Card withBorder p="md">
-          <Stack gap="sm">
-            <Group justify="space-between">
-              <Text fw={500} size="sm" c="dimmed">Order Information</Text>
-              <Badge color="blue" variant="light">
+        <Card withBorder p='md'>
+          <Stack gap='sm'>
+            <Group justify='space-between'>
+              <Text fw={500} size='sm' c='dimmed'>
+                Order Information
+              </Text>
+              <Badge color='blue' variant='light'>
                 {order.orderNumber}
               </Badge>
             </Group>
-            <Text size="sm">
-              <Text component="span" fw={500}>Customer:</Text> {order.customerName}
+            <Text size='sm'>
+              <Text component='span' fw={500}>
+                Customer:
+              </Text>{' '}
+              {order.customerName}
             </Text>
           </Stack>
         </Card>
 
         {/* Part Information */}
-        <Card withBorder p="md">
-          <Stack gap="sm">
-            <Text fw={500} size="sm" c="dimmed">Part to Delete</Text>
-            
-            <Group justify="space-between" align="center">
+        <Card withBorder p='md'>
+          <Stack gap='sm'>
+            <Text fw={500} size='sm' c='dimmed'>
+              Part to Delete
+            </Text>
+
+            <Group justify='space-between' align='center'>
               <div>
-                <Text fw={600} size="md" style={{ color: '#dc2626' }}>
+                <Text fw={600} size='md' style={{ color: '#dc2626' }}>
                   {lineItem.part.partNumber}
                 </Text>
-                <Text size="sm" c="dimmed">
+                <Text size='sm' c='dimmed'>
                   {lineItem.part.partName}
                 </Text>
               </div>
-              <Badge color="gray" variant="light">
+              <Badge color='gray' variant='light'>
                 Qty: {lineItem.quantity}
               </Badge>
             </Group>
 
             {lineItem.part.drawingNumber && (
-              <Text size="sm">
-                <Text component="span" fw={500}>Drawing:</Text> {lineItem.part.drawingNumber}
-                {lineItem.part.revisionLevel && ` Rev ${lineItem.part.revisionLevel}`}
+              <Text size='sm'>
+                <Text component='span' fw={500}>
+                  Drawing:
+                </Text>{' '}
+                {lineItem.part.drawingNumber}
+                {lineItem.part.revisionLevel &&
+                  ` Rev ${lineItem.part.revisionLevel}`}
               </Text>
             )}
 
             {lineItem.part.description && (
-              <Text size="sm" c="dimmed">
+              <Text size='sm' c='dimmed'>
                 {lineItem.part.description}
               </Text>
             )}
@@ -187,24 +208,20 @@ export function DeletePartConfirmation({
         {error && (
           <Alert
             icon={<IconInfoCircle size={16} />}
-            color="red"
-            variant="light"
+            color='red'
+            variant='light'
           >
             {error}
           </Alert>
         )}
 
         {/* Action Buttons */}
-        <Group justify="flex-end" gap="sm">
-          <Button
-            variant="light"
-            onClick={handleClose}
-            disabled={loading}
-          >
+        <Group justify='flex-end' gap='sm'>
+          <Button variant='light' onClick={handleClose} disabled={loading}>
             Cancel
           </Button>
           <Button
-            color="red"
+            color='red'
             leftSection={<IconTrash size={16} />}
             onClick={handleDelete}
             loading={loading}

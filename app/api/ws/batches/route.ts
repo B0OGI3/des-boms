@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     batchId,
     status,
     priority,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // In a real implementation, you'd broadcast this to WebSocket clients

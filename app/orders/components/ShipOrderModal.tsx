@@ -15,32 +15,44 @@ import {
 import type { Order } from '../hooks/useOrderSearch';
 
 // Helper functions for UI logic
-const getStatusBadgeColor = (orderStatus: string, canShip: boolean | null): string => {
+const getStatusBadgeColor = (
+  orderStatus: string,
+  canShip: boolean | null
+): string => {
   if (orderStatus === 'SHIPPED') return 'blue';
   return canShip ? 'green' : 'orange';
 };
 
 const getPriorityBadgeColor = (priority: string): string => {
   switch (priority) {
-    case 'RUSH': return 'red';
-    case 'HOLD': return 'gray';
-    default: return 'blue';
+    case 'RUSH':
+      return 'red';
+    case 'HOLD':
+      return 'gray';
+    default:
+      return 'blue';
   }
 };
 
 const getAlertColor = (messageType: string): string => {
   switch (messageType) {
-    case 'success': return 'green';
-    case 'info': return 'blue';
-    default: return 'orange';
+    case 'success':
+      return 'green';
+    case 'info':
+      return 'blue';
+    default:
+      return 'orange';
   }
 };
 
 const getAlertTitle = (messageType: string): string => {
   switch (messageType) {
-    case 'success': return 'Ready to Ship';
-    case 'info': return 'Already Shipped';
-    default: return 'Cannot Ship Yet';
+    case 'success':
+      return 'Ready to Ship';
+    case 'info':
+      return 'Already Shipped';
+    default:
+      return 'Cannot Ship Yet';
   }
 };
 
@@ -128,21 +140,21 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
 
   const getStatusMessage = () => {
     if (!order) return null;
-    
+
     if (order.orderStatus === 'SHIPPED') {
       return {
         type: 'info',
         message: `Order was shipped on ${order.shippedAt ? new Date(order.shippedAt).toLocaleDateString() : 'unknown date'} by ${order.shippedBy || 'unknown'}`,
       };
     }
-    
+
     if (order.orderStatus !== 'COMPLETED') {
       return {
         type: 'warning',
         message: 'Order must be completed before shipping',
       };
     }
-    
+
     return {
       type: 'success',
       message: 'Order is ready for shipping',
@@ -156,61 +168,71 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
       opened={opened}
       onClose={handleClose}
       title={
-        <Group gap="sm">
-          <Text size="lg" fw={600}>
+        <Group gap='sm'>
+          <Text size='lg' fw={600}>
             Ship Order
           </Text>
           {order && (
-            <Badge 
+            <Badge
               color={getStatusBadgeColor(order.orderStatus, canShip)}
-              variant="light"
+              variant='light'
             >
               {order.orderStatus}
             </Badge>
           )}
         </Group>
       }
-      size="md"
+      size='md'
       centered
     >
       {!order ? (
-        <Text c="dimmed">No order selected</Text>
+        <Text c='dimmed'>No order selected</Text>
       ) : (
-        <Stack gap="md">
+        <Stack gap='md'>
           {/* Order Summary */}
-          <div style={{
-            background: 'rgba(248, 249, 250, 0.5)',
-            border: '1px solid rgba(206, 212, 218, 0.3)',
-            borderRadius: '8px',
-            padding: '16px'
-          }}>
-            <Group justify="space-between" style={{ marginBottom: '12px' }}>
+          <div
+            style={{
+              background: 'rgba(248, 249, 250, 0.5)',
+              border: '1px solid rgba(206, 212, 218, 0.3)',
+              borderRadius: '8px',
+              padding: '16px',
+            }}
+          >
+            <Group justify='space-between' style={{ marginBottom: '12px' }}>
               <Text fw={500}>{order.orderId}</Text>
-              <Badge color="blue" variant="light">
+              <Badge color='blue' variant='light'>
                 {order.customerName}
               </Badge>
             </Group>
-            
-            <Group gap="xl">
+
+            <Group gap='xl'>
               <div>
-                <Text size="sm" c="dimmed">Completed</Text>
-                <Text size="sm">
-                  {order.completedAt ? new Date(order.completedAt).toLocaleDateString() : 'Not completed'}
+                <Text size='sm' c='dimmed'>
+                  Completed
+                </Text>
+                <Text size='sm'>
+                  {order.completedAt
+                    ? new Date(order.completedAt).toLocaleDateString()
+                    : 'Not completed'}
                 </Text>
               </div>
               <div>
-                <Text size="sm" c="dimmed">Priority</Text>
-                <Badge 
+                <Text size='sm' c='dimmed'>
+                  Priority
+                </Text>
+                <Badge
                   color={getPriorityBadgeColor(order.priority)}
-                  variant="light"
-                  size="sm"
+                  variant='light'
+                  size='sm'
                 >
                   {order.priority}
                 </Badge>
               </div>
               <div>
-                <Text size="sm" c="dimmed">Total Value</Text>
-                <Text size="sm">${order.totalValue.toLocaleString()}</Text>
+                <Text size='sm' c='dimmed'>
+                  Total Value
+                </Text>
+                <Text size='sm'>${order.totalValue.toLocaleString()}</Text>
               </div>
             </Group>
           </div>
@@ -229,36 +251,40 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
           {canShip && (
             <>
               <TextInput
-                label="Shipped By"
-                placeholder="Enter operator name or ID"
+                label='Shipped By'
+                placeholder='Enter operator name or ID'
                 value={shippedBy}
-                onChange={(e) => setShippedBy(e.target.value)}
+                onChange={e => setShippedBy(e.target.value)}
                 required
-                error={error && !shippedBy.trim() ? 'Operator name is required' : null}
+                error={
+                  error && !shippedBy.trim()
+                    ? 'Operator name is required'
+                    : null
+                }
               />
 
               <Select
-                label="Carrier"
-                placeholder="Select shipping carrier"
+                label='Carrier'
+                placeholder='Select shipping carrier'
                 value={carrier}
-                onChange={(value) => setCarrier(value || '')}
+                onChange={value => setCarrier(value || '')}
                 data={CARRIERS}
                 searchable
                 clearable
               />
 
               <TextInput
-                label="Tracking Number"
-                placeholder="Enter tracking number"
+                label='Tracking Number'
+                placeholder='Enter tracking number'
                 value={trackingNumber}
-                onChange={(e) => setTrackingNumber(e.target.value)}
+                onChange={e => setTrackingNumber(e.target.value)}
               />
 
               <Textarea
-                label="Shipping Notes"
-                placeholder="Enter shipping details, special instructions, etc."
+                label='Shipping Notes'
+                placeholder='Enter shipping details, special instructions, etc.'
                 value={shippingNotes}
-                onChange={(e) => setShippingNotes(e.target.value)}
+                onChange={e => setShippingNotes(e.target.value)}
                 minRows={3}
                 maxRows={5}
               />
@@ -267,22 +293,32 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
 
           {/* Show existing shipping info if already shipped */}
           {order.orderStatus === 'SHIPPED' && (
-            <div style={{
-              background: 'rgba(59, 130, 246, 0.1)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              borderRadius: '8px',
-              padding: '16px'
-            }}>
-              <Text fw={500} style={{ marginBottom: '8px' }}>Shipping Information:</Text>
-              <Stack gap="xs">
+            <div
+              style={{
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '8px',
+                padding: '16px',
+              }}
+            >
+              <Text fw={500} style={{ marginBottom: '8px' }}>
+                Shipping Information:
+              </Text>
+              <Stack gap='xs'>
                 <div>
-                  <Text size="sm" c="dimmed">Shipped By:</Text>
-                  <Text size="sm">{order.shippedBy}</Text>
+                  <Text size='sm' c='dimmed'>
+                    Shipped By:
+                  </Text>
+                  <Text size='sm'>{order.shippedBy}</Text>
                 </div>
                 <div>
-                  <Text size="sm" c="dimmed">Shipped Date:</Text>
-                  <Text size="sm">
-                    {order.shippedAt ? new Date(order.shippedAt).toLocaleString() : 'Unknown'}
+                  <Text size='sm' c='dimmed'>
+                    Shipped Date:
+                  </Text>
+                  <Text size='sm'>
+                    {order.shippedAt
+                      ? new Date(order.shippedAt).toLocaleString()
+                      : 'Unknown'}
                   </Text>
                 </div>
                 {/* Note: We'll need to parse shipping notes to extract carrier/tracking */}
@@ -292,28 +328,28 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
 
           {/* Error Display */}
           {error && (
-            <Alert color="red" title="Error">
+            <Alert color='red' title='Error'>
               {error}
             </Alert>
           )}
 
           {/* Action Buttons */}
-          <Group justify="flex-end" gap="sm">
+          <Group justify='flex-end' gap='sm'>
             <Button
-              variant="light"
+              variant='light'
               onClick={handleClose}
               disabled={isSubmitting}
             >
               {order?.orderStatus === 'SHIPPED' ? 'Close' : 'Cancel'}
             </Button>
-            
+
             {canShip && (
               <Button
                 onClick={handleSubmit}
                 loading={isSubmitting}
                 disabled={!shippedBy.trim()}
-                color="blue"
-                leftSection={isSubmitting ? <Loader size="sm" /> : '🚚'}
+                color='blue'
+                leftSection={isSubmitting ? <Loader size='sm' /> : '🚚'}
               >
                 {isSubmitting ? 'Shipping...' : 'Ship Order'}
               </Button>

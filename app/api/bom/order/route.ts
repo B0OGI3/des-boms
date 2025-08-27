@@ -5,11 +5,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../lib/prisma';
-import { 
-  getFullBOMStructure, 
+import {
+  getFullBOMStructure,
   calculateBatchMaterialRequirements,
   getBOMManufacturingSequence,
-  MaterialRequirement
+  MaterialRequirement,
 } from '../../../../lib/bomUtils';
 
 /**
@@ -20,13 +20,14 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const orderId = searchParams.get('orderId');
     const batchId = searchParams.get('batchId');
-    const includeManufacturingSequence = searchParams.get('manufacturingSequence') === 'true';
+    const includeManufacturingSequence =
+      searchParams.get('manufacturingSequence') === 'true';
 
     if (!orderId && !batchId) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Either orderId or batchId must be provided' 
+        {
+          success: false,
+          error: 'Either orderId or batchId must be provided',
         },
         { status: 400 }
       );
@@ -34,8 +35,9 @@ export async function GET(request: NextRequest) {
 
     if (batchId) {
       // Get material requirements for a specific batch
-      const materialRequirements = await calculateBatchMaterialRequirements(batchId);
-      
+      const materialRequirements =
+        await calculateBatchMaterialRequirements(batchId);
+
       const batch = await prisma.batch.findUnique({
         where: { id: batchId },
         include: {
@@ -44,17 +46,20 @@ export async function GET(request: NextRequest) {
               part: true,
               purchaseOrder: {
                 include: {
-                  customer: true
-                }
-              }
-            }
-          }
-        }
+                  customer: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       let manufacturingSequence = null;
       if (includeManufacturingSequence && batch) {
-        manufacturingSequence = await getBOMManufacturingSequence(batch.lineItem.partId, batch.quantity);
+        manufacturingSequence = await getBOMManufacturingSequence(
+          batch.lineItem.partId,
+          batch.quantity
+        );
       }
 
       return NextResponse.json({
@@ -65,16 +70,23 @@ export async function GET(request: NextRequest) {
             batchId: batch?.batchId,
             quantity: batch?.quantity,
             part: batch?.lineItem.part,
-            customer: batch?.lineItem.purchaseOrder.customer.name
+            customer: batch?.lineItem.purchaseOrder.customer.name,
           },
           materialRequirements,
           manufacturingSequence,
           summary: {
-            totalRawMaterials: materialRequirements.filter(req => req.partType === 'RAW_MATERIAL').length,
-            totalSemiFinished: materialRequirements.filter(req => req.partType === 'SEMI_FINISHED').length,
-            totalMaterialCost: materialRequirements.reduce((sum, req) => sum + req.totalCost, 0)
-          }
-        }
+            totalRawMaterials: materialRequirements.filter(
+              req => req.partType === 'RAW_MATERIAL'
+            ).length,
+            totalSemiFinished: materialRequirements.filter(
+              req => req.partType === 'SEMI_FINISHED'
+            ).length,
+            totalMaterialCost: materialRequirements.reduce(
+              (sum, req) => sum + req.totalCost,
+              0
+            ),
+          },
+        },
       });
     }
 
@@ -86,17 +98,17 @@ export async function GET(request: NextRequest) {
         lineItems: {
           include: {
             part: true,
-            batches: true
-          }
-        }
-      }
+            batches: true,
+          },
+        },
+      },
     });
 
     if (!order) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Order not found' 
+        {
+          success: false,
+          error: 'Order not found',
         },
         { status: 404 }
       );
@@ -104,12 +116,18 @@ export async function GET(request: NextRequest) {
 
     // Calculate material requirements for each line item
     const lineItemRequirements = await Promise.all(
-      order.lineItems.map(async (lineItem) => {
-        const bomStructure = await getFullBOMStructure(lineItem.partId, lineItem.quantity);
-        
+      order.lineItems.map(async lineItem => {
+        const bomStructure = await getFullBOMStructure(
+          lineItem.partId,
+          lineItem.quantity
+        );
+
         let manufacturingSequence = null;
         if (includeManufacturingSequence) {
-          manufacturingSequence = await getBOMManufacturingSequence(lineItem.partId, lineItem.quantity);
+          manufacturingSequence = await getBOMManufacturingSequence(
+            lineItem.partId,
+            lineItem.quantity
+          );
         }
 
         return {
@@ -118,7 +136,7 @@ export async function GET(request: NextRequest) {
             part: lineItem.part,
             quantity: lineItem.quantity,
             dueDate: lineItem.dueDate,
-            notes: lineItem.notes
+            notes: lineItem.notes,
           },
           bomStructure,
           manufacturingSequence,
@@ -126,20 +144,21 @@ export async function GET(request: NextRequest) {
             id: batch.id,
             batchId: batch.batchId,
             quantity: batch.quantity,
-            status: batch.status
-          }))
+            status: batch.status,
+          })),
         };
       })
     );
 
     // Consolidate material requirements across all line items
     const consolidatedMaterials: { [partId: string]: MaterialRequirement } = {};
-    
+
     lineItemRequirements.forEach(item => {
       if (item.bomStructure) {
         item.bomStructure.materialRequirements.forEach(req => {
           if (consolidatedMaterials[req.partId]) {
-            consolidatedMaterials[req.partId].totalQuantityRequired += req.totalQuantityRequired;
+            consolidatedMaterials[req.partId].totalQuantityRequired +=
+              req.totalQuantityRequired;
             consolidatedMaterials[req.partId].totalCost += req.totalCost;
             consolidatedMaterials[req.partId].sources.push(...req.sources);
           } else {
@@ -160,28 +179,36 @@ export async function GET(request: NextRequest) {
           poNumber: order.poNumber,
           customer: order.customer,
           dueDate: order.dueDate,
-          priority: order.priority
+          priority: order.priority,
         },
         lineItems: lineItemRequirements,
         consolidatedMaterialRequirements: consolidatedRequirements,
         summary: {
           totalLineItems: order.lineItems.length,
-          totalRawMaterials: consolidatedRequirements.filter(req => req.partType === 'RAW_MATERIAL').length,
-          totalSemiFinished: consolidatedRequirements.filter(req => req.partType === 'SEMI_FINISHED').length,
-          totalMaterialCost: consolidatedRequirements.reduce((sum, req) => sum + req.totalCost, 0),
-          estimatedManufacturingSteps: lineItemRequirements.reduce((sum, item) => 
-            sum + (item.manufacturingSequence?.length || 0), 0)
-        }
-      }
+          totalRawMaterials: consolidatedRequirements.filter(
+            req => req.partType === 'RAW_MATERIAL'
+          ).length,
+          totalSemiFinished: consolidatedRequirements.filter(
+            req => req.partType === 'SEMI_FINISHED'
+          ).length,
+          totalMaterialCost: consolidatedRequirements.reduce(
+            (sum, req) => sum + req.totalCost,
+            0
+          ),
+          estimatedManufacturingSteps: lineItemRequirements.reduce(
+            (sum, item) => sum + (item.manufacturingSequence?.length || 0),
+            0
+          ),
+        },
+      },
     });
-
   } catch (error) {
     console.error('Error fetching order material requirements:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to fetch order material requirements',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -196,11 +223,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { batchId, materialConsumption, operatorId } = body;
 
-    if (!batchId || !materialConsumption || !Array.isArray(materialConsumption)) {
+    if (
+      !batchId ||
+      !materialConsumption ||
+      !Array.isArray(materialConsumption)
+    ) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Missing required fields: batchId, materialConsumption (array)' 
+        {
+          success: false,
+          error:
+            'Missing required fields: batchId, materialConsumption (array)',
         },
         { status: 400 }
       );
@@ -212,17 +244,17 @@ export async function POST(request: NextRequest) {
       include: {
         lineItem: {
           include: {
-            part: true
-          }
-        }
-      }
+            part: true,
+          },
+        },
+      },
     });
 
     if (!batch) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Batch not found' 
+        {
+          success: false,
+          error: 'Batch not found',
         },
         { status: 404 }
       );
@@ -235,7 +267,7 @@ export async function POST(request: NextRequest) {
 
         // Validate material part exists
         const materialPart = await prisma.part.findUnique({
-          where: { id: materialPartId }
+          where: { id: materialPartId },
         });
 
         if (!materialPart) {
@@ -250,7 +282,7 @@ export async function POST(request: NextRequest) {
             unitCost: unitCost ? parseFloat(unitCost) : null,
             operatorId,
             notes,
-            consumedAt: new Date()
+            consumedAt: new Date(),
           },
           include: {
             materialPart: {
@@ -258,33 +290,40 @@ export async function POST(request: NextRequest) {
                 partNumber: true,
                 partName: true,
                 partType: true,
-                unitOfMeasure: true
-              }
-            }
-          }
+                unitOfMeasure: true,
+              },
+            },
+          },
         });
       })
     );
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        batchId,
-        consumptionRecords,
-        totalRecords: consumptionRecords.length,
-        totalCost: consumptionRecords.reduce((sum, record) => 
-          sum + (parseFloat(record.quantityUsed.toString()) * (parseFloat(record.unitCost?.toString() || '0'))), 0)
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          batchId,
+          consumptionRecords,
+          totalRecords: consumptionRecords.length,
+          totalCost: consumptionRecords.reduce(
+            (sum, record) =>
+              sum +
+              parseFloat(record.quantityUsed.toString()) *
+                parseFloat(record.unitCost?.toString() || '0'),
+            0
+          ),
+        },
+        message: `Successfully recorded material consumption for batch ${batch.batchId}`,
       },
-      message: `Successfully recorded material consumption for batch ${batch.batchId}`
-    }, { status: 201 });
-
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating material consumption records:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create material consumption records',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

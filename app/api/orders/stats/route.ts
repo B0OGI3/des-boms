@@ -5,20 +5,15 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     // Get basic order counts
-    const [
-      totalOrders,
-      rushOrders,
-      overdueOrders,
-      orders
-    ] = await Promise.all([
+    const [totalOrders, rushOrders, overdueOrders, orders] = await Promise.all([
       prisma.purchaseOrder.count(),
       prisma.purchaseOrder.count({
-        where: { priority: 'RUSH' }
+        where: { priority: 'RUSH' },
       }),
       prisma.purchaseOrder.count({
         where: {
-          dueDate: { lt: new Date() }
-        }
+          dueDate: { lt: new Date() },
+        },
       }),
       prisma.purchaseOrder.findMany({
         include: {
@@ -27,13 +22,13 @@ export async function GET() {
             include: {
               batches: {
                 include: {
-                  routingSteps: true
-                }
-              }
-            }
-          }
-        }
-      })
+                  routingSteps: true,
+                },
+              },
+            },
+          },
+        },
+      }),
     ]);
 
     // Calculate derived statistics
@@ -46,14 +41,18 @@ export async function GET() {
       // Calculate order value based on line items (you may need to adjust this based on your pricing model)
       const orderValue = order.lineItems.reduce((sum, item) => {
         // For now, we'll use a simple calculation - you might want to add pricing to your schema
-        return sum + (item.quantity * 100); // Assuming $100 per unit as placeholder
+        return sum + item.quantity * 100; // Assuming $100 per unit as placeholder
       }, 0);
       totalValue += orderValue;
 
       // Determine order status based on batch completion
       const allBatches = order.lineItems.flatMap(item => item.batches);
-      const completedBatches = allBatches.filter(batch => batch.status === 'COMPLETED').length;
-      const inProgressBatches = allBatches.filter(batch => batch.status === 'IN_PROGRESS').length;
+      const completedBatches = allBatches.filter(
+        batch => batch.status === 'COMPLETED'
+      ).length;
+      const inProgressBatches = allBatches.filter(
+        batch => batch.status === 'IN_PROGRESS'
+      ).length;
 
       if (allBatches.length === 0) {
         pendingOrders++;
@@ -76,7 +75,7 @@ export async function GET() {
       rushOrders,
       overdueOrders,
       totalValue,
-      avgOrderValue
+      avgOrderValue,
     };
 
     return NextResponse.json({

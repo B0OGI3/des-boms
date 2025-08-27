@@ -28,14 +28,14 @@ export async function GET(
                         partName: true,
                         partType: true,
                         standardCost: true,
-                        unitOfMeasure: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+                        unitOfMeasure: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         materialConsumption: {
           include: {
@@ -46,12 +46,12 @@ export async function GET(
                 partName: true,
                 partType: true,
                 standardCost: true,
-                unitOfMeasure: true
-              }
-            }
-          }
-        }
-      }
+                unitOfMeasure: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!batch) {
@@ -70,7 +70,10 @@ export async function GET(
       requiredQuantity: Number(bomEntry.quantity) * batch.quantity,
       unitOfMeasure: bomEntry.unitOfMeasure || bomEntry.childPart.unitOfMeasure,
       standardCost: Number(bomEntry.childPart.standardCost || 0),
-      totalRequiredCost: Number(bomEntry.childPart.standardCost || 0) * Number(bomEntry.quantity) * batch.quantity
+      totalRequiredCost:
+        Number(bomEntry.childPart.standardCost || 0) *
+        Number(bomEntry.quantity) *
+        batch.quantity,
     }));
 
     // Calculate consumed materials
@@ -81,20 +84,24 @@ export async function GET(
       partType: consumption.materialPart.partType,
       consumedQuantity: Number(consumption.quantityUsed),
       unitCost: Number(consumption.unitCost || 0),
-      totalConsumedCost: Number(consumption.quantityUsed) * Number(consumption.unitCost || 0),
+      totalConsumedCost:
+        Number(consumption.quantityUsed) * Number(consumption.unitCost || 0),
       consumedAt: consumption.consumedAt,
       operatorId: consumption.operatorId,
-      notes: consumption.notes
+      notes: consumption.notes,
     }));
 
     // Calculate variance between required and consumed
     const materialVariance = requiredMaterials.map(required => {
-      const consumed = consumedMaterials.find(c => c.partId === required.partId);
+      const consumed = consumedMaterials.find(
+        c => c.partId === required.partId
+      );
       const actualQuantity = consumed?.consumedQuantity || 0;
       const variance = actualQuantity - required.requiredQuantity;
-      const variancePercent = required.requiredQuantity > 0 
-        ? (variance / required.requiredQuantity) * 100 
-        : 0;
+      const variancePercent =
+        required.requiredQuantity > 0
+          ? (variance / required.requiredQuantity) * 100
+          : 0;
 
       let status = 'ON_TARGET';
       if (Math.abs(variancePercent) > 5) {
@@ -106,20 +113,32 @@ export async function GET(
         actualQuantity,
         variance,
         variancePercent,
-        status
+        status,
       };
     });
 
     // Summary statistics
     const summary = {
-      totalRequiredCost: requiredMaterials.reduce((sum, m) => sum + m.totalRequiredCost, 0),
-      totalConsumedCost: consumedMaterials.reduce((sum, m) => sum + m.totalConsumedCost, 0),
+      totalRequiredCost: requiredMaterials.reduce(
+        (sum, m) => sum + m.totalRequiredCost,
+        0
+      ),
+      totalConsumedCost: consumedMaterials.reduce(
+        (sum, m) => sum + m.totalConsumedCost,
+        0
+      ),
       materialVarianceCost: 0,
-      materialsOnTarget: materialVariance.filter(m => m.status === 'ON_TARGET').length,
-      materialsOverConsumed: materialVariance.filter(m => m.status === 'OVER_CONSUMED').length,
-      materialsUnderConsumed: materialVariance.filter(m => m.status === 'UNDER_CONSUMED').length
+      materialsOnTarget: materialVariance.filter(m => m.status === 'ON_TARGET')
+        .length,
+      materialsOverConsumed: materialVariance.filter(
+        m => m.status === 'OVER_CONSUMED'
+      ).length,
+      materialsUnderConsumed: materialVariance.filter(
+        m => m.status === 'UNDER_CONSUMED'
+      ).length,
     };
-    summary.materialVarianceCost = summary.totalConsumedCost - summary.totalRequiredCost;
+    summary.materialVarianceCost =
+      summary.totalConsumedCost - summary.totalRequiredCost;
 
     return NextResponse.json({
       success: true,
@@ -131,17 +150,16 @@ export async function GET(
         requiredMaterials,
         consumedMaterials,
         materialVariance,
-        summary
-      }
+        summary,
+      },
     });
-
   } catch (error) {
     console.error('Error fetching batch materials:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch batch materials',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -157,12 +175,16 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { materialPartId, quantityUsed, operatorId, notes } = await request.json();
+    const { materialPartId, quantityUsed, operatorId, notes } =
+      await request.json();
 
     // Validate required fields
     if (!materialPartId || !quantityUsed || quantityUsed <= 0) {
       return NextResponse.json(
-        { success: false, error: 'Material part ID and positive quantity are required' },
+        {
+          success: false,
+          error: 'Material part ID and positive quantity are required',
+        },
         { status: 400 }
       );
     }
@@ -170,7 +192,7 @@ export async function POST(
     // Verify batch exists
     const batch = await prisma.batch.findUnique({
       where: { id },
-      select: { id: true, batchId: true }
+      select: { id: true, batchId: true },
     });
 
     if (!batch) {
@@ -183,7 +205,7 @@ export async function POST(
     // Verify material part exists
     const materialPart = await prisma.part.findUnique({
       where: { id: materialPartId },
-      select: { id: true, partNumber: true, standardCost: true }
+      select: { id: true, partNumber: true, standardCost: true },
     });
 
     if (!materialPart) {
@@ -198,9 +220,9 @@ export async function POST(
       where: {
         batchId_materialPartId: {
           batchId: id,
-          materialPartId
-        }
-      }
+          materialPartId,
+        },
+      },
     });
 
     let consumption;
@@ -213,17 +235,17 @@ export async function POST(
           unitCost: materialPart.standardCost || 0,
           operatorId: operatorId || 'UNKNOWN',
           notes: notes || null,
-          consumedAt: new Date()
+          consumedAt: new Date(),
         },
         include: {
           materialPart: {
             select: {
               partNumber: true,
               partName: true,
-              partType: true
-            }
-          }
-        }
+              partType: true,
+            },
+          },
+        },
       });
     } else {
       // Create new consumption record
@@ -235,35 +257,34 @@ export async function POST(
           unitCost: materialPart.standardCost || 0,
           operatorId: operatorId || 'UNKNOWN',
           notes: notes || null,
-          consumedAt: new Date()
+          consumedAt: new Date(),
         },
         include: {
           materialPart: {
             select: {
               partNumber: true,
               partName: true,
-              partType: true
-            }
-          }
-        }
+              partType: true,
+            },
+          },
+        },
       });
     }
 
     return NextResponse.json({
       success: true,
       data: consumption,
-      message: existingConsumption 
+      message: existingConsumption
         ? 'Material consumption updated successfully'
-        : 'Material consumption recorded successfully'
+        : 'Material consumption recorded successfully',
     });
-
   } catch (error) {
     console.error('Error recording material consumption:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to record material consumption',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

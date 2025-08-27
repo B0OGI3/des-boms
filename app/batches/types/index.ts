@@ -1,6 +1,11 @@
 // Types for Batch Management System
 export type BatchPriority = 'RUSH' | 'STANDARD' | 'HOLD';
-export type BatchStatus = 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
+export type BatchStatus =
+  | 'QUEUED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'ON_HOLD'
+  | 'CANCELLED';
 
 export interface Batch {
   id: string;
@@ -15,7 +20,7 @@ export interface Batch {
   notes: string | null;
   createdAt: string;
   updatedAt: string;
-  
+
   // Relations
   lineItem: {
     id: string;
@@ -60,7 +65,7 @@ export interface RoutingStep {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED';
   createdAt: string;
   updatedAt: string;
-  
+
   // Relations
   workstation: {
     id: string;
@@ -126,7 +131,13 @@ export interface RoutingStepInput {
 }
 
 // Filter types
-export type BatchStatusFilter = 'ALL' | 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
+export type BatchStatusFilter =
+  | 'ALL'
+  | 'QUEUED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'ON_HOLD'
+  | 'CANCELLED';
 export type BatchPriorityFilter = 'ALL' | 'RUSH' | 'STANDARD' | 'HOLD';
 
 // Search and filtering

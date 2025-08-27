@@ -1,6 +1,6 @@
 /**
  * BOM (Bill of Materials) Utilities for DES-BOMS
- * 
+ *
  * Handles hierarchical BOM structures:
  * - Finished Goods (FG-) can contain Semi-Finished (SF-) and Raw Materials (RM-)
  * - Semi-Finished (SF-) can contain Raw Materials (RM-)
@@ -65,26 +65,39 @@ export interface MaterialRequirement {
 /**
  * Validate BOM hierarchy rules
  */
-export function validateBOMHierarchy(parentType: PartType, childType: PartType): { valid: boolean; error?: string } {
+export function validateBOMHierarchy(
+  parentType: PartType,
+  childType: PartType
+): { valid: boolean; error?: string } {
   switch (parentType) {
     case 'FINISHED':
       // Finished goods can contain SF or RM
       if (childType === 'SEMI_FINISHED' || childType === 'RAW_MATERIAL') {
         return { valid: true };
       }
-      return { valid: false, error: 'Finished goods can only contain Semi-Finished parts or Raw Materials' };
-    
+      return {
+        valid: false,
+        error:
+          'Finished goods can only contain Semi-Finished parts or Raw Materials',
+      };
+
     case 'SEMI_FINISHED':
       // Semi-finished can only contain RM
       if (childType === 'RAW_MATERIAL') {
         return { valid: true };
       }
-      return { valid: false, error: 'Semi-Finished parts can only contain Raw Materials' };
-    
+      return {
+        valid: false,
+        error: 'Semi-Finished parts can only contain Raw Materials',
+      };
+
     case 'RAW_MATERIAL':
       // Raw materials cannot contain other parts
-      return { valid: false, error: 'Raw Materials cannot contain other components' };
-    
+      return {
+        valid: false,
+        error: 'Raw Materials cannot contain other components',
+      };
+
     default:
       return { valid: false, error: 'Unknown part type' };
   }
@@ -93,7 +106,10 @@ export function validateBOMHierarchy(parentType: PartType, childType: PartType):
 /**
  * Get full BOM structure with all levels
  */
-export async function getFullBOMStructure(partId: string, requiredQuantity: number = 1): Promise<BOMStructure | null> {
+export async function getFullBOMStructure(
+  partId: string,
+  requiredQuantity: number = 1
+): Promise<BOMStructure | null> {
   const part = await prisma.part.findUnique({
     where: { id: partId },
     include: {
@@ -103,19 +119,19 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
             include: {
               childBOMs: {
                 include: {
-                  childPart: true
-                }
-              }
-            }
-          }
+                  childPart: true,
+                },
+              },
+            },
+          },
         },
         orderBy: {
           childPart: {
-            partNumber: 'asc'
-          }
-        }
-      }
-    }
+            partNumber: 'asc',
+          },
+        },
+      },
+    },
   });
 
   if (!part) {
@@ -126,17 +142,26 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
   let totalMaterialCost = 0;
 
   // Recursively process BOM components
-  function processComponents(components: any[], parentQuantity: number, level: number, parentName: string): BOMComponent[] {
+  function processComponents(
+    components: any[],
+    parentQuantity: number,
+    level: number,
+    parentName: string
+  ): BOMComponent[] {
     return components.map(bom => {
       const requiredQty = parseFloat(bom.quantity.toString()) * parentQuantity;
-      const scrapFactor = bom.scrapFactor ? parseFloat(bom.scrapFactor.toString()) : 0;
+      const scrapFactor = bom.scrapFactor
+        ? parseFloat(bom.scrapFactor.toString())
+        : 0;
       const totalQtyWithScrap = requiredQty * (1 + scrapFactor);
-      
+
       const component: BOMComponent = {
         id: bom.id,
         quantity: parseFloat(bom.quantity.toString()),
         unitOfMeasure: bom.unitOfMeasure,
-        scrapFactor: bom.scrapFactor ? parseFloat(bom.scrapFactor.toString()) : undefined,
+        scrapFactor: bom.scrapFactor
+          ? parseFloat(bom.scrapFactor.toString())
+          : undefined,
         operation: bom.operation,
         notes: bom.notes,
         totalRequiredQuantity: totalQtyWithScrap,
@@ -146,17 +171,19 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
           partName: bom.childPart.partName,
           partType: bom.childPart.partType,
           description: bom.childPart.description,
-          standardCost: bom.childPart.standardCost ? parseFloat(bom.childPart.standardCost.toString()) : undefined,
-          unitOfMeasure: bom.childPart.unitOfMeasure
-        }
+          standardCost: bom.childPart.standardCost
+            ? parseFloat(bom.childPart.standardCost.toString())
+            : undefined,
+          unitOfMeasure: bom.childPart.unitOfMeasure,
+        },
       };
 
       // Process sub-components if they exist
       if (bom.childPart.childBOMs && bom.childPart.childBOMs.length > 0) {
         component.subComponents = processComponents(
-          bom.childPart.childBOMs, 
-          totalQtyWithScrap, 
-          level + 1, 
+          bom.childPart.childBOMs,
+          totalQtyWithScrap,
+          level + 1,
           bom.childPart.partName
         );
       }
@@ -166,11 +193,12 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
       if (materialRequirements.has(partId)) {
         const existing = materialRequirements.get(partId)!;
         existing.totalQuantityRequired += totalQtyWithScrap;
-        existing.totalCost = existing.totalQuantityRequired * (existing.standardCost || 0);
+        existing.totalCost =
+          existing.totalQuantityRequired * (existing.standardCost || 0);
         existing.sources.push({
           fromComponent: parentName,
           quantity: totalQtyWithScrap,
-          operation: bom.operation
+          operation: bom.operation,
         });
       } else {
         const standardCost = component.childPart.standardCost || 0;
@@ -186,11 +214,13 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
           unitOfMeasure: bom.childPart.unitOfMeasure,
           standardCost,
           totalCost,
-          sources: [{
-            fromComponent: parentName,
-            quantity: totalQtyWithScrap,
-            operation: bom.operation
-          }]
+          sources: [
+            {
+              fromComponent: parentName,
+              quantity: totalQtyWithScrap,
+              operation: bom.operation,
+            },
+          ],
         });
       }
 
@@ -198,7 +228,12 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
     });
   }
 
-  const components = processComponents(part.childBOMs, requiredQuantity, 1, part.partName);
+  const components = processComponents(
+    part.childBOMs,
+    requiredQuantity,
+    1,
+    part.partName
+  );
 
   return {
     parentPart: {
@@ -207,12 +242,14 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
       partName: part.partName,
       partType: part.partType,
       description: part.description || undefined,
-      standardCost: part.standardCost ? parseFloat(part.standardCost.toString()) : undefined
+      standardCost: part.standardCost
+        ? parseFloat(part.standardCost.toString())
+        : undefined,
     },
     components,
     materialRequirements: Array.from(materialRequirements.values()),
     totalMaterialCost,
-    levels: getMaxLevel(components)
+    levels: getMaxLevel(components),
   };
 }
 
@@ -221,7 +258,7 @@ export async function getFullBOMStructure(partId: string, requiredQuantity: numb
  */
 function getMaxLevel(components: BOMComponent[]): number {
   if (components.length === 0) return 0;
-  
+
   let maxLevel = 1;
   for (const component of components) {
     if (component.subComponents) {
@@ -235,24 +272,29 @@ function getMaxLevel(components: BOMComponent[]): number {
 /**
  * Calculate material requirements for a batch
  */
-export async function calculateBatchMaterialRequirements(batchId: string): Promise<MaterialRequirement[]> {
+export async function calculateBatchMaterialRequirements(
+  batchId: string
+): Promise<MaterialRequirement[]> {
   const batch = await prisma.batch.findUnique({
     where: { id: batchId },
     include: {
       lineItem: {
         include: {
-          part: true
-        }
-      }
-    }
+          part: true,
+        },
+      },
+    },
   });
 
   if (!batch) {
     throw new Error('Batch not found');
   }
 
-  const bomStructure = await getFullBOMStructure(batch.lineItem.partId, batch.quantity);
-  
+  const bomStructure = await getFullBOMStructure(
+    batch.lineItem.partId,
+    batch.quantity
+  );
+
   if (!bomStructure) {
     throw new Error('Could not retrieve BOM structure for batch');
   }
@@ -263,11 +305,20 @@ export async function calculateBatchMaterialRequirements(batchId: string): Promi
 /**
  * Validate that a BOM component relationship is allowed
  */
-export async function validateBOMComponentAddition(parentPartId: string, childPartId: string): Promise<{ valid: boolean; error?: string }> {
+export async function validateBOMComponentAddition(
+  parentPartId: string,
+  childPartId: string
+): Promise<{ valid: boolean; error?: string }> {
   // Check if parts exist and get their types
   const [parentPart, childPart] = await Promise.all([
-    prisma.part.findUnique({ where: { id: parentPartId }, select: { partType: true, partNumber: true } }),
-    prisma.part.findUnique({ where: { id: childPartId }, select: { partType: true, partNumber: true } })
+    prisma.part.findUnique({
+      where: { id: parentPartId },
+      select: { partType: true, partNumber: true },
+    }),
+    prisma.part.findUnique({
+      where: { id: childPartId },
+      select: { partType: true, partNumber: true },
+    }),
   ]);
 
   if (!parentPart || !childPart) {
@@ -275,7 +326,10 @@ export async function validateBOMComponentAddition(parentPartId: string, childPa
   }
 
   // Check hierarchy rules
-  const hierarchyCheck = validateBOMHierarchy(parentPart.partType, childPart.partType);
+  const hierarchyCheck = validateBOMHierarchy(
+    parentPart.partType,
+    childPart.partType
+  );
   if (!hierarchyCheck.valid) {
     return hierarchyCheck;
   }
@@ -292,14 +346,23 @@ export async function validateBOMComponentAddition(parentPartId: string, childPa
 /**
  * Check for circular references in BOM structure
  */
-async function checkCircularReference(parentPartId: string, childPartId: string): Promise<{ valid: boolean; error?: string }> {
+async function checkCircularReference(
+  parentPartId: string,
+  childPartId: string
+): Promise<{ valid: boolean; error?: string }> {
   // Simple check: ensure parent is not in child's BOM tree
   const childBomStructure = await getFullBOMStructure(childPartId);
-  
+
   if (childBomStructure) {
-    const containsParent = checkIfPartExistsInBOM(childBomStructure.components, parentPartId);
+    const containsParent = checkIfPartExistsInBOM(
+      childBomStructure.components,
+      parentPartId
+    );
     if (containsParent) {
-      return { valid: false, error: 'Adding this component would create a circular reference' };
+      return {
+        valid: false,
+        error: 'Adding this component would create a circular reference',
+      };
     }
   }
 
@@ -309,12 +372,18 @@ async function checkCircularReference(parentPartId: string, childPartId: string)
 /**
  * Check if a part ID exists anywhere in a BOM structure
  */
-function checkIfPartExistsInBOM(components: BOMComponent[], partId: string): boolean {
+function checkIfPartExistsInBOM(
+  components: BOMComponent[],
+  partId: string
+): boolean {
   for (const component of components) {
     if (component.childPart.id === partId) {
       return true;
     }
-    if (component.subComponents && checkIfPartExistsInBOM(component.subComponents, partId)) {
+    if (
+      component.subComponents &&
+      checkIfPartExistsInBOM(component.subComponents, partId)
+    ) {
       return true;
     }
   }
@@ -324,15 +393,20 @@ function checkIfPartExistsInBOM(components: BOMComponent[], partId: string): boo
 /**
  * Get all raw materials required for a finished good or semi-finished part
  */
-export async function getRawMaterialsForPart(partId: string, quantity: number = 1): Promise<MaterialRequirement[]> {
+export async function getRawMaterialsForPart(
+  partId: string,
+  quantity: number = 1
+): Promise<MaterialRequirement[]> {
   const bomStructure = await getFullBOMStructure(partId, quantity);
-  
+
   if (!bomStructure) {
     return [];
   }
 
   // Filter to only raw materials
-  return bomStructure.materialRequirements.filter(req => req.partType === 'RAW_MATERIAL');
+  return bomStructure.materialRequirements.filter(
+    req => req.partType === 'RAW_MATERIAL'
+  );
 }
 
 /**
@@ -349,16 +423,23 @@ export interface ManufacturingStep {
   dependencies: string[]; // Part IDs that must be completed first
 }
 
-export async function getBOMManufacturingSequence(partId: string, quantity: number = 1): Promise<ManufacturingStep[]> {
+export async function getBOMManufacturingSequence(
+  partId: string,
+  quantity: number = 1
+): Promise<ManufacturingStep[]> {
   const bomStructure = await getFullBOMStructure(partId, quantity);
-  
+
   if (!bomStructure) {
     return [];
   }
 
   const steps: ManufacturingStep[] = [];
-  
-  function processLevel(components: BOMComponent[], level: number, parentDependencies: string[] = []) {
+
+  function processLevel(
+    components: BOMComponent[],
+    level: number,
+    parentDependencies: string[] = []
+  ) {
     for (const component of components) {
       const step: ManufacturingStep = {
         level,
@@ -368,19 +449,22 @@ export async function getBOMManufacturingSequence(partId: string, quantity: numb
         partType: component.childPart.partType,
         quantity: component.totalRequiredQuantity || component.quantity,
         operation: component.operation,
-        dependencies: [...parentDependencies]
+        dependencies: [...parentDependencies],
       };
 
       steps.push(step);
 
       if (component.subComponents) {
-        processLevel(component.subComponents, level + 1, [...parentDependencies, component.childPart.id]);
+        processLevel(component.subComponents, level + 1, [
+          ...parentDependencies,
+          component.childPart.id,
+        ]);
       }
     }
   }
 
   processLevel(bomStructure.components, 1);
-  
+
   // Sort by level (deeper levels first, so dependencies are built first)
   return steps.sort((a, b) => b.level - a.level);
 }
@@ -389,7 +473,10 @@ export async function getBOMManufacturingSequence(partId: string, quantity: numb
  * Integration utility for Smart Batch Generation
  * Suggests routing steps based on BOM structure and part types
  */
-export async function generateBOMBasedRoutingSteps(partId: string, quantity: number = 1): Promise<{
+export async function generateBOMBasedRoutingSteps(
+  partId: string,
+  quantity: number = 1
+): Promise<{
   suggestedSteps: Array<{
     stepNumber: number;
     operation: string;
@@ -403,7 +490,7 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
   materialRequirements: MaterialRequirement[];
 }> {
   const bomStructure = await getFullBOMStructure(partId, quantity);
-  
+
   if (!bomStructure) {
     return { suggestedSteps: [], materialRequirements: [] };
   }
@@ -412,12 +499,21 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
   let stepNumber = 1;
 
   // Get the manufacturing sequence
-  const manufacturingSteps = await getBOMManufacturingSequence(partId, quantity);
-  
+  const manufacturingSteps = await getBOMManufacturingSequence(
+    partId,
+    quantity
+  );
+
   // Group by part type to create logical manufacturing steps
-  const finishedParts = manufacturingSteps.filter(step => step.partType === 'FINISHED');
-  const semiFinishedParts = manufacturingSteps.filter(step => step.partType === 'SEMI_FINISHED');
-  const rawMaterialParts = manufacturingSteps.filter(step => step.partType === 'RAW_MATERIAL');
+  const finishedParts = manufacturingSteps.filter(
+    step => step.partType === 'FINISHED'
+  );
+  const semiFinishedParts = manufacturingSteps.filter(
+    step => step.partType === 'SEMI_FINISHED'
+  );
+  const rawMaterialParts = manufacturingSteps.filter(
+    step => step.partType === 'RAW_MATERIAL'
+  );
 
   // 1. Material Preparation Steps (Raw Materials)
   if (rawMaterialParts.length > 0) {
@@ -429,7 +525,9 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
       required: true,
       partType: 'RAW_MATERIAL',
       partNumber: 'PREP-MATERIALS',
-      materialRequirements: rawMaterialParts.map(rm => `${rm.partNumber}: ${rm.quantity} units`)
+      materialRequirements: rawMaterialParts.map(
+        rm => `${rm.partNumber}: ${rm.quantity} units`
+      ),
     });
   }
 
@@ -438,7 +536,7 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
     // Determine operation based on part name/description
     let operation = 'MACHINING';
     let estimatedTime = 120; // Default 2 hours
-    
+
     if (sfPart.partName.toLowerCase().includes('weld')) {
       operation = 'WELDING';
       estimatedTime = 90;
@@ -458,9 +556,10 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
       required: true,
       partType: sfPart.partType,
       partNumber: sfPart.partNumber,
-      materialRequirements: sfPart.dependencies.length > 0 
-        ? [`Requires: ${sfPart.dependencies.join(', ')}`]
-        : undefined
+      materialRequirements:
+        sfPart.dependencies.length > 0
+          ? [`Requires: ${sfPart.dependencies.join(', ')}`]
+          : undefined,
     });
   });
 
@@ -474,9 +573,10 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
       required: true,
       partType: fgPart.partType,
       partNumber: fgPart.partNumber,
-      materialRequirements: fgPart.dependencies.length > 0 
-        ? [`Components: ${fgPart.dependencies.join(', ')}`]
-        : undefined
+      materialRequirements:
+        fgPart.dependencies.length > 0
+          ? [`Components: ${fgPart.dependencies.join(', ')}`]
+          : undefined,
     });
   });
 
@@ -489,7 +589,7 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
     required: true,
     partType: 'FINISHED',
     partNumber: bomStructure.parentPart.partNumber,
-    materialRequirements: ['QC checklist', 'Measuring tools']
+    materialRequirements: ['QC checklist', 'Measuring tools'],
   });
 
   suggestedSteps.push({
@@ -500,11 +600,11 @@ export async function generateBOMBasedRoutingSteps(partId: string, quantity: num
     required: false,
     partType: 'FINISHED',
     partNumber: bomStructure.parentPart.partNumber,
-    materialRequirements: ['Packaging materials', 'Labels']
+    materialRequirements: ['Packaging materials', 'Labels'],
   });
 
   return {
     suggestedSteps,
-    materialRequirements: bomStructure.materialRequirements
+    materialRequirements: bomStructure.materialRequirements,
   };
 }

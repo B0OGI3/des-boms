@@ -11,7 +11,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Modal,
   Stack,
@@ -159,6 +159,75 @@ export const SmartBatchGenerationModal: React.FC<
     estimationBuffer: 20, // 20% buffer for estimates
     defaultRoutingStrategy: 'AUTO',
   });
+
+  // Memoized select option lists to avoid re-creating arrays on every render
+  const priorityStrategyOptions = useMemo(
+    () => [
+      { value: 'BALANCED', label: 'Balanced' },
+      { value: 'EFFICIENCY', label: 'Efficiency Focus' },
+      { value: 'QUALITY', label: 'Quality Focus' },
+      { value: 'SPEED', label: 'Speed Focus' },
+    ],
+    []
+  );
+
+  type ReasoningPresetKey =
+    | 'quality'
+    | 'efficiency'
+    | 'rush'
+    | 'standard'
+    | 'pilot'
+    | 'final';
+
+  const reasoningPresets = useMemo<Record<ReasoningPresetKey, string>>(
+    () => ({
+      quality: 'Small batch for enhanced quality control and defect reduction',
+      efficiency: 'Large batch optimized for maximum manufacturing efficiency',
+      rush: 'Priority batch for urgent delivery requirements',
+      standard: 'Standard batch size following normal production procedures',
+      pilot: 'Initial pilot batch for process validation and testing',
+      final: 'Final production batch to complete order requirements',
+    }),
+    []
+  );
+
+  const reasoningPresetLabels: Record<ReasoningPresetKey, string> = useMemo(
+    () => ({
+      quality: '🎯 Quality Focus',
+      efficiency: '🏭 Efficiency',
+      rush: '🚀 Rush Order',
+      standard: '📋 Standard Process',
+      pilot: '🧪 Pilot Batch',
+      final: '✅ Final Production',
+    }),
+    []
+  );
+
+  // Stable option arrays derived from the preset maps to avoid re-creating arrays
+  const quickPresetOptions = useMemo(
+    () =>
+      (Object.keys(reasoningPresetLabels) as ReasoningPresetKey[]).map(k => ({
+        value: k,
+        label: reasoningPresetLabels[k],
+      })),
+    [reasoningPresetLabels]
+  );
+
+  const priorityOptions = useMemo(
+    () => [
+      { value: 'RUSH', label: 'Rush' },
+      { value: 'STANDARD', label: 'Standard' },
+    ],
+    []
+  );
+
+  const bulkApplyPriorityOptions = useMemo(
+    () => [
+      { value: 'RUSH', label: '🚀 Set All RUSH' },
+      { value: 'STANDARD', label: '📋 Set All STANDARD' },
+    ],
+    []
+  );
 
   // Load suggestions when modal opens
   useEffect(() => {
@@ -358,6 +427,8 @@ export const SmartBatchGenerationModal: React.FC<
 
     setApprovedSuggestions(prev => prev.map(updateSuggestion));
   };
+
+  // (callbacks intentionally kept as local functions; avoid creating unused memoized refs)
 
   const removeBatch = (lineItemId: string, batchNumber: number) => {
     const updateSuggestion = (suggestion: BatchSuggestion) => {
@@ -567,15 +638,7 @@ export const SmartBatchGenerationModal: React.FC<
                                   | 'SPEED',
                               }))
                             }
-                            data={[
-                              { value: 'BALANCED', label: 'Balanced' },
-                              {
-                                value: 'EFFICIENCY',
-                                label: 'Efficiency Focus',
-                              },
-                              { value: 'QUALITY', label: 'Quality Focus' },
-                              { value: 'SPEED', label: 'Speed Focus' },
-                            ]}
+                            data={priorityStrategyOptions}
                             size='xs'
                           />
                         </div>
@@ -794,10 +857,7 @@ export const SmartBatchGenerationModal: React.FC<
                           placeholder='Apply priority to all...'
                           size='sm'
                           w={180}
-                          data={[
-                            { value: 'RUSH', label: '🚀 Set All RUSH' },
-                            { value: 'STANDARD', label: '📋 Set All STANDARD' },
-                          ]}
+                          data={bulkApplyPriorityOptions}
                           onChange={value => {
                             if (value)
                               applyToAllBatches(
@@ -908,10 +968,7 @@ export const SmartBatchGenerationModal: React.FC<
                                       value as 'RUSH' | 'STANDARD'
                                     )
                                   }
-                                  data={[
-                                    { value: 'RUSH', label: 'Rush' },
-                                    { value: 'STANDARD', label: 'Standard' },
-                                  ]}
+                                  data={priorityOptions}
                                   w={100}
                                 />
                               </Table.Td>
@@ -1027,51 +1084,15 @@ export const SmartBatchGenerationModal: React.FC<
                                     size='xs'
                                     placeholder='Quick presets...'
                                     w='100%'
-                                    data={[
-                                      {
-                                        value: 'quality',
-                                        label: '🎯 Quality Focus',
-                                      },
-                                      {
-                                        value: 'efficiency',
-                                        label: '🏭 Efficiency',
-                                      },
-                                      { value: 'rush', label: '🚀 Rush Order' },
-                                      {
-                                        value: 'standard',
-                                        label: '📋 Standard Process',
-                                      },
-                                      {
-                                        value: 'pilot',
-                                        label: '🧪 Pilot Batch',
-                                      },
-                                      {
-                                        value: 'final',
-                                        label: '✅ Final Production',
-                                      },
-                                    ]}
+                                    data={quickPresetOptions}
                                     onChange={value => {
-                                      const presets = {
-                                        quality:
-                                          'Small batch for enhanced quality control and defect reduction',
-                                        efficiency:
-                                          'Large batch optimized for maximum manufacturing efficiency',
-                                        rush: 'Priority batch for urgent delivery requirements',
-                                        standard:
-                                          'Standard batch size following normal production procedures',
-                                        pilot:
-                                          'Initial pilot batch for process validation and testing',
-                                        final:
-                                          'Final production batch to complete order requirements',
-                                      };
-                                      if (
-                                        value &&
-                                        presets[value as keyof typeof presets]
-                                      ) {
+                                      const key =
+                                        value as ReasoningPresetKey | null;
+                                      if (key && reasoningPresets[key]) {
                                         updateBatchReasoning(
                                           suggestion.lineItemId,
                                           batch.batchNumber,
-                                          presets[value as keyof typeof presets]
+                                          reasoningPresets[key]
                                         );
                                       }
                                     }}

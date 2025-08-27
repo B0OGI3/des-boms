@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
-import type { 
-  Batch, 
-  BatchSearchParams, 
-  BatchStatusFilter, 
+import type {
+  Batch,
+  BatchSearchParams,
+  BatchStatusFilter,
   BatchPriorityFilter,
-  BatchSearchResult 
+  BatchSearchResult,
 } from '../types';
 
 interface UseBatchSearchReturn extends BatchSearchResult {
@@ -77,18 +77,19 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Search filters
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<BatchStatusFilter>('ALL');
-  const [priorityFilter, setPriorityFilter] = useState<BatchPriorityFilter>('ALL');
+  const [priorityFilter, setPriorityFilter] =
+    useState<BatchPriorityFilter>('ALL');
   const [workstationFilter, setWorkstationFilter] = useState<string>('ALL');
   const [overdueFilter, setOverdueFilter] = useState<boolean>(false);
   const [orderFilter, setOrderFilter] = useState<string>('ALL');
-  
+
   // Debounce search term to avoid too many API calls
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  
+
   // Build search parameters - only send what the API handles
   const searchParams: BatchSearchParams = useMemo(() => {
     const params: BatchSearchParams = {};
@@ -111,14 +112,21 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
       params.orderId = orderFilter;
     }
     return params;
-  }, [debouncedSearchTerm, statusFilter, priorityFilter, workstationFilter, overdueFilter, orderFilter]);
-  
+  }, [
+    debouncedSearchTerm,
+    statusFilter,
+    priorityFilter,
+    workstationFilter,
+    overdueFilter,
+    orderFilter,
+  ]);
+
   // Fetch batches from API
   const fetchBatches = useCallback(async (params: BatchSearchParams = {}) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Build query string
       const queryParams = new URLSearchParams();
       Object.entries(params).forEach(([key, value]) => {
@@ -126,28 +134,27 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
           queryParams.append(key, value);
         }
       });
-      
+
       const queryString = queryParams.toString();
       const url = queryString ? `/api/batches?${queryString}` : '/api/batches';
-      
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch batches');
       }
-      
+
       const data = await response.json();
-      
+
       // Convert API response to UI format
       const convertedBatches = data.data.map(convertApiBatchToBatch);
       setBatches(convertedBatches);
-      
     } catch (err) {
       console.error('Error fetching batches:', err);
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -156,11 +163,11 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
       setLoading(false);
     }
   }, []);
-  
+
   const refetch = useCallback(() => {
     fetchBatches(searchParams);
   }, [fetchBatches, searchParams]);
-  
+
   // Effect to fetch batches when search parameters change
   useEffect(() => {
     // Add a small delay to prevent rapid API calls
@@ -170,21 +177,21 @@ export const useBatchSearch = (): UseBatchSearchReturn => {
 
     return () => clearTimeout(timeoutId);
   }, [searchParams, fetchBatches]);
-  
+
   // Initial fetch on mount
   useEffect(() => {
     fetchBatches();
   }, [fetchBatches]);
-  
+
   const hasActiveFilters = Boolean(
-    searchTerm.trim() || 
-    statusFilter !== 'ALL' || 
-    priorityFilter !== 'ALL' ||
-    workstationFilter !== 'ALL' ||
-    overdueFilter ||
-    orderFilter !== 'ALL'
+    searchTerm.trim() ||
+      statusFilter !== 'ALL' ||
+      priorityFilter !== 'ALL' ||
+      workstationFilter !== 'ALL' ||
+      overdueFilter ||
+      orderFilter !== 'ALL'
   );
-  
+
   return {
     batches,
     totalCount: batches.length,

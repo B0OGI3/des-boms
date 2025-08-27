@@ -1,6 +1,7 @@
 # DES-BOMS Project Hierarchy Structure
 
 ## Overview
+
 This document outlines the proper hierarchy structure implemented throughout the DES-BOMS project to ensure maintainable, scalable, and organized code.
 
 ## Directory Structure
@@ -91,35 +92,40 @@ DES-BOMS/
 ## Import Hierarchy Best Practices
 
 ### 1. Barrel Exports
+
 Each major directory contains an `index.ts` file that exports all public APIs:
+
 - Simplifies imports
 - Provides a single source of truth
 - Makes refactoring easier
 - Improves code discoverability
 
 ### 2. Import Order Convention
+
 ```typescript
 // 1. External libraries
-import { Button, Text } from "@mantine/core";
-import { useState, useEffect } from "react";
+import { Button, Text } from '@mantine/core';
+import { useState, useEffect } from 'react';
 
 // 2. Internal barrel exports (preferred)
-import { LoadingScreen, ErrorBoundary } from "../components";
-import { usePageInitialization } from "../../hooks";
-import { OrderType, CustomerType } from "../../types";
+import { LoadingScreen, ErrorBoundary } from '../components';
+import { usePageInitialization } from '../../hooks';
+import { OrderType, CustomerType } from '../../types';
 
 // 3. Specific internal imports (when barrel not available)
-import { validateOrder } from "../utils/orderValidation";
+import { validateOrder } from '../utils/orderValidation';
 ```
 
 ### 3. Module Organization Principles
 
 #### Domain-Driven Structure
+
 - Each major feature (batches, orders, etc.) has its own module
 - Components, hooks, types, and utilities are co-located with their domain
 - Shared utilities are promoted to the appropriate level
 
 #### Separation of Concerns
+
 - **Components**: UI rendering and user interaction
 - **Hooks**: Reusable stateful logic
 - **Types**: TypeScript type definitions
@@ -127,6 +133,7 @@ import { validateOrder } from "../utils/orderValidation";
 - **Lib**: Core services and integrations
 
 #### Hierarchy Levels
+
 1. **App Level**: Shared across entire application
 2. **Domain Level**: Specific to a feature domain (batches, orders)
 3. **Component Level**: Specific to a single component
@@ -134,6 +141,7 @@ import { validateOrder } from "../utils/orderValidation";
 ## API Route Organization
 
 ### RESTful Structure
+
 ```
 /api/
 ├── /batches/
@@ -147,6 +155,7 @@ import { validateOrder } from "../utils/orderValidation";
 ```
 
 ### Naming Conventions
+
 - Use kebab-case for route segments
 - Group related operations in subdirectories
 - Keep route files focused on HTTP methods for that resource
@@ -154,31 +163,37 @@ import { validateOrder } from "../utils/orderValidation";
 ## Type Hierarchy
 
 ### Shared Types (`types/shared.ts`)
+
 - Application-wide interfaces
 - Enums used across modules
 - Generic utility types
 
 ### Domain-Specific Types
+
 - Co-located with their respective domains
 - Extended from shared base types where appropriate
 
 ### Generated Types
+
 - Prisma-generated types in `/generated/prisma/`
 - Build-time generated types
 
 ## Component Hierarchy
 
 ### Shared Components (`app/components/`)
+
 - Used across multiple pages/domains
 - General-purpose UI components
 - Layout components
 
 ### Domain Components (`app/[domain]/components/`)
+
 - Specific to a particular domain
 - Business logic components
 - Domain-specific UI patterns
 
 ### UI Components (`app/components/ui/`)
+
 - Pure presentation components
 - Reusable design system elements
 - No business logic

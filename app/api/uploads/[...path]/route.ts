@@ -7,17 +7,25 @@ import { prisma } from '@/lib/prisma';
 function getMimeType(fileName: string): string {
   const ext = fileName.split('.').pop()?.toLowerCase();
   switch (ext) {
-    case 'pdf': return 'application/pdf';
-    case 'dwg': return 'application/acad';
+    case 'pdf':
+      return 'application/pdf';
+    case 'dwg':
+      return 'application/acad';
     case 'step':
-    case 'stp': return 'application/step';
+    case 'stp':
+      return 'application/step';
     case 'iges':
-    case 'igs': return 'application/iges';
+    case 'igs':
+      return 'application/iges';
     case 'jpg':
-    case 'jpeg': return 'image/jpeg';
-    case 'png': return 'image/png';
-    case 'txt': return 'text/plain';
-    default: return 'application/octet-stream';
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    case 'txt':
+      return 'text/plain';
+    default:
+      return 'application/octet-stream';
   }
 }
 
@@ -34,7 +42,7 @@ export async function GET(
 ) {
   try {
     const { path } = await params;
-    
+
     if (!path || path.length === 0) {
       return NextResponse.json(
         { error: 'File path required' },
@@ -50,14 +58,11 @@ export async function GET(
     if (path[0] === 'file' && path[1]) {
       const fileId = path[1];
       const fileRecord = await prisma.fileAttachment.findUnique({
-        where: { id: fileId }
+        where: { id: fileId },
       });
 
       if (!fileRecord) {
-        return NextResponse.json(
-          { error: 'File not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'File not found' }, { status: 404 });
       }
 
       // Construct file path from stored information
@@ -65,7 +70,7 @@ export async function GET(
       filePath = join(uploadsDir, fileRecord.filePath.replace('/uploads/', ''));
       fileName = fileRecord.fileName;
       mimeType = fileRecord.mimeType;
-    } 
+    }
     // Handle direct file path: /api/uploads/line-items/[lineItemId]/[filename]
     else {
       const uploadsDir = join(process.cwd(), 'uploads');
@@ -76,17 +81,19 @@ export async function GET(
 
     // Read and serve the file
     const fileBuffer = await readFile(filePath);
-    
+
     const response = new NextResponse(new Uint8Array(fileBuffer));
     response.headers.set('Content-Type', mimeType);
-    response.headers.set('Content-Disposition', `inline; filename="${fileName}"`);
+    response.headers.set(
+      'Content-Disposition',
+      `inline; filename="${fileName}"`
+    );
     response.headers.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-    
-    return response;
 
+    return response;
   } catch (error) {
     console.error('File serve error:', error);
-    
+
     if ((error as any).code === 'ENOENT') {
       return NextResponse.json(
         { error: 'File not found on disk' },

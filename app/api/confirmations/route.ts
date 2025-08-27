@@ -10,12 +10,13 @@ export async function GET(request: NextRequest) {
     const operatorName = searchParams.get('operatorName');
     const stepId = searchParams.get('stepId');
     const status = searchParams.get('status');
-    
+
     const where: Prisma.StepConfirmationWhereInput = {};
     if (workstationId) where.workstationId = workstationId;
     if (operatorName) where.operatorName = operatorName;
     if (stepId) where.stepId = stepId;
-    if (status) where.status = status as Prisma.StepConfirmationWhereInput['status'];
+    if (status)
+      where.status = status as Prisma.StepConfirmationWhereInput['status'];
 
     const confirmations = await prisma.stepConfirmation.findMany({
       where,
@@ -136,7 +137,6 @@ export async function POST(request: NextRequest) {
         where: { id: stepId },
         data: { status: 'IN_PROGRESS' },
       });
-
     } else if (action === 'COMPLETE') {
       if (!existingConfirmation) {
         return NextResponse.json(
@@ -177,14 +177,14 @@ export async function POST(request: NextRequest) {
         where: { batchId: confirmation.routingStep.batchId },
       });
 
-      const completedSteps = allSteps.filter(step => 
-        step.status === 'COMPLETED' || step.status === 'SKIPPED'
+      const completedSteps = allSteps.filter(
+        step => step.status === 'COMPLETED' || step.status === 'SKIPPED'
       );
 
       if (completedSteps.length === allSteps.length) {
         await prisma.batch.update({
           where: { id: confirmation.routingStep.batchId },
-          data: { 
+          data: {
             status: 'COMPLETED',
             actualCompletion: new Date(),
           },

@@ -188,9 +188,13 @@ export async function GET(request: NextRequest) {
 
     // Calculate workstation efficiency
     const workstationEfficiency = workstations.map(ws => {
-      const activeSteps = ws.routingSteps.filter(step => step.status === 'IN_PROGRESS');
-      const queuedSteps = ws.routingSteps.filter(step => step.status === 'PENDING');
-      
+      const activeSteps = ws.routingSteps.filter(
+        step => step.status === 'IN_PROGRESS'
+      );
+      const queuedSteps = ws.routingSteps.filter(
+        step => step.status === 'PENDING'
+      );
+
       // Determine workstation status
       let status: 'ACTIVE' | 'QUEUED' | 'IDLE';
       if (activeSteps.length > 0) {
@@ -200,7 +204,7 @@ export async function GET(request: NextRequest) {
       } else {
         status = 'IDLE';
       }
-      
+
       return {
         workstationId: ws.id,
         name: ws.name,
@@ -225,9 +229,10 @@ export async function GET(request: NextRequest) {
         rushOrders,
         pendingQC,
       },
-      workstations: view === 'workstation' && workstationId ? 
-        workstations.filter(ws => ws.id === workstationId) : 
-        workstations,
+      workstations:
+        view === 'workstation' && workstationId
+          ? workstations.filter(ws => ws.id === workstationId)
+          : workstations,
       workstationEfficiency,
       alerts: {
         flaggedSteps,

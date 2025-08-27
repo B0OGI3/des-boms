@@ -1,9 +1,9 @@
 /**
  * Part Number Generator for DES-BOMS
- * 
+ *
  * Generates unique part numbers with prefixes based on part type:
  * - FG-YYYY-####: Finished Goods/Assemblies
- * - SF-YYYY-####: Semi-Finished Parts/Sub-assemblies  
+ * - SF-YYYY-####: Semi-Finished Parts/Sub-assemblies
  * - RM-YYYY-####: Raw Materials/Stock
  */
 
@@ -35,24 +35,27 @@ export function getPartTypePrefix(partType: PartType): string {
 /**
  * Generate the next sequential number for a given part type and year
  */
-export async function getNextSequentialNumber(partType: PartType, year: number): Promise<number> {
+export async function getNextSequentialNumber(
+  partType: PartType,
+  year: number
+): Promise<number> {
   const prefix = getPartTypePrefix(partType);
   const yearStr = year.toString();
-  
+
   // Find the highest existing part number for this type/year
   const existingParts = await prisma.part.findMany({
     where: {
       partNumber: {
-        startsWith: `${prefix}-${yearStr}-`
-      }
+        startsWith: `${prefix}-${yearStr}-`,
+      },
     },
     select: {
-      partNumber: true
+      partNumber: true,
     },
     orderBy: {
-      partNumber: 'desc'
+      partNumber: 'desc',
     },
-    take: 1
+    take: 1,
   });
 
   if (existingParts.length === 0) {
@@ -68,7 +71,9 @@ export async function getNextSequentialNumber(partType: PartType, year: number):
 
   const lastSequential = parseInt(parts[2], 10);
   if (isNaN(lastSequential)) {
-    throw new Error(`Invalid sequential number in part number: ${lastPartNumber}`);
+    throw new Error(
+      `Invalid sequential number in part number: ${lastPartNumber}`
+    );
   }
 
   return lastSequential + 1;
@@ -80,13 +85,16 @@ const partCounters: { [key: string]: number } = {};
 /**
  * Generate the next sequential number for a given part type and year (demo version)
  */
-export async function getNextSequentialNumberDemo(partType: PartType, year: number): Promise<number> {
+export async function getNextSequentialNumberDemo(
+  partType: PartType,
+  year: number
+): Promise<number> {
   const key = `${getPartTypePrefix(partType)}-${year}`;
-  
+
   if (!(key in partCounters)) {
     partCounters[key] = 0;
   }
-  
+
   partCounters[key]++;
   return partCounters[key];
 }
@@ -94,24 +102,31 @@ export async function getNextSequentialNumberDemo(partType: PartType, year: numb
 /**
  * Generate a new unique part number
  */
-export async function generatePartNumber(config: PartNumberConfig): Promise<string> {
+export async function generatePartNumber(
+  config: PartNumberConfig
+): Promise<string> {
   const year = config.year || new Date().getFullYear();
   const prefix = getPartTypePrefix(config.partType);
   const sequential = await getNextSequentialNumberDemo(config.partType, year); // Use demo version for seeding
-  
+
   // Format: XX-YYYY-#### (4-digit sequential)
   const partNumber = `${prefix}-${year}-${sequential.toString().padStart(4, '0')}`;
-  
+
   return partNumber;
 }
 
 /**
  * Validate a part number format
  */
-export function validatePartNumber(partNumber: string): { isValid: boolean; partType?: PartType; year?: number; sequential?: number } {
+export function validatePartNumber(partNumber: string): {
+  isValid: boolean;
+  partType?: PartType;
+  year?: number;
+  sequential?: number;
+} {
   const regex = /^(FG|SF|RM)-(\d{4})-(\d{4})$/;
   const match = regex.exec(partNumber);
-  
+
   if (!match) {
     return { isValid: false };
   }
@@ -139,7 +154,7 @@ export function validatePartNumber(partNumber: string): { isValid: boolean; part
     isValid: true,
     partType,
     year,
-    sequential
+    sequential,
   };
 }
 

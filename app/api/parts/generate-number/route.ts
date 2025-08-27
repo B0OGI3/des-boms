@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       // Extract the numeric part after the prefix
       const numericPart = lastPartNumber.replace(prefix, '');
       const lastNumber = parseInt(numericPart, 10);
-      
+
       if (!isNaN(lastNumber)) {
         nextNumber = lastNumber + 1;
       }
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       // If somehow the number already exists, try the next one
       const fallbackNumber = (nextNumber + 1).toString().padStart(6, '0');
       const fallbackPartNumber = `${prefix}${fallbackNumber}`;
-      
+
       return NextResponse.json({
         partNumber: fallbackPartNumber,
         message: 'Generated fallback part number due to conflict',
@@ -81,7 +81,6 @@ export async function POST(request: NextRequest) {
       partNumber: newPartNumber,
       message: 'Part number generated successfully',
     });
-
   } catch (error) {
     console.error('Error generating part number:', error);
     return NextResponse.json(
@@ -92,8 +91,5 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  );
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }

@@ -1,6 +1,6 @@
 /**
  * QuickBooks Token Manager
- * 
+ *
  * Handles automatic token refresh and .env file updates for QuickBooks integration.
  * Provides both manual and automatic token refresh capabilities.
  */
@@ -31,7 +31,7 @@ export class QuickBooksTokenManager {
     // Support both .env.local and .env files
     const envLocalPath = path.join(process.cwd(), '.env.local');
     const envPath = path.join(process.cwd(), '.env');
-    
+
     this.envPath = fs.existsSync(envLocalPath) ? envLocalPath : envPath;
   }
 
@@ -51,7 +51,7 @@ export class QuickBooksTokenManager {
   public needsRefresh(): boolean {
     const accessToken = process.env.QB_ACCESS_TOKEN;
     const refreshToken = process.env.QB_REFRESH_TOKEN;
-    
+
     if (!accessToken || !refreshToken) {
       console.log('[TOKEN] No tokens found - refresh needed');
       return true;
@@ -81,15 +81,17 @@ export class QuickBooksTokenManager {
       params.append('grant_type', 'refresh_token');
       params.append('refresh_token', refreshToken);
 
-      const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-      
+      const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString(
+        'base64'
+      );
+
       const response = await axios.post<TokenResponse>(
         'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
         params,
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Basic ${basicAuth}`,
+            Authorization: `Basic ${basicAuth}`,
           },
           timeout: 10000, // 10 second timeout
         }
@@ -104,15 +106,21 @@ export class QuickBooksTokenManager {
       const tokenInfo: TokenInfo = {
         accessToken: access_token,
         refreshToken: refresh_token,
-        expiresAt: expires_in ? new Date(Date.now() + expires_in * 1000) : undefined,
+        expiresAt: expires_in
+          ? new Date(Date.now() + expires_in * 1000)
+          : undefined,
       };
 
       console.log('[TOKEN] Tokens refreshed successfully');
       return tokenInfo;
-
     } catch (error: any) {
-      console.error('[TOKEN] Failed to refresh tokens:', error.response?.data || error.message);
-      throw new Error(`Token refresh failed: ${error.response?.data?.error_description || error.message}`);
+      console.error(
+        '[TOKEN] Failed to refresh tokens:',
+        error.response?.data || error.message
+      );
+      throw new Error(
+        `Token refresh failed: ${error.response?.data?.error_description || error.message}`
+      );
     }
   }
 
@@ -170,9 +178,11 @@ export class QuickBooksTokenManager {
 
       console.log('[TOKEN] Environment file updated successfully');
       console.log(`[TOKEN] Updated file: ${this.envPath}`);
-
     } catch (error: any) {
-      console.error('[TOKEN] Failed to update environment file:', error.message);
+      console.error(
+        '[TOKEN] Failed to update environment file:',
+        error.message
+      );
       throw new Error(`Failed to update environment file: ${error.message}`);
     }
   }
@@ -201,9 +211,15 @@ export class QuickBooksTokenManager {
     companyId?: string;
   } {
     return {
-      hasTokens: !!(process.env.QB_ACCESS_TOKEN && process.env.QB_REFRESH_TOKEN),
-      accessToken: process.env.QB_ACCESS_TOKEN ? process.env.QB_ACCESS_TOKEN.substring(0, 20) + '...' : undefined,
-      refreshToken: process.env.QB_REFRESH_TOKEN ? process.env.QB_REFRESH_TOKEN.substring(0, 20) + '...' : undefined,
+      hasTokens: !!(
+        process.env.QB_ACCESS_TOKEN && process.env.QB_REFRESH_TOKEN
+      ),
+      accessToken: process.env.QB_ACCESS_TOKEN
+        ? process.env.QB_ACCESS_TOKEN.substring(0, 20) + '...'
+        : undefined,
+      refreshToken: process.env.QB_REFRESH_TOKEN
+        ? process.env.QB_REFRESH_TOKEN.substring(0, 20) + '...'
+        : undefined,
       companyId: process.env.QB_COMPANY_ID,
     };
   }
@@ -220,16 +236,17 @@ export class QuickBooksTokenManager {
     }
 
     try {
-      const baseUrl = process.env.QB_SANDBOX === 'true' 
-        ? 'https://sandbox-quickbooks.api.intuit.com'
-        : 'https://quickbooks.api.intuit.com';
+      const baseUrl =
+        process.env.QB_SANDBOX === 'true'
+          ? 'https://sandbox-quickbooks.api.intuit.com'
+          : 'https://quickbooks.api.intuit.com';
 
       const response = await axios.get(
         `${baseUrl}/v3/company/${companyId}/companyinfo/${companyId}`,
         {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Accept': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+            Accept: 'application/json',
           },
           timeout: 10000,
         }
@@ -237,7 +254,10 @@ export class QuickBooksTokenManager {
 
       return response.status === 200;
     } catch (error: any) {
-      console.log('[TOKEN] Token validation failed:', error.response?.status || error.message);
+      console.log(
+        '[TOKEN] Token validation failed:',
+        error.response?.status || error.message
+      );
       return false;
     }
   }
@@ -255,11 +275,11 @@ export function getTokenManager(): QuickBooksTokenManager {
  */
 export async function autoRefreshTokens(): Promise<boolean> {
   const tokenManager = getTokenManager();
-  
+
   try {
     // First validate current tokens
     const isValid = await tokenManager.validateCurrentTokens();
-    
+
     if (!isValid) {
       console.log('[TOKEN] Current tokens are invalid, attempting refresh...');
       await tokenManager.refreshAndUpdate();

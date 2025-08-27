@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -28,7 +28,7 @@ body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
+
   body {
     background: white !important;
     color: black !important;
@@ -37,7 +37,7 @@ body {
     font-size: 12pt !important;
     line-height: 1.4 !important;
   }
-  
+
   /* Hide non-printable elements */
   .no-print,
   button:not(.print-button),
@@ -46,7 +46,7 @@ body {
   .mantine-Modal-close {
     display: none !important;
   }
-  
+
   /* Page layout */
   @page {
     margin: 0.5in;
@@ -54,11 +54,11 @@ body {
     /* Suggest single-sided printing */
     marks: none;
   }
-  
+
   @page :first {
     margin-top: 1in;
   }
-  
+
   /* Ensure content fits on single pages */
   .work-traveler-document,
   .batch-table-container {
@@ -66,43 +66,53 @@ body {
     orphans: 3;
     widows: 3;
   }
-  
+
   /* Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: black !important;
     page-break-after: avoid;
     margin-top: 0 !important;
   }
-  
-  p, div, span {
+
+  p,
+  div,
+  span {
     color: black !important;
   }
-  
+
   /* Tables */
   table {
     border-collapse: collapse !important;
     width: 100% !important;
   }
-  
-  table, th, td {
+
+  table,
+  th,
+  td {
     border: 1px solid black !important;
   }
-  
-  th, td {
+
+  th,
+  td {
     padding: 4pt 6pt !important;
     text-align: left !important;
   }
-  
+
   th {
     background-color: #f0f0f0 !important;
     font-weight: bold !important;
   }
-  
+
   /* Page breaks */
   .page-break {
     page-break-before: always;
   }
-  
+
   .avoid-break {
     page-break-inside: avoid;
   }

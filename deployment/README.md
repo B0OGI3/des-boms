@@ -5,19 +5,23 @@ This directory contains deployment and development scripts for the DES-BOMS syst
 ## 🚀 Deployment Scripts
 
 ### Production Deployment
+
 - **`deploy-production.bat`** - Windows production deployment
-- **`deploy-production.sh`** - Linux production deployment  
+- **`deploy-production.sh`** - Linux production deployment
 - **`deploy-linux.sh`** - Linux-specific deployment script
 
 ### Docker Deployment
+
 - **`docker-entrypoint.sh`** - Docker container entry point
 - **`start-docker.bat`** - Start Docker containers (Windows)
 - **`start-docker.sh`** - Start Docker containers (Linux)
 
 ### Development
+
 - **`dev.bat`** - Development environment startup (Windows)
 
 ### Automation
+
 - **`refresh-qb-tokens-scheduler.bat`** - QuickBooks token refresh scheduler
 
 ## 📋 Usage
@@ -25,11 +29,13 @@ This directory contains deployment and development scripts for the DES-BOMS syst
 ### For Production Deployment
 
 **Windows:**
+
 ```cmd
 deployment\deploy-production.bat
 ```
 
 **Linux:**
+
 ```bash
 ./deployment/deploy-production.sh
 ```
@@ -37,11 +43,13 @@ deployment\deploy-production.bat
 ### For Docker Development
 
 **Windows:**
+
 ```cmd
 deployment\start-docker.bat
 ```
 
 **Linux:**
+
 ```bash
 ./deployment/start-docker.sh
 ```
@@ -49,6 +57,7 @@ deployment\start-docker.bat
 ### For Local Development
 
 **Windows:**
+
 ```cmd
 deployment\dev.bat
 ```

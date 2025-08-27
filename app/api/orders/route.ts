@@ -24,18 +24,18 @@ export async function GET(request: NextRequest) {
   const priority = searchParams.get('priority');
   const search = searchParams.get('search');
   // Note: Status filtering is handled in the application layer since it's calculated from batch data
-  
+
   try {
     const where: Prisma.PurchaseOrderWhereInput = {};
-    
+
     // Filter by customer
     if (customerId) where.customerId = customerId;
-    
+
     // Filter by priority
     if (priority && priority !== 'ALL') {
       where.priority = priority as Prisma.PurchaseOrderWhereInput['priority'];
     }
-    
+
     // Search functionality - search across multiple fields
     if (search?.trim()) {
       const searchTerm = search.trim();
@@ -159,13 +159,13 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching orders:', error);
     console.error('Search params:', { customerId, priority, search });
-    
+
     // More detailed error logging
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.error('Prisma error code:', error.code);
       console.error('Prisma error message:', error.message);
     }
-    
+
     return NextResponse.json(
       {
         success: false,
@@ -192,13 +192,13 @@ export async function POST(request: NextRequest) {
 
     // Map frontend priority values to database enum values (DES-BOMS spec: Rush / Standard / Hold)
     const priorityMapping: Record<string, 'RUSH' | 'STANDARD' | 'HOLD'> = {
-      'RUSH': 'RUSH',
-      'STANDARD': 'STANDARD',
-      'HOLD': 'HOLD',
+      RUSH: 'RUSH',
+      STANDARD: 'STANDARD',
+      HOLD: 'HOLD',
       // Legacy mappings for backwards compatibility
-      'LOW': 'HOLD',
-      'NORMAL': 'STANDARD',
-      'HIGH': 'RUSH'
+      LOW: 'HOLD',
+      NORMAL: 'STANDARD',
+      HIGH: 'RUSH',
     };
 
     const dbPriority = priorityMapping[priority] || 'STANDARD';
@@ -224,12 +224,14 @@ export async function POST(request: NextRequest) {
     const processedLineItems = await Promise.all(
       lineItems.map(async (item: LineItemInput) => {
         let partId = item.partId;
-        
+
         // If no partId provided, create a new part
         if (!partId && item.partName) {
           // Use provided part number or generate one
-          const partNumber = item.partNumber || await generatePartNumber({ partType: 'FINISHED' });
-          
+          const partNumber =
+            item.partNumber ||
+            (await generatePartNumber({ partType: 'FINISHED' }));
+
           const newPart = await prisma.part.create({
             data: {
               partNumber,
@@ -241,11 +243,13 @@ export async function POST(request: NextRequest) {
           });
           partId = newPart.id;
         }
-        
+
         if (!partId) {
-          throw new Error('Either partId or partName must be provided for each line item');
+          throw new Error(
+            'Either partId or partName must be provided for each line item'
+          );
         }
-        
+
         return {
           partId,
           quantity: item.quantity,

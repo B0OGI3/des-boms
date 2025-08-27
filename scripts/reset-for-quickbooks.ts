@@ -1,6 +1,6 @@
 /**
  * Database Reset Script for QuickBooks Integration
- * 
+ *
  * Clears all existing customer and order data to start fresh with QuickBooks sync.
  * This preserves the database structure while removing test/sample data.
  */
@@ -42,7 +42,7 @@ async function resetDatabaseForQuickBooks() {
 
     console.log('✅ Database cleanup completed successfully!');
     console.log('🔗 Ready for QuickBooks integration');
-    
+
     // Show final counts
     const counts = {
       customers: await prisma.customer.count(),
@@ -54,7 +54,6 @@ async function resetDatabaseForQuickBooks() {
 
     console.log('\n📊 Final database state:');
     console.table(counts);
-
   } catch (error) {
     console.error('❌ Error during database cleanup:', error);
     throw error;
@@ -74,7 +73,7 @@ resetDatabaseForQuickBooks()
     console.log('4. Start creating customers - they will sync to QuickBooks!');
     process.exit(0);
   })
-  .catch((error) => {
+  .catch(error => {
     console.error('Failed to reset database:', error);
     process.exit(1);
   });

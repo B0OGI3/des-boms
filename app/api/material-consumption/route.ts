@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 /**
  * Material Consumption API
- * 
+ *
  * Handles tracking and recording of material consumption during manufacturing
  * with full BOM hierarchy awareness and cost calculation.
  */
@@ -59,23 +59,25 @@ export async function GET(request: NextRequest) {
                 part: true,
                 purchaseOrder: {
                   include: {
-                    customer: true
-                  }
-                }
-              }
-            }
-          }
+                    customer: true,
+                  },
+                },
+              },
+            },
+          },
         },
-        materialPart: true
+        materialPart: true,
       },
       orderBy: {
-        consumedAt: 'desc'
-      }
+        consumedAt: 'desc',
+      },
     });
 
     // Calculate summary statistics
-    const totalCost = consumptionRecords.reduce((sum, record) => 
-      sum + (Number(record.unitCost) || 0) * Number(record.quantityUsed), 0
+    const totalCost = consumptionRecords.reduce(
+      (sum, record) =>
+        sum + (Number(record.unitCost) || 0) * Number(record.quantityUsed),
+      0
     );
 
     const materialSummary = consumptionRecords.reduce((acc, record) => {
@@ -87,11 +89,12 @@ export async function GET(request: NextRequest) {
           partType: record.materialPart.partType,
           totalQuantityUsed: 0,
           totalCost: 0,
-          batchCount: 0
+          batchCount: 0,
         };
       }
       acc[partId].totalQuantityUsed += Number(record.quantityUsed);
-      acc[partId].totalCost += (Number(record.unitCost) || 0) * Number(record.quantityUsed);
+      acc[partId].totalCost +=
+        (Number(record.unitCost) || 0) * Number(record.quantityUsed);
       acc[partId].batchCount += 1;
       return acc;
     }, {} as any);
@@ -102,17 +105,16 @@ export async function GET(request: NextRequest) {
       summary: {
         totalRecords: consumptionRecords.length,
         totalCost,
-        materialSummary: Object.values(materialSummary)
-      }
+        materialSummary: Object.values(materialSummary),
+      },
     });
-
   } catch (error) {
     console.error('Error fetching material consumption:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to fetch material consumption records',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -135,11 +137,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const results = await prisma.$transaction(async (tx) => {
+    const results = await prisma.$transaction(async tx => {
       const createdRecords = [];
 
       for (const record of records as MaterialConsumptionRecord[]) {
-        const { batchId, materialPartId, quantityUsed, unitCost, operatorId, notes } = record;
+        const {
+          batchId,
+          materialPartId,
+          quantityUsed,
+          unitCost,
+          operatorId,
+          notes,
+        } = record;
 
         // Validate that the batch exists
         const batch = await tx.batch.findUnique({
@@ -147,10 +156,10 @@ export async function POST(request: NextRequest) {
           include: {
             lineItem: {
               include: {
-                part: true
-              }
-            }
-          }
+                part: true,
+              },
+            },
+          },
         });
 
         if (!batch) {
@@ -159,7 +168,7 @@ export async function POST(request: NextRequest) {
 
         // Validate that the material part exists
         const materialPart = await tx.part.findUnique({
-          where: { id: materialPartId }
+          where: { id: materialPartId },
         });
 
         if (!materialPart) {
@@ -181,7 +190,7 @@ export async function POST(request: NextRequest) {
             unitCost: actualUnitCost,
             consumedAt: new Date(),
             operatorId,
-            notes
+            notes,
           },
           include: {
             materialPart: true,
@@ -189,12 +198,12 @@ export async function POST(request: NextRequest) {
               include: {
                 lineItem: {
                   include: {
-                    part: true
-                  }
-                }
-              }
-            }
-          }
+                    part: true,
+                  },
+                },
+              },
+            },
+          },
         });
 
         createdRecords.push(consumptionRecord);
@@ -206,16 +215,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: results,
-      message: `Successfully recorded ${results.length} material consumption records`
+      message: `Successfully recorded ${results.length} material consumption records`,
     });
-
   } catch (error) {
     console.error('Error recording material consumption:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to record material consumption',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -244,7 +252,7 @@ export async function PUT(request: NextRequest) {
         quantityUsed: quantityUsed !== undefined ? quantityUsed : undefined,
         unitCost: unitCost !== undefined ? unitCost : undefined,
         notes: notes !== undefined ? notes : undefined,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       include: {
         materialPart: true,
@@ -252,27 +260,26 @@ export async function PUT(request: NextRequest) {
           include: {
             lineItem: {
               include: {
-                part: true
-              }
-            }
-          }
-        }
-      }
+                part: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return NextResponse.json({
       success: true,
       data: updatedRecord,
-      message: 'Material consumption record updated successfully'
+      message: 'Material consumption record updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating material consumption:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to update material consumption record',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -296,21 +303,20 @@ export async function DELETE(request: NextRequest) {
     }
 
     await prisma.materialConsumption.delete({
-      where: { id }
+      where: { id },
     });
 
     return NextResponse.json({
       success: true,
-      message: 'Material consumption record deleted successfully'
+      message: 'Material consumption record deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting material consumption:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to delete material consumption record',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

@@ -5,12 +5,14 @@ This directory contains configuration files for various tools and frameworks use
 ## 📋 Configuration Files
 
 ### Code Quality & Linting
+
 - **`eslint.config.mjs`** - ESLint configuration for code quality and style enforcement
   - TypeScript support
   - Next.js specific rules
   - Custom project-specific rules
 
 ### Styling & CSS
+
 - **`postcss.config.mjs`** - PostCSS configuration for CSS processing
   - Tailwind CSS integration
   - CSS optimization and autoprefixing

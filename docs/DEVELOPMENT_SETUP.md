@@ -15,12 +15,14 @@ Before you begin, ensure you have the following installed:
 ## 🛠️ Quick Setup
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/your-org/DES-BOMS.git
 cd DES-BOMS
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 pnpm install
 # or
@@ -28,6 +30,7 @@ npm install
 ```
 
 ### 3. Environment Configuration
+
 ```bash
 # Copy the example environment file
 cp .env.example .env.local
@@ -37,6 +40,7 @@ code .env.local
 ```
 
 ### 4. Database Setup
+
 ```bash
 # Generate Prisma client
 pnpm prisma generate
@@ -49,6 +53,7 @@ pnpm prisma db seed
 ```
 
 ### 5. Start Development Server
+
 ```bash
 pnpm dev
 # or
@@ -62,6 +67,7 @@ npm run dev
 If you prefer using Docker:
 
 ### Development with Docker
+
 ```bash
 # Start the development environment
 docker-compose up -d
@@ -70,6 +76,7 @@ docker-compose up -d
 ```
 
 ### Production with Docker
+
 ```bash
 # Build and start production environment
 docker-compose -f docker-compose.prod.yml up -d
@@ -80,6 +87,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ### PostgreSQL Setup
 
 1. **Create Database**
+
 ```sql
 CREATE DATABASE desboms;
 CREATE USER desboms_user WITH PASSWORD 'your_password';
@@ -87,12 +95,15 @@ GRANT ALL PRIVILEGES ON DATABASE desboms TO desboms_user;
 ```
 
 2. **Update .env.local**
+
 ```bash
 DATABASE_URL="postgresql://desboms_user:your_password@localhost:5432/desboms"
 ```
 
 ### Using SQLite (Development Only)
+
 For quick development setup, you can use SQLite:
+
 ```bash
 DATABASE_URL="file:./dev.db"
 ```
@@ -100,6 +111,7 @@ DATABASE_URL="file:./dev.db"
 ## 🔧 Development Tools
 
 ### Recommended VS Code Extensions
+
 - **Prisma** - Database schema management
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
@@ -107,6 +119,7 @@ DATABASE_URL="file:./dev.db"
 - **Tailwind CSS IntelliSense** - CSS class suggestions
 
 ### Available Scripts
+
 ```bash
 # Development
 pnpm dev              # Start development server
@@ -151,6 +164,7 @@ DES-BOMS/
    - Get your Client ID and Secret
 
 2. **Configure Environment**
+
 ```bash
 QUICKBOOKS_CLIENT_ID="your_client_id"
 QUICKBOOKS_CLIENT_SECRET="your_client_secret"
@@ -163,6 +177,7 @@ QUICKBOOKS_SANDBOX="true"  # Set to false for production
 ### Common Issues
 
 **Port Already in Use**
+
 ```bash
 # Kill process on port 3000
 npx kill-port 3000
@@ -172,6 +187,7 @@ PORT=3001 pnpm dev
 ```
 
 **Database Connection Issues**
+
 ```bash
 # Check PostgreSQL status
 sudo systemctl status postgresql
@@ -181,6 +197,7 @@ sudo systemctl restart postgresql
 ```
 
 **Prisma Issues**
+
 ```bash
 # Reset database (WARNING: This will delete all data)
 pnpm prisma migrate reset
@@ -190,6 +207,7 @@ pnpm prisma generate
 ```
 
 **Node Modules Issues**
+
 ```bash
 # Clear node modules and reinstall
 rm -rf node_modules pnpm-lock.yaml
@@ -215,6 +233,7 @@ pnpm install
 ## 📞 Support
 
 If you encounter any issues:
+
 1. Check the troubleshooting section above
 2. Search existing issues in the repository
 3. Create a new issue with detailed information

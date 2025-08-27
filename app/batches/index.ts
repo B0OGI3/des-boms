@@ -20,7 +20,7 @@ export {
   NetworkError,
   DatabaseError,
   ValidationError,
-  LoadingError
+  LoadingError,
 } from './components/ErrorComponents';
 
 // Loading Skeletons (multiple exports)
@@ -28,13 +28,13 @@ export {
   BatchTableSkeleton,
   StatsSkeleton,
   ModalContentSkeleton,
-  FilterBarSkeleton
+  FilterBarSkeleton,
 } from './components/LoadingSkeletons';
 
 // Smart Notifications
-export { 
+export {
   useSmartNotifications,
-  type BatchNotification 
+  type BatchNotification,
 } from './components/SmartNotifications';
 
 // Hooks

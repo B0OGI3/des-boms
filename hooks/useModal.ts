@@ -15,24 +15,24 @@ export interface UseModalReturn<T = any> {
 export const useModal = <T = any>(initialState = false): UseModalReturn<T> => {
   const [isOpen, setIsOpen] = useState(initialState);
   const [data, setData] = useState<T | null>(null);
-  
+
   const open = useCallback((modalData?: T) => {
     setData(modalData ?? null);
     setIsOpen(true);
   }, []);
-  
+
   const close = useCallback(() => {
     setIsOpen(false);
     setData(null);
   }, []);
-  
+
   const toggle = useCallback(() => {
     setIsOpen(prev => !prev);
     if (isOpen) {
       setData(null);
     }
   }, [isOpen]);
-  
+
   return {
     isOpen,
     data,

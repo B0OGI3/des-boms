@@ -13,22 +13,22 @@ export async function POST(
 
     // Return a more user-friendly error for now
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'PDF generation is temporarily unavailable',
-        message: 'Please use the print function in the Work Traveler modal as an alternative. PDF generation will be restored in a future update.',
-        code: 'PDF_GENERATION_DISABLED'
+        message:
+          'Please use the print function in the Work Traveler modal as an alternative. PDF generation will be restored in a future update.',
+        code: 'PDF_GENERATION_DISABLED',
       },
       { status: 503 } // Service Temporarily Unavailable
     );
-
   } catch (error) {
     console.error('Error in work traveler endpoint:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to process work traveler request',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

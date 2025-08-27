@@ -20,7 +20,12 @@ export interface Customer extends BaseEntity {
 }
 
 // Status and Priority enums (aligned with DES-BOMS spec: Rush / Standard / Hold)
-export type StatusType = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
+export type StatusType =
+  | 'PENDING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'ON_HOLD'
+  | 'CANCELLED';
 export type PriorityType = 'HOLD' | 'STANDARD' | 'RUSH';
 
 // Batch types

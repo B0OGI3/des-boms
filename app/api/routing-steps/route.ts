@@ -18,16 +18,16 @@ export async function GET(request: NextRequest) {
 
     // Build where clause
     const where: Prisma.RoutingStepWhereInput = {};
-    
+
     if (workstationId) {
       where.workstationId = workstationId;
     }
-    
+
     if (status) {
       const statusArray = status.split(',');
       where.status = { in: statusArray as any };
     }
-    
+
     if (batchId) {
       where.batchId = batchId;
     }
@@ -38,9 +38,9 @@ export async function GET(request: NextRequest) {
         some: {
           operatorName: {
             contains: operatorName,
-            mode: 'insensitive'
-          }
-        }
+            mode: 'insensitive',
+          },
+        },
       };
     }
 
@@ -55,29 +55,29 @@ export async function GET(request: NextRequest) {
                 part: true,
                 purchaseOrder: {
                   include: {
-                    customer: true
-                  }
-                }
-              }
-            }
-          }
+                    customer: true,
+                  },
+                },
+              },
+            },
+          },
         },
         confirmations: {
           orderBy: {
-            createdAt: 'desc'
-          }
-        }
+            createdAt: 'desc',
+          },
+        },
       },
       orderBy: [
         { batch: { priority: 'desc' } }, // Rush orders first
-        { stepNumber: 'asc' }
-      ]
+        { stepNumber: 'asc' },
+      ],
     });
 
     // Transform the data to include latest confirmation info
     const transformedSteps = routingSteps.map(step => {
       const latestConfirmation = step.confirmations[0];
-      
+
       return {
         id: step.id,
         stepNumber: step.stepNumber,
@@ -98,32 +98,31 @@ export async function GET(request: NextRequest) {
             partName: step.batch.lineItem.part.partName,
             purchaseOrder: {
               customer: {
-                name: step.batch.lineItem.purchaseOrder.customer.name
-              }
-            }
-          }
+                name: step.batch.lineItem.purchaseOrder.customer.name,
+              },
+            },
+          },
         },
         workstation: {
           id: step.workstation.id,
           name: step.workstation.name,
-          description: step.workstation.description
-        }
+          description: step.workstation.description,
+        },
       };
     });
 
     return NextResponse.json({
       success: true,
       data: transformedSteps,
-      count: transformedSteps.length
+      count: transformedSteps.length,
     });
-
   } catch (error) {
     console.error('Error fetching routing steps:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch routing steps',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -141,14 +140,17 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!batchId || !routingSteps || !Array.isArray(routingSteps)) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: batchId, routingSteps' },
+        {
+          success: false,
+          error: 'Missing required fields: batchId, routingSteps',
+        },
         { status: 400 }
       );
     }
 
     // Check if batch exists
     const batch = await prisma.batch.findUnique({
-      where: { id: batchId }
+      where: { id: batchId },
     });
 
     if (!batch) {
@@ -159,12 +161,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Create routing steps in a transaction
-    const createdSteps = await prisma.$transaction(async (tx) => {
+    const createdSteps = await prisma.$transaction(async tx => {
       const steps = [];
-      
+
       for (let i = 0; i < routingSteps.length; i++) {
         const stepData = routingSteps[i];
-        
+
         const step = await tx.routingStep.create({
           data: {
             batchId,
@@ -174,7 +176,7 @@ export async function POST(request: NextRequest) {
             required: stepData.required ?? true,
             estimatedTime: stepData.estimatedTime,
             notes: stepData.notes,
-            status: 'PENDING'
+            status: 'PENDING',
           },
           include: {
             workstation: true,
@@ -185,35 +187,37 @@ export async function POST(request: NextRequest) {
                     part: true,
                     purchaseOrder: {
                       include: {
-                        customer: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+                        customer: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         });
-        
+
         steps.push(step);
       }
-      
+
       return steps;
     });
 
-    return NextResponse.json({
-      success: true,
-      data: createdSteps,
-      message: `Created ${createdSteps.length} routing steps`
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        data: createdSteps,
+        message: `Created ${createdSteps.length} routing steps`,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating routing steps:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to create routing steps',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

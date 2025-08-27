@@ -26,25 +26,25 @@ export async function GET(
             workstation: true,
             confirmations: {
               orderBy: {
-                createdAt: 'desc'
-              }
-            }
+                createdAt: 'desc',
+              },
+            },
           },
           orderBy: {
-            stepNumber: 'asc'
-          }
+            stepNumber: 'asc',
+          },
         },
         lineItem: {
           include: {
             part: true,
             purchaseOrder: {
               include: {
-                customer: true
-              }
-            }
-          }
-        }
-      }
+                customer: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!batch) {
@@ -65,20 +65,19 @@ export async function GET(
           lineItem: {
             partNumber: batch.lineItem.part.partNumber,
             partName: batch.lineItem.part.partName,
-            partType: batch.lineItem.part.partType
-          }
+            partType: batch.lineItem.part.partType,
+          },
         },
-        routingSteps: batch.routingSteps
-      }
+        routingSteps: batch.routingSteps,
+      },
     });
-
   } catch (error) {
     console.error('Error fetching batch routing:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch batch routing',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -101,8 +100,8 @@ export async function POST(
     const batch = await prisma.batch.findUnique({
       where: { id },
       include: {
-        routingSteps: true
-      }
+        routingSteps: true,
+      },
     });
 
     if (!batch) {
@@ -115,9 +114,10 @@ export async function POST(
     // Check if batch already has routing steps
     if (batch.routingSteps.length > 0) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Batch already has routing steps. Use PUT to update existing steps.' 
+        {
+          success: false,
+          error:
+            'Batch already has routing steps. Use PUT to update existing steps.',
         },
         { status: 400 }
       );
@@ -132,13 +132,13 @@ export async function POST(
         include: {
           templateSteps: {
             include: {
-              workstation: true
+              workstation: true,
             },
             orderBy: {
-              stepNumber: 'asc'
-            }
-          }
-        }
+              stepNumber: 'asc',
+            },
+          },
+        },
       });
 
       if (!template) {
@@ -154,7 +154,7 @@ export async function POST(
         description: templateStep.description,
         required: templateStep.required,
         estimatedTime: templateStep.estimatedTime,
-        notes: templateStep.notes
+        notes: templateStep.notes,
       }));
     } else if (customSteps && Array.isArray(customSteps)) {
       // Use custom steps
@@ -164,13 +164,13 @@ export async function POST(
         description: step.description,
         required: step.required ?? true,
         estimatedTime: step.estimatedTime,
-        notes: step.notes
+        notes: step.notes,
       }));
     } else {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Either templateId or customSteps must be provided' 
+        {
+          success: false,
+          error: 'Either templateId or customSteps must be provided',
         },
         { status: 400 }
       );
@@ -179,7 +179,7 @@ export async function POST(
     // Create routing steps in a transaction
     const createdSteps = await prisma.$transaction(async (tx: any) => {
       const steps = [];
-      
+
       for (const stepData of stepsToCreate) {
         const step = await tx.routingStep.create({
           data: {
@@ -190,32 +190,34 @@ export async function POST(
             required: stepData.required,
             estimatedTime: stepData.estimatedTime,
             notes: stepData.notes,
-            status: 'PENDING'
+            status: 'PENDING',
           },
           include: {
-            workstation: true
-          }
+            workstation: true,
+          },
         });
-        
+
         steps.push(step);
       }
-      
+
       return steps;
     });
 
-    return NextResponse.json({
-      success: true,
-      data: createdSteps,
-      message: `Created ${createdSteps.length} routing steps for batch ${batch.batchId}`
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        data: createdSteps,
+        message: `Created ${createdSteps.length} routing steps for batch ${batch.batchId}`,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating batch routing:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to create batch routing',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -244,7 +246,7 @@ export async function PUT(
     // Check if batch exists
     const batch = await prisma.batch.findUnique({
       where: { id },
-      include: { routingSteps: true }
+      include: { routingSteps: true },
     });
 
     if (!batch) {
@@ -258,7 +260,7 @@ export async function PUT(
     const result = await prisma.$transaction(async (tx: any) => {
       // Delete existing routing steps
       await tx.routingStep.deleteMany({
-        where: { batchId: id }
+        where: { batchId: id },
       });
 
       // Create new routing steps
@@ -273,34 +275,34 @@ export async function PUT(
               description: step.description,
               status: 'PENDING',
               required: step.required ?? true,
-              notes: step.notes || ''
+              notes: step.notes || '',
             },
             include: {
-              workstation: true
-            }
+              workstation: true,
+            },
           })
         )
       );
 
       // Update batch status if needed
       const updateData: any = {};
-      
+
       // If adding routing steps to a queued batch, keep it queued
       // The routing update itself doesn't change status
-      
+
       const updatedBatch = await tx.batch.update({
         where: { id },
         data: updateData,
         include: {
           routingSteps: {
             include: {
-              workstation: true
+              workstation: true,
             },
             orderBy: {
-              stepNumber: 'asc'
-            }
-          }
-        }
+              stepNumber: 'asc',
+            },
+          },
+        },
       });
 
       return { batch: updatedBatch, routingSteps };
@@ -310,18 +312,17 @@ export async function PUT(
       success: true,
       data: {
         batch: result.batch,
-        routingSteps: result.routingSteps
+        routingSteps: result.routingSteps,
       },
-      message: `Updated routing with ${steps.length} steps`
+      message: `Updated routing with ${steps.length} steps`,
     });
-
   } catch (error) {
     console.error('Error updating batch routing:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to update batch routing',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

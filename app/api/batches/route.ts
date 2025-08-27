@@ -10,13 +10,18 @@ import { prisma } from '../../../lib/prisma';
  * Smart Routing Determination Logic
  */
 async function determineSmartRouting(tx: any, batch: any, routingOptions: any) {
-  const { templateId, customSteps, useRecommended = true, considerPriority = true } = routingOptions;
-  
+  const {
+    templateId,
+    customSteps,
+    useRecommended = true,
+    considerPriority = true,
+  } = routingOptions;
+
   // Priority 1: Custom steps (highest priority)
   if (customSteps && Array.isArray(customSteps)) {
     return await createRoutingSteps(tx, batch.id, customSteps);
   }
-  
+
   // Priority 2: Specific template ID
   if (templateId) {
     const template = await getRoutingTemplate(templateId);
@@ -24,21 +29,23 @@ async function determineSmartRouting(tx: any, batch: any, routingOptions: any) {
       return await createRoutingSteps(tx, batch.id, template.steps);
     }
   }
-  
+
   // Priority 3: Smart routing based on business rules
   const smartTemplate = await selectSmartTemplate(batch, considerPriority);
   if (smartTemplate) {
     return await createRoutingSteps(tx, batch.id, smartTemplate.steps);
   }
-  
+
   // Priority 4: Part's recommended template
   if (useRecommended && batch.lineItem.part.recommendedRoutingTemplateId) {
-    const template = await getRoutingTemplate(batch.lineItem.part.recommendedRoutingTemplateId);
+    const template = await getRoutingTemplate(
+      batch.lineItem.part.recommendedRoutingTemplateId
+    );
     if (template) {
       return await createRoutingSteps(tx, batch.id, template.steps);
     }
   }
-  
+
   // Fallback: No routing steps created
   return [];
 }
@@ -52,35 +59,85 @@ async function getRoutingTemplate(templateId: string) {
     'template-standard': {
       name: 'Standard Machining',
       steps: [
-        { workstationId: 'ws-mill-1', description: 'Rough milling operations', estimatedTime: 90, stepNumber: 1 },
-        { workstationId: 'ws-turn-1', description: 'Turning operations', estimatedTime: 60, stepNumber: 2 },
-        { workstationId: 'ws-inspect-1', description: 'Final inspection', estimatedTime: 20, stepNumber: 3 }
-      ]
+        {
+          workstationId: 'ws-mill-1',
+          description: 'Rough milling operations',
+          estimatedTime: 90,
+          stepNumber: 1,
+        },
+        {
+          workstationId: 'ws-turn-1',
+          description: 'Turning operations',
+          estimatedTime: 60,
+          stepNumber: 2,
+        },
+        {
+          workstationId: 'ws-inspect-1',
+          description: 'Final inspection',
+          estimatedTime: 20,
+          stepNumber: 3,
+        },
+      ],
     },
     'template-rush': {
       name: 'Rush Production',
       steps: [
-        { workstationId: 'ws-mill-2', description: 'Priority milling', estimatedTime: 60, stepNumber: 1 },
-        { workstationId: 'ws-inspect-1', description: 'Quick inspection', estimatedTime: 10, stepNumber: 2 }
-      ]
+        {
+          workstationId: 'ws-mill-2',
+          description: 'Priority milling',
+          estimatedTime: 60,
+          stepNumber: 1,
+        },
+        {
+          workstationId: 'ws-inspect-1',
+          description: 'Quick inspection',
+          estimatedTime: 10,
+          stepNumber: 2,
+        },
+      ],
     },
     'template-high-volume': {
       name: 'High Volume Production',
       steps: [
-        { workstationId: 'ws-mill-1', description: 'Batch milling setup', estimatedTime: 120, stepNumber: 1 },
-        { workstationId: 'ws-mill-1', description: 'Batch milling run', estimatedTime: 180, stepNumber: 2 },
-        { workstationId: 'ws-inspect-2', description: 'Batch inspection', estimatedTime: 30, stepNumber: 3 }
-      ]
+        {
+          workstationId: 'ws-mill-1',
+          description: 'Batch milling setup',
+          estimatedTime: 120,
+          stepNumber: 1,
+        },
+        {
+          workstationId: 'ws-mill-1',
+          description: 'Batch milling run',
+          estimatedTime: 180,
+          stepNumber: 2,
+        },
+        {
+          workstationId: 'ws-inspect-2',
+          description: 'Batch inspection',
+          estimatedTime: 30,
+          stepNumber: 3,
+        },
+      ],
     },
     'template-assembly': {
       name: 'Assembly Only',
       steps: [
-        { workstationId: 'ws-assembly-1', description: 'Final assembly', estimatedTime: 45, stepNumber: 1 },
-        { workstationId: 'ws-inspect-1', description: 'Assembly inspection', estimatedTime: 15, stepNumber: 2 }
-      ]
-    }
+        {
+          workstationId: 'ws-assembly-1',
+          description: 'Final assembly',
+          estimatedTime: 45,
+          stepNumber: 1,
+        },
+        {
+          workstationId: 'ws-inspect-1',
+          description: 'Assembly inspection',
+          estimatedTime: 15,
+          stepNumber: 2,
+        },
+      ],
+    },
   };
-  
+
   return templates[templateId] || null;
 }
 
@@ -92,18 +149,20 @@ async function selectSmartTemplate(batch: any, considerPriority: boolean) {
   if (considerPriority && batch.priority === 'RUSH') {
     return await getRoutingTemplate('template-rush');
   }
-  
+
   // High volume batches get optimized routing
   if (batch.quantity > 100) {
     return await getRoutingTemplate('template-high-volume');
   }
-  
+
   // Assembly parts skip machining
-  if (batch.lineItem.part.partType === 'FINISHED' && 
-      batch.lineItem.part.partName.toLowerCase().includes('assembly')) {
+  if (
+    batch.lineItem.part.partType === 'FINISHED' &&
+    batch.lineItem.part.partName.toLowerCase().includes('assembly')
+  ) {
     return await getRoutingTemplate('template-assembly');
   }
-  
+
   // Default to standard template
   return await getRoutingTemplate('template-standard');
 }
@@ -111,9 +170,13 @@ async function selectSmartTemplate(batch: any, considerPriority: boolean) {
 /**
  * Create routing steps from template steps
  */
-async function createRoutingSteps(tx: any, batchId: string, templateSteps: any[]) {
+async function createRoutingSteps(
+  tx: any,
+  batchId: string,
+  templateSteps: any[]
+) {
   const routingSteps = [];
-  
+
   for (const stepData of templateSteps) {
     const step = await tx.routingStep.create({
       data: {
@@ -124,16 +187,16 @@ async function createRoutingSteps(tx: any, batchId: string, templateSteps: any[]
         required: stepData.required ?? true,
         estimatedTime: stepData.estimatedTime,
         notes: stepData.notes,
-        status: 'PENDING'
+        status: 'PENDING',
       },
       include: {
-        workstation: true
-      }
+        workstation: true,
+      },
     });
-    
+
     routingSteps.push(step);
   }
-  
+
   return routingSteps;
 }
 
@@ -166,8 +229,8 @@ export async function GET(request: NextRequest) {
     if (orderId) {
       where.lineItem = {
         purchaseOrder: {
-          id: orderId
-        }
+          id: orderId,
+        },
       };
     }
 
@@ -175,10 +238,30 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { batchId: { contains: searchTerm, mode: 'insensitive' } },
         { notes: { contains: searchTerm, mode: 'insensitive' } },
-        { lineItem: { part: { partNumber: { contains: searchTerm, mode: 'insensitive' } } } },
-        { lineItem: { part: { partName: { contains: searchTerm, mode: 'insensitive' } } } },
-        { lineItem: { purchaseOrder: { customer: { name: { contains: searchTerm, mode: 'insensitive' } } } } },
-        { lineItem: { purchaseOrder: { systemOrderId: { contains: searchTerm, mode: 'insensitive' } } } }
+        {
+          lineItem: {
+            part: { partNumber: { contains: searchTerm, mode: 'insensitive' } },
+          },
+        },
+        {
+          lineItem: {
+            part: { partName: { contains: searchTerm, mode: 'insensitive' } },
+          },
+        },
+        {
+          lineItem: {
+            purchaseOrder: {
+              customer: { name: { contains: searchTerm, mode: 'insensitive' } },
+            },
+          },
+        },
+        {
+          lineItem: {
+            purchaseOrder: {
+              systemOrderId: { contains: searchTerm, mode: 'insensitive' },
+            },
+          },
+        },
       ];
     }
 
@@ -190,9 +273,9 @@ export async function GET(request: NextRequest) {
           ...where,
           routingSteps: {
             some: {
-              workstationId: workstationId
-            }
-          }
+              workstationId: workstationId,
+            },
+          },
         },
         include: {
           lineItem: {
@@ -269,14 +352,13 @@ export async function GET(request: NextRequest) {
       },
       count: batches.length,
     });
-
   } catch (error) {
     console.error('Error fetching batches:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to fetch batches',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -289,20 +371,23 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     const {
       lineItemId,
       quantity,
       priority,
       notes,
       // Smart routing options
-      routingOptions = {}
+      routingOptions = {},
     } = body;
 
     // Validate required fields
     if (!lineItemId || !quantity) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: lineItemId, quantity' },
+        {
+          success: false,
+          error: 'Missing required fields: lineItemId, quantity',
+        },
         { status: 400 }
       );
     }
@@ -314,10 +399,10 @@ export async function POST(request: NextRequest) {
         part: true, // Include Parts Master data
         purchaseOrder: {
           include: {
-            customer: true
-          }
-        }
-      }
+            customer: true,
+          },
+        },
+      },
     });
 
     if (!lineItem) {
@@ -330,13 +415,13 @@ export async function POST(request: NextRequest) {
     // Generate batch ID
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
-    
+
     // Get the last batch number for today
     const lastBatch = await prisma.batch.findFirst({
       where: {
-        batchId: { startsWith: `DES-${dateStr.slice(2)}-` }
+        batchId: { startsWith: `DES-${dateStr.slice(2)}-` },
       },
-      orderBy: { batchId: 'desc' }
+      orderBy: { batchId: 'desc' },
     });
 
     let batchNumber = 1;
@@ -363,7 +448,7 @@ export async function POST(request: NextRequest) {
           notes,
           startDate: new Date(),
           estimatedCompletion,
-          status: 'QUEUED'
+          status: 'QUEUED',
         },
         include: {
           lineItem: {
@@ -376,11 +461,15 @@ export async function POST(request: NextRequest) {
               },
             },
           },
-        }
+        },
       });
 
       // Determine routing steps using smart routing logic
-      const routingSteps = await determineSmartRouting(tx, newBatch, routingOptions);
+      const routingSteps = await determineSmartRouting(
+        tx,
+        newBatch,
+        routingOptions
+      );
 
       // Determine routing source type
       let routingSource = 'none';
@@ -397,30 +486,32 @@ export async function POST(request: NextRequest) {
       return {
         batch: newBatch,
         routingSteps,
-        routingSource
+        routingSource,
       };
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...result.batch,
-        routingSteps: result.routingSteps
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          ...result.batch,
+          routingSteps: result.routingSteps,
+        },
+        message: `Batch created with ${result.routingSteps.length} routing steps (${result.routingSource})`,
+        routingInfo: {
+          stepsCreated: result.routingSteps.length,
+          source: result.routingSource,
+        },
       },
-      message: `Batch created with ${result.routingSteps.length} routing steps (${result.routingSource})`,
-      routingInfo: {
-        stepsCreated: result.routingSteps.length,
-        source: result.routingSource
-      }
-    }, { status: 201 });
-
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating batch:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create batch',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

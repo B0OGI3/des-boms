@@ -46,4 +46,4 @@ All user-reported issues have been addressed. The codebase is now functionally c
 
 ---
 
-*This file documents the context and reasoning for the recent set of changes. See commit history and PRs for detailed diffs.*
+_This file documents the context and reasoning for the recent set of changes. See commit history and PRs for detailed diffs._

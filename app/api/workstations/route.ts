@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const activeOnly = searchParams.get('active') === 'true';
     const includeQueue = searchParams.get('includeQueue') === 'true';
     const includeOperators = searchParams.get('includeOperators') === 'true';
-    
+
     const where: Prisma.WorkstationWhereInput = {};
     if (activeOnly) where.active = true;
 
@@ -80,8 +80,12 @@ export async function GET(request: NextRequest) {
       ...workstation,
       status: workstation.operatorSessions?.length > 0 ? 'ACTIVE' : 'IDLE',
       currentOperator: workstation.operatorSessions?.[0]?.operatorId || null,
-      activeJobs: workstation.routingSteps?.filter(step => step.status === 'IN_PROGRESS').length || 0,
-      queuedJobs: workstation.routingSteps?.filter(step => step.status === 'PENDING').length || 0,
+      activeJobs:
+        workstation.routingSteps?.filter(step => step.status === 'IN_PROGRESS')
+          .length || 0,
+      queuedJobs:
+        workstation.routingSteps?.filter(step => step.status === 'PENDING')
+          .length || 0,
     }));
 
     return NextResponse.json({

@@ -8,20 +8,17 @@ declare module 'intuit-oauth' {
 
   class OAuthClient {
     constructor(config: OAuthConfig);
-    
-    authorizeUri(params: {
-      scope: string;
-      state?: string;
-    }): string;
-    
+
+    authorizeUri(params: { scope: string; state?: string }): string;
+
     createToken(uri: string): Promise<any>;
-    
+
     refresh(): Promise<any>;
-    
+
     revoke(): Promise<any>;
-    
+
     isAccessTokenValid(): boolean;
-    
+
     getToken(): any;
   }
 

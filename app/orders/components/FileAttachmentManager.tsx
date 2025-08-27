@@ -56,8 +56,10 @@ export function FileAttachmentManager({
 
   const getFileIcon = (mimeType: string, fileType: string) => {
     if (mimeType.startsWith('image/')) return <IconPhoto size={16} />;
-    if (mimeType === 'application/pdf') return <IconFile size={16} color="red" />;
-    if (fileType.toLowerCase().includes('dwg')) return <IconSettings size={16} color="blue" />;
+    if (mimeType === 'application/pdf')
+      return <IconFile size={16} color='red' />;
+    if (fileType.toLowerCase().includes('dwg'))
+      return <IconSettings size={16} color='blue' />;
     if (mimeType.startsWith('text/')) return <IconFileText size={16} />;
     return <IconFile size={16} />;
   };
@@ -83,7 +85,7 @@ export function FileAttachmentManager({
     setUploading(true);
 
     try {
-      const uploadPromises = selectedFiles.map(async (file) => {
+      const uploadPromises = selectedFiles.map(async file => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('lineItemId', lineItemId);
@@ -120,7 +122,8 @@ export function FileAttachmentManager({
       console.error('Upload error:', error);
       notifications.show({
         title: 'Upload failed',
-        message: error instanceof Error ? error.message : 'Failed to upload files',
+        message:
+          error instanceof Error ? error.message : 'Failed to upload files',
         color: 'red',
       });
     } finally {
@@ -128,50 +131,54 @@ export function FileAttachmentManager({
     }
   }, [selectedFiles, lineItemId, description, onAttachmentsChange]);
 
-  const handleDelete = useCallback(async (fileId: string, fileName: string) => {
-    if (!confirm(`Delete file "${fileName}"?`)) return;
+  const handleDelete = useCallback(
+    async (fileId: string, fileName: string) => {
+      if (!confirm(`Delete file "${fileName}"?`)) return;
 
-    try {
-      const response = await fetch(`/api/uploads?fileId=${fileId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        let error;
-        try {
-          error = await response.json();
-        } catch {
-          // If response isn't JSON, use status text
-          error = { error: response.statusText || 'Delete failed' };
-        }
-        console.error('Delete file error response:', error);
-        throw new Error(error.error || 'Delete failed');
-      }
-
-      // Try to consume response if successful
       try {
-        await response.json();
-      } catch {
-        // Response might be empty, which is fine for a successful delete
-        console.log('Delete file successful (empty response)');
+        const response = await fetch(`/api/uploads?fileId=${fileId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          let error;
+          try {
+            error = await response.json();
+          } catch {
+            // If response isn't JSON, use status text
+            error = { error: response.statusText || 'Delete failed' };
+          }
+          console.error('Delete file error response:', error);
+          throw new Error(error.error || 'Delete failed');
+        }
+
+        // Try to consume response if successful
+        try {
+          await response.json();
+        } catch {
+          // Response might be empty, which is fine for a successful delete
+          console.log('Delete file successful (empty response)');
+        }
+
+        notifications.show({
+          title: 'File deleted',
+          message: `"${fileName}" has been deleted`,
+          color: 'green',
+        });
+
+        onAttachmentsChange();
+      } catch (error) {
+        console.error('Delete error:', error);
+        notifications.show({
+          title: 'Delete failed',
+          message:
+            error instanceof Error ? error.message : 'Failed to delete file',
+          color: 'red',
+        });
       }
-
-      notifications.show({
-        title: 'File deleted',
-        message: `"${fileName}" has been deleted`,
-        color: 'green',
-      });
-
-      onAttachmentsChange();
-    } catch (error) {
-      console.error('Delete error:', error);
-      notifications.show({
-        title: 'Delete failed',
-        message: error instanceof Error ? error.message : 'Failed to delete file',
-        color: 'red',
-      });
-    }
-  }, [onAttachmentsChange]);
+    },
+    [onAttachmentsChange]
+  );
 
   const handleDownload = useCallback((attachment: FileAttachment) => {
     // Open in new tab for download
@@ -179,42 +186,47 @@ export function FileAttachmentManager({
   }, []);
 
   return (
-    <Stack gap="md">
+    <Stack gap='md'>
       {!readonly && (
-        <Card withBorder p="md">
-          <Stack gap="sm">
-            <Text fw={600} size="sm">Upload Files</Text>
-            <Text size="xs" c="dimmed">
+        <Card withBorder p='md'>
+          <Stack gap='sm'>
+            <Text fw={600} size='sm'>
+              Upload Files
+            </Text>
+            <Text size='xs' c='dimmed'>
               Supported: PDF, DWG, STEP, IGES, Images, Text files
             </Text>
-            
+
             <FileInput
               multiple
-              accept=".pdf,.dwg,.step,.stp,.iges,.igs,.jpg,.jpeg,.png,.txt,.doc,.docx"
+              accept='.pdf,.dwg,.step,.stp,.iges,.igs,.jpg,.jpeg,.png,.txt,.doc,.docx'
               value={selectedFiles}
               onChange={setSelectedFiles}
-              placeholder="Select files to upload..."
+              placeholder='Select files to upload...'
               leftSection={<IconUpload size={16} />}
             />
 
             {selectedFiles.length > 0 && (
               <Textarea
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Optional description for all uploaded files..."
+                onChange={e => setDescription(e.target.value)}
+                placeholder='Optional description for all uploaded files...'
                 rows={2}
                 maxLength={500}
               />
             )}
 
-            <Group justify="flex-end">
+            <Group justify='flex-end'>
               <Button
                 onClick={handleUpload}
                 disabled={selectedFiles.length === 0 || uploading}
                 loading={uploading}
                 leftSection={<IconUpload size={16} />}
               >
-                Upload {selectedFiles.length > 0 ? `${selectedFiles.length} file(s)` : ''}
+                Upload{' '}
+                {selectedFiles.length > 0
+                  ? `${selectedFiles.length} file(s)`
+                  : ''}
               </Button>
             </Group>
           </Stack>
@@ -222,61 +234,64 @@ export function FileAttachmentManager({
       )}
 
       {attachments.length === 0 ? (
-        <Alert icon={<IconInfoCircle size={16} />} title="No files attached">
-          {readonly 
-            ? "No files have been attached to this line item."
-            : "Upload drawings, CAD models, specifications, or other relevant files for this line item."
-          }
+        <Alert icon={<IconInfoCircle size={16} />} title='No files attached'>
+          {readonly
+            ? 'No files have been attached to this line item.'
+            : 'Upload drawings, CAD models, specifications, or other relevant files for this line item.'}
         </Alert>
       ) : (
-        <Stack gap="xs">
-          <Text fw={600} size="sm">{attachments.length} Attached File(s)</Text>
-          {attachments.map((attachment) => (
-            <Card key={attachment.id} withBorder p="sm">
-              <Group justify="space-between" wrap="nowrap">
-                <Group gap="xs" style={{ flex: 1, minWidth: 0 }}>
+        <Stack gap='xs'>
+          <Text fw={600} size='sm'>
+            {attachments.length} Attached File(s)
+          </Text>
+          {attachments.map(attachment => (
+            <Card key={attachment.id} withBorder p='sm'>
+              <Group justify='space-between' wrap='nowrap'>
+                <Group gap='xs' style={{ flex: 1, minWidth: 0 }}>
                   {getFileIcon(attachment.mimeType, attachment.fileType)}
                   <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-                    <Text size="sm" fw={500} truncate>
+                    <Text size='sm' fw={500} truncate>
                       {attachment.fileName}
                     </Text>
-                    <Group gap="xs">
-                      <Badge size="xs" variant="light">
+                    <Group gap='xs'>
+                      <Badge size='xs' variant='light'>
                         {attachment.fileType.toUpperCase()}
                       </Badge>
-                      <Text size="xs" c="dimmed">
+                      <Text size='xs' c='dimmed'>
                         {formatFileSize(attachment.fileSize)}
                       </Text>
-                      <Text size="xs" c="dimmed">
+                      <Text size='xs' c='dimmed'>
                         by {attachment.uploadedBy}
                       </Text>
                     </Group>
                     {attachment.description && (
-                      <Text size="xs" c="dimmed" lineClamp={1}>
+                      <Text size='xs' c='dimmed' lineClamp={1}>
                         {attachment.description}
                       </Text>
                     )}
                   </Stack>
                 </Group>
 
-                <Group gap="xs">
-                  <Tooltip label="Download">
+                <Group gap='xs'>
+                  <Tooltip label='Download'>
                     <ActionIcon
-                      variant="subtle"
-                      size="sm"
+                      variant='subtle'
+                      size='sm'
                       onClick={() => handleDownload(attachment)}
                     >
                       <IconDownload size={16} />
                     </ActionIcon>
                   </Tooltip>
-                  
+
                   {!readonly && (
-                    <Tooltip label="Delete">
+                    <Tooltip label='Delete'>
                       <ActionIcon
-                        variant="subtle"
-                        color="red"
-                        size="sm"
-                        onClick={() => handleDelete(attachment.id, attachment.fileName)}
+                        variant='subtle'
+                        color='red'
+                        size='sm'
+                        onClick={() =>
+                          handleDelete(attachment.id, attachment.fileName)
+                        }
                       >
                         <IconTrash size={16} />
                       </ActionIcon>

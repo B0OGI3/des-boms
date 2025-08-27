@@ -18,15 +18,15 @@ export async function GET(request: NextRequest) {
     const operatorId = searchParams.get('operatorId');
 
     const where: any = {};
-    
+
     if (stepId) {
       where.stepId = stepId;
     }
-    
+
     if (workstationId) {
       where.workstationId = workstationId;
     }
-    
+
     if (operatorId) {
       where.operatorId = operatorId;
     }
@@ -63,14 +63,13 @@ export async function GET(request: NextRequest) {
       success: true,
       data: confirmations,
     });
-
   } catch (error) {
     console.error('Error fetching step confirmations:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to fetch step confirmations',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -83,20 +82,24 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    
+
     const stepId = formData.get('stepId') as string;
     const operatorName = formData.get('operatorName') as string;
-    const operatorId = formData.get('operatorId') as string || null;
-    const action = formData.get('action') as 'start' | 'complete' | 'pause' | 'flag';
-    const notes = formData.get('notes') as string || null;
-    const photo = formData.get('photo') as File || null;
+    const operatorId = (formData.get('operatorId') as string) || null;
+    const action = formData.get('action') as
+      | 'start'
+      | 'complete'
+      | 'pause'
+      | 'flag';
+    const notes = (formData.get('notes') as string) || null;
+    const photo = (formData.get('photo') as File) || null;
 
     // Validate required fields
     if (!stepId || !operatorName || !action) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Missing required fields: stepId, operatorName, action' 
+        {
+          success: false,
+          error: 'Missing required fields: stepId, operatorName, action',
         },
         { status: 400 }
       );
@@ -113,9 +116,9 @@ export async function POST(request: NextRequest) {
 
     if (!routingStep) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Routing step not found' 
+        {
+          success: false,
+          error: 'Routing step not found',
         },
         { status: 404 }
       );
@@ -155,9 +158,9 @@ export async function POST(request: NextRequest) {
         break;
       default:
         return NextResponse.json(
-          { 
-            success: false, 
-            error: 'Invalid action. Must be: start, complete, pause, or flag' 
+          {
+            success: false,
+            error: 'Invalid action. Must be: start, complete, pause, or flag',
           },
           { status: 400 }
         );
@@ -170,7 +173,8 @@ export async function POST(request: NextRequest) {
         workstationId: routingStep.workstationId,
         operatorName,
         operatorId,
-        startTime: action === 'start' || action === 'flag' ? new Date() : undefined,
+        startTime:
+          action === 'start' || action === 'flag' ? new Date() : undefined,
         endTime: action === 'complete' ? new Date() : undefined,
         notes,
         photoUrl,
@@ -190,14 +194,16 @@ export async function POST(request: NextRequest) {
     // If this is a completion, check if we need to update batch status
     if (action === 'complete') {
       const allSteps = await prisma.routingStep.findMany({
-        where: { 
+        where: {
           batchId: routingStep.batchId,
           required: true,
         },
       });
 
-      const completedSteps = allSteps.filter(step => step.status === 'COMPLETED');
-      
+      const completedSteps = allSteps.filter(
+        step => step.status === 'COMPLETED'
+      );
+
       // If all required steps are completed, mark batch as completed
       if (completedSteps.length === allSteps.length) {
         await prisma.batch.update({
@@ -236,19 +242,21 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: fullConfirmation,
-      message: `Step ${action} recorded successfully`,
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        data: fullConfirmation,
+        message: `Step ${action} recorded successfully`,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating step confirmation:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create step confirmation',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

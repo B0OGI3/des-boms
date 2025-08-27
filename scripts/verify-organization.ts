@@ -36,7 +36,7 @@ async function generateOrganizationReport(): Promise<OrganizationReport> {
   const tools = await listDirectory('tools');
   const deployment = await listDirectory('deployment');
   const config = await listDirectory('config');
-  
+
   // Check root directory for cleanliness
   const rootFiles = await listDirectory('.');
   const expectedRootFiles = [
@@ -53,9 +53,9 @@ async function generateOrganizationReport(): Promise<OrganizationReport> {
     '.env.example',
     'LICENSE',
     'next-env.d.ts',
-    'tsconfig.tsbuildinfo'
+    'tsconfig.tsbuildinfo',
   ];
-  
+
   const expectedRootDirs = [
     'app',
     'lib',
@@ -74,52 +74,61 @@ async function generateOrganizationReport(): Promise<OrganizationReport> {
     'node_modules',
     '.next',
     '.git',
-    '.github'
+    '.github',
   ];
-  
+
   // Check for documentation files that should be in docs/
-  const docFiles = rootFiles.filter(file => 
-    file.endsWith('.md') && 
-    file !== 'README.md' && 
-    file !== 'LICENSE'
+  const docFiles = rootFiles.filter(
+    file => file.endsWith('.md') && file !== 'README.md' && file !== 'LICENSE'
   );
-  
+
   // Check for script files that should be in tools/ or deployment/
-  const scriptFiles = rootFiles.filter(file => 
-    (file.endsWith('.js') || file.endsWith('.sh') || file.endsWith('.bat')) && 
-    !file.startsWith('.')
+  const scriptFiles = rootFiles.filter(
+    file =>
+      (file.endsWith('.js') || file.endsWith('.sh') || file.endsWith('.bat')) &&
+      !file.startsWith('.')
   );
-  
+
   // Check for config files that should be in config/
-  const configFiles = rootFiles.filter(file => 
-    (file.includes('.config.') || file.includes('eslint') || file.includes('tailwind') || file.includes('postcss')) &&
-    !expectedRootFiles.includes(file)
+  const configFiles = rootFiles.filter(
+    file =>
+      (file.includes('.config.') ||
+        file.includes('eslint') ||
+        file.includes('tailwind') ||
+        file.includes('postcss')) &&
+      !expectedRootFiles.includes(file)
   );
-  
+
   const misorganized = [
     ...docFiles.map(f => `${f} (should be in docs/)`),
     ...scriptFiles.map(f => `${f} (should be in tools/ or deployment/)`),
     ...configFiles.map(f => `${f} (should be in config/)`),
-    ...rootFiles.filter(file => 
-      !expectedRootFiles.includes(file) && 
-      !expectedRootDirs.includes(file) &&
-      !file.startsWith('.env') &&
-      !docFiles.includes(file) &&
-      !scriptFiles.includes(file) &&
-      !configFiles.includes(file)
-    ).map(f => `${f} (unexpected file in root)`)
+    ...rootFiles
+      .filter(
+        file =>
+          !expectedRootFiles.includes(file) &&
+          !expectedRootDirs.includes(file) &&
+          !file.startsWith('.env') &&
+          !docFiles.includes(file) &&
+          !scriptFiles.includes(file) &&
+          !configFiles.includes(file)
+      )
+      .map(f => `${f} (unexpected file in root)`),
   ];
-  
+
   const expectedItems = expectedRootFiles.length + expectedRootDirs.length;
-  const rootCleanness = Math.max(0, (expectedItems - misorganized.length) / expectedItems * 100);
-  
+  const rootCleanness = Math.max(
+    0,
+    ((expectedItems - misorganized.length) / expectedItems) * 100
+  );
+
   return {
     docs,
     tools,
     deployment,
     config,
     misorganized,
-    rootCleanness
+    rootCleanness,
   };
 }
 
@@ -128,40 +137,44 @@ export { generateOrganizationReport, type OrganizationReport };
 
 // CLI execution
 if (require.main === module) {
-  generateOrganizationReport().then(report => {
-    console.log('📁 DES-BOMS Repository Organization Report');
-    console.log('=========================================\n');
-    
-    console.log('📚 Documentation (`docs/`):');
-    console.log(`   Files: ${report.docs.length}`);
-    report.docs.forEach(file => console.log(`   - ${file}`));
-    
-    console.log('\n🛠️  Development Tools (`tools/`):');
-    console.log(`   Files: ${report.tools.length}`);
-    report.tools.forEach(file => console.log(`   - ${file}`));
-    
-    console.log('\n🚀 Deployment Scripts (`deployment/`):');
-    console.log(`   Files: ${report.deployment.length}`);
-    report.deployment.forEach(file => console.log(`   - ${file}`));
-    
-    console.log('\n⚙️  Configuration Files (`config/`):');
-    console.log(`   Files: ${report.config.length}`);
-    report.config.forEach(file => console.log(`   - ${file}`));
-    
-    if (report.misorganized.length > 0) {
-      console.log('\n⚠️  Misorganized Files (in root):');
-      report.misorganized.forEach(file => console.log(`   - ${file}`));
-    }
-    
-    console.log('\n📊 Organization Score:');
-    console.log(`Root Directory Cleanliness: ${report.rootCleanness.toFixed(1)}%`);
-    
-    if (report.rootCleanness >= 90) {
-      console.log('✅ Repository is well organized!');
-    } else if (report.rootCleanness >= 70) {
-      console.log('⚠️  Repository organization could be improved');
-    } else {
-      console.log('❌ Repository needs better organization');
-    }
-  }).catch(console.error);
+  generateOrganizationReport()
+    .then(report => {
+      console.log('📁 DES-BOMS Repository Organization Report');
+      console.log('=========================================\n');
+
+      console.log('📚 Documentation (`docs/`):');
+      console.log(`   Files: ${report.docs.length}`);
+      report.docs.forEach(file => console.log(`   - ${file}`));
+
+      console.log('\n🛠️  Development Tools (`tools/`):');
+      console.log(`   Files: ${report.tools.length}`);
+      report.tools.forEach(file => console.log(`   - ${file}`));
+
+      console.log('\n🚀 Deployment Scripts (`deployment/`):');
+      console.log(`   Files: ${report.deployment.length}`);
+      report.deployment.forEach(file => console.log(`   - ${file}`));
+
+      console.log('\n⚙️  Configuration Files (`config/`):');
+      console.log(`   Files: ${report.config.length}`);
+      report.config.forEach(file => console.log(`   - ${file}`));
+
+      if (report.misorganized.length > 0) {
+        console.log('\n⚠️  Misorganized Files (in root):');
+        report.misorganized.forEach(file => console.log(`   - ${file}`));
+      }
+
+      console.log('\n📊 Organization Score:');
+      console.log(
+        `Root Directory Cleanliness: ${report.rootCleanness.toFixed(1)}%`
+      );
+
+      if (report.rootCleanness >= 90) {
+        console.log('✅ Repository is well organized!');
+      } else if (report.rootCleanness >= 70) {
+        console.log('⚠️  Repository organization could be improved');
+      } else {
+        console.log('❌ Repository needs better organization');
+      }
+    })
+    .catch(console.error);
 }

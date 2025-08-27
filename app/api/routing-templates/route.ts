@@ -12,14 +12,15 @@ export async function GET() {
       {
         id: 'template-standard',
         name: 'Standard Machining',
-        description: 'Standard mill, turn, grind, inspect workflow for general parts',
+        description:
+          'Standard mill, turn, grind, inspect workflow for general parts',
         category: 'MACHINING',
         estimatedDuration: 170, // Total minutes
         applicablePartTypes: ['FINISHED', 'SEMI_FINISHED'],
         businessRules: {
           minQuantity: 1,
           maxQuantity: 50,
-          priorities: ['STANDARD']
+          priorities: ['STANDARD'],
         },
         steps: [
           {
@@ -29,7 +30,7 @@ export async function GET() {
             description: 'Rough milling operations',
             estimatedTime: 90,
             required: true,
-            notes: 'Use appropriate speeds and feeds for material'
+            notes: 'Use appropriate speeds and feeds for material',
           },
           {
             stepNumber: 2,
@@ -38,7 +39,7 @@ export async function GET() {
             description: 'Turning operations',
             estimatedTime: 60,
             required: true,
-            notes: 'Check concentricity requirements'
+            notes: 'Check concentricity requirements',
           },
           {
             stepNumber: 3,
@@ -47,14 +48,15 @@ export async function GET() {
             description: 'Final inspection',
             estimatedTime: 20,
             required: true,
-            notes: 'CMM inspection per drawing requirements'
-          }
-        ]
+            notes: 'CMM inspection per drawing requirements',
+          },
+        ],
       },
       {
         id: 'template-rush',
         name: 'Rush Production',
-        description: 'Expedited routing for rush orders - skips non-critical operations',
+        description:
+          'Expedited routing for rush orders - skips non-critical operations',
         category: 'EXPEDITED',
         estimatedDuration: 70,
         applicablePartTypes: ['FINISHED', 'SEMI_FINISHED'],
@@ -62,7 +64,7 @@ export async function GET() {
           minQuantity: 1,
           maxQuantity: 25,
           priorities: ['RUSH'],
-          autoSelect: true // Automatically selected for RUSH orders
+          autoSelect: true, // Automatically selected for RUSH orders
         },
         steps: [
           {
@@ -72,7 +74,7 @@ export async function GET() {
             description: 'Priority milling (combined ops)',
             estimatedTime: 60,
             required: true,
-            notes: 'Combine rough and finish operations'
+            notes: 'Combine rough and finish operations',
           },
           {
             stepNumber: 2,
@@ -81,9 +83,9 @@ export async function GET() {
             description: 'Quick inspection',
             estimatedTime: 10,
             required: true,
-            notes: 'Focus on critical dimensions only'
-          }
-        ]
+            notes: 'Focus on critical dimensions only',
+          },
+        ],
       },
       {
         id: 'template-high-volume',
@@ -96,7 +98,7 @@ export async function GET() {
           minQuantity: 100,
           maxQuantity: 1000,
           priorities: ['STANDARD', 'RUSH'],
-          autoSelect: true // Automatically selected for large batches
+          autoSelect: true, // Automatically selected for large batches
         },
         steps: [
           {
@@ -106,7 +108,7 @@ export async function GET() {
             description: 'Batch setup and tooling',
             estimatedTime: 120,
             required: true,
-            notes: 'Setup for long production run'
+            notes: 'Setup for long production run',
           },
           {
             stepNumber: 2,
@@ -115,7 +117,7 @@ export async function GET() {
             description: 'High volume milling run',
             estimatedTime: 180,
             required: true,
-            notes: 'Continuous production mode'
+            notes: 'Continuous production mode',
           },
           {
             stepNumber: 3,
@@ -124,9 +126,9 @@ export async function GET() {
             description: 'Statistical sampling inspection',
             estimatedTime: 30,
             required: true,
-            notes: 'Sample every 10th piece'
-          }
-        ]
+            notes: 'Sample every 10th piece',
+          },
+        ],
       },
       {
         id: 'template-assembly',
@@ -140,7 +142,7 @@ export async function GET() {
           maxQuantity: 500,
           priorities: ['STANDARD', 'RUSH'],
           partNameContains: ['assembly', 'assy', 'kit'],
-          autoSelect: true // Auto-selected for assembly parts
+          autoSelect: true, // Auto-selected for assembly parts
         },
         steps: [
           {
@@ -150,7 +152,7 @@ export async function GET() {
             description: 'Component assembly',
             estimatedTime: 45,
             required: true,
-            notes: 'Follow assembly drawings and torque specs'
+            notes: 'Follow assembly drawings and torque specs',
           },
           {
             stepNumber: 2,
@@ -159,10 +161,10 @@ export async function GET() {
             description: 'Assembly inspection',
             estimatedTime: 15,
             required: true,
-            notes: 'Verify all components and functions'
-          }
-        ]
-      }
+            notes: 'Verify all components and functions',
+          },
+        ],
+      },
     ];
 
     return NextResponse.json({
@@ -173,17 +175,18 @@ export async function GET() {
       meta: {
         version: '2.0',
         smartRoutingEnabled: true,
-        autoSelectionRules: smartTemplates.filter(t => t.businessRules?.autoSelect).length
-      }
+        autoSelectionRules: smartTemplates.filter(
+          t => t.businessRules?.autoSelect
+        ).length,
+      },
     });
-
   } catch (error) {
     console.error('Error fetching routing templates:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch routing templates',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

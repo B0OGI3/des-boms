@@ -13,7 +13,10 @@ interface ErrorBoundaryProps {
   fallback?: React.ReactNode;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -38,37 +41,42 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
       return (
         <Card
-          padding="xl"
+          padding='xl'
           style={{
-            background: "linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05))",
-            border: "1px solid rgba(239, 68, 68, 0.3)",
-            borderRadius: "12px",
-            backdropFilter: "blur(12px)",
-            textAlign: "center",
-            margin: "20px auto",
-            maxWidth: "500px",
+            background:
+              'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05))',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            borderRadius: '12px',
+            backdropFilter: 'blur(12px)',
+            textAlign: 'center',
+            margin: '20px auto',
+            maxWidth: '500px',
           }}
         >
           <div
             style={{
               width: 64,
               height: 64,
-              borderRadius: "50%",
-              background: "rgba(239, 68, 68, 0.2)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 16px auto",
-              fontSize: "24px",
-              border: "2px solid rgba(239, 68, 68, 0.3)",
+              borderRadius: '50%',
+              background: 'rgba(239, 68, 68, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px auto',
+              fontSize: '24px',
+              border: '2px solid rgba(239, 68, 68, 0.3)',
             }}
           >
             ⚠️
           </div>
-          <Text size="lg" fw={600} style={{ color: "#f87171", marginBottom: 12 }}>
+          <Text
+            size='lg'
+            fw={600}
+            style={{ color: '#f87171', marginBottom: 12 }}
+          >
             Something went wrong
           </Text>
-          <Text size="md" style={{ color: "#fca5a5", marginBottom: 20 }}>
+          <Text size='md' style={{ color: '#fca5a5', marginBottom: 20 }}>
             An unexpected error occurred. Please try refreshing the page.
           </Text>
           <Button
@@ -77,9 +85,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               window.location.reload();
             }}
             style={{
-              background: "linear-gradient(135deg, #ef4444, #dc2626)",
-              border: "none",
-              borderRadius: "8px",
+              background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+              border: 'none',
+              borderRadius: '8px',
               fontWeight: 600,
             }}
           >

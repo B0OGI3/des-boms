@@ -29,12 +29,17 @@ export interface UseBulkSelectionReturn {
 export const useBulkSelection = (
   onRefresh?: () => void
 ): UseBulkSelectionReturn => {
-  const [selectedBatches, setSelectedBatches] = useState<Set<string>>(new Set());
+  const [selectedBatches, setSelectedBatches] = useState<Set<string>>(
+    new Set()
+  );
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const isSelected = useCallback((batchId: string) => {
-    return selectedBatches.has(batchId);
-  }, [selectedBatches]);
+  const isSelected = useCallback(
+    (batchId: string) => {
+      return selectedBatches.has(batchId);
+    },
+    [selectedBatches]
+  );
 
   const selectBatch = useCallback((batchId: string) => {
     setSelectedBatches(prev => new Set([...prev, batchId]));
@@ -60,93 +65,109 @@ export const useBulkSelection = (
     });
   }, []);
 
-  const selectAll = useCallback((batches: Batch[]) => {
-    const allCurrentSelected = batches.every(batch => selectedBatches.has(batch.id));
-    
-    if (allCurrentSelected) {
-      // If all current batches are selected, deselect them
-      setSelectedBatches(prev => {
-        const newSet = new Set(prev);
-        batches.forEach(batch => newSet.delete(batch.id));
-        return newSet;
-      });
-    } else {
-      // Otherwise, select all current batches
-      setSelectedBatches(prev => {
-        const newSet = new Set(prev);
-        batches.forEach(batch => newSet.add(batch.id));
-        return newSet;
-      });
-    }
-  }, [selectedBatches]);
+  const selectAll = useCallback(
+    (batches: Batch[]) => {
+      const allCurrentSelected = batches.every(batch =>
+        selectedBatches.has(batch.id)
+      );
+
+      if (allCurrentSelected) {
+        // If all current batches are selected, deselect them
+        setSelectedBatches(prev => {
+          const newSet = new Set(prev);
+          batches.forEach(batch => newSet.delete(batch.id));
+          return newSet;
+        });
+      } else {
+        // Otherwise, select all current batches
+        setSelectedBatches(prev => {
+          const newSet = new Set(prev);
+          batches.forEach(batch => newSet.add(batch.id));
+          return newSet;
+        });
+      }
+    },
+    [selectedBatches]
+  );
 
   const clearSelection = useCallback(() => {
     setSelectedBatches(new Set());
   }, []);
 
   // Bulk action implementations
-  const updatePriority = useCallback(async (priority: 'RUSH' | 'STANDARD' | 'HOLD') => {
-    if (selectedBatches.size === 0) {
-      return;
-    }
-
-    setIsProcessing(true);
-    try {
-      const response = await fetch('/api/batches/bulk-update', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          batchIds: Array.from(selectedBatches),
-          updates: { priority },
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update batch priorities');
+  const updatePriority = useCallback(
+    async (priority: 'RUSH' | 'STANDARD' | 'HOLD') => {
+      if (selectedBatches.size === 0) {
+        return;
       }
 
-      clearSelection();
-      onRefresh?.();
-    } catch (error) {
-      console.error('Error updating batch priorities:', error);
-      throw error;
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [selectedBatches, clearSelection, onRefresh]);
+      setIsProcessing(true);
+      try {
+        const response = await fetch('/api/batches/bulk-update', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            batchIds: Array.from(selectedBatches),
+            updates: { priority },
+          }),
+        });
 
-  const updateStatus = useCallback(async (status: string) => {
-    if (selectedBatches.size === 0) return;
+        if (!response.ok) {
+          throw new Error('Failed to update batch priorities');
+        }
 
-    console.log('Updating status for batches:', Array.from(selectedBatches), 'to:', status);
-    setIsProcessing(true);
-    try {
-      const response = await fetch('/api/batches/bulk-update', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          batchIds: Array.from(selectedBatches),
-          updates: { status },
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update batch statuses');
+        clearSelection();
+        onRefresh?.();
+      } catch (error) {
+        console.error('Error updating batch priorities:', error);
+        throw error;
+      } finally {
+        setIsProcessing(false);
       }
+    },
+    [selectedBatches, clearSelection, onRefresh]
+  );
 
-      clearSelection();
-      onRefresh?.();
-    } catch (error) {
-      console.error('Error updating batch statuses:', error);
-      throw error;
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [selectedBatches, clearSelection, onRefresh]);
+  const updateStatus = useCallback(
+    async (status: string) => {
+      if (selectedBatches.size === 0) return;
+
+      console.log(
+        'Updating status for batches:',
+        Array.from(selectedBatches),
+        'to:',
+        status
+      );
+      setIsProcessing(true);
+      try {
+        const response = await fetch('/api/batches/bulk-update', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            batchIds: Array.from(selectedBatches),
+            updates: { status },
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update batch statuses');
+        }
+
+        clearSelection();
+        onRefresh?.();
+      } catch (error) {
+        console.error('Error updating batch statuses:', error);
+        throw error;
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [selectedBatches, clearSelection, onRefresh]
+  );
 
   const deleteBatches = useCallback(async () => {
     if (selectedBatches.size === 0) return;

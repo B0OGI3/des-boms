@@ -37,7 +37,7 @@ import {
   Switch,
   NumberInput,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   IconPlayerPlay,
   IconCheck,
@@ -166,6 +166,34 @@ export default function WorkstationsPage() {
       setLoading(false);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Memoize Select data for workstations to avoid recreating array each render
+  const workstationOptions = useMemo(
+    () =>
+      workstations.map(ws => ({
+        value: ws.id,
+        label: `${ws.name} - ${ws.description}`,
+      })),
+    [workstations]
+  );
+
+  const workstationCategoryOptions = useMemo(
+    () => [
+      { value: 'MACHINING', label: 'Machining' },
+      { value: 'ASSEMBLY', label: 'Assembly' },
+      { value: 'WELDING', label: 'Welding' },
+      { value: 'INSPECTION', label: 'Inspection' },
+      { value: 'PACKAGING', label: 'Packaging' },
+      { value: 'PREP', label: 'Preparation' },
+      { value: 'FINISHING', label: 'Finishing' },
+      { value: 'OTHER', label: 'Other' },
+    ],
+    []
+  );
+
+  const handleWorkstationSelect = useCallback((value: string | null) => {
+    setSelectedWorkstation(value || '');
+  }, []);
 
   // Handle workstation creation/update
   const handleWorkstationSave = async () => {
@@ -538,11 +566,8 @@ export default function WorkstationsPage() {
                 label='Select Workstation to Manage'
                 placeholder='Choose a workstation'
                 value={selectedWorkstation}
-                onChange={value => setSelectedWorkstation(value || '')}
-                data={workstations.map(ws => ({
-                  value: ws.id,
-                  label: `${ws.name} - ${ws.description}`,
-                }))}
+                onChange={handleWorkstationSelect}
+                data={workstationOptions}
                 size='lg'
                 styles={{
                   label: {
@@ -944,16 +969,7 @@ export default function WorkstationsPage() {
                   category: value || 'MACHINING',
                 }))
               }
-              data={[
-                { value: 'MACHINING', label: 'Machining' },
-                { value: 'ASSEMBLY', label: 'Assembly' },
-                { value: 'WELDING', label: 'Welding' },
-                { value: 'INSPECTION', label: 'Inspection' },
-                { value: 'PACKAGING', label: 'Packaging' },
-                { value: 'PREP', label: 'Preparation' },
-                { value: 'FINISHING', label: 'Finishing' },
-                { value: 'OTHER', label: 'Other' },
-              ]}
+              data={workstationCategoryOptions}
               styles={{
                 label: { color: '#f1f5f9' },
                 input: {

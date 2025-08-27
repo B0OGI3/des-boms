@@ -33,46 +33,58 @@ export interface FormState<T = Record<string, any>> {
 // Common validation rules
 export const validationRules = {
   required: <T>(message = 'This field is required'): ValidationRule<T> => ({
-    validate: (value: T) => value !== null && value !== undefined && value !== '',
+    validate: (value: T) =>
+      value !== null && value !== undefined && value !== '',
     message,
   }),
-  
+
   minLength: (min: number, message?: string): ValidationRule<string> => ({
     validate: (value: string) => value.length >= min,
     message: message || `Must be at least ${min} characters`,
   }),
-  
+
   maxLength: (max: number, message?: string): ValidationRule<string> => ({
     validate: (value: string) => value.length <= max,
     message: message || `Must be no more than ${max} characters`,
   }),
-  
-  email: (message = 'Please enter a valid email address'): ValidationRule<string> => ({
+
+  email: (
+    message = 'Please enter a valid email address'
+  ): ValidationRule<string> => ({
     validate: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
     message,
   }),
-  
-  phone: (message = 'Please enter a valid phone number'): ValidationRule<string> => ({
-    validate: (value: string) => /^[+]?[1-9]\d{0,15}$/.test(value.replace(/\s/g, '')),
+
+  phone: (
+    message = 'Please enter a valid phone number'
+  ): ValidationRule<string> => ({
+    validate: (value: string) =>
+      /^[+]?[1-9]\d{0,15}$/.test(value.replace(/\s/g, '')),
     message,
   }),
-  
-  number: (message = 'Please enter a valid number'): ValidationRule<string> => ({
+
+  number: (
+    message = 'Please enter a valid number'
+  ): ValidationRule<string> => ({
     validate: (value: string) => !isNaN(Number(value)),
     message,
   }),
-  
-  positiveNumber: (message = 'Please enter a positive number'): ValidationRule<number> => ({
+
+  positiveNumber: (
+    message = 'Please enter a positive number'
+  ): ValidationRule<number> => ({
     validate: (value: number) => value > 0,
     message,
   }),
-  
+
   date: (message = 'Please enter a valid date'): ValidationRule<string> => ({
     validate: (value: string) => !isNaN(Date.parse(value)),
     message,
   }),
-  
-  futureDate: (message = 'Date must be in the future'): ValidationRule<string> => ({
+
+  futureDate: (
+    message = 'Date must be in the future'
+  ): ValidationRule<string> => ({
     validate: (value: string) => new Date(value) > new Date(),
     message,
   }),

@@ -105,7 +105,16 @@ async function handleOperatorLogin(operatorData: {
   hourlyRate?: string;
   workstationId: string;
 }) {
-  const { operatorId, operatorName, email, phone, certifications, shift, hourlyRate, workstationId } = operatorData;
+  const {
+    operatorId,
+    operatorName,
+    email,
+    phone,
+    certifications,
+    shift,
+    hourlyRate,
+    workstationId,
+  } = operatorData;
 
   // Check if operator exists
   let operator = await prisma.workstationOperator.findUnique({
@@ -174,7 +183,15 @@ async function handleOperatorCreation(operatorData: {
   shift: 'DAY' | 'SWING' | 'NIGHT' | 'FLEXIBLE';
   hourlyRate?: string;
 }) {
-  const { operatorId, operatorName, email, phone, certifications, shift, hourlyRate } = operatorData;
+  const {
+    operatorId,
+    operatorName,
+    email,
+    phone,
+    certifications,
+    shift,
+    hourlyRate,
+  } = operatorData;
 
   // Check if operator already exists
   const existingOperator = await prisma.workstationOperator.findUnique({
@@ -205,16 +222,16 @@ async function handleOperatorCreation(operatorData: {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      operatorId, 
-      operatorName, 
-      email, 
-      phone, 
-      certifications = [], 
+    const {
+      operatorId,
+      operatorName,
+      email,
+      phone,
+      certifications = [],
       shift = 'DAY',
       hourlyRate,
       workstationId, // For login session
-      action = 'create' // 'create' or 'login'
+      action = 'create', // 'create' or 'login'
     } = body;
 
     // Validate required fields
@@ -276,7 +293,10 @@ export async function POST(request: NextRequest) {
         message: 'Operator created successfully',
       });
     } catch (creationError) {
-      if (creationError instanceof Error && creationError.message === 'Operator ID already exists') {
+      if (
+        creationError instanceof Error &&
+        creationError.message === 'Operator ID already exists'
+      ) {
         return NextResponse.json(
           {
             success: false,
@@ -345,7 +365,15 @@ export async function PUT(request: NextRequest) {
       });
     } else {
       // Handle regular operator update
-      const { operatorName, email, phone, certifications, shift, hourlyRate, active } = body;
+      const {
+        operatorName,
+        email,
+        phone,
+        certifications,
+        shift,
+        hourlyRate,
+        active,
+      } = body;
 
       const operator = await prisma.workstationOperator.update({
         where: { operatorId },
@@ -355,7 +383,9 @@ export async function PUT(request: NextRequest) {
           ...(phone !== undefined && { phone }),
           ...(certifications && { certifications }),
           ...(shift && { shift }),
-          ...(hourlyRate !== undefined && { hourlyRate: hourlyRate ? parseFloat(hourlyRate) : null }),
+          ...(hourlyRate !== undefined && {
+            hourlyRate: hourlyRate ? parseFloat(hourlyRate) : null,
+          }),
           ...(active !== undefined && { active }),
         },
       });

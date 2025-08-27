@@ -25,7 +25,7 @@
 'use client';
 
 import { Text, Group, Loader, Alert, Button } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { StandardPage } from '../components/ui/StandardPage';
@@ -484,6 +484,27 @@ const OrdersPageContent = ({
   handleNavigateToBatch: (batchId: string) => void;
   handleNavigateToWorkstation: (workstationId: string) => void;
 }) => {
+  const statusOptions = useMemo(
+    () => [
+      { value: 'ALL', label: 'All Status' },
+      { value: 'PENDING', label: 'Pending' },
+      { value: 'IN_PROGRESS', label: 'In Progress' },
+      { value: 'COMPLETED', label: 'Completed' },
+      { value: 'SHIPPED', label: 'Shipped' },
+      { value: 'CANCELLED', label: 'Cancelled' },
+    ],
+    []
+  );
+
+  const pagePriorityOptions = useMemo(
+    () => [
+      { value: 'ALL', label: 'All Priority' },
+      { value: 'STANDARD', label: 'Standard' },
+      { value: 'RUSH', label: 'Rush' },
+      { value: 'URGENT', label: 'Urgent' },
+    ],
+    []
+  );
   return (
     <StandardPage
       title='Customer Orders'
@@ -528,22 +549,10 @@ const OrdersPageContent = ({
           searchPlaceholder='Search by customer, order number, part number, or drawing...'
           statusFilter={orderSearch.statusFilter}
           onStatusChange={orderSearch.setStatusFilter}
-          statusOptions={[
-            { value: 'ALL', label: 'All Status' },
-            { value: 'PENDING', label: 'Pending' },
-            { value: 'IN_PROGRESS', label: 'In Progress' },
-            { value: 'COMPLETED', label: 'Completed' },
-            { value: 'SHIPPED', label: 'Shipped' },
-            { value: 'CANCELLED', label: 'Cancelled' },
-          ]}
+          statusOptions={statusOptions}
           priorityFilter={orderSearch.priorityFilter}
           onPriorityChange={orderSearch.setPriorityFilter}
-          priorityOptions={[
-            { value: 'ALL', label: 'All Priority' },
-            { value: 'STANDARD', label: 'Standard' },
-            { value: 'RUSH', label: 'Rush' },
-            { value: 'URGENT', label: 'Urgent' },
-          ]}
+          priorityOptions={pagePriorityOptions}
         />
 
         {/* Action Buttons */}

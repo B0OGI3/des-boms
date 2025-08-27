@@ -17,9 +17,16 @@ import {
   Collapse,
   ActionIcon,
   Box,
-  LoadingOverlay
+  LoadingOverlay,
 } from '@mantine/core';
-import { IconCalendar, IconUser, IconFileText, IconPackage, IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import {
+  IconCalendar,
+  IconUser,
+  IconFileText,
+  IconPackage,
+  IconChevronDown,
+  IconChevronRight,
+} from '@tabler/icons-react';
 import type { Order } from '../hooks/useOrderSearch';
 import { FileAttachmentManager } from './FileAttachmentManager';
 import { MaterialRequirementsPanel } from '../../components/ui/MaterialRequirementsPanel';
@@ -73,26 +80,39 @@ interface OrderDetailsModalProps {
 // Status badge colors
 const getStatusColor = (status: string): string => {
   switch (status) {
-    case 'PENDING': return 'gray';
-    case 'IN_PROGRESS': return 'blue';
-    case 'COMPLETED': return 'green';
-    case 'ON_HOLD': return 'yellow';
-    case 'CANCELLED': return 'red';
-    default: return 'gray';
+    case 'PENDING':
+      return 'gray';
+    case 'IN_PROGRESS':
+      return 'blue';
+    case 'COMPLETED':
+      return 'green';
+    case 'ON_HOLD':
+      return 'yellow';
+    case 'CANCELLED':
+      return 'red';
+    default:
+      return 'gray';
   }
 };
 
 // Priority badge colors (aligned with DES-BOMS spec: Rush / Standard / Hold)
 const getPriorityColor = (priority: string): string => {
   switch (priority) {
-    case 'RUSH': return 'red';        // Urgent priority - red
-    case 'STANDARD': return 'blue';   // Normal priority - blue
-    case 'HOLD': return 'gray';       // On hold - gray
+    case 'RUSH':
+      return 'red'; // Urgent priority - red
+    case 'STANDARD':
+      return 'blue'; // Normal priority - blue
+    case 'HOLD':
+      return 'gray'; // On hold - gray
     // Legacy support for old priority values
-    case 'HIGH': return 'orange';
-    case 'NORMAL': return 'blue';
-    case 'LOW': return 'gray';
-    default: return 'gray';
+    case 'HIGH':
+      return 'orange';
+    case 'NORMAL':
+      return 'blue';
+    case 'LOW':
+      return 'gray';
+    default:
+      return 'gray';
   }
 };
 
@@ -117,7 +137,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   opened,
   onClose,
   order,
-  onEdit
+  onEdit,
 }) => {
   const [enhancedOrder, setEnhancedOrder] = useState<EnhancedOrderOrNull>(null);
   const [loading, setLoading] = useState(false);
@@ -142,47 +162,50 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
           // Convert the Prisma result to our enhanced format
           const enhanced: EnhancedOrder = {
             ...order,
-            lineItems: result.data.lineItems?.map((item: {
-              id: string;
-              part: {
-                partNumber: string;
-                partName: string;
-                partType: string;
-                drawingNumber?: string;
-                revisionLevel?: string;
-                description?: string;
-              };
-              quantity: number;
-              unitPrice?: number;
-              notes?: string;
-              fileAttachments?: Array<{
-                id: string;
-                fileName: string;
-                storedFileName: string;
-                filePath: string;
-                fileType: string;
-                mimeType: string;
-                fileSize: number;
-                uploadedBy: string;
-                description?: string;
-                createdAt: string;
-              }>;
-            }) => ({
-              id: item.id,
-              part: {
-                id: '', // Placeholder since part ID not needed for display
-                partNumber: item.part.partNumber,
-                partName: item.part.partName,
-                partType: item.part.partType as PartType,
-                drawingNumber: item.part.drawingNumber,
-                revisionLevel: item.part.revisionLevel,
-                description: item.part.description,
-              },
-              quantity: item.quantity,
-              unitPrice: item.unitPrice,
-              notes: item.notes,
-              fileAttachments: item.fileAttachments || []
-            })) || []
+            lineItems:
+              result.data.lineItems?.map(
+                (item: {
+                  id: string;
+                  part: {
+                    partNumber: string;
+                    partName: string;
+                    partType: string;
+                    drawingNumber?: string;
+                    revisionLevel?: string;
+                    description?: string;
+                  };
+                  quantity: number;
+                  unitPrice?: number;
+                  notes?: string;
+                  fileAttachments?: Array<{
+                    id: string;
+                    fileName: string;
+                    storedFileName: string;
+                    filePath: string;
+                    fileType: string;
+                    mimeType: string;
+                    fileSize: number;
+                    uploadedBy: string;
+                    description?: string;
+                    createdAt: string;
+                  }>;
+                }) => ({
+                  id: item.id,
+                  part: {
+                    id: '', // Placeholder since part ID not needed for display
+                    partNumber: item.part.partNumber,
+                    partName: item.part.partName,
+                    partType: item.part.partType as PartType,
+                    drawingNumber: item.part.drawingNumber,
+                    revisionLevel: item.part.revisionLevel,
+                    description: item.part.description,
+                  },
+                  quantity: item.quantity,
+                  unitPrice: item.unitPrice,
+                  notes: item.notes,
+                  fileAttachments: item.fileAttachments || [],
+                })
+              ) || [],
           };
           setEnhancedOrder(enhanced);
         }
@@ -191,11 +214,18 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         // Fallback to basic order data - transform to match interface
         setEnhancedOrder({
           ...order,
-          lineItems: order.lineItems?.map((item, index) => ({
-            id: `temp-${index}`, // Temporary ID for display only
-            ...item,
-            fileAttachments: []
-          })) || []
+          lineItems:
+            order.lineItems?.map((item, index) => {
+              // Avoid specifying `id` twice in the same object literal (TS flags duplicate keys
+              // when spreading objects that may contain the same key). Extract `id` then
+              // reconstruct the object with a single `id` field.
+              const { id: itemId, ...rest } = item as any;
+              return {
+                ...rest,
+                id: itemId ?? `temp-${index}`,
+                fileAttachments: [],
+              } as EnhancedLineItem;
+            }) || [],
         });
       } finally {
         setLoading(false);
@@ -207,56 +237,62 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
 
   const refreshOrderData = useCallback(async () => {
     if (!order || !opened) return;
-    
+
     try {
       const response = await fetch(`/api/orders/${order.id}`);
       if (!response.ok) return;
-      
+
       const result = await response.json();
       if (result.success) {
         const enhanced: EnhancedOrder = {
           ...order,
-          lineItems: result.data.lineItems?.map((apiItem: {
-            id: string;
-            part: {
-              partNumber: string;
-              partName: string;
-              partType: string;
-              drawingNumber?: string;
-              revisionLevel?: string;
-              description?: string;
-            };
-            quantity: number;
-            unitPrice?: number;
-            notes?: string;
-            fileAttachments?: Array<{
-              id: string;
-              fileName: string;
-              storedFileName: string;
-              filePath: string;
-              fileType: string;
-              mimeType: string;
-              fileSize: number;
-              uploadedBy: string;
-              description?: string;
-              createdAt: string;
-            }>;
-          }) => ({
-            id: apiItem.id,
-            part: {
-              id: '', // Placeholder since part ID not needed for display
-              partNumber: apiItem.part.partNumber,
-              partName: apiItem.part.partName,
-              partType: apiItem.part.partType as 'FINISHED_GOOD' | 'SEMI_FINISHED' | 'RAW_MATERIAL',
-              drawingNumber: apiItem.part.drawingNumber,
-              revisionLevel: apiItem.part.revisionLevel,
-              description: apiItem.part.description,
-            },
-            quantity: apiItem.quantity,
-            unitPrice: apiItem.unitPrice,
-            notes: apiItem.notes,
-            fileAttachments: apiItem.fileAttachments || []
-          })) || []
+          lineItems:
+            result.data.lineItems?.map(
+              (apiItem: {
+                id: string;
+                part: {
+                  partNumber: string;
+                  partName: string;
+                  partType: string;
+                  drawingNumber?: string;
+                  revisionLevel?: string;
+                  description?: string;
+                };
+                quantity: number;
+                unitPrice?: number;
+                notes?: string;
+                fileAttachments?: Array<{
+                  id: string;
+                  fileName: string;
+                  storedFileName: string;
+                  filePath: string;
+                  fileType: string;
+                  mimeType: string;
+                  fileSize: number;
+                  uploadedBy: string;
+                  description?: string;
+                  createdAt: string;
+                }>;
+              }) => ({
+                id: apiItem.id,
+                part: {
+                  id: '', // Placeholder since part ID not needed for display
+                  partNumber: apiItem.part.partNumber,
+                  partName: apiItem.part.partName,
+                  partType: apiItem.part.partType as
+                    | 'FINISHED_GOOD'
+                    | 'SEMI_FINISHED'
+                    | 'RAW_MATERIAL',
+                  drawingNumber: apiItem.part.drawingNumber,
+                  revisionLevel: apiItem.part.revisionLevel,
+                  description: apiItem.part.description,
+                },
+                quantity: apiItem.quantity,
+                unitPrice: apiItem.unitPrice,
+                notes: apiItem.notes,
+                fileAttachments: apiItem.fileAttachments || [],
+              })
+            ) || [],
         };
         setEnhancedOrder(enhanced);
       }
@@ -282,60 +318,81 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   // Use enhanced order data if available, fall back to basic order
   const displayOrder = enhancedOrder || order;
 
-  const progressPercentage = displayOrder.assignedBatches > 0 
-    ? Math.round((displayOrder.completedBatches / displayOrder.assignedBatches) * 100) 
-    : 0;
+  const progressPercentage =
+    displayOrder.assignedBatches > 0
+      ? Math.round(
+          (displayOrder.completedBatches / displayOrder.assignedBatches) * 100
+        )
+      : 0;
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
       title={
-        <Group gap="sm">
+        <Group gap='sm'>
           <IconFileText size={20} />
-          <Text fw={600} size="lg">Order Details</Text>
+          <Text fw={600} size='lg'>
+            Order Details
+          </Text>
         </Group>
       }
-      size="xl"
+      size='xl'
       scrollAreaComponent={ScrollArea.Autosize}
       styles={{
-        content: { position: 'relative' }
+        content: { position: 'relative' },
       }}
     >
       <LoadingOverlay visible={loading} />
-      <Stack gap="lg">
+      <Stack gap='lg'>
         {/* Order Header */}
         <Card withBorder>
           <Grid>
             <Grid.Col span={6}>
-              <Stack gap="xs">
-                <Text size="sm" c="dimmed">Order ID</Text>
-                <Text fw={600} size="lg">{displayOrder.orderId}</Text>
+              <Stack gap='xs'>
+                <Text size='sm' c='dimmed'>
+                  Order ID
+                </Text>
+                <Text fw={600} size='lg'>
+                  {displayOrder.orderId}
+                </Text>
               </Stack>
             </Grid.Col>
             <Grid.Col span={6}>
-              <Stack gap="xs">
-                <Text size="sm" c="dimmed">PO Number</Text>
+              <Stack gap='xs'>
+                <Text size='sm' c='dimmed'>
+                  PO Number
+                </Text>
                 <Text fw={500}>{displayOrder.orderNumber}</Text>
               </Stack>
             </Grid.Col>
             <Grid.Col span={6}>
-              <Stack gap="xs">
-                <Text size="sm" c="dimmed">Customer</Text>
-                <Group gap="xs">
+              <Stack gap='xs'>
+                <Text size='sm' c='dimmed'>
+                  Customer
+                </Text>
+                <Group gap='xs'>
                   <IconUser size={16} />
                   <Text fw={500}>{displayOrder.customerName}</Text>
                 </Group>
               </Stack>
             </Grid.Col>
             <Grid.Col span={6}>
-              <Stack gap="xs">
-                <Text size="sm" c="dimmed">Status & Priority</Text>
-                <Group gap="xs">
-                  <Badge color={getStatusColor(displayOrder.status)} variant="filled">
+              <Stack gap='xs'>
+                <Text size='sm' c='dimmed'>
+                  Status & Priority
+                </Text>
+                <Group gap='xs'>
+                  <Badge
+                    color={getStatusColor(displayOrder.status)}
+                    variant='filled'
+                  >
                     {displayOrder.status.replace('_', ' ')}
                   </Badge>
-                  <Badge color={getPriorityColor(displayOrder.priority)} variant="outline">
+                  <Badge
+                    color={getPriorityColor(displayOrder.priority)}
+                    variant='outline'
+                  >
                     {displayOrder.priority}
                   </Badge>
                 </Group>
@@ -348,31 +405,49 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         <Grid>
           <Grid.Col span={6}>
             <Card withBorder>
-              <Stack gap="md">
-                <Group gap="xs">
+              <Stack gap='md'>
+                <Group gap='xs'>
                   <IconCalendar size={18} />
                   <Text fw={500}>Important Dates</Text>
                 </Group>
-                <Stack gap="xs">
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Order Date:</Text>
-                    <Text size="sm">{formatDate(displayOrder.orderDate)}</Text>
+                <Stack gap='xs'>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Order Date:
+                    </Text>
+                    <Text size='sm'>{formatDate(displayOrder.orderDate)}</Text>
                   </Group>
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Due Date:</Text>
-                    <Text size="sm" fw={500}>{formatDate(displayOrder.dueDate)}</Text>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Due Date:
+                    </Text>
+                    <Text size='sm' fw={500}>
+                      {formatDate(displayOrder.dueDate)}
+                    </Text>
                   </Group>
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Days Until Due:</Text>
-                    <Text size="sm" c={
-                      (() => {
-                        const daysUntilDue = Math.ceil((new Date(displayOrder.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Days Until Due:
+                    </Text>
+                    <Text
+                      size='sm'
+                      c={(() => {
+                        const daysUntilDue = Math.ceil(
+                          (new Date(displayOrder.dueDate).getTime() -
+                            new Date().getTime()) /
+                            (1000 * 60 * 60 * 24)
+                        );
                         if (daysUntilDue < 0) return 'red';
                         if (daysUntilDue < 7) return 'orange';
                         return 'green';
-                      })()
-                    }>
-                      {Math.ceil((new Date(displayOrder.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
+                      })()}
+                    >
+                      {Math.ceil(
+                        (new Date(displayOrder.dueDate).getTime() -
+                          new Date().getTime()) /
+                          (1000 * 60 * 60 * 24)
+                      )}{' '}
+                      days
                     </Text>
                   </Group>
                 </Stack>
@@ -381,23 +456,35 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
           </Grid.Col>
           <Grid.Col span={6}>
             <Card withBorder>
-              <Stack gap="md">
-                <Group gap="xs">
+              <Stack gap='md'>
+                <Group gap='xs'>
                   <IconPackage size={18} />
                   <Text fw={500}>Order Summary</Text>
                 </Group>
-                <Stack gap="xs">
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Total Value:</Text>
-                    <Text size="sm" fw={600} c="green">{formatCurrency(displayOrder.totalValue)}</Text>
+                <Stack gap='xs'>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Total Value:
+                    </Text>
+                    <Text size='sm' fw={600} c='green'>
+                      {formatCurrency(displayOrder.totalValue)}
+                    </Text>
                   </Group>
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Line Items:</Text>
-                    <Text size="sm">{displayOrder.itemCount}</Text>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Line Items:
+                    </Text>
+                    <Text size='sm'>{displayOrder.itemCount}</Text>
                   </Group>
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Production Progress:</Text>
-                    <Text size="sm">{displayOrder.completedBatches} / {displayOrder.assignedBatches} batches ({progressPercentage}%)</Text>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='dimmed'>
+                      Production Progress:
+                    </Text>
+                    <Text size='sm'>
+                      {displayOrder.completedBatches} /{' '}
+                      {displayOrder.assignedBatches} batches (
+                      {progressPercentage}%)
+                    </Text>
                   </Group>
                 </Stack>
               </Stack>
@@ -408,58 +495,71 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         {/* Line Items */}
         {displayOrder.lineItems && displayOrder.lineItems.length > 0 && (
           <Card withBorder>
-            <Stack gap="md">
-              <Text fw={500} size="md">Line Items</Text>
+            <Stack gap='md'>
+              <Text fw={500} size='md'>
+                Line Items
+              </Text>
               <Divider />
               <ScrollArea>
-                <Stack gap="md">
+                <Stack gap='md'>
                   {displayOrder.lineItems.map((item, index) => {
                     // Check if this is an enhanced line item with ID
                     const isEnhanced = enhancedOrder && 'id' in item;
                     const enhancedItem = item as EnhancedLineItem;
-                    const itemId = isEnhanced ? enhancedItem.id : `temp-${index}`;
-                    const hasFileAttachments = isEnhanced && enhancedItem.fileAttachments;
-                    
+                    const itemId = isEnhanced
+                      ? enhancedItem.id
+                      : `temp-${index}`;
+                    const hasFileAttachments =
+                      isEnhanced && enhancedItem.fileAttachments;
+
                     return (
-                      <Card key={itemId} withBorder padding="md">
-                        <Stack gap="sm">
+                      <Card key={itemId} withBorder padding='md'>
+                        <Stack gap='sm'>
                           {/* Line Item Header */}
-                          <Group justify="space-between" align="flex-start">
-                            <Stack gap="xs" style={{ flex: 1 }}>
-                              <Group gap="md" align="center">
-                                <Text fw={600} size="md">{item.part.partNumber}</Text>
+                          <Group justify='space-between' align='flex-start'>
+                            <Stack gap='xs' style={{ flex: 1 }}>
+                              <Group gap='md' align='center'>
+                                <Text fw={600} size='md'>
+                                  {item.part.partNumber}
+                                </Text>
                                 <PartTypeIndicator
-                                  partType={item.part.partType as 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL'}
+                                  partType={
+                                    item.part.partType as
+                                      | 'FINISHED'
+                                      | 'SEMI_FINISHED'
+                                      | 'RAW_MATERIAL'
+                                  }
                                   partNumber={item.part.partNumber}
-                                  size="sm"
+                                  size='sm'
                                   showDetails={false}
                                 />
-                                <Text c="dimmed">-</Text>
+                                <Text c='dimmed'>-</Text>
                                 <Text>{item.part.partName}</Text>
                               </Group>
-                              <Group gap="md">
+                              <Group gap='md'>
                                 {item.part.drawingNumber && (
-                                  <Text size="sm" c="dimmed">
+                                  <Text size='sm' c='dimmed'>
                                     Drawing: {item.part.drawingNumber}
-                                    {item.part.revisionLevel && ` (Rev. ${item.part.revisionLevel})`}
+                                    {item.part.revisionLevel &&
+                                      ` (Rev. ${item.part.revisionLevel})`}
                                   </Text>
                                 )}
-                                <Text size="sm" fw={500} c="blue">
+                                <Text size='sm' fw={500} c='blue'>
                                   Qty: {item.quantity.toLocaleString()}
                                 </Text>
                                 {item.part.description && (
-                                  <Text size="sm" c="dimmed">
+                                  <Text size='sm' c='dimmed'>
                                     {item.part.description}
                                   </Text>
                                 )}
                               </Group>
                             </Stack>
-                            
+
                             {isEnhanced && (
                               <ActionIcon
-                                variant="subtle"
+                                variant='subtle'
                                 onClick={() => toggleItemExpansion(itemId)}
-                                size="sm"
+                                size='sm'
                               >
                                 {expandedItems.has(itemId) ? (
                                   <IconChevronDown size={16} />
@@ -469,30 +569,38 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                               </ActionIcon>
                             )}
                           </Group>
-                          
+
                           {/* Expanded Content - File Attachments and Material Requirements */}
                           {isEnhanced && (
                             <Collapse in={expandedItems.has(itemId)}>
-                              <Box pt="md">
-                                <Divider mb="md" />
-                                
+                              <Box pt='md'>
+                                <Divider mb='md' />
+
                                 {/* Material Requirements Section */}
-                                <Stack gap="md" mb="md">
-                                  <Text fw={500} size="sm">Material Requirements</Text>
+                                <Stack gap='md' mb='md'>
+                                  <Text fw={500} size='sm'>
+                                    Material Requirements
+                                  </Text>
                                   <MaterialRequirementsPanel
                                     lineItemId={itemId}
                                     showCosts={true}
                                     compact={true}
                                   />
                                 </Stack>
-                                
-                                <Divider mb="md" />
-                                
+
+                                <Divider mb='md' />
+
                                 {/* File Attachments Section */}
-                                <Text fw={500} size="sm" mb="sm">File Attachments</Text>
+                                <Text fw={500} size='sm' mb='sm'>
+                                  File Attachments
+                                </Text>
                                 <FileAttachmentManager
                                   lineItemId={itemId}
-                                  attachments={hasFileAttachments ? enhancedItem.fileAttachments || [] : []}
+                                  attachments={
+                                    hasFileAttachments
+                                      ? enhancedItem.fileAttachments || []
+                                      : []
+                                  }
                                   onAttachmentsChange={refreshOrderData}
                                 />
                               </Box>
@@ -509,13 +617,13 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
         )}
 
         {/* Action Buttons */}
-        <Group justify="flex-end" gap="sm">
-          <Button variant="default" onClick={onClose}>
+        <Group justify='flex-end' gap='sm'>
+          <Button variant='default' onClick={onClose}>
             Close
           </Button>
           {onEdit && (
-            <Button 
-              variant="filled" 
+            <Button
+              variant='filled'
               onClick={() => {
                 onEdit(displayOrder);
                 onClose();

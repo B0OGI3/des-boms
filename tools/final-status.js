@@ -1,6 +1,6 @@
 /**
  * QuickBooks Integration - Final Status
- * 
+ *
  * Summary of completed work and current system state
  */
 
@@ -8,9 +8,13 @@ console.log('✅ QuickBooks Integration Complete');
 console.log('==================================\n');
 
 console.log('🎯 ACCOMPLISHED:');
-console.log('   ✅ Fixed QuickBooks status detection with real token validation');
+console.log(
+  '   ✅ Fixed QuickBooks status detection with real token validation'
+);
 console.log('   ✅ Enhanced UI components for proper status display');
-console.log('   ✅ Fixed customer sync to include customers WITHOUT email addresses');
+console.log(
+  '   ✅ Fixed customer sync to include customers WITHOUT email addresses'
+);
 console.log('   ✅ Updated tokens with fresh OAuth credentials');
 console.log('   ✅ Implemented proper parent window notification for OAuth');
 console.log('   ✅ Added reauth button to New Order modal');

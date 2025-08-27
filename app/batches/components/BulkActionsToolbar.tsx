@@ -2,7 +2,7 @@
  * Bulk Actions Toolbar for batch management
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Group,
   Button,
@@ -41,33 +41,67 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
+  const priorityOptions = useMemo(
+    () => [
+      { value: 'RUSH', label: 'Rush' },
+      { value: 'STANDARD', label: 'Standard' },
+      { value: 'HOLD', label: 'Hold' },
+    ],
+    []
+  );
+
+  const statusOptions = useMemo(
+    () => [
+      { value: 'QUEUED', label: 'Queued' },
+      { value: 'IN_PROGRESS', label: 'In Progress' },
+      { value: 'COMPLETED', label: 'Completed' },
+      { value: 'ON_HOLD', label: 'On Hold' },
+      { value: 'CANCELLED', label: 'Cancelled' },
+    ],
+    []
+  );
+
+  const handlePriorityChange = useCallback((value: string | null) => {
+    setSelectedPriority(value || '');
+  }, []);
+
+  const handleStatusChange = useCallback((value: string | null) => {
+    setSelectedStatus(value || '');
+  }, []);
+
   if (selectedCount === 0) {
     return null;
   }
 
   const handlePriorityUpdate = async () => {
     if (!selectedPriority) return;
-    
+
     try {
       setError(null);
-      await bulkActions.updatePriority(selectedPriority as 'RUSH' | 'STANDARD' | 'HOLD');
+      await bulkActions.updatePriority(
+        selectedPriority as 'RUSH' | 'STANDARD' | 'HOLD'
+      );
       setPriorityModalOpen(false);
       setSelectedPriority('');
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to update priority');
+      setError(
+        error instanceof Error ? error.message : 'Failed to update priority'
+      );
     }
   };
 
   const handleStatusUpdate = async () => {
     if (!selectedStatus) return;
-    
+
     try {
       setError(null);
       await bulkActions.updateStatus(selectedStatus);
       setStatusModalOpen(false);
       setSelectedStatus('');
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to update status');
+      setError(
+        error instanceof Error ? error.message : 'Failed to update status'
+      );
     }
   };
 
@@ -77,7 +111,9 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
       await bulkActions.deleteBatches();
       setDeleteModalOpen(false);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to delete batches');
+      setError(
+        error instanceof Error ? error.message : 'Failed to delete batches'
+      );
     }
   };
 
@@ -94,7 +130,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 1000,
-          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9))',
+          background:
+            'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9))',
           border: '1px solid rgba(51, 65, 85, 0.4)',
           borderRadius: '16px',
           padding: '16px 24px',
@@ -103,12 +140,12 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
           minWidth: '400px',
         }}
       >
-        <Group justify="space-between" align="center">
-          <Group gap="md">
+        <Group justify='space-between' align='center'>
+          <Group gap='md'>
             <Badge
-              color="blue"
-              variant="filled"
-              size="lg"
+              color='blue'
+              variant='filled'
+              size='lg'
               style={{
                 background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
                 fontSize: '0.9rem',
@@ -117,12 +154,12 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
             >
               {selectedCount} selected
             </Badge>
-            
-            <Group gap="xs">
+
+            <Group gap='xs'>
               {/* Priority Update */}
               <Button
-                size="sm"
-                variant="light"
+                size='sm'
+                variant='light'
                 onClick={() => setPriorityModalOpen(true)}
                 disabled={isProcessing}
                 style={{
@@ -136,8 +173,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
 
               {/* Status Update */}
               <Button
-                size="sm"
-                variant="light"
+                size='sm'
+                variant='light'
                 onClick={() => setStatusModalOpen(true)}
                 disabled={isProcessing}
                 style={{
@@ -151,8 +188,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
 
               {/* Export */}
               <Button
-                size="sm"
-                variant="light"
+                size='sm'
+                variant='light'
                 leftSection={<IconDownload size={16} />}
                 onClick={handleExport}
                 disabled={isProcessing}
@@ -167,8 +204,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
 
               {/* Delete */}
               <Button
-                size="sm"
-                variant="light"
+                size='sm'
+                variant='light'
                 leftSection={<IconTrash size={16} />}
                 onClick={() => setDeleteModalOpen(true)}
                 disabled={isProcessing}
@@ -183,12 +220,12 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
             </Group>
           </Group>
 
-          <Group gap="xs">
-            {isProcessing && <Loader size="sm" color="blue" />}
-            
+          <Group gap='xs'>
+            {isProcessing && <Loader size='sm' color='blue' />}
+
             <ActionIcon
-              variant="subtle"
-              size="sm"
+              variant='subtle'
+              size='sm'
               onClick={bulkActions.clearSelection}
               disabled={isProcessing}
               style={{ color: '#94a3b8' }}
@@ -200,9 +237,9 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
 
         {error && (
           <Alert
-            color="red"
-            title="Error"
-            style={{ 
+            color='red'
+            title='Error'
+            style={{
               marginTop: 12,
               background: 'rgba(239, 68, 68, 0.1)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -217,29 +254,25 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
       <Modal
         opened={priorityModalOpen}
         onClose={() => setPriorityModalOpen(false)}
-        title="Update Priority"
+        title='Update Priority'
         centered
       >
-        <Stack gap="md">
-          <Text size="sm" style={{ color: '#6b7280' }}>
+        <Stack gap='md'>
+          <Text size='sm' style={{ color: '#6b7280' }}>
             Update priority for {selectedCount} selected batches
           </Text>
-          
+
           <Select
-            label="New Priority"
-            placeholder="Select priority"
+            label='New Priority'
+            placeholder='Select priority'
             value={selectedPriority}
-            onChange={(value) => setSelectedPriority(value || '')}
-            data={[
-              { value: 'RUSH', label: 'Rush' },
-              { value: 'STANDARD', label: 'Standard' },
-              { value: 'HOLD', label: 'Hold' },
-            ]}
+            onChange={handlePriorityChange}
+            data={priorityOptions}
           />
 
-          <Group justify="flex-end" gap="sm">
+          <Group justify='flex-end' gap='sm'>
             <Button
-              variant="subtle"
+              variant='subtle'
               onClick={() => setPriorityModalOpen(false)}
               disabled={isProcessing}
             >
@@ -260,31 +293,25 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
       <Modal
         opened={statusModalOpen}
         onClose={() => setStatusModalOpen(false)}
-        title="Update Status"
+        title='Update Status'
         centered
       >
-        <Stack gap="md">
-          <Text size="sm" style={{ color: '#6b7280' }}>
+        <Stack gap='md'>
+          <Text size='sm' style={{ color: '#6b7280' }}>
             Update status for {selectedCount} selected batches
           </Text>
-          
+
           <Select
-            label="New Status"
-            placeholder="Select status"
+            label='New Status'
+            placeholder='Select status'
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value || '')}
-            data={[
-              { value: 'QUEUED', label: 'Queued' },
-              { value: 'IN_PROGRESS', label: 'In Progress' },
-              { value: 'COMPLETED', label: 'Completed' },
-              { value: 'ON_HOLD', label: 'On Hold' },
-              { value: 'CANCELLED', label: 'Cancelled' },
-            ]}
+            onChange={handleStatusChange}
+            data={statusOptions}
           />
 
-          <Group justify="flex-end" gap="sm">
+          <Group justify='flex-end' gap='sm'>
             <Button
-              variant="subtle"
+              variant='subtle'
               onClick={() => setStatusModalOpen(false)}
               disabled={isProcessing}
             >
@@ -305,27 +332,27 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
       <Modal
         opened={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="Delete Batches"
+        title='Delete Batches'
         centered
       >
-        <Stack gap="md">
-          <Alert color="red" icon={<IconAlertTriangle size={16} />}>
-            <Text size="sm">
-              Are you sure you want to delete {selectedCount} selected batches? 
+        <Stack gap='md'>
+          <Alert color='red' icon={<IconAlertTriangle size={16} />}>
+            <Text size='sm'>
+              Are you sure you want to delete {selectedCount} selected batches?
               This action cannot be undone.
             </Text>
           </Alert>
 
-          <Group justify="flex-end" gap="sm">
+          <Group justify='flex-end' gap='sm'>
             <Button
-              variant="subtle"
+              variant='subtle'
               onClick={() => setDeleteModalOpen(false)}
               disabled={isProcessing}
             >
               Cancel
             </Button>
             <Button
-              color="red"
+              color='red'
               onClick={handleDelete}
               disabled={isProcessing}
               loading={isProcessing}

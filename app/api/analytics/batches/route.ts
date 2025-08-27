@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     // Calculate date range based on timeframe
     const now = new Date();
     const startDate = new Date();
-    
+
     switch (timeframe) {
       case '24h':
         startDate.setDate(now.getDate() - 1);
@@ -35,70 +35,70 @@ export async function GET(request: NextRequest) {
       inProgressBatches,
       priorityDistribution,
       recentActivity,
-      completionTrends
+      completionTrends,
     ] = await Promise.all([
       // Total batches in timeframe
       prisma.batch.count({
         where: {
-          createdAt: { gte: startDate }
-        }
+          createdAt: { gte: startDate },
+        },
       }),
 
       // Completed batches
       prisma.batch.count({
         where: {
           status: 'COMPLETED',
-          actualCompletion: { gte: startDate }
-        }
+          actualCompletion: { gte: startDate },
+        },
       }),
 
       // Overdue batches (estimated completion < now, not completed)
       prisma.batch.count({
         where: {
           estimatedCompletion: { lt: now },
-          status: { not: 'COMPLETED' }
-        }
+          status: { not: 'COMPLETED' },
+        },
       }),
 
       // In progress batches
       prisma.batch.count({
         where: {
-          status: 'IN_PROGRESS'
-        }
+          status: 'IN_PROGRESS',
+        },
       }),
 
       // Priority distribution
       prisma.batch.groupBy({
         by: ['priority'],
         where: {
-          createdAt: { gte: startDate }
+          createdAt: { gte: startDate },
         },
         _count: {
-          id: true
-        }
+          id: true,
+        },
       }),
 
       // Recent activity (last 10 updates)
       prisma.batch.findMany({
         where: {
-          updatedAt: { gte: startDate }
+          updatedAt: { gte: startDate },
         },
         orderBy: {
-          updatedAt: 'desc'
+          updatedAt: 'desc',
         },
-        take: 10
+        take: 10,
       }),
 
       // Completion trends (batches completed each day)
       prisma.batch.findMany({
         where: {
           status: 'COMPLETED',
-          actualCompletion: { gte: startDate }
+          actualCompletion: { gte: startDate },
         },
         select: {
-          actualCompletion: true
-        }
-      })
+          actualCompletion: true,
+        },
+      }),
     ]);
 
     // Get workstation utilization data separately
@@ -106,20 +106,20 @@ export async function GET(request: NextRequest) {
       by: ['workstationId'],
       where: {
         batch: {
-          createdAt: { gte: startDate }
-        }
+          createdAt: { gte: startDate },
+        },
       },
       _count: {
-        id: true
-      }
+        id: true,
+      },
     });
 
     // Get workstation names for utilization data
     const workstationIds = workstationUtilization.map(w => w.workstationId);
     const workstations = await prisma.workstation.findMany({
       where: {
-        id: { in: workstationIds }
-      }
+        id: { in: workstationIds },
+      },
     });
 
     // Process workstation utilization data
@@ -128,22 +128,29 @@ export async function GET(request: NextRequest) {
       return {
         workstation: workstation?.name || 'Unknown',
         batches: util._count.id,
-        utilization: Math.round((util._count.id / totalBatches) * 100)
+        utilization: Math.round((util._count.id / totalBatches) * 100),
       };
     });
 
     // Calculate efficiency metrics
-    const completionRate = totalBatches > 0 ? Math.round((completedBatches / totalBatches) * 100) : 0;
-    const overdueRate = totalBatches > 0 ? Math.round((overdueBatches / totalBatches) * 100) : 0;
+    const completionRate =
+      totalBatches > 0
+        ? Math.round((completedBatches / totalBatches) * 100)
+        : 0;
+    const overdueRate =
+      totalBatches > 0 ? Math.round((overdueBatches / totalBatches) * 100) : 0;
 
     // Process completion trends
-    const trendsData = completionTrends.reduce((acc, trend) => {
-      if (trend.actualCompletion) {
-        const date = trend.actualCompletion.toISOString().split('T')[0];
-        acc[date] = (acc[date] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
+    const trendsData = completionTrends.reduce(
+      (acc, trend) => {
+        if (trend.actualCompletion) {
+          const date = trend.actualCompletion.toISOString().split('T')[0];
+          acc[date] = (acc[date] || 0) + 1;
+        }
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // Generate trend array for the last 7 days
     const trendArray = [];
@@ -153,7 +160,7 @@ export async function GET(request: NextRequest) {
       const dateStr = date.toISOString().split('T')[0];
       trendArray.push({
         date: dateStr,
-        completed: trendsData[dateStr] || 0
+        completed: trendsData[dateStr] || 0,
       });
     }
 
@@ -164,13 +171,13 @@ export async function GET(request: NextRequest) {
         inProgressBatches,
         overdueBatches,
         completionRate,
-        overdueRate
+        overdueRate,
       },
       workstationUtilization: workstationData,
       priorityDistribution: priorityDistribution.map(p => ({
         priority: p.priority,
         count: p._count.id,
-        percentage: Math.round((p._count.id / totalBatches) * 100)
+        percentage: Math.round((p._count.id / totalBatches) * 100),
       })),
       completionTrends: trendArray,
       recentActivity: recentActivity.map(batch => ({
@@ -180,14 +187,13 @@ export async function GET(request: NextRequest) {
         priority: batch.priority,
         quantity: batch.quantity,
         lineItemId: batch.lineItemId,
-        updatedAt: batch.updatedAt
+        updatedAt: batch.updatedAt,
       })),
       timeframe,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
     };
 
     return NextResponse.json(analytics);
-
   } catch (error) {
     console.error('Error fetching batch analytics:', error);
     return NextResponse.json(

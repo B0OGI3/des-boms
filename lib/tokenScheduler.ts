@@ -1,6 +1,6 @@
 /**
  * QuickBooks Token Refresh Scheduler
- * 
+ *
  * Background service to automatically refresh QuickBooks tokens before they expire.
  * Can be used as a periodic background job or API endpoint.
  */
@@ -18,33 +18,33 @@ export async function runTokenRefreshJob(): Promise<{
   timestamp: string;
 }> {
   const timestamp = new Date().toISOString();
-  
+
   try {
     console.log('[SCHEDULER] Running token refresh job at:', timestamp);
-    
+
     const tokenManager = getTokenManager();
     const status = tokenManager.getTokenStatus();
-    
+
     if (!status.hasTokens) {
       console.log('[SCHEDULER] No tokens configured, skipping refresh');
       return {
         success: true,
         refreshed: false,
         message: 'No tokens configured - OAuth setup required',
-        timestamp
+        timestamp,
       };
     }
 
     // Attempt auto-refresh (only refreshes if tokens are invalid)
     const refreshed = await autoRefreshTokens();
-    
+
     if (refreshed) {
       console.log('[SCHEDULER] Tokens were refreshed successfully');
       return {
         success: true,
         refreshed: true,
         message: 'Tokens refreshed automatically',
-        timestamp
+        timestamp,
       };
     } else {
       console.log('[SCHEDULER] Tokens are still valid, no refresh needed');
@@ -52,17 +52,16 @@ export async function runTokenRefreshJob(): Promise<{
         success: true,
         refreshed: false,
         message: 'Tokens are valid, no refresh needed',
-        timestamp
+        timestamp,
       };
     }
-
   } catch (error: any) {
     console.error('[SCHEDULER] Token refresh job failed:', error);
     return {
       success: false,
       refreshed: false,
       message: error.message || 'Token refresh failed',
-      timestamp
+      timestamp,
     };
   }
 }
@@ -71,16 +70,20 @@ export async function runTokenRefreshJob(): Promise<{
  * Start periodic token refresh (for use in background services)
  * @param intervalMinutes How often to check tokens (default: 30 minutes)
  */
-export function startTokenRefreshScheduler(intervalMinutes: number = 30): NodeJS.Timeout {
+export function startTokenRefreshScheduler(
+  intervalMinutes: number = 30
+): NodeJS.Timeout {
   const intervalMs = intervalMinutes * 60 * 1000;
-  
-  console.log(`[SCHEDULER] Starting token refresh scheduler (every ${intervalMinutes} minutes)`);
-  
+
+  console.log(
+    `[SCHEDULER] Starting token refresh scheduler (every ${intervalMinutes} minutes)`
+  );
+
   // Run immediately
   runTokenRefreshJob().catch(error => {
     console.error('[SCHEDULER] Initial token refresh failed:', error);
   });
-  
+
   // Then run periodically
   return setInterval(async () => {
     try {

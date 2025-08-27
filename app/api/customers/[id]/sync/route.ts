@@ -1,13 +1,13 @@
 /**
  * QuickBooks Sync API Routes
- * 
+ *
  * Handles QuickBooks integration operations like manual sync,
  * sync status checking, and webhook handling.
  */
 
-import { prisma } from "@/lib/prisma";
-import { getQuickBooksService } from "@/lib/quickbooks";
-import { NextRequest, NextResponse } from "next/server";
+import { prisma } from '@/lib/prisma';
+import { getQuickBooksService } from '@/lib/quickbooks';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/customers/[id]/sync - Get sync status for a customer
@@ -18,7 +18,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    
+
     const customer = await prisma.customer.findUnique({
       where: { id },
       select: {
@@ -33,7 +33,7 @@ export async function GET(
 
     if (!customer) {
       return NextResponse.json(
-        { error: "Customer not found" },
+        { error: 'Customer not found' },
         { status: 404 }
       );
     }
@@ -45,12 +45,14 @@ export async function GET(
       syncStatus: customer.syncStatus,
       lastSyncedAt: customer.lastSyncedAt,
       syncError: customer.syncError,
-      isQuickBooksConfigured: !!(process.env.QB_CONSUMER_KEY && process.env.QB_CONSUMER_SECRET),
+      isQuickBooksConfigured: !!(
+        process.env.QB_CONSUMER_KEY && process.env.QB_CONSUMER_SECRET
+      ),
     });
   } catch (error) {
     console.error('Error getting sync status:', error);
     return NextResponse.json(
-      { error: "Failed to get sync status" },
+      { error: 'Failed to get sync status' },
       { status: 500 }
     );
   }
@@ -65,7 +67,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    
+
     // Check if customer exists
     const customer = await prisma.customer.findUnique({
       where: { id },
@@ -73,7 +75,7 @@ export async function POST(
 
     if (!customer) {
       return NextResponse.json(
-        { error: "Customer not found" },
+        { error: 'Customer not found' },
         { status: 404 }
       );
     }
@@ -82,7 +84,10 @@ export async function POST(
     const qbService = await getQuickBooksService();
     if (!qbService) {
       return NextResponse.json(
-        { error: "QuickBooks not configured. Please set up QuickBooks integration first." },
+        {
+          error:
+            'QuickBooks not configured. Please set up QuickBooks integration first.',
+        },
         { status: 503 }
       );
     }
@@ -93,14 +98,14 @@ export async function POST(
     });
 
     return NextResponse.json({
-      message: "QuickBooks sync initiated",
+      message: 'QuickBooks sync initiated',
       customerId: id,
-      status: "UPDATING"
+      status: 'UPDATING',
     });
   } catch (error) {
     console.error('Error triggering manual sync:', error);
     return NextResponse.json(
-      { error: "Failed to trigger sync" },
+      { error: 'Failed to trigger sync' },
       { status: 500 }
     );
   }

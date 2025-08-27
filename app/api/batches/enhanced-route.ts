@@ -18,14 +18,17 @@ export async function POST(request: NextRequest) {
       priority,
       notes,
       // Routing options
-      customSteps,               // Provide completely custom steps
-      routingNotes              // Special routing instructions
+      customSteps, // Provide completely custom steps
+      routingNotes, // Special routing instructions
     } = body;
 
     // Validate required fields
     if (!lineItemId || !quantity) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: lineItemId, quantity' },
+        {
+          success: false,
+          error: 'Missing required fields: lineItemId, quantity',
+        },
         { status: 400 }
       );
     }
@@ -37,10 +40,10 @@ export async function POST(request: NextRequest) {
         part: true,
         purchaseOrder: {
           include: {
-            customer: true
-          }
-        }
-      }
+            customer: true,
+          },
+        },
+      },
     });
 
     if (!lineItem) {
@@ -53,10 +56,10 @@ export async function POST(request: NextRequest) {
     // Generate batch ID
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
-    
+
     const lastBatch = await prisma.batch.findFirst({
-      where: { batchId: { startsWith: `DES-${dateStr.slice(2)}-` }},
-      orderBy: { batchId: 'desc' }
+      where: { batchId: { startsWith: `DES-${dateStr.slice(2)}-` } },
+      orderBy: { batchId: 'desc' },
     });
 
     let batchNumber = 1;
@@ -72,7 +75,7 @@ export async function POST(request: NextRequest) {
     estimatedCompletion.setDate(estimatedCompletion.getDate() + 7);
 
     // Create batch and routing steps in transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async tx => {
       // Create the batch
       const newBatch = await tx.batch.create({
         data: {
@@ -83,8 +86,8 @@ export async function POST(request: NextRequest) {
           notes,
           startDate: new Date(),
           estimatedCompletion,
-          status: 'QUEUED'
-        }
+          status: 'QUEUED',
+        },
       });
 
       // Determine routing steps to create
@@ -98,7 +101,7 @@ export async function POST(request: NextRequest) {
           description: step.description,
           required: step.required ?? true,
           estimatedTime: step.estimatedTime,
-          notes: step.notes || routingNotes
+          notes: step.notes || routingNotes,
         }));
       }
 
@@ -115,11 +118,11 @@ export async function POST(request: NextRequest) {
               required: stepData.required,
               estimatedTime: stepData.estimatedTime,
               notes: stepData.notes,
-              status: 'PENDING'
+              status: 'PENDING',
             },
             include: {
-              workstation: true
-            }
+              workstation: true,
+            },
           });
           routingSteps.push(routingStep);
         }
@@ -129,30 +132,32 @@ export async function POST(request: NextRequest) {
       return {
         batch: newBatch,
         routingSteps,
-        routingSource: customSteps ? 'custom' : 'none'
+        routingSource: customSteps ? 'custom' : 'none',
       };
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...result.batch,
-        routingSteps: result.routingSteps
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          ...result.batch,
+          routingSteps: result.routingSteps,
+        },
+        message: `Batch created with ${result.routingSteps.length} routing steps (source: ${result.routingSource})`,
+        routingInfo: {
+          stepsCreated: result.routingSteps.length,
+          source: result.routingSource,
+        },
       },
-      message: `Batch created with ${result.routingSteps.length} routing steps (source: ${result.routingSource})`,
-      routingInfo: {
-        stepsCreated: result.routingSteps.length,
-        source: result.routingSource
-      }
-    }, { status: 201 });
-
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating batch with routing:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create batch',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

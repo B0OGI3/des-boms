@@ -70,65 +70,151 @@ const ROUTING_TEMPLATES: RoutingTemplate[] = [
     templateId: 'standard',
     name: 'Standard Manufacturing',
     steps: [
-      { stepNumber: 1, description: 'Material Preparation', workstationCategory: 'MACHINING', estimatedTime: 2, required: true },
-      { stepNumber: 2, description: 'Primary Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 4, required: true },
-      { stepNumber: 3, description: 'Quality Inspection', workstationCategory: 'INSPECTION', estimatedTime: 1, required: true },
-      { stepNumber: 4, description: 'Finishing Operations', workstationCategory: 'FINISHING', estimatedTime: 2, required: true }
+      {
+        stepNumber: 1,
+        description: 'Material Preparation',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 2,
+        required: true,
+      },
+      {
+        stepNumber: 2,
+        description: 'Primary Manufacturing',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 4,
+        required: true,
+      },
+      {
+        stepNumber: 3,
+        description: 'Quality Inspection',
+        workstationCategory: 'INSPECTION',
+        estimatedTime: 1,
+        required: true,
+      },
+      {
+        stepNumber: 4,
+        description: 'Finishing Operations',
+        workstationCategory: 'FINISHING',
+        estimatedTime: 2,
+        required: true,
+      },
     ],
     businessRules: {
       applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
-    }
+    },
   },
   {
     templateId: 'rush',
     name: 'Rush Priority',
     steps: [
-      { stepNumber: 1, description: 'Express Material Prep', workstationCategory: 'MACHINING', estimatedTime: 1, required: true },
-      { stepNumber: 2, description: 'Priority Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 3, required: true },
-      { stepNumber: 3, description: 'Final Inspection', workstationCategory: 'INSPECTION', estimatedTime: 1, required: true }
+      {
+        stepNumber: 1,
+        description: 'Express Material Prep',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 1,
+        required: true,
+      },
+      {
+        stepNumber: 2,
+        description: 'Priority Manufacturing',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 3,
+        required: true,
+      },
+      {
+        stepNumber: 3,
+        description: 'Final Inspection',
+        workstationCategory: 'INSPECTION',
+        estimatedTime: 1,
+        required: true,
+      },
     ],
     businessRules: {
       applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
-      priority: ['RUSH']
-    }
+      priority: ['RUSH'],
+    },
   },
   {
     templateId: 'high-volume',
     name: 'High Volume Production',
     steps: [
-      { stepNumber: 1, description: 'Bulk Material Setup', workstationCategory: 'MACHINING', estimatedTime: 3, required: true },
-      { stepNumber: 2, description: 'High-Speed Manufacturing', workstationCategory: 'MACHINING', estimatedTime: 5, required: true },
-      { stepNumber: 3, description: 'Batch Quality Control', workstationCategory: 'INSPECTION', estimatedTime: 2, required: true },
-      { stepNumber: 4, description: 'Surface Treatment', workstationCategory: 'FINISHING', estimatedTime: 2, required: true },
-      { stepNumber: 5, description: 'Final Packaging', workstationCategory: 'FINISHING', estimatedTime: 1, required: true }
+      {
+        stepNumber: 1,
+        description: 'Bulk Material Setup',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 3,
+        required: true,
+      },
+      {
+        stepNumber: 2,
+        description: 'High-Speed Manufacturing',
+        workstationCategory: 'MACHINING',
+        estimatedTime: 5,
+        required: true,
+      },
+      {
+        stepNumber: 3,
+        description: 'Batch Quality Control',
+        workstationCategory: 'INSPECTION',
+        estimatedTime: 2,
+        required: true,
+      },
+      {
+        stepNumber: 4,
+        description: 'Surface Treatment',
+        workstationCategory: 'FINISHING',
+        estimatedTime: 2,
+        required: true,
+      },
+      {
+        stepNumber: 5,
+        description: 'Final Packaging',
+        workstationCategory: 'FINISHING',
+        estimatedTime: 1,
+        required: true,
+      },
     ],
     businessRules: {
       applicablePartTypes: ['FINISHED_GOOD', 'SEMI_FINISHED'],
-      minQuantity: 50
-    }
-  }
+      minQuantity: 50,
+    },
+  },
 ];
 
 // Smart routing selection logic
-function selectOptimalTemplate(part: any, batchQuantity: number, priority: string): RoutingTemplate {
+function selectOptimalTemplate(
+  part: any,
+  batchQuantity: number,
+  priority: string
+): RoutingTemplate {
   // Priority-based selection
   if (priority === 'RUSH') {
     const rushTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'rush');
-    if (rushTemplate?.businessRules.applicablePartTypes.includes(part.partType)) {
+    if (
+      rushTemplate?.businessRules.applicablePartTypes.includes(part.partType)
+    ) {
       return rushTemplate;
     }
   }
 
   // Volume-based selection
   if (batchQuantity >= 50) {
-    const highVolumeTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'high-volume');
-    if (highVolumeTemplate?.businessRules.applicablePartTypes.includes(part.partType)) {
+    const highVolumeTemplate = ROUTING_TEMPLATES.find(
+      t => t.templateId === 'high-volume'
+    );
+    if (
+      highVolumeTemplate?.businessRules.applicablePartTypes.includes(
+        part.partType
+      )
+    ) {
       return highVolumeTemplate;
     }
   }
 
   // Default to standard template
-  const standardTemplate = ROUTING_TEMPLATES.find(t => t.templateId === 'standard');
+  const standardTemplate = ROUTING_TEMPLATES.find(
+    t => t.templateId === 'standard'
+  );
   return standardTemplate || ROUTING_TEMPLATES[0];
 }
 
@@ -136,23 +222,27 @@ function selectOptimalTemplate(part: any, batchQuantity: number, priority: strin
 async function generateSmartRoutingForBatch(tx: any, batch: any, part: any) {
   try {
     // Select optimal routing template
-    const template = selectOptimalTemplate(part, batch.quantity, batch.priority);
-    
+    const template = selectOptimalTemplate(
+      part,
+      batch.quantity,
+      batch.priority
+    );
+
     // Get workstations by category
     const workstations = await tx.workstation.findMany({
-      where: { active: true }
+      where: { active: true },
     });
 
     // Create routing steps from template
     for (const stepTemplate of template.steps) {
       // Find appropriate workstation for this step
-      const suitableWorkstations = workstations.filter((ws: any) => 
-        ws.category === stepTemplate.workstationCategory
+      const suitableWorkstations = workstations.filter(
+        (ws: any) => ws.category === stepTemplate.workstationCategory
       );
-      
+
       // Select first available workstation or fall back to any active workstation
       const selectedWorkstation = suitableWorkstations[0] || workstations[0];
-      
+
       if (selectedWorkstation) {
         await tx.routingStep.create({
           data: {
@@ -163,13 +253,15 @@ async function generateSmartRoutingForBatch(tx: any, batch: any, part: any) {
             required: stepTemplate.required,
             estimatedTime: stepTemplate.estimatedTime,
             notes: `Auto-generated from ${template.name} template`,
-            status: 'PENDING'
-          }
+            status: 'PENDING',
+          },
         });
       }
     }
 
-    console.log(`Generated ${template.steps.length} routing steps for batch ${batch.batchId} using ${template.name} template`);
+    console.log(
+      `Generated ${template.steps.length} routing steps for batch ${batch.batchId} using ${template.name} template`
+    );
   } catch (error) {
     console.error('Error generating smart routing for batch:', error);
     // Don't throw - let batch creation succeed even if routing fails
@@ -189,24 +281,25 @@ interface GenerationConfig {
 
 // Smart batch sizing algorithm with customization
 function calculateOptimalBatchSize(
-  quantity: number, 
-  partType: string, 
-  priority: string, 
+  quantity: number,
+  partType: string,
+  priority: string,
   config: GenerationConfig
 ): number {
   // Use configured preferred size as base
   let baseSize = config.preferredBatchSize;
-  
+
   // Adjust based on part type and strategy
   const partMultipliers = {
-    'FINISHED_GOOD': config.priorityStrategy === 'QUALITY' ? 0.7 : 1.0,
-    'SEMI_FINISHED': config.priorityStrategy === 'EFFICIENCY' ? 1.3 : 1.0,
-    'RAW_MATERIAL': config.priorityStrategy === 'EFFICIENCY' ? 1.5 : 1.2
+    FINISHED_GOOD: config.priorityStrategy === 'QUALITY' ? 0.7 : 1.0,
+    SEMI_FINISHED: config.priorityStrategy === 'EFFICIENCY' ? 1.3 : 1.0,
+    RAW_MATERIAL: config.priorityStrategy === 'EFFICIENCY' ? 1.5 : 1.2,
   };
-  
-  const partMultiplier = partMultipliers[partType as keyof typeof partMultipliers] || 1.0;
+
+  const partMultiplier =
+    partMultipliers[partType as keyof typeof partMultipliers] || 1.0;
   baseSize = Math.ceil(baseSize * partMultiplier);
-  
+
   // Strategy adjustments
   switch (config.priorityStrategy) {
     case 'SPEED':
@@ -223,15 +316,18 @@ function calculateOptimalBatchSize(
       // Use base size as-is
       break;
   }
-  
+
   // Priority adjustment
   if (priority === 'RUSH') {
     baseSize = Math.ceil(baseSize * 0.7); // Smaller batches for rush orders
   }
-  
+
   // Ensure within configured bounds
-  const optimalSize = Math.max(config.minBatchSize, Math.min(baseSize, config.maxBatchSize));
-  
+  const optimalSize = Math.max(
+    config.minBatchSize,
+    Math.min(baseSize, config.maxBatchSize)
+  );
+
   // Don't exceed total quantity
   return Math.min(optimalSize, quantity);
 }
@@ -244,7 +340,7 @@ async function calculateBatchMaterialRequirements(
   try {
     // Get the part's BOM structure
     const bomStructure = await getFullBOMStructure(partId);
-    
+
     if (!bomStructure || bomStructure.components.length === 0) {
       return []; // No BOM, no material requirements
     }
@@ -254,7 +350,8 @@ async function calculateBatchMaterialRequirements(
     // Calculate requirements for each component
     for (const component of bomStructure.components) {
       const totalQuantityRequired = component.quantity * batchQuantity;
-      const totalCost = (component.childPart.standardCost || 0) * totalQuantityRequired;
+      const totalCost =
+        (component.childPart.standardCost || 0) * totalQuantityRequired;
 
       materialRequirements.push({
         partId: component.childPart.id,
@@ -262,9 +359,10 @@ async function calculateBatchMaterialRequirements(
         partName: component.childPart.partName,
         partType: component.childPart.partType,
         totalQuantityRequired,
-        unitOfMeasure: component.unitOfMeasure || component.childPart.unitOfMeasure || 'EA',
+        unitOfMeasure:
+          component.unitOfMeasure || component.childPart.unitOfMeasure || 'EA',
         standardCost: component.childPart.standardCost || 0,
-        totalCost
+        totalCost,
       });
     }
 
@@ -304,7 +402,9 @@ async function generateBOMBasedRouting(
         description: `Material Kitting - Prepare ${bomStructure.components.length} components`,
         estimatedTime: Math.ceil(bomStructure.components.length * 0.5), // 30 min per component
         required: true,
-        materialRequirements: bomStructure.components.map((comp: any) => comp.childPart.partNumber)
+        materialRequirements: bomStructure.components.map(
+          (comp: any) => comp.childPart.partNumber
+        ),
       });
 
       // Renumber subsequent steps
@@ -318,7 +418,8 @@ async function generateBOMBasedRouting(
       steps.push({
         stepNumber: steps.length,
         workstationId: '',
-        description: 'Assembly Verification - Confirm all components integrated',
+        description:
+          'Assembly Verification - Confirm all components integrated',
         estimatedTime: Math.ceil(batchQuantity * 0.1), // 6 min per part
         required: true,
       });
@@ -347,52 +448,75 @@ async function generateBatchSuggestions(
 ): Promise<BatchSuggestion['suggestedBatches']> {
   try {
     const { quantity, part } = lineItem;
-    const optimalBatchSize = calculateOptimalBatchSize(quantity, part.partType, orderPriority, config);
-    
+    const optimalBatchSize = calculateOptimalBatchSize(
+      quantity,
+      part.partType,
+      orderPriority,
+      config
+    );
+
     const batches = [];
     let remainingQuantity = quantity;
     let batchNumber = 1;
-    
+
     // Determine if this should be RUSH based on configuration
-    const shouldRush = orderPriority === 'RUSH' || 
-      (orderPriority === 'STANDARD' && Math.random() * 100 < config.rushThreshold);
-    
-    while (remainingQuantity > 0 && (config.allowSplitting || batchNumber === 1)) {
+    const shouldRush =
+      orderPriority === 'RUSH' ||
+      (orderPriority === 'STANDARD' &&
+        Math.random() * 100 < config.rushThreshold);
+
+    while (
+      remainingQuantity > 0 &&
+      (config.allowSplitting || batchNumber === 1)
+    ) {
       const batchQuantity = Math.min(optimalBatchSize, remainingQuantity);
-      
+
       // Determine batch priority - first batch gets order priority for rush orders
-      const batchPriority: 'RUSH' | 'STANDARD' | 'HOLD' = shouldRush ? 'RUSH' : 'STANDARD';
-      
+      const batchPriority: 'RUSH' | 'STANDARD' | 'HOLD' = shouldRush
+        ? 'RUSH'
+        : 'STANDARD';
+
       // Select smart routing template
-      const template = selectOptimalTemplate(part, batchQuantity, batchPriority);
-      
+      const template = selectOptimalTemplate(
+        part,
+        batchQuantity,
+        batchPriority
+      );
+
       // Generate BOM-aware routing steps
-      const workflowSteps = await generateBOMBasedRouting(part, batchQuantity, template);
-      
+      const workflowSteps = await generateBOMBasedRouting(
+        part,
+        batchQuantity,
+        template
+      );
+
       // Calculate material requirements for this batch
-      const batchMaterialRequirements = await calculateBatchMaterialRequirements(part.id, batchQuantity);
-      
+      const batchMaterialRequirements =
+        await calculateBatchMaterialRequirements(part.id, batchQuantity);
+
       // Calculate material cost
       const materialCost = batchMaterialRequirements.reduce(
-        (total, req) => total + req.totalCost, 
+        (total, req) => total + req.totalCost,
         0
       );
-      
+
       // Estimate duration based on batch size, part complexity, and QC level
       let baseDuration = Math.ceil(batchQuantity / 25); // Base: 25 parts per day
-      
+
       // Quality control adjustments
       const qcMultiplier = {
-        'STANDARD': 1.0,
-        'ENHANCED': 1.3,
-        'STRICT': 1.6
+        STANDARD: 1.0,
+        ENHANCED: 1.3,
+        STRICT: 1.6,
       }[config.qualityControlLevel];
-      
+
       baseDuration = Math.ceil(baseDuration * qcMultiplier);
-      
+
       // Apply estimation buffer
-      const estimatedDuration = Math.ceil(baseDuration * (1 + config.estimationBuffer / 100));
-      
+      const estimatedDuration = Math.ceil(
+        baseDuration * (1 + config.estimationBuffer / 100)
+      );
+
       // Generate reasoning based on configuration
       let reasoning = '';
       if (batchMaterialRequirements.length > 0) {
@@ -406,7 +530,7 @@ async function generateBatchSuggestions(
       } else {
         reasoning = `Balanced batch (${batchQuantity}) considering quality and efficiency using ${template.name}`;
       }
-      
+
       batches.push({
         batchNumber,
         quantity: batchQuantity,
@@ -415,16 +539,16 @@ async function generateBatchSuggestions(
         workflowSteps,
         materialCost,
         batchMaterialRequirements,
-        reasoning
+        reasoning,
       });
-      
+
       remainingQuantity -= batchQuantity;
       batchNumber++;
-      
+
       // Safety check to prevent infinite loops
       if (batchNumber > 50) break;
     }
-    
+
     return batches;
   } catch (error) {
     console.error('Error generating batch suggestions:', error);
@@ -439,7 +563,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    
+
     // Parse request body for configuration
     const body = await request.json().catch(() => ({}));
     const config: GenerationConfig = {
@@ -451,7 +575,7 @@ export async function POST(
       rushThreshold: 75,
       qualityControlLevel: 'STANDARD',
       estimationBuffer: 20,
-      ...body.config // Override with user configuration
+      ...body.config, // Override with user configuration
     };
 
     // Get order with line items
@@ -486,12 +610,12 @@ export async function POST(
     for (const lineItem of order.lineItems) {
       // Calculate how much quantity is already batched
       const existingBatchQuantity = lineItem.batches.reduce(
-        (sum, batch) => sum + batch.quantity, 
+        (sum, batch) => sum + batch.quantity,
         0
       );
-      
+
       const remainingQuantity = lineItem.quantity - existingBatchQuantity;
-      
+
       // Only suggest batches if there's remaining quantity
       if (remainingQuantity > 0) {
         const suggestedBatches = await generateBatchSuggestions(
@@ -503,7 +627,7 @@ export async function POST(
 
         // Calculate overall material requirements for this line item
         const materialRequirements = await calculateBatchMaterialRequirements(
-          lineItem.part.id, 
+          lineItem.part.id,
           remainingQuantity
         );
 
@@ -528,9 +652,11 @@ export async function POST(
       (sum, suggestion) => sum + suggestion.suggestedBatches.length,
       0
     );
-    
+
     const estimatedCompletionDays = Math.max(
-      ...suggestions.flatMap(s => s.suggestedBatches.map(b => b.estimatedDuration))
+      ...suggestions.flatMap(s =>
+        s.suggestedBatches.map(b => b.estimatedDuration)
+      )
     );
 
     return NextResponse.json({
@@ -564,13 +690,13 @@ export async function POST(
 
 // Helper function to create routing steps from workflow steps
 async function createRoutingStepsFromWorkflow(
-  tx: any, 
-  newBatch: any, 
+  tx: any,
+  newBatch: any,
   workflowSteps: any[]
 ): Promise<void> {
   // Get workstations for assignment
   const workstations = await tx.workstation.findMany({
-    where: { active: true }
+    where: { active: true },
   });
 
   for (const workflowStep of workflowSteps) {
@@ -592,8 +718,8 @@ async function createRoutingStepsFromWorkflow(
           required: true,
           estimatedTime: workflowStep.estimatedTime,
           notes: 'Generated from smart batch workflow steps',
-          status: 'PENDING'
-        }
+          status: 'PENDING',
+        },
       });
     }
   }
@@ -601,8 +727,8 @@ async function createRoutingStepsFromWorkflow(
 
 // Helper function to create material consumption records
 async function createMaterialConsumptionRecords(
-  tx: any, 
-  newBatch: any, 
+  tx: any,
+  newBatch: any,
   materialRequirements: any[]
 ): Promise<void> {
   for (const materialReq of materialRequirements) {
@@ -614,16 +740,16 @@ async function createMaterialConsumptionRecords(
         unitCost: materialReq.standardCost || 0,
         consumedAt: new Date(),
         operatorId: 'SYSTEM', // Auto-generated consumption
-        notes: `Auto-allocated for BOM requirements: ${materialReq.partNumber}`
-      }
+        notes: `Auto-allocated for BOM requirements: ${materialReq.partNumber}`,
+      },
     });
   }
 }
 
 // Helper function to create a single batch with routing
 async function createBatchWithRouting(
-  tx: any, 
-  suggestion: any, 
+  tx: any,
+  suggestion: any,
   batch: any
 ): Promise<any> {
   const batchId = await generateBatchId(tx);
@@ -631,14 +757,16 @@ async function createBatchWithRouting(
   // Get the part information for smart routing
   const lineItem = await tx.orderLineItem.findUnique({
     where: { id: suggestion.lineItemId },
-    include: { part: true }
+    include: { part: true },
   });
 
   if (!lineItem) return null;
 
   // Calculate estimated completion date
   const estimatedCompletion = new Date();
-  estimatedCompletion.setDate(estimatedCompletion.getDate() + batch.estimatedDuration);
+  estimatedCompletion.setDate(
+    estimatedCompletion.getDate() + batch.estimatedDuration
+  );
 
   // Create the batch
   const newBatch = await tx.batch.create({
@@ -650,7 +778,7 @@ async function createBatchWithRouting(
       notes: `Auto-generated: ${batch.reasoning}`,
       startDate: new Date(),
       estimatedCompletion,
-      status: 'QUEUED'
+      status: 'QUEUED',
     },
     include: {
       lineItem: {
@@ -675,8 +803,15 @@ async function createBatchWithRouting(
   }
 
   // Create material consumption records for BOM parts
-  if (batch.batchMaterialRequirements && batch.batchMaterialRequirements.length > 0) {
-    await createMaterialConsumptionRecords(tx, newBatch, batch.batchMaterialRequirements);
+  if (
+    batch.batchMaterialRequirements &&
+    batch.batchMaterialRequirements.length > 0
+  ) {
+    await createMaterialConsumptionRecords(
+      tx,
+      newBatch,
+      batch.batchMaterialRequirements
+    );
   }
 
   return newBatch;
@@ -701,7 +836,7 @@ export async function PUT(
     const createdBatches: any[] = [];
 
     // Create batches in a transaction with smart routing
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async tx => {
       for (const suggestion of approvedSuggestions) {
         for (const batch of suggestion.suggestedBatches) {
           const newBatch = await createBatchWithRouting(tx, suggestion, batch);
@@ -737,13 +872,13 @@ export async function PUT(
 async function generateBatchId(tx: any): Promise<string> {
   const today = new Date();
   const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
-  
+
   // Get the last batch number for today
   const lastBatch = await tx.batch.findFirst({
     where: {
-      batchId: { startsWith: `DES-${dateStr.slice(2)}-` }
+      batchId: { startsWith: `DES-${dateStr.slice(2)}-` },
     },
-    orderBy: { batchId: 'desc' }
+    orderBy: { batchId: 'desc' },
   });
 
   let batchNumber = 1;

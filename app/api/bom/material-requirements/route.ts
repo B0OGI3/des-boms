@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getFullBOMStructure, calculateBatchMaterialRequirements } from '@/lib/bomUtils';
+import {
+  getFullBOMStructure,
+  calculateBatchMaterialRequirements,
+} from '@/lib/bomUtils';
 
 /**
  * BOM Material Requirements API
- * 
+ *
  * Provides BOM-aware material requirements for batches and routing steps,
  * enabling workstations to understand exactly what materials are needed.
  */
@@ -41,17 +44,17 @@ export async function GET(request: NextRequest) {
               part: true,
               purchaseOrder: {
                 include: {
-                  customer: true
-                }
-              }
-            }
+                  customer: true,
+                },
+              },
+            },
           },
           materialConsumption: {
             include: {
-              materialPart: true
-            }
-          }
-        }
+              materialPart: true,
+            },
+          },
+        },
       });
 
       if (!batch) {
@@ -70,7 +73,7 @@ export async function GET(request: NextRequest) {
         priority: batch.priority,
         part: batch.lineItem.part,
         customer: batch.lineItem.purchaseOrder.customer,
-        materialConsumption: batch.materialConsumption
+        materialConsumption: batch.materialConsumption,
       };
     }
 
@@ -82,8 +85,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Get the full BOM structure for this part
-    const bomStructure = await getFullBOMStructure(targetPartId, targetQuantity);
-    
+    const bomStructure = await getFullBOMStructure(
+      targetPartId,
+      targetQuantity
+    );
+
     if (!bomStructure) {
       return NextResponse.json(
         { success: false, error: 'Could not retrieve BOM structure for part' },
@@ -106,12 +112,15 @@ export async function GET(request: NextRequest) {
       return {
         ...req,
         available: true, // Simplified - assume materials are available
-        shortage: 0 // No shortage calculation without inventory tracking
+        shortage: 0, // No shortage calculation without inventory tracking
       };
     });
 
     // Calculate total material cost
-    const totalMaterialCost = enhancedRequirements.reduce((sum, req) => sum + req.totalCost, 0);
+    const totalMaterialCost = enhancedRequirements.reduce(
+      (sum, req) => sum + req.totalCost,
+      0
+    );
 
     // Check for any material shortages (simplified)
     const shortages = enhancedRequirements.filter(req => !req.available);
@@ -133,19 +142,18 @@ export async function GET(request: NextRequest) {
             partName: s.partName,
             required: s.totalQuantityRequired,
             available: 0, // Simplified - no inventory tracking
-            shortage: s.shortage
-          }))
-        }
-      }
+            shortage: s.shortage,
+          })),
+        },
+      },
     });
-
   } catch (error) {
     console.error('Error getting BOM material requirements:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to get BOM material requirements',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -177,7 +185,7 @@ export async function POST(request: NextRequest) {
         results.push({
           partId: null,
           error: 'Part ID is required',
-          description
+          description,
         });
         continue;
       }
@@ -191,8 +199,8 @@ export async function POST(request: NextRequest) {
             id: true,
             partNumber: true,
             partName: true,
-            partType: true
-          }
+            partType: true,
+          },
         });
 
         if (!part) {
@@ -200,7 +208,7 @@ export async function POST(request: NextRequest) {
             partId,
             error: 'Part not found',
             description,
-            success: false
+            success: false,
           });
           continue;
         }
@@ -209,7 +217,10 @@ export async function POST(request: NextRequest) {
         const bomStructure = await getFullBOMStructure(partId, quantity);
         const materialRequirements = bomStructure?.materialRequirements || [];
 
-        const totalCost = materialRequirements.reduce((sum, req) => sum + req.totalCost, 0);
+        const totalCost = materialRequirements.reduce(
+          (sum, req) => sum + req.totalCost,
+          0
+        );
 
         results.push({
           partId,
@@ -218,15 +229,14 @@ export async function POST(request: NextRequest) {
           description,
           materialRequirements,
           totalMaterialCost: totalCost,
-          success: true
+          success: true,
         });
-
       } catch (error) {
         results.push({
           partId,
           error: error instanceof Error ? error.message : 'Unknown error',
           description,
-          success: false
+          success: false,
         });
       }
     }
@@ -261,18 +271,17 @@ export async function POST(request: NextRequest) {
           materialRequirements: aggregatedRequirements,
           totalMaterialCost: totalCost,
           totalItems: items.length,
-          successfulItems: results.filter(r => r.success).length
-        }
-      }
+          successfulItems: results.filter(r => r.success).length,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Error calculating batch material requirements:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to calculate material requirements',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

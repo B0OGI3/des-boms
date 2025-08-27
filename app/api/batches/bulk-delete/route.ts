@@ -33,12 +33,14 @@ export async function DELETE(request: NextRequest) {
     };
 
     return NextResponse.json(result);
-
   } catch (error) {
     console.error('Error in bulk delete:', error);
-    
+
     return NextResponse.json(
-      { error: 'Failed to delete batches', message: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Failed to delete batches',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }

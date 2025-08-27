@@ -6,10 +6,12 @@ export function generateBatchId(): string {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
-  
+
   // Generate a random 3-digit number for uniqueness
-  const sequence = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  
+  const sequence = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, '0');
+
   return `DES-${year}-${month}${day}-${sequence}`;
 }
 
@@ -18,8 +20,10 @@ export function calculateBatchProgress(batch: Batch): number {
   if (!batch.routingSteps || batch.routingSteps.length === 0) {
     return 0;
   }
-  
-  const completedSteps = batch.routingSteps.filter(step => step.status === 'COMPLETED').length;
+
+  const completedSteps = batch.routingSteps.filter(
+    step => step.status === 'COMPLETED'
+  ).length;
   return Math.round((completedSteps / batch.routingSteps.length) * 100);
 }
 
@@ -28,11 +32,15 @@ export function getCurrentStep(batch: Batch): RoutingStep | null {
   if (!batch.routingSteps || batch.routingSteps.length === 0) {
     return null;
   }
-  
+
   // Find the first step that's not completed
-  const sortedSteps = [...batch.routingSteps].sort((a, b) => a.stepNumber - b.stepNumber);
-  const activeStep = sortedSteps.find(step => step.status !== 'COMPLETED' && step.status !== 'SKIPPED');
-    
+  const sortedSteps = [...batch.routingSteps].sort(
+    (a, b) => a.stepNumber - b.stepNumber
+  );
+  const activeStep = sortedSteps.find(
+    step => step.status !== 'COMPLETED' && step.status !== 'SKIPPED'
+  );
+
   return activeStep || null;
 }
 
@@ -69,37 +77,45 @@ export function getBatchPriorityColor(priority: Batch['priority']): string {
 }
 
 // Calculate estimated completion date based on routing steps
-export function calculateEstimatedCompletion(routingSteps: RoutingStep[], startDate?: Date): Date | null {
+export function calculateEstimatedCompletion(
+  routingSteps: RoutingStep[],
+  startDate?: Date
+): Date | null {
   if (!routingSteps || routingSteps.length === 0) {
     return null;
   }
-  
+
   const totalEstimatedMinutes = routingSteps.reduce((total, step) => {
     return total + (step.estimatedTime || 0);
   }, 0);
-  
+
   if (totalEstimatedMinutes === 0) {
     return null;
   }
-  
+
   const start = startDate || new Date();
   const estimatedCompletion = new Date(start);
-  estimatedCompletion.setMinutes(estimatedCompletion.getMinutes() + totalEstimatedMinutes);
-  
+  estimatedCompletion.setMinutes(
+    estimatedCompletion.getMinutes() + totalEstimatedMinutes
+  );
+
   return estimatedCompletion;
 }
 
 // Format batch duration for display
-export function formatBatchDuration(startDate: string | null, endDate: string | null): string {
+export function formatBatchDuration(
+  startDate: string | null,
+  endDate: string | null
+): string {
   if (!startDate) return 'Not started';
   if (!endDate) return 'In progress';
-  
+
   const start = new Date(startDate);
   const end = new Date(endDate);
   const diffMs = end.getTime() - start.getTime();
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-  
+
   if (diffHours > 0) {
     return `${diffHours}h ${diffMinutes}m`;
   }
@@ -111,7 +127,7 @@ export function isBatchOverdue(batch: Batch): boolean {
   if (!batch.estimatedCompletion || batch.status === 'COMPLETED') {
     return false;
   }
-  
+
   const now = new Date();
   const estimated = new Date(batch.estimatedCompletion);
   return now > estimated;
@@ -122,7 +138,7 @@ export function getNextStepNumber(existingSteps: RoutingStep[]): number {
   if (!existingSteps || existingSteps.length === 0) {
     return 1;
   }
-  
+
   const maxStepNumber = Math.max(...existingSteps.map(step => step.stepNumber));
   return maxStepNumber + 1;
 }
@@ -141,25 +157,28 @@ interface BatchFormData {
   }>;
 }
 
-export function validateBatchForm(data: BatchFormData): { isValid: boolean; errors: string[] } {
+export function validateBatchForm(data: BatchFormData): {
+  isValid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
-  
+
   if (!data.lineItemId) {
     errors.push('Line item is required');
   }
-  
+
   if (!data.quantity || data.quantity <= 0) {
     errors.push('Quantity must be greater than 0');
   }
-  
+
   if (!data.priority) {
     errors.push('Priority is required');
   }
-  
+
   if (!data.routingSteps || data.routingSteps.length === 0) {
     errors.push('At least one routing step is required');
   }
-  
+
   // Validate routing steps
   if (data.routingSteps) {
     data.routingSteps.forEach((step: any, index: number) => {
@@ -171,10 +190,10 @@ export function validateBatchForm(data: BatchFormData): { isValid: boolean; erro
       }
     });
   }
-  
+
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
   };
 }
 
@@ -185,13 +204,13 @@ export function formatEstimatedTime(minutes: number): string {
   if (minutes < 60) {
     return `${minutes}min`;
   }
-  
+
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  
+
   if (remainingMinutes === 0) {
     return `${hours}h`;
   }
-  
+
   return `${hours}h ${remainingMinutes}min`;
 }

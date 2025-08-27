@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the template with its steps in a transaction
-    const template = await prisma.$transaction(async (tx) => {
+    const template = await prisma.$transaction(async tx => {
       // Create the template
       const newTemplate = await tx.routingTemplate.create({
         data: {

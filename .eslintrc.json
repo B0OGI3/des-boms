@@ -10,7 +10,34 @@
     ],
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/exhaustive-deps": "warn",
-    "import/no-anonymous-default-export": "off"
+    "import/no-anonymous-default-export": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXAttribute[name.name='data'] > JSXExpressionContainer > ArrayExpression",
+        "message": "Avoid inline array literals in the `data` JSX prop (use useMemo or module-level constants) — inline arrays can cause excessive re-renders."
+      },
+      {
+        "selector": "JSXAttribute[name.name='data'] > JSXExpressionContainer > ObjectExpression",
+        "message": "Avoid inline object literals in the `data` JSX prop (use useMemo or module-level constants) — inline objects can cause excessive re-renders."
+      },
+      {
+        "selector": "JSXAttribute[name.name='options'] > JSXExpressionContainer > ArrayExpression",
+        "message": "Avoid inline array literals in the `options` JSX prop (use useMemo or module-level constants) — inline arrays can cause excessive re-renders."
+      },
+      {
+        "selector": "JSXAttribute[name.name='options'] > JSXExpressionContainer > ObjectExpression",
+        "message": "Avoid inline object literals in the `options` JSX prop (use useMemo or module-level constants) — inline objects can cause excessive re-renders."
+      },
+      {
+        "selector": "JSXAttribute[name.name='items'] > JSXExpressionContainer > ArrayExpression",
+        "message": "Avoid inline array literals in the `items` JSX prop (use useMemo or module-level constants) — inline arrays can cause excessive re-renders."
+      },
+      {
+        "selector": "JSXAttribute[name.name='items'] > JSXExpressionContainer > ObjectExpression",
+        "message": "Avoid inline object literals in the `items` JSX prop (use useMemo or module-level constants) — inline objects can cause excessive re-renders."
+      }
+    ]
   },
   "ignorePatterns": [
     "generated/**",

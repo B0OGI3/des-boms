@@ -10,12 +10,12 @@ export async function GET() {
       'Priority distribution analysis',
       'Efficiency performance indicators',
       'Overdue batch alerts',
-      'Completion rate tracking'
+      'Completion rate tracking',
     ],
     navigation: {
       batches: '/batches',
-      analytics: '/api/analytics/batches'
-    }
+      analytics: '/api/analytics/batches',
+    },
   };
 
   return NextResponse.json(analytics);

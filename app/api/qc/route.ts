@@ -163,9 +163,7 @@ async function checkOrderCompletion(tx: any, batch: any, inspector: string) {
 }
 
 // Helper function to determine batch status update
-function getBatchStatusUpdate(
-  result: string
-): {
+function getBatchStatusUpdate(result: string): {
   status: 'COMPLETED' | 'CANCELLED' | 'IN_PROGRESS';
   actualCompletion?: null;
 } | null {

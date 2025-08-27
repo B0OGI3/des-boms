@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run the project's pre-commit npm script to lint, type-check and format:check
+npm run pre-commit
