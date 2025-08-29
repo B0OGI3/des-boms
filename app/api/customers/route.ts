@@ -16,11 +16,12 @@ import { NextResponse } from 'next/server';
  */
 type CustomerRequestBody = {
   name: string; // Required: Customer or company name
-  contact?: string; // Optional: Primary contact person
-  email: string; // Required: Primary email (must be unique)
+  contactName?: string; // Optional: Primary contact person
+  email?: string; // Optional: Primary email (must be unique if provided)
   phone?: string; // Optional: Phone number
   billingAddress?: string; // Optional: Billing address
   shippingAddress?: string; // Optional: Shipping/service address
+  notes?: string; // Optional: Customer notes
 };
 
 /**
@@ -49,12 +50,25 @@ export async function GET() {
  */
 export async function POST(req: Request) {
   const body: CustomerRequestBody = await req.json();
-  const { name, contact, email, phone, billingAddress, shippingAddress } = body;
+  const {
+    name,
+    contactName,
+    email,
+    phone,
+    billingAddress,
+    shippingAddress,
+    notes,
+  } = body;
 
   // Validate required fields
-  if (!name || !email) {
+  if (!name) {
+    return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+  }
+
+  // Validate email format if provided
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json(
-      { error: 'Name and email are required' },
+      { error: 'Please enter a valid email address' },
       { status: 400 }
     );
   }
@@ -64,11 +78,12 @@ export async function POST(req: Request) {
     const newCustomer = await prisma.customer.create({
       data: {
         name,
-        contactName: contact,
-        email,
-        phone,
-        billingAddress,
-        shippingAddress,
+        contactName: contactName || null,
+        email: email || null,
+        phone: phone || null,
+        billingAddress: billingAddress || null,
+        shippingAddress: shippingAddress || null,
+        notes: notes || null,
         syncStatus: 'PENDING', // QuickBooks sync will be attempted
       },
     });
@@ -85,8 +100,19 @@ export async function POST(req: Request) {
   } catch (error) {
     // Handle database constraints (e.g., unique email violation)
     console.error('Error creating customer:', error);
+
+    // Check for specific database errors
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === 'P2002') {
+        return NextResponse.json(
+          { error: 'A customer with this email already exists' },
+          { status: 409 }
+        );
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Failed to create customer. Email may already exist.' },
+      { error: 'Failed to create customer. Please try again.' },
       { status: 500 }
     );
   }

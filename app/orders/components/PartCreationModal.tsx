@@ -167,10 +167,11 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
   // Reset form when modal opens/closes
   useEffect(() => {
     if (opened) {
-      setFormData({
+      const shouldAutoGenerate = !initialPartNumber;
+      const initialFormData: Partial<Part> = {
         partNumber: initialPartNumber,
         partName: '',
-        partType: 'FINISHED',
+        partType: 'FINISHED' as PartType,
         drawingNumber: '',
         revisionLevel: '',
         description: '',
@@ -180,11 +181,21 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
         leadTime: undefined,
         active: true,
         notes: '',
-      });
+      };
+
+      setFormData(initialFormData);
       setErrors({});
       setSuccess(false);
-      setAutoGeneratePN(!initialPartNumber);
+      setAutoGeneratePN(shouldAutoGenerate);
       setGeneratedPartNumber('');
+
+      // Generate part number immediately if auto-generation is enabled
+      if (shouldAutoGenerate) {
+        setTimeout(() => {
+          generatePartNumber('FINISHED');
+        }, 0);
+      }
+
       // Reset BOM state
       setBomComponents([]);
       setBomEnabled(false);
@@ -193,6 +204,13 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
       loadAvailableParts();
     }
   }, [opened, initialPartNumber]);
+
+  // Generate part number when part type changes (only if auto-generating)
+  useEffect(() => {
+    if (autoGeneratePN && formData.partType && opened) {
+      generatePartNumber(formData.partType);
+    }
+  }, [formData.partType, autoGeneratePN, opened]);
 
   // Memoized select option arrays
   const partTypeSelectOptions = useMemo(
@@ -864,9 +882,14 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
                   label='Auto-generate'
                   checked={autoGeneratePN}
                   onChange={e => {
-                    setAutoGeneratePN(e.currentTarget.checked);
-                    if (e.currentTarget.checked && formData.partType) {
+                    const isChecked = e.currentTarget.checked;
+                    setAutoGeneratePN(isChecked);
+                    if (isChecked && formData.partType) {
                       generatePartNumber(formData.partType);
+                    } else if (!isChecked) {
+                      // Clear the generated part number when disabling auto-generation
+                      setGeneratedPartNumber('');
+                      // Keep the current part number in the form
                     }
                   }}
                   size='sm'

@@ -17,12 +17,21 @@ import {
   Collapse,
   Badge,
   Box,
+  Checkbox,
 } from '@mantine/core';
 import {
   IconPlus,
   IconTrash,
   IconCheck,
   IconAlertCircle,
+  IconBuilding,
+  IconUser,
+  IconMail,
+  IconPhone,
+  IconMapPin,
+  IconTruck,
+  IconNotes,
+  IconInfoCircle,
 } from '@tabler/icons-react';
 import type { Customer } from '../../../types/shared';
 import { QuickBooksStatus } from '../../components/ui/QuickBooksStatus';
@@ -72,46 +81,270 @@ const NewCustomerForm: React.FC<{
   onCancel: () => void;
 }> = ({ onCustomerCreated, onCancel }) => {
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState({
+    name: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    billingAddress: '',
+    shippingAddress: '',
+    notes: '',
+  });
+
+  const [sameAsBilling, setSameAsBilling] = useState(false);
+
+  // Update shipping address when billing address changes and sameAsBilling is checked
+  useEffect(() => {
+    if (sameAsBilling) {
+      setFormData(prev => ({ ...prev, shippingAddress: prev.billingAddress }));
+    }
+  }, [formData.billingAddress, sameAsBilling]);
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Company/Customer name is required';
+    }
+
+    // Email is now optional, but if provided, validate format
+    if (
+      formData.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (formData.phone && !/^[\d\s\-+().]+$/.test(formData.phone)) {
+      newErrors.phone = 'Please enter a valid phone number';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleCreate = async () => {
+    if (!validateForm()) return;
+
     setLoading(true);
     try {
       const res = await fetch('/api/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify(formData),
       });
-      if (!res.ok) throw new Error('Failed to create');
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to create customer');
+      }
+
       const created = await res.json();
       onCustomerCreated(created);
-    } catch (e) {
-      // log and surface a simple alert
-      // eslint-disable-next-line no-console
-      console.error(e);
-      // eslint-disable-next-line no-alert
-      alert('Failed to create customer');
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to create customer';
+      setErrors({ submit: errorMessage });
     } finally {
       setLoading(false);
     }
   };
 
+  const updateFormData = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear field error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
   return (
-    <Card withBorder>
-      <Stack>
-        <TextInput
-          label='Customer Name'
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <Group justify='flex-end'>
-          <Button variant='subtle' onClick={onCancel}>
+    <Card withBorder shadow='sm' p='lg' radius='md'>
+      <Stack gap='lg'>
+        {errors.submit && (
+          <Alert color='red' icon={<IconAlertCircle size={16} />} radius='md'>
+            {errors.submit}
+          </Alert>
+        )}
+
+        {/* Company Information */}
+        <Card withBorder shadow='xs' p='md' radius='md' bg='gray.0'>
+          <Stack gap='md'>
+            <Group gap='xs'>
+              <IconBuilding
+                size={18}
+                style={{ color: 'var(--mantine-color-blue-6)' }}
+              />
+              <Text fw={600} size='sm' c='blue.7'>
+                Company Information
+              </Text>
+            </Group>
+
+            <TextInput
+              label='Company/Customer Name'
+              placeholder='Enter company or customer name'
+              value={formData.name}
+              onChange={e => updateFormData('name', e.target.value)}
+              error={errors.name}
+              required
+              leftSection={<IconBuilding size={16} />}
+              size='md'
+              radius='md'
+            />
+
+            <TextInput
+              label='Contact Name'
+              placeholder='Primary contact person (optional)'
+              value={formData.contactName}
+              onChange={e => updateFormData('contactName', e.target.value)}
+              leftSection={<IconUser size={16} />}
+              size='md'
+              radius='md'
+            />
+
+            <Group grow>
+              <TextInput
+                label='Email'
+                placeholder='customer@company.com (optional)'
+                type='email'
+                value={formData.email}
+                onChange={e => updateFormData('email', e.target.value)}
+                error={errors.email}
+                leftSection={<IconMail size={16} />}
+                size='md'
+                radius='md'
+              />
+
+              <TextInput
+                label='Phone'
+                placeholder='(555) 123-4567 (optional)'
+                value={formData.phone}
+                onChange={e => updateFormData('phone', e.target.value)}
+                error={errors.phone}
+                leftSection={<IconPhone size={16} />}
+                size='md'
+                radius='md'
+              />
+            </Group>
+          </Stack>
+        </Card>
+
+        {/* Address Information */}
+        <Card withBorder shadow='xs' p='md' radius='md' bg='blue.0'>
+          <Stack gap='md'>
+            <Group gap='xs'>
+              <IconMapPin
+                size={18}
+                style={{ color: 'var(--mantine-color-green-6)' }}
+              />
+              <Text fw={600} size='sm' c='green.7'>
+                Address Information
+              </Text>
+            </Group>
+
+            <Textarea
+              label='Billing Address'
+              placeholder='Street address, City, State, ZIP (optional)'
+              value={formData.billingAddress}
+              onChange={e => updateFormData('billingAddress', e.target.value)}
+              autosize
+              minRows={3}
+              leftSection={<IconMapPin size={16} />}
+              size='md'
+              radius='md'
+            />
+
+            <Group gap='xs' align='center'>
+              <Checkbox
+                checked={sameAsBilling}
+                onChange={e => setSameAsBilling(e.currentTarget.checked)}
+                size='md'
+                color='green'
+              />
+              <Text size='sm' fw={500}>
+                Shipping address same as billing
+              </Text>
+            </Group>
+
+            <Textarea
+              label='Shipping Address'
+              placeholder='Street address, City, State, ZIP (optional)'
+              value={formData.shippingAddress}
+              onChange={e => updateFormData('shippingAddress', e.target.value)}
+              autosize
+              minRows={3}
+              disabled={sameAsBilling}
+              leftSection={<IconTruck size={16} />}
+              size='md'
+              radius='md'
+            />
+          </Stack>
+        </Card>
+
+        {/* Additional Information */}
+        <Card withBorder shadow='xs' p='md' radius='md' bg='orange.0'>
+          <Stack gap='md'>
+            <Group gap='xs'>
+              <IconNotes
+                size={18}
+                style={{ color: 'var(--mantine-color-orange-6)' }}
+              />
+              <Text fw={600} size='sm' c='orange.7'>
+                Additional Information
+              </Text>
+            </Group>
+
+            <Textarea
+              label='Notes'
+              placeholder='Additional notes about this customer (optional)'
+              value={formData.notes}
+              onChange={e => updateFormData('notes', e.target.value)}
+              autosize
+              minRows={2}
+              leftSection={<IconNotes size={16} />}
+              size='md'
+              radius='md'
+            />
+          </Stack>
+        </Card>
+
+        {/* Action Buttons */}
+        <Group justify='flex-end' gap='md' mt='md'>
+          <Button
+            variant='light'
+            onClick={onCancel}
+            disabled={loading}
+            size='md'
+            radius='md'
+          >
             Cancel
           </Button>
-          <Button onClick={handleCreate} loading={loading}>
-            Create
+          <Button
+            onClick={handleCreate}
+            loading={loading}
+            leftSection={<IconCheck size={16} />}
+            disabled={!formData.name.trim()}
+            size='md'
+            radius='md'
+            color='blue'
+          >
+            Create Customer
           </Button>
         </Group>
+
+        {/* Help Text */}
+        <Alert color='blue' icon={<IconInfoCircle size={16} />} radius='md'>
+          <Text size='sm' fw={500}>
+            This customer will be automatically synced to QuickBooks when
+            created. Only the company name is required for seamless integration.
+          </Text>
+        </Alert>
       </Stack>
     </Card>
   );
@@ -247,7 +480,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     () =>
       customers.map(c => ({
         value: c.id,
-        label: c.email ? `${c.name} (${c.email})` : c.name,
+        label: c.name,
       })),
     [customers]
   );
@@ -346,6 +579,25 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                   setOrderData(prev => ({ ...prev, customerId: v || '' }))
                 }
                 error={errors.customerId}
+                renderOption={({ option }) => {
+                  const customer = customers.find(c => c.id === option.value);
+                  return (
+                    <Group gap='xs'>
+                      <div>
+                        <Text size='sm' fw={500}>
+                          {customer?.contactName
+                            ? `${customer.name} (${customer.contactName})`
+                            : customer?.name || option.label}
+                        </Text>
+                        {customer?.email && (
+                          <Text size='xs' c='dimmed'>
+                            {customer.email}
+                          </Text>
+                        )}
+                      </div>
+                    </Group>
+                  );
+                }}
               />
               <Button
                 size='sm'

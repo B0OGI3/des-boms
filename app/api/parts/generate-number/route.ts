@@ -26,12 +26,13 @@ export async function POST(request: NextRequest) {
     }
 
     const prefix = PART_TYPE_PREFIXES[partType];
+    const currentYear = new Date().getFullYear();
 
-    // Find the highest existing part number for this type
+    // Find the highest existing part number for this type and year
     const existingParts = await prisma.part.findMany({
       where: {
         partNumber: {
-          startsWith: prefix,
+          startsWith: `${prefix}${currentYear}-`,
         },
       },
       select: {
@@ -47,18 +48,19 @@ export async function POST(request: NextRequest) {
 
     if (existingParts.length > 0) {
       const lastPartNumber = existingParts[0].partNumber;
-      // Extract the numeric part after the prefix
-      const numericPart = lastPartNumber.replace(prefix, '');
-      const lastNumber = parseInt(numericPart, 10);
-
-      if (!isNaN(lastNumber)) {
-        nextNumber = lastNumber + 1;
+      // Extract the numeric part after the year
+      const parts = lastPartNumber.split('-');
+      if (parts.length === 3) {
+        const lastNumber = parseInt(parts[2], 10);
+        if (!isNaN(lastNumber)) {
+          nextNumber = lastNumber + 1;
+        }
       }
     }
 
-    // Format the new part number with leading zeros (6 digits)
-    const formattedNumber = nextNumber.toString().padStart(6, '0');
-    const newPartNumber = `${prefix}${formattedNumber}`;
+    // Format the new part number with year and 4-digit sequential number
+    const formattedNumber = nextNumber.toString().padStart(4, '0');
+    const newPartNumber = `${prefix}${currentYear}-${formattedNumber}`;
 
     // Double-check uniqueness (in case of race conditions)
     const existingPart = await prisma.part.findUnique({
@@ -68,8 +70,8 @@ export async function POST(request: NextRequest) {
 
     if (existingPart) {
       // If somehow the number already exists, try the next one
-      const fallbackNumber = (nextNumber + 1).toString().padStart(6, '0');
-      const fallbackPartNumber = `${prefix}${fallbackNumber}`;
+      const fallbackNumber = (nextNumber + 1).toString().padStart(4, '0');
+      const fallbackPartNumber = `${prefix}${currentYear}-${fallbackNumber}`;
 
       return NextResponse.json({
         partNumber: fallbackPartNumber,
