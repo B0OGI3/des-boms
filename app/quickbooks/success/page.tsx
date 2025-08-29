@@ -35,11 +35,23 @@ function QuickBooksSuccessPageInner() {
     if (companyId && accessToken) {
       try {
         if (window.opener) {
-          const origins = [
+          // Build a safe list of allowed origins to postMessage to.
+          // Allowlist comes from NEXT_PUBLIC_QB_ALLOWED_ORIGINS (comma-separated)
+          // and sensible defaults including localhost:5000 for server use.
+          const envOrigins = (process.env.NEXT_PUBLIC_QB_ALLOWED_ORIGINS || '')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+          const defaultOrigins = [
             'http://localhost:3000',
             'https://localhost:3000',
+            'http://localhost:5000',
+            'https://localhost:5000',
             'https://noticeably-full-llama.ngrok-free.app',
           ];
+          const origins = Array.from(
+            new Set([window.location.origin, ...defaultOrigins, ...envOrigins])
+          );
           const message = {
             type: 'quickbooks-oauth-complete',
             success: true,

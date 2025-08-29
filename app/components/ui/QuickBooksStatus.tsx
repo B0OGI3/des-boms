@@ -95,11 +95,16 @@ export function QuickBooksStatus({
   };
 
   const handleConnect = () => {
-    // For development, use ngrok URL; for production, use current origin
-    const isDev = window.location.hostname === 'localhost';
-    const baseUrl = isDev
-      ? 'https://noticeably-full-llama.ngrok-free.app'
-      : window.location.origin;
+    // For development, prefer the actual origin (including port) and allow
+    // an optional comma-separated override via NEXT_PUBLIC_QB_ALLOWED_ORIGINS.
+    // If an explicit dev tunnel is configured (e.g. ngrok), it can be
+    // provided in that env var and will be used as an additional origin.
+    const envOrigins = (process.env.NEXT_PUBLIC_QB_ALLOWED_ORIGINS || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+    // Use current origin (includes port like :5000) as primary baseUrl
+    const baseUrl = window.location.origin;
 
     // Open QuickBooks OAuth in new window
     window.open(
@@ -111,7 +116,9 @@ export function QuickBooksStatus({
     // Listen for the OAuth completion
     const handleMessage = (event: MessageEvent) => {
       // Accept messages from either localhost or ngrok
-      const validOrigins = [window.location.origin, baseUrl];
+      const validOrigins = Array.from(
+        new Set([window.location.origin, baseUrl, ...envOrigins])
+      );
       if (!validOrigins.includes(event.origin)) return;
 
       if (event.data.type === 'quickbooks-oauth-complete') {
