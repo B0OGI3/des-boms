@@ -140,7 +140,6 @@ const convertPurchaseOrderToOrder = (purchaseOrder: {
     unitPrice?: number;
     batches?: Array<{ status: string }>;
   }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }): Order => {
   try {
@@ -226,7 +225,6 @@ const convertPurchaseOrderToOrder = (purchaseOrder: {
           quantity?: number;
           unitPrice?: number;
           notes?: string;
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           [key: string]: any;
         }) => ({
           id: item.id || '',

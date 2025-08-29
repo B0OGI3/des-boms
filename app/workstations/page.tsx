@@ -1,19 +1,19 @@
 /**
- * DES-BOMS Workstation Management - No Login Required
+ * DES-BOMS Workstation Management - SECURE OPERATOR SIGN-OFF REQUIRED
  *
- * Streamlined workstation management interface for immediate access to all
- * DES-BOMS manufacturing functionality without any authentication barriers.
+ * Streamlined workstation management interface with mandatory operator authentication
+ * for all manufacturing operations. Requires authenticated operator sign-off for
+ * accountability and quality control.
  *
  * Core DES-BOMS Features:
- * - Direct workstation selection and job queue access
- * - Complete routing step management (start/complete/flag)
- * - Photo uploads and detailed notes for documentation
- * - Real-time job queue updates and status tracking
+ * - Mandatory operator login/authentication before any step actions
+ * - Complete routing step management (start/complete/flag) with operator tracking
+ * - Photo uploads and detailed notes for documentation with operator attribution
+ * - Real-time job queue updates and status tracking with operator accountability
  * - Part number, customer, and priority information display
- * - Manufacturing workflow control optimized for efficiency
+ * - Manufacturing workflow control optimized for efficiency and compliance
  *
- * No authentication required - select workstation and immediately begin managing
- * manufacturing operations with full DES-BOMS capability.
+ * REQUIRES AUTHENTICATED OPERATOR SIGN-OFF for all manufacturing steps
  */
 
 'use client';
@@ -46,10 +46,12 @@ import {
   IconRefresh,
   IconPlus,
   IconEdit,
+  IconUser,
 } from '@tabler/icons-react';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { WorkOrderTracking } from '../components';
 import { StandardPage } from '../components/ui';
+import { OperatorAuth } from '../components/OperatorAuth';
 import { usePageInitialization } from '../../hooks';
 import theme from '../theme';
 
@@ -112,6 +114,21 @@ interface RoutingStep {
     notes?: string;
   }>;
 }
+
+interface Operator {
+  id: string;
+  operatorId: string;
+  operatorName: string;
+  certifications: string[];
+  shift: 'DAY' | 'SWING' | 'NIGHT' | 'FLEXIBLE';
+  active: boolean;
+  currentWorkstationId?: string;
+  loginTime?: string;
+  logoutTime?: string;
+}
+
+// Reusable type alias for action union to satisfy Sonar rule S4323
+type StepAction = 'start' | 'complete' | 'flag';
 
 // Lightweight memoized card for each workstation to avoid heavy re-renders
 type WorkstationCardProps = {
@@ -186,7 +203,7 @@ export default function WorkstationsPage() {
   const [stepActionModal, setStepActionModal] = useState<{
     open: boolean;
     step?: RoutingStep;
-    action?: 'start' | 'complete' | 'flag';
+    action?: StepAction;
   }>({ open: false });
   const [workstationModal, setWorkstationModal] = useState<{
     open: boolean;
@@ -199,6 +216,9 @@ export default function WorkstationsPage() {
   const [materialConsumption, setMaterialConsumption] = useState<{
     [key: string]: number;
   }>({});
+
+  // OPERATOR AUTHENTICATION STATE
+  const [currentOperator, setCurrentOperator] = useState<Operator | null>(null);
 
   // Workstation form state
   const [workstationForm, setWorkstationForm] = useState({
@@ -414,68 +434,105 @@ export default function WorkstationsPage() {
     }
   };
 
-  const handleStepAction = async (action: 'start' | 'complete' | 'flag') => {
+  // Prepare FormData for step confirmation
+  const prepareStepConfirmationFormData = (
+    step: any,
+    action: StepAction,
+    operator: Operator
+  ) => {
+    const fd = new FormData();
+    fd.append('stepId', step.id);
+    fd.append('workstationId', selectedWorkstation);
+    fd.append('operatorName', operator.operatorName);
+    fd.append('operatorId', operator.operatorId);
+    fd.append('action', action);
+    if (actionNotes) fd.append('notes', actionNotes);
+    if (uploadedFile) fd.append('photo', uploadedFile);
+    return fd;
+  };
+
+  // Record material consumption for a completed step
+  const recordMaterialConsumption = async (batchId: string, stepId: string) => {
+    if (Object.keys(materialConsumption).length === 0) return;
+    try {
+      await fetch(`/api/batches/${batchId}/materials`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          consumptions: Object.entries(materialConsumption).map(
+            ([partId, actualQuantity]) => ({
+              partId,
+              actualQuantity,
+              stepId,
+            })
+          ),
+        }),
+      });
+    } catch (error) {
+      console.error('Error recording material consumption:', error);
+    }
+  };
+
+  // Refresh routing steps for the selected workstation
+  const refreshRoutingSteps = async () => {
+    try {
+      const stepsResponse = await fetch(
+        `/api/routing-steps?workstationId=${selectedWorkstation}&status=PENDING,IN_PROGRESS`
+      );
+      if (stepsResponse.ok) {
+        const json = await stepsResponse.json();
+        setRoutingSteps(json.data || []);
+      }
+    } catch (err) {
+      console.error('Error refreshing routing steps:', err);
+    }
+  };
+
+  const handleStepAction = async (action: StepAction) => {
     if (!stepActionModal.step) return;
 
+    // REQUIRE OPERATOR AUTHENTICATION BEFORE ANY STEP ACTION
+    if (!currentOperator) {
+      alert(
+        'Operator authentication required. Please log in before confirming steps.'
+      );
+      return;
+    }
+
+    // Verify operator is logged into the correct workstation
+    if (currentOperator.currentWorkstationId !== selectedWorkstation) {
+      alert('You are not logged into this workstation. Please log in first.');
+      return;
+    }
+
     try {
-      const formData = new FormData();
-      formData.append('stepId', stepActionModal.step.id);
-      formData.append('workstationId', selectedWorkstation);
-      formData.append('operatorName', 'Admin');
-      formData.append('action', action);
-
-      if (actionNotes) {
-        formData.append('notes', actionNotes);
-      }
-
-      if (uploadedFile) {
-        formData.append('photo', uploadedFile);
-      }
+      const fd = prepareStepConfirmationFormData(
+        stepActionModal.step,
+        action,
+        currentOperator
+      );
 
       const response = await fetch('/api/step-confirmations', {
         method: 'POST',
-        body: formData,
+        body: fd,
       });
 
       if (response.ok) {
-        // If completing a step and we have material consumption data, record it
-        if (
-          action === 'complete' &&
-          stepActionModal.step &&
-          Object.keys(materialConsumption).length > 0
-        ) {
-          try {
-            await fetch(
-              `/api/batches/${stepActionModal.step.batch.id}/materials`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  consumptions: Object.entries(materialConsumption).map(
-                    ([partId, actualQuantity]) => ({
-                      partId,
-                      actualQuantity,
-                      stepId: stepActionModal.step!.id,
-                    })
-                  ),
-                }),
-              }
-            );
-          } catch (error) {
-            console.error('Error recording material consumption:', error);
-          }
+        // Log confirmation
+        console.log(
+          `Step ${action} confirmed by ${currentOperator.operatorName}`
+        );
+
+        // Record material consumption if completing
+        if (action === 'complete' && stepActionModal.step) {
+          await recordMaterialConsumption(
+            stepActionModal.step.batch.id,
+            stepActionModal.step.id
+          );
         }
 
         // Refresh routing steps
-        const stepsResponse = await fetch(
-          `/api/routing-steps?workstationId=${selectedWorkstation}&status=PENDING,IN_PROGRESS`
-        );
-        if (stepsResponse.ok) {
-          const result = await stepsResponse.json();
-          setRoutingSteps(result.data || []);
-        }
+        await refreshRoutingSteps();
 
         // Close modal and reset
         setStepActionModal({ open: false });
@@ -483,11 +540,43 @@ export default function WorkstationsPage() {
         setUploadedFile(null);
         setBatchMaterials([]);
         setMaterialConsumption({});
+      } else {
+        const error = await response.json();
+        alert(`Step confirmation failed: ${error.error}`);
       }
     } catch (error) {
       console.error('Error submitting step action:', error);
+      alert('Failed to confirm step. Please try again.');
     }
   };
+
+  // OPERATOR AUTHENTICATION HANDLERS
+  const handleOperatorLogin = useCallback(
+    (operator: Operator) => {
+      setCurrentOperator(operator);
+      console.log(
+        `Operator ${operator.operatorName} logged in at workstation ${selectedWorkstation}`
+      );
+    },
+    [selectedWorkstation]
+  );
+
+  const handleOperatorLogout = useCallback(() => {
+    setCurrentOperator(null);
+    console.log('Operator logged out');
+  }, []);
+
+  // Update operator workstation when workstation selection changes
+  useEffect(() => {
+    if (
+      currentOperator &&
+      selectedWorkstation &&
+      currentOperator.currentWorkstationId !== selectedWorkstation
+    ) {
+      // Operator needs to log into the new workstation
+      setCurrentOperator(null);
+    }
+  }, [currentOperator, selectedWorkstation]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -669,6 +758,35 @@ export default function WorkstationsPage() {
             </Grid.Col>
           </Grid>
         </Card>
+
+        {/* OPERATOR AUTHENTICATION - REQUIRED FOR STEP ACTIONS */}
+        {selectedWorkstation && (
+          <OperatorAuth
+            workstationId={selectedWorkstation}
+            onOperatorLogin={handleOperatorLogin}
+            onOperatorLogout={handleOperatorLogout}
+            currentOperator={currentOperator}
+          />
+        )}
+
+        {/* Authentication Warning */}
+        {selectedWorkstation && !currentOperator && (
+          <Alert
+            color='orange'
+            style={{
+              background: 'rgba(245, 158, 11, 0.1)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
+              marginBottom: 32,
+            }}
+          >
+            <Text style={{ color: '#f59e0b' }}>
+              ⚠️ <strong>Operator Authentication Required:</strong> You must log
+              in before performing any manufacturing step actions. This ensures
+              proper accountability and quality control for all production
+              activities.
+            </Text>
+          </Alert>
+        )}
 
         {/* BOM Integration Info */}
         {selectedWorkstation && (
@@ -910,6 +1028,12 @@ export default function WorkstationsPage() {
                                   action: 'start',
                                 })
                               }
+                              disabled={!currentOperator}
+                              title={
+                                !currentOperator
+                                  ? 'Login required to start steps'
+                                  : 'Start this manufacturing step'
+                              }
                             >
                               Start
                             </Button>
@@ -926,6 +1050,12 @@ export default function WorkstationsPage() {
                                   action: 'complete',
                                 })
                               }
+                              disabled={!currentOperator}
+                              title={
+                                !currentOperator
+                                  ? 'Login required to complete steps'
+                                  : 'Complete this manufacturing step'
+                              }
                             >
                               Complete
                             </Button>
@@ -939,6 +1069,12 @@ export default function WorkstationsPage() {
                                 step,
                                 action: 'flag',
                               })
+                            }
+                            disabled={!currentOperator}
+                            title={
+                              !currentOperator
+                                ? 'Login required to flag issues'
+                                : 'Flag issue with this step'
                             }
                           >
                             <IconFlag size={16} />
@@ -1121,6 +1257,33 @@ export default function WorkstationsPage() {
               </div>
             )}
 
+            {/* AUTHENTICATED OPERATOR INFORMATION */}
+            {currentOperator && (
+              <Card
+                style={{
+                  background: 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                }}
+              >
+                <Group gap='sm' align='center'>
+                  <IconUser size={16} style={{ color: '#10b981' }} />
+                  <div>
+                    <Text size='sm' fw={500} style={{ color: '#10b981' }}>
+                      Authenticated Operator
+                    </Text>
+                    <Text size='xs' style={{ color: '#059669' }}>
+                      {currentOperator.operatorName} (
+                      {currentOperator.operatorId})
+                    </Text>
+                    <Text size='xs' style={{ color: '#047857' }}>
+                      {currentOperator.shift} Shift •{' '}
+                      {currentOperator.certifications.length} certifications
+                    </Text>
+                  </div>
+                </Group>
+              </Card>
+            )}
+
             {/* Material Requirements for Complete Action */}
             {stepActionModal.action === 'complete' &&
               batchMaterials.length > 0 && (
@@ -1235,6 +1398,12 @@ export default function WorkstationsPage() {
               <Button
                 color={stepActionModal.action === 'flag' ? 'red' : 'blue'}
                 onClick={() => handleStepAction(stepActionModal.action!)}
+                disabled={!currentOperator}
+                title={
+                  !currentOperator
+                    ? 'Operator authentication required'
+                    : undefined
+                }
               >
                 {(() => {
                   if (stepActionModal.action === 'start') return 'Start Step';

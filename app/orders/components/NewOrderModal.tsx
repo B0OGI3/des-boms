@@ -470,7 +470,6 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
         if (res.ok) setCustomers(await res.json());
       } catch (e) {
         // log and continue
-        // eslint-disable-next-line no-console
         console.error(e);
       }
     })();
@@ -552,9 +551,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       onClose();
     } catch (e) {
       // log the error and surface a simple alert
-      // eslint-disable-next-line no-console
       console.error(e);
-      // eslint-disable-next-line no-alert
       alert('Failed to create order');
     } finally {
       setSubmitting(false);

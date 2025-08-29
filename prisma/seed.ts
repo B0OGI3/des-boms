@@ -400,6 +400,49 @@ async function main() {
 
   console.log(`✅ Created ${workstations.length} workstations`);
 
+  // Create or update Workstation Operators (idempotent for repeated seed runs)
+  console.log('👷 Ensuring Workstation Operators exist...');
+  const operators = await Promise.all([
+    prisma.workstationOperator.upsert({
+      where: { operatorId: 'JS001' },
+      update: {
+        operatorName: 'John Smith',
+        email: 'john.smith@des-boms.local',
+        certifications: [],
+        shift: 'DAY',
+        active: true,
+      },
+      create: {
+        operatorId: 'JS001',
+        operatorName: 'John Smith',
+        email: 'john.smith@des-boms.local',
+        certifications: [],
+        shift: 'DAY',
+        active: true,
+      },
+    }),
+    prisma.workstationOperator.upsert({
+      where: { operatorId: 'MG002' },
+      update: {
+        operatorName: 'Maria Garcia',
+        email: 'maria.garcia@des-boms.local',
+        certifications: [],
+        shift: 'DAY',
+        active: true,
+      },
+      create: {
+        operatorId: 'MG002',
+        operatorName: 'Maria Garcia',
+        email: 'maria.garcia@des-boms.local',
+        certifications: [],
+        shift: 'DAY',
+        active: true,
+      },
+    }),
+  ]);
+
+  console.log(`✅ Ensured ${operators.length} workstation operators`);
+
   // Create Batches with Routing Steps
   const batches = [];
 

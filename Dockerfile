@@ -22,8 +22,8 @@ COPY . .
 # Build the Next.js app
 RUN pnpm build
 
-# Copy and make entrypoint script executable
-COPY docker-entrypoint.sh ./
+# Copy and make entrypoint script executable (file lives in deployment/)
+COPY deployment/docker-entrypoint.sh ./docker-entrypoint.sh
 RUN chmod +x docker-entrypoint.sh
 
 # Expose the port Next.js runs on

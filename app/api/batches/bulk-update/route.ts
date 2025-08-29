@@ -34,9 +34,8 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    // Prepare update data for Prisma
-    // Using any due to complex Prisma type unions for update operations
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Prepare update data for Prisma. Using `any` because Prisma update
+    // payload types are complex for dynamic update objects in this handler.
     const updateData: any = {};
 
     if (updates.priority) {

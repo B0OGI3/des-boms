@@ -48,6 +48,7 @@ function QuickBooksSuccessPageInner() {
             'http://localhost:5000',
             'https://localhost:5000',
             'https://noticeably-full-llama.ngrok-free.app',
+            'https://des-boms.deliveredengineering.com',
           ];
           const origins = Array.from(
             new Set([window.location.origin, ...defaultOrigins, ...envOrigins])
