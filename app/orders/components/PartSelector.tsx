@@ -5,7 +5,7 @@
  * Used in order line items to improve UX and maintain part consistency
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Group,
   Button,
@@ -61,6 +61,14 @@ const partTypeOptions = [
   { value: 'RAW_MATERIAL', label: 'Raw Materials/Stock', color: 'green' },
 ];
 
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+// Use explicit middlewares to avoid Popper flip/shift recalculations when
+// Select props are re-created on each render.
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
 const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   value,
   onChange,
@@ -79,15 +87,8 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
   const [useDropdown, setUseDropdown] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize component
-  useEffect(() => {
-    if (isPageReady && !isInitialized) {
-      fetchParts();
-      setIsInitialized(true);
-    }
-  }, [isPageReady, isInitialized]);
-
-  const fetchParts = async () => {
+  // Fetch parts (memoized) - declared before useEffect to satisfy hooks
+  const fetchParts = useCallback(async () => {
     setLoading(true);
     setFetchError(null);
 
@@ -119,27 +120,43 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Initialize component
+  useEffect(() => {
+    if (isPageReady && !isInitialized) {
+      fetchParts();
+      setIsInitialized(true);
+    }
+  }, [isPageReady, isInitialized, fetchParts]);
 
   // Transform parts to Select options
-  const partOptions = Array.isArray(parts)
-    ? parts.map(part => ({
-        value: part.id,
-        label: `${part.partNumber} - ${part.partName}`,
-        part: part,
-      }))
-    : [];
+  const partOptions = React.useMemo(
+    () =>
+      Array.isArray(parts)
+        ? parts.map(part => ({
+            value: part.id,
+            label: `${part.partNumber} - ${part.partName}`,
+            part,
+          }))
+        : [],
+    [parts]
+  );
 
   // Filtered options based on search term
-  const filteredOptions = searchTerm
-    ? partOptions.filter(
-        option =>
-          option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          option.part.description
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase())
-      )
-    : partOptions;
+  const filteredOptions = React.useMemo(
+    () =>
+      searchTerm
+        ? partOptions.filter(
+            option =>
+              option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              option.part.description
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase())
+          )
+        : partOptions,
+    [searchTerm, partOptions]
+  );
 
   const getPartTypeBadge = (partType: string) => {
     const typeConfig = partTypeOptions.find(opt => opt.value === partType);
@@ -286,9 +303,7 @@ const PartSelectorInternal: React.FC<PartSelectorProps> = ({
                 disabled={loading}
                 rightSection={loading ? <Loader size='sm' /> : undefined}
                 maxDropdownHeight={200}
-                comboboxProps={{
-                  withinPortal: true,
-                }}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
               />
             </div>
             <Button

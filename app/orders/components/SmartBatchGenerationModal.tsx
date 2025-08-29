@@ -11,7 +11,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Modal,
   Stack,
@@ -50,73 +50,324 @@ import {
 } from '@tabler/icons-react';
 import { RoutingEditorModal } from '../../batches/components/RoutingEditorModal';
 
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
+// Type aliases for union types to replace inline unions
 type PartType = 'FINISHED' | 'SEMI_FINISHED' | 'RAW_MATERIAL';
+type WorkflowStepStatus =
+  | 'PENDING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'SKIPPED'
+  | 'FAILED';
+type BatchPriority = 'RUSH' | 'STANDARD';
+type PriorityStrategy = 'BALANCED' | 'EFFICIENCY' | 'QUALITY' | 'SPEED';
+type QualityControlLevel = 'STANDARD' | 'ENHANCED' | 'STRICT';
+type BulkApplyField = 'priority' | 'reasoning';
+type NumberInputValue = string | number | undefined;
 
-interface WorkflowStep {
-  id: string;
-  stepNumber: number;
-  workstationId: string;
-  description: string;
-  estimatedTime: number; // Changed from estimatedMinutes to match batch system
-  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED';
-  partType?: PartType;
-  partNumber?: string;
-  materialRequirements?: string[];
+// Per-row Batch component to avoid creating inline callbacks per row in parent
+interface BatchRowProps {
+  suggestion: BatchSuggestion;
+  batch: BatchSuggestion['suggestedBatches'][0];
+  priorityOptions: { value: string; label: string }[];
+  quickPresetOptions: { value: string; label: string }[];
+  reasoningPresets: Record<string, string>;
+  showWorkflow: boolean;
+  updateBatchQuantity: (
+    lineItemId: string,
+    batchNumber: number,
+    newQuantity: number
+  ) => void;
+  updateBatchPriority: (
+    lineItemId: string,
+    batchNumber: number,
+    newPriority: BatchPriority
+  ) => void;
+  updateBatchDuration: (
+    lineItemId: string,
+    batchNumber: number,
+    newDuration: number
+  ) => void;
+  updateBatchReasoning: (
+    lineItemId: string,
+    batchNumber: number,
+    newReasoning: string
+  ) => void;
+  duplicateBatch: (lineItemId: string, batchNumber: number) => void;
+  removeBatch: (lineItemId: string, batchNumber: number) => void;
+  openRoutingEditor: (lineItemId: string, batchNumber: number) => void;
+  toggleWorkflowSteps: (lineItemId: string, batchNumber: number) => void;
 }
 
-interface MaterialRequirement {
-  partId: string;
-  partNumber: string;
-  partName: string;
-  partType: PartType;
-  totalQuantityRequired: number;
-  unitOfMeasure?: string;
-  standardCost?: number;
-  totalCost: number;
-}
+const BatchRow: React.FC<BatchRowProps> = ({
+  suggestion,
+  batch,
+  priorityOptions,
+  quickPresetOptions,
+  reasoningPresets,
+  showWorkflow,
+  updateBatchQuantity,
+  updateBatchPriority,
+  updateBatchDuration,
+  updateBatchReasoning,
+  duplicateBatch,
+  removeBatch,
+  openRoutingEditor,
+  toggleWorkflowSteps,
+}) => {
+  const lineItemId = suggestion.lineItemId;
 
-interface BatchSuggestion {
-  lineItemId: string;
-  partNumber: string;
-  partName: string;
-  partType?: PartType;
-  totalQuantity: number;
-  materialRequirements?: MaterialRequirement[];
-  suggestedBatches: Array<{
-    batchNumber: number;
-    quantity: number;
-    priority: 'RUSH' | 'STANDARD';
-    estimatedDuration: number;
-    workflowSteps: WorkflowStep[];
-    reasoning: string;
-  }>;
-}
+  const onChangeQuantity = useCallback(
+    (value: NumberInputValue) =>
+      updateBatchQuantity(lineItemId, batch.batchNumber, Number(value) || 0),
+    [updateBatchQuantity, lineItemId, batch.batchNumber]
+  );
 
-interface GenerationConfig {
-  maxBatchSize: number;
-  minBatchSize: number;
-  preferredBatchSize: number;
-  priorityStrategy: 'BALANCED' | 'EFFICIENCY' | 'QUALITY' | 'SPEED';
-  allowSplitting: boolean;
-  rushThreshold: number; // percentage of order priority that triggers RUSH
-  qualityControlLevel: 'STANDARD' | 'ENHANCED' | 'STRICT';
-  estimationBuffer: number; // percentage buffer for time estimates
-  defaultRoutingStrategy?: string;
-}
+  const onChangePriority = useCallback(
+    (value: string | null) =>
+      updateBatchPriority(
+        lineItemId,
+        batch.batchNumber,
+        value as BatchPriority
+      ),
+    [updateBatchPriority, lineItemId, batch.batchNumber]
+  );
 
-interface BatchGenerationData {
-  orderId: string;
-  orderNumber: string;
-  customerName: string;
-  orderPriority: string;
-  suggestions: BatchSuggestion[];
-  summary: {
-    totalLineItems: number;
-    totalBatches: number;
-    estimatedCompletionDays: number;
-    canAutoGenerate: boolean;
-  };
-}
+  const onChangeDuration = useCallback(
+    (value: NumberInputValue) =>
+      updateBatchDuration(lineItemId, batch.batchNumber, Number(value) || 1),
+    [updateBatchDuration, lineItemId, batch.batchNumber]
+  );
+
+  const onChangeReasoning = useCallback(
+    (value: string) =>
+      updateBatchReasoning(lineItemId, batch.batchNumber, value),
+    [updateBatchReasoning, lineItemId, batch.batchNumber]
+  );
+
+  const onDuplicate = useCallback(
+    () => duplicateBatch(lineItemId, batch.batchNumber),
+    [duplicateBatch, lineItemId, batch.batchNumber]
+  );
+
+  const onRemove = useCallback(
+    () => removeBatch(lineItemId, batch.batchNumber),
+    [removeBatch, lineItemId, batch.batchNumber]
+  );
+
+  const onToggleWorkflow = useCallback(
+    () => toggleWorkflowSteps(lineItemId, batch.batchNumber),
+    [toggleWorkflowSteps, lineItemId, batch.batchNumber]
+  );
+
+  const onOpenRouting = useCallback(
+    () => openRoutingEditor(lineItemId, batch.batchNumber),
+    [openRoutingEditor, lineItemId, batch.batchNumber]
+  );
+
+  return (
+    <>
+      <Table.Tr>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Text size='sm' fw={500}>
+            #{batch.batchNumber}
+          </Text>
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <NumberInput
+            size='xs'
+            value={batch.quantity}
+            onChange={onChangeQuantity}
+            min={1}
+            max={suggestion.totalQuantity}
+            w={80}
+          />
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Select
+            size='xs'
+            value={batch.priority}
+            onChange={onChangePriority}
+            data={priorityOptions}
+            w={100}
+            comboboxProps={DEFAULT_COMBOBOX_PROPS}
+            maxDropdownHeight={220}
+          />
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Stack gap='xs'>
+            <Group gap='xs' align='center'>
+              <Text size='xs' fw={500}>
+                {(batch.workflowSteps || []).length} step
+                {(batch.workflowSteps || []).length !== 1 ? 's' : ''}
+              </Text>
+              <Group gap='xxs'>
+                <Tooltip label='View workflow steps'>
+                  <ActionIcon
+                    size='xs'
+                    variant='light'
+                    color='green'
+                    onClick={onToggleWorkflow}
+                  >
+                    <IconEye size={10} />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip label='Edit workflow steps'>
+                  <ActionIcon
+                    size='xs'
+                    variant='light'
+                    color='blue'
+                    onClick={onOpenRouting}
+                  >
+                    <IconRoute size={10} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            </Group>
+          </Stack>
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Group gap='xs' align='center'>
+            <NumberInput
+              size='xs'
+              value={batch.estimatedDuration}
+              onChange={onChangeDuration}
+              min={1}
+              max={365}
+              w={60}
+              suffix='d'
+            />
+            <Tooltip label='Days to complete'>
+              <IconCalendar size={12} style={{ color: '#64748b' }} />
+            </Tooltip>
+          </Group>
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Stack gap='xs'>
+            <Textarea
+              size='xs'
+              value={batch.reasoning}
+              onChange={event => onChangeReasoning(event.currentTarget.value)}
+              placeholder='Enter reasoning for this batch...'
+              autosize
+              minRows={2}
+              maxRows={4}
+              styles={{
+                input: {
+                  fontSize: '12px',
+                  padding: '6px 8px',
+                  lineHeight: '1.4',
+                },
+              }}
+            />
+            <Select
+              size='xs'
+              placeholder='Quick presets...'
+              w='100%'
+              data={quickPresetOptions}
+              onChange={value => {
+                if (typeof value !== 'string' || value.length === 0) return;
+                const preset = reasoningPresets[value];
+                if (preset)
+                  updateBatchReasoning(lineItemId, batch.batchNumber, preset);
+              }}
+              styles={{ input: { fontSize: '11px', padding: '4px 8px' } }}
+              clearable
+              comboboxProps={DEFAULT_COMBOBOX_PROPS}
+              maxDropdownHeight={220}
+            />
+          </Stack>
+        </Table.Td>
+        <Table.Td style={{ verticalAlign: 'top', padding: '12px 8px' }}>
+          <Group gap='xs'>
+            <Tooltip label='Duplicate this batch'>
+              <ActionIcon
+                size='sm'
+                variant='subtle'
+                color='blue'
+                onClick={onDuplicate}
+              >
+                <IconCopy size={14} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label='Remove batch'>
+              <ActionIcon
+                size='sm'
+                variant='subtle'
+                color='red'
+                onClick={onRemove}
+              >
+                <IconTrash size={14} />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
+        </Table.Td>
+      </Table.Tr>
+
+      {showWorkflow && (batch.workflowSteps || []).length > 0 && (
+        <Table.Tr>
+          <Table.Td colSpan={7}>
+            <Box
+              p='md'
+              style={{
+                background: 'rgba(59, 130, 246, 0.05)',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                borderRadius: '8px',
+              }}
+            >
+              <Group justify='space-between' mb='xs'>
+                <Text size='sm' fw={600} c='blue'>
+                  Workflow Steps
+                </Text>
+                <Text size='xs' c='dimmed'>
+                  {(batch.workflowSteps || []).length} step
+                  {(batch.workflowSteps || []).length !== 1 ? 's' : ''}
+                </Text>
+              </Group>
+              <Stack gap='xs'>
+                {(batch.workflowSteps || []).map(step => (
+                  <Group
+                    key={step.id}
+                    gap='sm'
+                    p='xs'
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: '6px',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                    }}
+                  >
+                    <Badge size='sm' variant='light' color='blue'>
+                      {step.stepNumber}
+                    </Badge>
+                    <Text size='sm' flex={1}>
+                      {step.description}
+                    </Text>
+                    <Text size='xs' c='dimmed'>
+                      ~{step.estimatedTime}min
+                    </Text>
+                  </Group>
+                ))}
+                {(batch.workflowSteps || []).length === 0 && (
+                  <Text size='sm' c='dimmed' ta='center'>
+                    No workflow steps defined. Click edit to add steps.
+                  </Text>
+                )}
+              </Stack>
+            </Box>
+          </Table.Td>
+        </Table.Tr>
+      )}
+    </>
+  );
+};
+
+// Memoize BatchRow to prevent unnecessary re-renders when parent props are stable
+const MemoizedBatchRow = React.memo(BatchRow);
 
 interface SmartBatchGenerationModalProps {
   opened: boolean;
@@ -179,7 +430,7 @@ export const SmartBatchGenerationModal: React.FC<
     | 'pilot'
     | 'final';
 
-  const reasoningPresets = useMemo<Record<ReasoningPresetKey, string>>(
+  const reasoningPresets = useMemo<Record<string, string>>(
     () => ({
       quality: 'Small batch for enhanced quality control and defect reduction',
       efficiency: 'Large batch optimized for maximum manufacturing efficiency',
@@ -191,7 +442,7 @@ export const SmartBatchGenerationModal: React.FC<
     []
   );
 
-  const reasoningPresetLabels: Record<ReasoningPresetKey, string> = useMemo(
+  const reasoningPresetLabels: Record<string, string> = useMemo(
     () => ({
       quality: '🎯 Quality Focus',
       efficiency: '🏭 Efficiency',
@@ -235,6 +486,34 @@ export const SmartBatchGenerationModal: React.FC<
       loadSuggestions();
     }
   }, [opened, order]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Stable handlers for settings inputs to avoid inline function recreation
+  const setMinBatchSize = useCallback((value: NumberInputValue) => {
+    setConfig(prev => ({ ...prev, minBatchSize: Number(value) || 1 }));
+  }, []);
+
+  const setPreferredBatchSize = useCallback((value: NumberInputValue) => {
+    setConfig(prev => ({ ...prev, preferredBatchSize: Number(value) || 10 }));
+  }, []);
+
+  const setMaxBatchSize = useCallback((value: NumberInputValue) => {
+    setConfig(prev => ({ ...prev, maxBatchSize: Number(value) || 100 }));
+  }, []);
+
+  const setPriorityStrategy = useCallback((value: string | null) => {
+    setConfig(prev => ({
+      ...prev,
+      priorityStrategy: value as PriorityStrategy,
+    }));
+  }, []);
+
+  const setAllowSplittingHandler = useCallback((checked: boolean) => {
+    setConfig(prev => ({ ...prev, allowSplitting: checked }));
+  }, []);
+
+  const setRushThresholdHandler = useCallback((value: number) => {
+    setConfig(prev => ({ ...prev, rushThreshold: value }));
+  }, []);
 
   const loadSuggestions = async () => {
     try {
@@ -308,191 +587,197 @@ export const SmartBatchGenerationModal: React.FC<
     }
   };
 
-  const updateBatchQuantity = (
-    lineItemId: string,
-    batchNumber: number,
-    newQuantity: number
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const updateBatchQuantity = useCallback(
+    (lineItemId: string, batchNumber: number, newQuantity: number) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch =>
-        batch.batchNumber === batchNumber
-          ? { ...batch, quantity: newQuantity }
-          : batch
-      );
+        const updatedBatches = suggestion.suggestedBatches.map(batch =>
+          batch.batchNumber === batchNumber
+            ? { ...batch, quantity: newQuantity }
+            : batch
+        );
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
-  const updateBatchPriority = (
-    lineItemId: string,
-    batchNumber: number,
-    newPriority: 'RUSH' | 'STANDARD'
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const updateBatchPriority = useCallback(
+    (lineItemId: string, batchNumber: number, newPriority: BatchPriority) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch =>
-        batch.batchNumber === batchNumber
-          ? { ...batch, priority: newPriority }
-          : batch
-      );
+        const updatedBatches = suggestion.suggestedBatches.map(batch =>
+          batch.batchNumber === batchNumber
+            ? { ...batch, priority: newPriority }
+            : batch
+        );
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
-  const updateBatchDuration = (
-    lineItemId: string,
-    batchNumber: number,
-    newDuration: number
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const updateBatchDuration = useCallback(
+    (lineItemId: string, batchNumber: number, newDuration: number) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch =>
-        batch.batchNumber === batchNumber
-          ? { ...batch, estimatedDuration: newDuration }
-          : batch
-      );
+        const updatedBatches = suggestion.suggestedBatches.map(batch =>
+          batch.batchNumber === batchNumber
+            ? { ...batch, estimatedDuration: newDuration }
+            : batch
+        );
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
-  const updateBatchWorkflowSteps = (
-    lineItemId: string,
-    batchNumber: number,
-    steps: WorkflowStep[]
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const updateBatchWorkflowSteps = useCallback(
+    (lineItemId: string, batchNumber: number, steps: WorkflowStep[]) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch =>
-        batch.batchNumber === batchNumber
-          ? {
-              ...batch,
-              workflowSteps: steps,
-            }
-          : batch
-      );
+        const updatedBatches = suggestion.suggestedBatches.map(batch =>
+          batch.batchNumber === batchNumber
+            ? {
+                ...batch,
+                workflowSteps: steps,
+              }
+            : batch
+        );
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
-  const openRoutingEditor = (lineItemId: string, batchNumber: number) => {
-    setRoutingEditorModal({
-      open: true,
-      lineItemId,
-      batchNumber,
-      batchId: `temp-${lineItemId}-${batchNumber}`, // Temporary ID for preview
-    });
-  };
+  const openRoutingEditor = useCallback(
+    (lineItemId: string, batchNumber: number) => {
+      setRoutingEditorModal({
+        open: true,
+        lineItemId,
+        batchNumber,
+        batchId: `temp-${lineItemId}-${batchNumber}`, // Temporary ID for preview
+      });
+    },
+    [setRoutingEditorModal]
+  );
 
-  const toggleWorkflowSteps = (lineItemId: string, batchNumber: number) => {
-    const key = `${lineItemId}-${batchNumber}`;
-    setShowWorkflowSteps(prev => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const toggleWorkflowSteps = useCallback(
+    (lineItemId: string, batchNumber: number) => {
+      const key = `${lineItemId}-${batchNumber}`;
+      setShowWorkflowSteps(prev => ({
+        ...prev,
+        [key]: !prev[key],
+      }));
+    },
+    [setShowWorkflowSteps]
+  );
 
-  const updateBatchReasoning = (
-    lineItemId: string,
-    batchNumber: number,
-    newReasoning: string
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const updateBatchReasoning = useCallback(
+    (lineItemId: string, batchNumber: number, newReasoning: string) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch =>
-        batch.batchNumber === batchNumber
-          ? { ...batch, reasoning: newReasoning }
-          : batch
-      );
+        const updatedBatches = suggestion.suggestedBatches.map(batch =>
+          batch.batchNumber === batchNumber
+            ? { ...batch, reasoning: newReasoning }
+            : batch
+        );
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
   // (callbacks intentionally kept as local functions; avoid creating unused memoized refs)
 
-  const removeBatch = (lineItemId: string, batchNumber: number) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const removeBatch = useCallback(
+    (lineItemId: string, batchNumber: number) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const filteredBatches = suggestion.suggestedBatches.filter(
-        batch => batch.batchNumber !== batchNumber
-      );
+        const filteredBatches = suggestion.suggestedBatches.filter(
+          batch => batch.batchNumber !== batchNumber
+        );
 
-      return { ...suggestion, suggestedBatches: filteredBatches };
-    };
-
-    const filterEmptySuggestions = (suggestion: BatchSuggestion) =>
-      suggestion.suggestedBatches.length > 0;
-
-    setApprovedSuggestions(prev =>
-      prev.map(updateSuggestion).filter(filterEmptySuggestions)
-    );
-  };
-
-  const duplicateBatch = (lineItemId: string, batchNumber: number) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
-
-      const batchToDuplicate = suggestion.suggestedBatches.find(
-        b => b.batchNumber === batchNumber
-      );
-      if (!batchToDuplicate) return suggestion;
-
-      const newBatchNumber =
-        Math.max(...suggestion.suggestedBatches.map(b => b.batchNumber)) + 1;
-      const duplicatedBatch = {
-        ...batchToDuplicate,
-        batchNumber: newBatchNumber,
-        reasoning: `${batchToDuplicate.reasoning} (copy)`,
+        return { ...suggestion, suggestedBatches: filteredBatches };
       };
 
-      return {
-        ...suggestion,
-        suggestedBatches: [...suggestion.suggestedBatches, duplicatedBatch],
+      const filterEmptySuggestions = (suggestion: BatchSuggestion) =>
+        suggestion.suggestedBatches.length > 0;
+
+      setApprovedSuggestions(prev =>
+        prev.map(updateSuggestion).filter(filterEmptySuggestions)
+      );
+    },
+    [setApprovedSuggestions]
+  );
+
+  const duplicateBatch = useCallback(
+    (lineItemId: string, batchNumber: number) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
+
+        const batchToDuplicate = suggestion.suggestedBatches.find(
+          b => b.batchNumber === batchNumber
+        );
+        if (!batchToDuplicate) return suggestion;
+
+        const newBatchNumber =
+          Math.max(...suggestion.suggestedBatches.map(b => b.batchNumber)) + 1;
+        const duplicatedBatch = {
+          ...batchToDuplicate,
+          batchNumber: newBatchNumber,
+          reasoning: `${batchToDuplicate.reasoning} (copy)`,
+        };
+
+        return {
+          ...suggestion,
+          suggestedBatches: [...suggestion.suggestedBatches, duplicatedBatch],
+        };
       };
-    };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
-  const applyToAllBatches = (
-    lineItemId: string,
-    field: 'priority' | 'reasoning',
-    value: any
-  ) => {
-    const updateSuggestion = (suggestion: BatchSuggestion) => {
-      if (suggestion.lineItemId !== lineItemId) return suggestion;
+  const applyToAllBatches = useCallback(
+    (lineItemId: string, field: BulkApplyField, value: any) => {
+      const updateSuggestion = (suggestion: BatchSuggestion) => {
+        if (suggestion.lineItemId !== lineItemId) return suggestion;
 
-      const updatedBatches = suggestion.suggestedBatches.map(batch => ({
-        ...batch,
-        [field]: value,
-      }));
+        const updatedBatches = suggestion.suggestedBatches.map(batch => ({
+          ...batch,
+          [field]: value,
+        }));
 
-      return { ...suggestion, suggestedBatches: updatedBatches };
-    };
+        return { ...suggestion, suggestedBatches: updatedBatches };
+      };
 
-    setApprovedSuggestions(prev => prev.map(updateSuggestion));
-  };
+      setApprovedSuggestions(prev => prev.map(updateSuggestion));
+    },
+    [setApprovedSuggestions]
+  );
 
   const totalApprovedBatches = approvedSuggestions.reduce(
     (sum, suggestion) => sum + suggestion.suggestedBatches.length,
@@ -580,12 +865,7 @@ export const SmartBatchGenerationModal: React.FC<
                             <NumberInput
                               label='Min'
                               value={config.minBatchSize}
-                              onChange={value =>
-                                setConfig(prev => ({
-                                  ...prev,
-                                  minBatchSize: Number(value) || 1,
-                                }))
-                              }
+                              onChange={setMinBatchSize}
                               min={1}
                               max={config.maxBatchSize - 1}
                               w={70}
@@ -594,12 +874,7 @@ export const SmartBatchGenerationModal: React.FC<
                             <NumberInput
                               label='Preferred'
                               value={config.preferredBatchSize}
-                              onChange={value =>
-                                setConfig(prev => ({
-                                  ...prev,
-                                  preferredBatchSize: Number(value) || 10,
-                                }))
-                              }
+                              onChange={setPreferredBatchSize}
                               min={config.minBatchSize}
                               max={config.maxBatchSize}
                               w={80}
@@ -608,12 +883,7 @@ export const SmartBatchGenerationModal: React.FC<
                             <NumberInput
                               label='Max'
                               value={config.maxBatchSize}
-                              onChange={value =>
-                                setConfig(prev => ({
-                                  ...prev,
-                                  maxBatchSize: Number(value) || 100,
-                                }))
-                              }
+                              onChange={setMaxBatchSize}
                               min={config.minBatchSize + 1}
                               max={1000}
                               w={70}
@@ -628,18 +898,11 @@ export const SmartBatchGenerationModal: React.FC<
                           </Text>
                           <Select
                             value={config.priorityStrategy}
-                            onChange={value =>
-                              setConfig(prev => ({
-                                ...prev,
-                                priorityStrategy: value as
-                                  | 'BALANCED'
-                                  | 'EFFICIENCY'
-                                  | 'QUALITY'
-                                  | 'SPEED',
-                              }))
-                            }
+                            onChange={setPriorityStrategy}
                             data={priorityStrategyOptions}
                             size='xs'
+                            comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                            maxDropdownHeight={220}
                           />
                         </div>
 
@@ -652,10 +915,9 @@ export const SmartBatchGenerationModal: React.FC<
                               label='Allow batch splitting'
                               checked={config.allowSplitting}
                               onChange={event =>
-                                setConfig(prev => ({
-                                  ...prev,
-                                  allowSplitting: event.currentTarget.checked,
-                                }))
+                                setAllowSplittingHandler(
+                                  event.currentTarget.checked
+                                )
                               }
                               size='sm'
                             />
@@ -663,12 +925,7 @@ export const SmartBatchGenerationModal: React.FC<
                               <Text size='xs'>Rush Threshold:</Text>
                               <Slider
                                 value={config.rushThreshold}
-                                onChange={value =>
-                                  setConfig(prev => ({
-                                    ...prev,
-                                    rushThreshold: value,
-                                  }))
-                                }
+                                onChange={setRushThresholdHandler}
                                 min={0}
                                 max={100}
                                 w={100}
@@ -867,6 +1124,8 @@ export const SmartBatchGenerationModal: React.FC<
                               );
                           }}
                           clearable
+                          comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                          maxDropdownHeight={220}
                         />
                         <TextInput
                           placeholder='Type reasoning and press Enter...'
@@ -919,311 +1178,27 @@ export const SmartBatchGenerationModal: React.FC<
                       </Table.Thead>
                       <Table.Tbody>
                         {suggestion.suggestedBatches.map(batch => (
-                          <React.Fragment key={batch.batchNumber}>
-                            <Table.Tr>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Text size='sm' fw={500}>
-                                  #{batch.batchNumber}
-                                </Text>
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <NumberInput
-                                  size='xs'
-                                  value={batch.quantity}
-                                  onChange={value =>
-                                    updateBatchQuantity(
-                                      suggestion.lineItemId,
-                                      batch.batchNumber,
-                                      Number(value) || 0
-                                    )
-                                  }
-                                  min={1}
-                                  max={suggestion.totalQuantity}
-                                  w={80}
-                                />
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Select
-                                  size='xs'
-                                  value={batch.priority}
-                                  onChange={value =>
-                                    updateBatchPriority(
-                                      suggestion.lineItemId,
-                                      batch.batchNumber,
-                                      value as 'RUSH' | 'STANDARD'
-                                    )
-                                  }
-                                  data={priorityOptions}
-                                  w={100}
-                                />
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Stack gap='xs'>
-                                  <Group gap='xs' align='center'>
-                                    <Text size='xs' fw={500}>
-                                      {(batch.workflowSteps || []).length} step
-                                      {(batch.workflowSteps || []).length !== 1
-                                        ? 's'
-                                        : ''}
-                                    </Text>
-                                    <Group gap='xxs'>
-                                      <Tooltip label='View workflow steps'>
-                                        <ActionIcon
-                                          size='xs'
-                                          variant='light'
-                                          color='green'
-                                          onClick={() =>
-                                            toggleWorkflowSteps(
-                                              suggestion.lineItemId,
-                                              batch.batchNumber
-                                            )
-                                          }
-                                        >
-                                          <IconEye size={10} />
-                                        </ActionIcon>
-                                      </Tooltip>
-                                      <Tooltip label='Edit workflow steps'>
-                                        <ActionIcon
-                                          size='xs'
-                                          variant='light'
-                                          color='blue'
-                                          onClick={() =>
-                                            openRoutingEditor(
-                                              suggestion.lineItemId,
-                                              batch.batchNumber
-                                            )
-                                          }
-                                        >
-                                          <IconRoute size={10} />
-                                        </ActionIcon>
-                                      </Tooltip>
-                                    </Group>
-                                  </Group>
-                                </Stack>
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Group gap='xs' align='center'>
-                                  <NumberInput
-                                    size='xs'
-                                    value={batch.estimatedDuration}
-                                    onChange={value =>
-                                      updateBatchDuration(
-                                        suggestion.lineItemId,
-                                        batch.batchNumber,
-                                        Number(value) || 1
-                                      )
-                                    }
-                                    min={1}
-                                    max={365}
-                                    w={60}
-                                    suffix='d'
-                                  />
-                                  <Tooltip label='Days to complete'>
-                                    <IconCalendar
-                                      size={12}
-                                      style={{ color: '#64748b' }}
-                                    />
-                                  </Tooltip>
-                                </Group>
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Stack gap='xs'>
-                                  <Textarea
-                                    size='xs'
-                                    value={batch.reasoning}
-                                    onChange={event =>
-                                      updateBatchReasoning(
-                                        suggestion.lineItemId,
-                                        batch.batchNumber,
-                                        event.currentTarget.value
-                                      )
-                                    }
-                                    placeholder='Enter reasoning for this batch...'
-                                    autosize
-                                    minRows={2}
-                                    maxRows={4}
-                                    styles={{
-                                      input: {
-                                        fontSize: '12px',
-                                        padding: '6px 8px',
-                                        lineHeight: '1.4',
-                                      },
-                                    }}
-                                  />
-                                  <Select
-                                    size='xs'
-                                    placeholder='Quick presets...'
-                                    w='100%'
-                                    data={quickPresetOptions}
-                                    onChange={value => {
-                                      const key =
-                                        value as ReasoningPresetKey | null;
-                                      if (key && reasoningPresets[key]) {
-                                        updateBatchReasoning(
-                                          suggestion.lineItemId,
-                                          batch.batchNumber,
-                                          reasoningPresets[key]
-                                        );
-                                      }
-                                    }}
-                                    styles={{
-                                      input: {
-                                        fontSize: '11px',
-                                        padding: '4px 8px',
-                                      },
-                                    }}
-                                    clearable
-                                  />
-                                </Stack>
-                              </Table.Td>
-                              <Table.Td
-                                style={{
-                                  verticalAlign: 'top',
-                                  padding: '12px 8px',
-                                }}
-                              >
-                                <Group gap='xs'>
-                                  <Tooltip label='Duplicate this batch'>
-                                    <ActionIcon
-                                      size='sm'
-                                      variant='subtle'
-                                      color='blue'
-                                      onClick={() =>
-                                        duplicateBatch(
-                                          suggestion.lineItemId,
-                                          batch.batchNumber
-                                        )
-                                      }
-                                    >
-                                      <IconCopy size={14} />
-                                    </ActionIcon>
-                                  </Tooltip>
-                                  <Tooltip label='Remove batch'>
-                                    <ActionIcon
-                                      size='sm'
-                                      variant='subtle'
-                                      color='red'
-                                      onClick={() =>
-                                        removeBatch(
-                                          suggestion.lineItemId,
-                                          batch.batchNumber
-                                        )
-                                      }
-                                    >
-                                      <IconTrash size={14} />
-                                    </ActionIcon>
-                                  </Tooltip>
-                                </Group>
-                              </Table.Td>
-                            </Table.Tr>
-
-                            {/* Workflow Steps Display */}
-                            {showWorkflowSteps[
-                              `${suggestion.lineItemId}-${batch.batchNumber}`
-                            ] &&
-                              (batch.workflowSteps || []).length > 0 && (
-                                <Table.Tr>
-                                  <Table.Td colSpan={7}>
-                                    <Box
-                                      p='md'
-                                      style={{
-                                        background: 'rgba(59, 130, 246, 0.05)',
-                                        border:
-                                          '1px solid rgba(59, 130, 246, 0.2)',
-                                        borderRadius: '8px',
-                                      }}
-                                    >
-                                      <Group justify='space-between' mb='xs'>
-                                        <Text size='sm' fw={600} c='blue'>
-                                          Workflow Steps
-                                        </Text>
-                                        <Text size='xs' c='dimmed'>
-                                          {(batch.workflowSteps || []).length}{' '}
-                                          step
-                                          {(batch.workflowSteps || [])
-                                            .length !== 1
-                                            ? 's'
-                                            : ''}
-                                        </Text>
-                                      </Group>
-                                      <Stack gap='xs'>
-                                        {(batch.workflowSteps || []).map(
-                                          step => (
-                                            <Group
-                                              key={step.id}
-                                              gap='sm'
-                                              p='xs'
-                                              style={{
-                                                background:
-                                                  'rgba(255, 255, 255, 0.05)',
-                                                borderRadius: '6px',
-                                                border:
-                                                  '1px solid rgba(255, 255, 255, 0.1)',
-                                              }}
-                                            >
-                                              <Badge
-                                                size='sm'
-                                                variant='light'
-                                                color='blue'
-                                              >
-                                                {step.stepNumber}
-                                              </Badge>
-                                              <Text size='sm' flex={1}>
-                                                {step.description}
-                                              </Text>
-                                              <Text size='xs' c='dimmed'>
-                                                ~{step.estimatedTime}min
-                                              </Text>
-                                            </Group>
-                                          )
-                                        )}
-                                        {(batch.workflowSteps || []).length ===
-                                          0 && (
-                                          <Text
-                                            size='sm'
-                                            c='dimmed'
-                                            ta='center'
-                                          >
-                                            No workflow steps defined. Click
-                                            edit to add steps.
-                                          </Text>
-                                        )}
-                                      </Stack>
-                                    </Box>
-                                  </Table.Td>
-                                </Table.Tr>
-                              )}
-                          </React.Fragment>
+                          <MemoizedBatchRow
+                            key={batch.batchNumber}
+                            suggestion={suggestion}
+                            batch={batch}
+                            priorityOptions={priorityOptions}
+                            quickPresetOptions={quickPresetOptions}
+                            reasoningPresets={reasoningPresets}
+                            showWorkflow={
+                              !!showWorkflowSteps[
+                                `${suggestion.lineItemId}-${batch.batchNumber}`
+                              ]
+                            }
+                            updateBatchQuantity={updateBatchQuantity}
+                            updateBatchPriority={updateBatchPriority}
+                            updateBatchDuration={updateBatchDuration}
+                            updateBatchReasoning={updateBatchReasoning}
+                            duplicateBatch={duplicateBatch}
+                            removeBatch={removeBatch}
+                            openRoutingEditor={openRoutingEditor}
+                            toggleWorkflowSteps={toggleWorkflowSteps}
+                          />
                         ))}
                       </Table.Tbody>
                     </Table>
@@ -1446,3 +1421,69 @@ export const SmartBatchGenerationModal: React.FC<
     </Modal>
   );
 };
+
+interface WorkflowStep {
+  id: string;
+  stepNumber: number;
+  workstationId: string;
+  description: string;
+  estimatedTime: number; // Changed from estimatedMinutes to match batch system
+  status?: WorkflowStepStatus;
+  partType?: PartType;
+  partNumber?: string;
+  materialRequirements?: string[];
+}
+
+interface MaterialRequirement {
+  partId: string;
+  partNumber: string;
+  partName: string;
+  partType: PartType;
+  totalQuantityRequired: number;
+  unitOfMeasure?: string;
+  standardCost?: number;
+  totalCost: number;
+}
+
+interface BatchSuggestion {
+  lineItemId: string;
+  partNumber: string;
+  partName: string;
+  partType?: PartType;
+  totalQuantity: number;
+  materialRequirements?: MaterialRequirement[];
+  suggestedBatches: Array<{
+    batchNumber: number;
+    quantity: number;
+    priority: BatchPriority;
+    estimatedDuration: number;
+    workflowSteps: WorkflowStep[];
+    reasoning: string;
+  }>;
+}
+
+interface GenerationConfig {
+  maxBatchSize: number;
+  minBatchSize: number;
+  preferredBatchSize: number;
+  priorityStrategy: PriorityStrategy;
+  allowSplitting: boolean;
+  rushThreshold: number; // percentage of order priority that triggers RUSH
+  qualityControlLevel: QualityControlLevel;
+  estimationBuffer: number; // percentage buffer for time estimates
+  defaultRoutingStrategy?: string;
+}
+
+interface BatchGenerationData {
+  orderId: string;
+  orderNumber: string;
+  customerName: string;
+  orderPriority: string;
+  suggestions: BatchSuggestion[];
+  summary: {
+    totalLineItems: number;
+    totalBatches: number;
+    estimatedCompletionDays: number;
+    canAutoGenerate: boolean;
+  };
+}

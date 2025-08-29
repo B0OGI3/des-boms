@@ -100,6 +100,12 @@ const priorityOptions = [
   { value: 'RUSH', label: 'Rush Priority' },
 ];
 
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
 export const EditOrderModal: React.FC<EditOrderModalProps> = ({
   opened,
   onClose,
@@ -289,6 +295,8 @@ export const EditOrderModal: React.FC<EditOrderModalProps> = ({
                     setForm(prev => ({ ...prev, priority: value || 'NORMAL' }))
                   }
                   data={priorityOptions}
+                  comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                  maxDropdownHeight={200}
                   required
                 />
               </Grid.Col>

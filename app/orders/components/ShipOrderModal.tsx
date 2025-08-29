@@ -63,6 +63,7 @@ interface ShipOrderModalProps {
   onOrderShipped?: () => void;
 }
 
+// Keep carriers stable at module scope
 const CARRIERS = [
   { value: 'UPS', label: 'UPS' },
   { value: 'FedEx', label: 'FedEx' },
@@ -73,6 +74,12 @@ const CARRIERS = [
   { value: 'Customer Pickup', label: 'Customer Pickup' },
   { value: 'Other', label: 'Other' },
 ];
+
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
 
 export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
   opened,
@@ -269,6 +276,8 @@ export const ShipOrderModal: React.FC<ShipOrderModalProps> = ({
                 value={carrier}
                 onChange={value => setCarrier(value || '')}
                 data={CARRIERS}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
                 searchable
                 clearable
               />

@@ -72,6 +72,12 @@ interface RoutingTemplate {
   }[];
 }
 
+// Default combobox props to stabilize portal/Popper behaviour
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
 export function NewBatchModal({
   opened,
   onClose,
@@ -204,35 +210,66 @@ export function NewBatchModal({
   );
 
   // Validate quantity against available quantity
-  const validateQuantity = (quantity: number, lineItemId: string) => {
-    const selectedLineItem = lineItems.find(item => item.id === lineItemId);
-    if (!selectedLineItem) {
-      setQuantityError('Please select a line item first');
-      return false;
-    }
+  const validateQuantity = useCallback(
+    (quantity: number, lineItemId: string) => {
+      const selectedLineItem = lineItems.find(item => item.id === lineItemId);
+      if (!selectedLineItem) {
+        setQuantityError('Please select a line item first');
+        return false;
+      }
 
-    if (quantity <= 0) {
-      setQuantityError('Quantity must be greater than 0');
-      return false;
-    }
+      if (quantity <= 0) {
+        setQuantityError('Quantity must be greater than 0');
+        return false;
+      }
 
-    if (quantity > selectedLineItem.availableQuantity) {
-      setQuantityError(
-        `Only ${selectedLineItem.availableQuantity} units available (${selectedLineItem.batchedQuantity} already batched)`
-      );
-      return false;
-    }
+      if (quantity > selectedLineItem.availableQuantity) {
+        setQuantityError(
+          `Only ${selectedLineItem.availableQuantity} units available (${selectedLineItem.batchedQuantity} already batched)`
+        );
+        return false;
+      }
 
-    setQuantityError(null);
-    return true;
-  };
+      setQuantityError(null);
+      return true;
+    },
+    [lineItems]
+  );
 
   // Handle quantity change with validation
-  const handleQuantityChange = (value: number | string) => {
-    const numValue = Number(value) || 0;
-    setFormData(prev => ({ ...prev, quantity: numValue }));
-    validateQuantity(numValue, formData.lineItemId);
-  };
+  const handleQuantityChange = useCallback(
+    (value: number | string) => {
+      const numValue = Number(value) || 0;
+      setFormData(prev => ({ ...prev, quantity: numValue }));
+      validateQuantity(numValue, formData.lineItemId);
+    },
+    [validateQuantity, formData.lineItemId]
+  );
+
+  const handleLineItemChange = useCallback(
+    (value: string | null) => {
+      const v = value || '';
+      setFormData(prev => ({ ...prev, lineItemId: v }));
+      if (v) {
+        validateQuantity(formData.quantity, v);
+      }
+    },
+    [validateQuantity, formData.quantity]
+  );
+
+  const handlePrioritySelect = useCallback((value: string | null) => {
+    setFormData((prev: NewBatchInput) => ({
+      ...prev,
+      priority: value as 'RUSH' | 'STANDARD' | 'HOLD',
+    }));
+  }, []);
+
+  const handleRoutingTemplateSelect = useCallback((value: string | null) => {
+    setFormData((prev: NewBatchInput) => ({
+      ...prev,
+      routingTemplateId: value || '',
+    }));
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -374,14 +411,10 @@ export function NewBatchModal({
                     : 'Choose line item to batch'
                 }
                 data={lineItemOptions}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
                 value={formData.lineItemId}
-                onChange={value => {
-                  setFormData(prev => ({ ...prev, lineItemId: value || '' }));
-                  // Reset quantity validation when line item changes
-                  if (value) {
-                    validateQuantity(formData.quantity, value);
-                  }
-                }}
+                onChange={handleLineItemChange}
                 searchable
                 styles={{
                   input: {
@@ -480,12 +513,9 @@ export function NewBatchModal({
               <Select
                 data={priorityOptions}
                 value={formData.priority}
-                onChange={value =>
-                  setFormData((prev: NewBatchInput) => ({
-                    ...prev,
-                    priority: value as 'RUSH' | 'STANDARD' | 'HOLD',
-                  }))
-                }
+                onChange={handlePrioritySelect}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
                 styles={{
                   input: {
                     background: 'rgba(30, 41, 59, 0.6)',
@@ -515,13 +545,10 @@ export function NewBatchModal({
               <Select
                 placeholder='Choose routing template'
                 data={routingTemplateOptions}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
                 value={formData.routingTemplateId}
-                onChange={value =>
-                  setFormData((prev: NewBatchInput) => ({
-                    ...prev,
-                    routingTemplateId: value || '',
-                  }))
-                }
+                onChange={handleRoutingTemplateSelect}
                 searchable
                 styles={{
                   input: {

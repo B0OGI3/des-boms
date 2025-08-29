@@ -37,7 +37,7 @@ import {
   Switch,
   NumberInput,
 } from '@mantine/core';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, memo } from 'react';
 import {
   IconPlayerPlay,
   IconCheck,
@@ -52,6 +52,12 @@ import { WorkOrderTracking } from '../components';
 import { StandardPage } from '../components/ui';
 import { usePageInitialization } from '../../hooks';
 import theme from '../theme';
+
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
 
 interface Workstation {
   id: string;
@@ -106,6 +112,64 @@ interface RoutingStep {
     notes?: string;
   }>;
 }
+
+// Lightweight memoized card for each workstation to avoid heavy re-renders
+type WorkstationCardProps = {
+  workstation: Workstation;
+  onEdit: (w: Workstation) => void;
+};
+
+const WorkstationCard = memo(function WorkstationCard({
+  workstation,
+  onEdit,
+}: WorkstationCardProps) {
+  return (
+    <Card
+      style={{
+        background: 'rgba(51, 65, 85, 0.5)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'rgba(71, 85, 105, 0.5)',
+      }}
+    >
+      <Group justify='space-between' align='flex-start'>
+        <div style={{ flex: 1 }}>
+          <Group gap='sm' mb='xs'>
+            <Text fw={600} style={{ color: '#f1f5f9' }}>
+              {workstation.name}
+            </Text>
+            <Badge
+              color={workstation.active ? 'green' : 'red'}
+              variant='filled'
+            >
+              {workstation.active ? 'Active' : 'Inactive'}
+            </Badge>
+          </Group>
+          <Text size='sm' style={{ color: '#cbd5e1' }}>
+            {workstation.description}
+          </Text>
+          {workstation.category && (
+            <Text size='xs' style={{ color: '#94a3b8' }}>
+              Type: {workstation.category}
+            </Text>
+          )}
+          {workstation.location && (
+            <Text size='xs' style={{ color: '#94a3b8' }}>
+              Location: {workstation.location}
+            </Text>
+          )}
+        </div>
+        <ActionIcon
+          color='blue'
+          variant='light'
+          onClick={() => onEdit(workstation)}
+        >
+          <IconEdit size={16} />
+        </ActionIcon>
+      </Group>
+    </Card>
+  );
+});
 
 export default function WorkstationsPage() {
   // Page initialization
@@ -191,6 +255,8 @@ export default function WorkstationsPage() {
     []
   );
 
+  // (DEFAULT_COMBOBOX_PROPS hoisted to module scope)
+
   const handleWorkstationSelect = useCallback((value: string | null) => {
     setSelectedWorkstation(value || '');
   }, []);
@@ -236,8 +302,45 @@ export default function WorkstationsPage() {
     }
   };
 
-  // Open workstation modal for editing
-  const handleEditWorkstation = (workstation: Workstation) => {
+  // Stable handlers for modal inputs to avoid inline function identities
+  const handleWorkstationNameChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setWorkstationForm(prev => ({ ...prev, name: event.target.value })),
+    []
+  );
+
+  const handleWorkstationDescriptionChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+      setWorkstationForm(prev => ({
+        ...prev,
+        description: event.target.value,
+      })),
+    []
+  );
+
+  const handleWorkstationCategoryChange = useCallback(
+    (value: string | null) =>
+      setWorkstationForm(prev => ({ ...prev, category: value || 'MACHINING' })),
+    []
+  );
+
+  const handleWorkstationLocationChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setWorkstationForm(prev => ({ ...prev, location: event.target.value })),
+    []
+  );
+
+  const handleWorkstationActiveChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setWorkstationForm(prev => ({
+        ...prev,
+        active: event.currentTarget.checked,
+      })),
+    []
+  );
+
+  // Stabilize handlers so memoized workstation cards don't re-render unnecessarily
+  const handleEditWorkstationCb = useCallback((workstation: Workstation) => {
     setWorkstationForm({
       name: workstation.name,
       description: workstation.description || '',
@@ -246,10 +349,9 @@ export default function WorkstationsPage() {
       active: workstation.active,
     });
     setWorkstationModal({ open: true, mode: 'edit', workstation });
-  };
+  }, []);
 
-  // Open workstation modal for adding
-  const handleAddWorkstation = () => {
+  const handleAddWorkstationCb = useCallback(() => {
     setWorkstationForm({
       name: '',
       description: '',
@@ -258,7 +360,7 @@ export default function WorkstationsPage() {
       active: true,
     });
     setWorkstationModal({ open: true, mode: 'add' });
-  };
+  }, []);
 
   // Fetch routing steps for selected workstation
   useEffect(() => {
@@ -481,7 +583,7 @@ export default function WorkstationsPage() {
             </Title>
             <Button
               leftSection={<IconPlus size={16} />}
-              onClick={handleAddWorkstation}
+              onClick={handleAddWorkstationCb}
               color='green'
               variant='filled'
             >
@@ -492,50 +594,10 @@ export default function WorkstationsPage() {
           <Grid>
             {workstations.map(workstation => (
               <Grid.Col span={4} key={workstation.id}>
-                <Card
-                  style={{
-                    background: 'rgba(51, 65, 85, 0.5)',
-                    borderWidth: '1px',
-                    borderStyle: 'solid',
-                    borderColor: 'rgba(71, 85, 105, 0.5)',
-                  }}
-                >
-                  <Group justify='space-between' align='flex-start'>
-                    <div style={{ flex: 1 }}>
-                      <Group gap='sm' mb='xs'>
-                        <Text fw={600} style={{ color: '#f1f5f9' }}>
-                          {workstation.name}
-                        </Text>
-                        <Badge
-                          color={workstation.active ? 'green' : 'red'}
-                          variant='filled'
-                        >
-                          {workstation.active ? 'Active' : 'Inactive'}
-                        </Badge>
-                      </Group>
-                      <Text size='sm' style={{ color: '#cbd5e1' }}>
-                        {workstation.description}
-                      </Text>
-                      {workstation.category && (
-                        <Text size='xs' style={{ color: '#94a3b8' }}>
-                          Type: {workstation.category}
-                        </Text>
-                      )}
-                      {workstation.location && (
-                        <Text size='xs' style={{ color: '#94a3b8' }}>
-                          Location: {workstation.location}
-                        </Text>
-                      )}
-                    </div>
-                    <ActionIcon
-                      color='blue'
-                      variant='light'
-                      onClick={() => handleEditWorkstation(workstation)}
-                    >
-                      <IconEdit size={16} />
-                    </ActionIcon>
-                  </Group>
-                </Card>
+                <WorkstationCard
+                  workstation={workstation}
+                  onEdit={handleEditWorkstationCb}
+                />
               </Grid.Col>
             ))}
           </Grid>
@@ -564,10 +626,17 @@ export default function WorkstationsPage() {
             <Grid.Col span={8}>
               <Select
                 label='Select Workstation to Manage'
-                placeholder='Choose a workstation'
+                placeholder={
+                  workstationOptions.length === 0
+                    ? 'No workstations available'
+                    : 'Choose a workstation'
+                }
                 value={selectedWorkstation}
                 onChange={handleWorkstationSelect}
                 data={workstationOptions}
+                searchable
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
                 size='lg'
                 styles={{
                   label: {
@@ -923,12 +992,7 @@ export default function WorkstationsPage() {
               label='Workstation Name'
               placeholder='e.g., LATHE-1, MILL-2'
               value={workstationForm.name}
-              onChange={event =>
-                setWorkstationForm(prev => ({
-                  ...prev,
-                  name: event.target.value,
-                }))
-              }
+              onChange={handleWorkstationNameChange}
               required
               styles={{
                 label: { color: '#f1f5f9' },
@@ -944,12 +1008,7 @@ export default function WorkstationsPage() {
               label='Description'
               placeholder='Describe the workstation capabilities...'
               value={workstationForm.description}
-              onChange={event =>
-                setWorkstationForm(prev => ({
-                  ...prev,
-                  description: event.target.value,
-                }))
-              }
+              onChange={handleWorkstationDescriptionChange}
               styles={{
                 label: { color: '#f1f5f9' },
                 input: {
@@ -963,12 +1022,7 @@ export default function WorkstationsPage() {
             <Select
               label='Category'
               value={workstationForm.category}
-              onChange={value =>
-                setWorkstationForm(prev => ({
-                  ...prev,
-                  category: value || 'MACHINING',
-                }))
-              }
+              onChange={handleWorkstationCategoryChange}
               data={workstationCategoryOptions}
               styles={{
                 label: { color: '#f1f5f9' },
@@ -984,12 +1038,7 @@ export default function WorkstationsPage() {
               label='Location (Optional)'
               placeholder='e.g., Building A, Bay 3'
               value={workstationForm.location}
-              onChange={event =>
-                setWorkstationForm(prev => ({
-                  ...prev,
-                  location: event.target.value,
-                }))
-              }
+              onChange={handleWorkstationLocationChange}
               styles={{
                 label: { color: '#f1f5f9' },
                 input: {
@@ -1003,12 +1052,7 @@ export default function WorkstationsPage() {
             <Switch
               label='Active'
               checked={workstationForm.active}
-              onChange={event =>
-                setWorkstationForm(prev => ({
-                  ...prev,
-                  active: event.currentTarget.checked,
-                }))
-              }
+              onChange={handleWorkstationActiveChange}
               styles={{
                 label: { color: '#f1f5f9' },
               }}

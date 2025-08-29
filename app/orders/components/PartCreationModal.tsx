@@ -5,7 +5,7 @@
  * Integrated with the DES-BOMS part management system
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Modal,
   Stack,
@@ -98,7 +98,7 @@ const partTypeOptions = [
   },
 ];
 
-// Common unit of measure options
+// Common unit of measure options (module-scoped to keep stable identity)
 const unitOptions = [
   { value: 'EA', label: 'Each' },
   { value: 'LB', label: 'Pounds' },
@@ -112,6 +112,12 @@ const unitOptions = [
   { value: 'SET', label: 'Set' },
   { value: 'LOT', label: 'Lot' },
 ];
+
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
 
 export const PartCreationModal: React.FC<PartCreationModalProps> = ({
   opened,
@@ -187,6 +193,21 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
       loadAvailableParts();
     }
   }, [opened, initialPartNumber]);
+
+  // Memoized select option arrays
+  const partTypeSelectOptions = useMemo(
+    () => partTypeOptions.map(opt => ({ value: opt.value, label: opt.label })),
+    []
+  );
+
+  const availablePartsSelectOptions = useMemo(
+    () =>
+      availableParts.map(part => ({
+        value: part.id,
+        label: `${part.partNumber} - ${part.partName}`,
+      })),
+    [availableParts]
+  );
 
   // Generate part number when part type changes
   useEffect(() => {
@@ -799,14 +820,13 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
                   label='Part Type'
                   placeholder='Select part type'
                   required
-                  data={partTypeOptions.map(opt => ({
-                    value: opt.value,
-                    label: opt.label,
-                  }))}
+                  data={partTypeSelectOptions}
                   value={formData.partType}
                   onChange={value => updateFormData('partType', value)}
                   error={errors.partType}
                   description={selectedPartType?.description}
+                  comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                  maxDropdownHeight={260}
                 />
 
                 {partTypeWarning && (
@@ -943,6 +963,8 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
                     onChange={value => updateFormData('unitOfMeasure', value)}
                     error={errors.unitOfMeasure}
                     searchable
+                    comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                    maxDropdownHeight={200}
                   />
                   <NumberInput
                     label='Standard Cost'
@@ -1055,10 +1077,9 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
                                     <div style={{ flex: 1 }}>
                                       <Select
                                         placeholder='Select component part'
-                                        data={availableParts.map(part => ({
-                                          value: part.id,
-                                          label: `${part.partNumber} - ${part.partName}`,
-                                        }))}
+                                        data={availablePartsSelectOptions}
+                                        comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                                        maxDropdownHeight={300}
                                         value={component.childPartId}
                                         onChange={value =>
                                           updateBOMComponent(
@@ -1095,6 +1116,8 @@ export const PartCreationModal: React.FC<PartCreationModalProps> = ({
                                     <Select
                                       placeholder='Unit'
                                       data={unitOptions}
+                                      comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                                      maxDropdownHeight={200}
                                       value={component.unitOfMeasure}
                                       onChange={value =>
                                         updateBOMComponent(

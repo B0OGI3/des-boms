@@ -74,6 +74,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onClearFilters,
   hasActiveFilters = false,
 }) => {
+  // Default combobox props to stabilize portal/Popper behaviour (module-scoped)
+  const DEFAULT_COMBOBOX_PROPS = {
+    withinPortal: true,
+    middlewares: { flip: false, shift: false },
+  } as const;
   const inputStyles = {
     input: {
       background: 'rgba(30, 41, 59, 0.7)',
@@ -202,13 +207,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               data={statusOptions}
               withCheckIcon={false}
               rightSection={<div style={{ display: 'none' }} />}
-              comboboxProps={{
-                withinPortal: true,
-                middlewares: {
-                  flip: false,
-                  shift: false,
-                },
-              }}
+              comboboxProps={DEFAULT_COMBOBOX_PROPS}
               styles={selectStyles}
             />
           </div>
@@ -229,13 +228,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               data={priorityOptions}
               withCheckIcon={false}
               rightSection={<div style={{ display: 'none' }} />}
-              comboboxProps={{
-                withinPortal: true,
-                middlewares: {
-                  flip: false,
-                  shift: false,
-                },
-              }}
+              comboboxProps={DEFAULT_COMBOBOX_PROPS}
               styles={selectStyles}
             />
           </div>

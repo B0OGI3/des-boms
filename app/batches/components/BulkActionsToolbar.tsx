@@ -29,6 +29,12 @@ interface BulkActionsToolbarProps {
   isProcessing: boolean;
 }
 
+// Default combobox props to stabilize portal/Popper behaviour across Selects
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
 export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
   selectedCount,
   bulkActions,
@@ -69,11 +75,7 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
     setSelectedStatus(value || '');
   }, []);
 
-  if (selectedCount === 0) {
-    return null;
-  }
-
-  const handlePriorityUpdate = async () => {
+  const handlePriorityUpdate = useCallback(async () => {
     if (!selectedPriority) return;
 
     try {
@@ -88,9 +90,9 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
         error instanceof Error ? error.message : 'Failed to update priority'
       );
     }
-  };
+  }, [selectedPriority, bulkActions]);
 
-  const handleStatusUpdate = async () => {
+  const handleStatusUpdate = useCallback(async () => {
     if (!selectedStatus) return;
 
     try {
@@ -103,9 +105,9 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
         error instanceof Error ? error.message : 'Failed to update status'
       );
     }
-  };
+  }, [selectedStatus, bulkActions]);
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     try {
       setError(null);
       await bulkActions.deleteBatches();
@@ -115,11 +117,15 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
         error instanceof Error ? error.message : 'Failed to delete batches'
       );
     }
-  };
+  }, [bulkActions]);
 
-  const handleExport = () => {
+  const handleExport = useCallback(() => {
     bulkActions.exportBatches();
-  };
+  }, [bulkActions]);
+
+  if (selectedCount === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -268,6 +274,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
             value={selectedPriority}
             onChange={handlePriorityChange}
             data={priorityOptions}
+            comboboxProps={DEFAULT_COMBOBOX_PROPS}
+            maxDropdownHeight={300}
           />
 
           <Group justify='flex-end' gap='sm'>
@@ -307,6 +315,8 @@ export const BulkActionsToolbar: React.FC<BulkActionsToolbarProps> = ({
             value={selectedStatus}
             onChange={handleStatusChange}
             data={statusOptions}
+            comboboxProps={DEFAULT_COMBOBOX_PROPS}
+            maxDropdownHeight={300}
           />
 
           <Group justify='flex-end' gap='sm'>

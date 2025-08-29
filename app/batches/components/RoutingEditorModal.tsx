@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   Stack,
@@ -16,6 +16,13 @@ import {
 } from '@mantine/core';
 import { IconTrash, IconPlus, IconGripVertical } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
+
+// Module-level default combobox props so both component and module-scoped
+// subcomponents can reference the same stable object.
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
 
 interface RoutingStep {
   id?: string;
@@ -65,14 +72,7 @@ export function RoutingEditorModal({
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (opened) {
-      fetchTemplatesAndWorkstations();
-      setSteps(currentSteps);
-    }
-  }, [opened, currentSteps]);
-
-  const fetchTemplatesAndWorkstations = async () => {
+  const fetchTemplatesAndWorkstations = useCallback(async () => {
     try {
       const [templatesRes, workstationsRes] = await Promise.all([
         fetch('/api/routing-templates'),
@@ -104,49 +104,86 @@ export function RoutingEditorModal({
         color: 'red',
       });
     }
-  };
+  }, []);
 
-  const applyTemplate = (templateId: string) => {
-    const template = templates.find(t => t.id === templateId);
-    if (template) {
-      const newSteps = template.steps.map(step => ({
-        stepNumber: step.stepNumber,
-        workstationId: step.workstationId,
-        estimatedMinutes: step.estimatedMinutes,
-        description: step.description,
-      }));
-      setSteps(newSteps);
-      setSelectedTemplate(templateId);
+  useEffect(() => {
+    if (opened) {
+      fetchTemplatesAndWorkstations();
+      setSteps(currentSteps);
     }
-  };
+  }, [opened, currentSteps, fetchTemplatesAndWorkstations]);
 
-  const addStep = () => {
-    const newStep: RoutingStep = {
-      stepNumber: steps.length + 1,
-      workstationId: workstations[0]?.id || '',
-      estimatedMinutes: 60,
-      description: 'New routing step',
-    };
-    setSteps([...steps, newStep]);
-  };
+  const applyTemplate = useCallback(
+    (templateId: string) => {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        const newSteps = template.steps.map(step => ({
+          stepNumber: step.stepNumber,
+          workstationId: step.workstationId,
+          estimatedMinutes: step.estimatedMinutes,
+          description: step.description,
+        }));
+        setSteps(newSteps);
+        setSelectedTemplate(templateId);
+      }
+    },
+    [templates]
+  );
 
-  const updateStep = (index: number, field: keyof RoutingStep, value: any) => {
-    const updatedSteps = [...steps];
-    updatedSteps[index] = { ...updatedSteps[index], [field]: value };
-    setSteps(updatedSteps);
-  };
+  // Memoized select options to avoid recreating arrays on each render
+  const templateOptions = React.useMemo(
+    () =>
+      Array.isArray(templates)
+        ? templates.map(t => ({ value: t.id, label: t.name }))
+        : [],
+    [templates]
+  );
 
-  const removeStep = (index: number) => {
-    const updatedSteps = steps.filter((_, i) => i !== index);
-    // Renumber steps
-    const renumberedSteps = updatedSteps.map((step, i) => ({
-      ...step,
-      stepNumber: i + 1,
-    }));
-    setSteps(renumberedSteps);
-  };
+  const workstationOptions = React.useMemo(
+    () =>
+      Array.isArray(workstations)
+        ? workstations.map(w => ({
+            value: w.id,
+            label: `${w.name} (${w.type})`,
+          }))
+        : [],
+    [workstations]
+  );
 
-  const handleSave = async () => {
+  // StepEditor moved to module scope below
+
+  const addStep = useCallback(() => {
+    setSteps(prev => {
+      const newStep: RoutingStep = {
+        stepNumber: prev.length + 1,
+        workstationId: workstations[0]?.id || '',
+        estimatedMinutes: 60,
+        description: 'New routing step',
+      };
+      return [...prev, newStep];
+    });
+  }, [workstations]);
+
+  const updateStep = useCallback(
+    (index: number, field: keyof RoutingStep, value: any) => {
+      setSteps(prev => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], [field]: value };
+        return updated;
+      });
+    },
+    []
+  );
+
+  const removeStep = useCallback((index: number) => {
+    setSteps(prev => {
+      const updatedSteps = prev.filter((_, i) => i !== index);
+      // Renumber steps
+      return updatedSteps.map((step, i) => ({ ...step, stepNumber: i + 1 }));
+    });
+  }, []);
+
+  const handleSave = useCallback(async () => {
     setLoading(true);
     try {
       // Check if this is a temporary batch (used in Smart Batch Generation)
@@ -192,7 +229,7 @@ export function RoutingEditorModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [batchId, onSave, onClose, steps]);
 
   return (
     <Modal
@@ -213,14 +250,12 @@ export function RoutingEditorModal({
           <Group gap='xs'>
             <Select
               placeholder='Choose a template...'
-              data={
-                Array.isArray(templates)
-                  ? templates.map(t => ({ value: t.id, label: t.name }))
-                  : []
-              }
+              data={templateOptions}
               value={selectedTemplate}
               onChange={value => value && applyTemplate(value)}
               style={{ flex: 1 }}
+              comboboxProps={DEFAULT_COMBOBOX_PROPS}
+              maxDropdownHeight={300}
             />
             <Button
               variant='light'
@@ -255,79 +290,14 @@ export function RoutingEditorModal({
 
           <Stack gap='xs'>
             {steps.map((step, index) => (
-              <Box
+              <StepEditor
                 key={`step-${step.stepNumber}-${index}`}
-                p='md'
-                style={{ border: '1px solid #e9ecef', borderRadius: '8px' }}
-              >
-                <Group gap='sm' align='flex-start'>
-                  <IconGripVertical
-                    size={16}
-                    style={{ color: '#adb5bd', marginTop: '8px' }}
-                  />
-
-                  <Stack gap='xs' style={{ flex: 1 }}>
-                    <Group gap='sm'>
-                      <Badge variant='light' size='sm'>
-                        Step {step.stepNumber}
-                      </Badge>
-                      <Select
-                        placeholder='Select workstation'
-                        data={
-                          Array.isArray(workstations)
-                            ? workstations.map(w => ({
-                                value: w.id,
-                                label: `${w.name} (${w.type})`,
-                              }))
-                            : []
-                        }
-                        value={step.workstationId}
-                        onChange={value =>
-                          value && updateStep(index, 'workstationId', value)
-                        }
-                        style={{ flex: 1 }}
-                      />
-                      <NumberInput
-                        placeholder='Minutes'
-                        value={step.estimatedMinutes}
-                        onChange={value =>
-                          updateStep(index, 'estimatedMinutes', value)
-                        }
-                        min={1}
-                        style={{ width: '100px' }}
-                      />
-                      <ActionIcon
-                        color='red'
-                        variant='light'
-                        onClick={() => removeStep(index)}
-                      >
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                    </Group>
-
-                    <Text
-                      size='sm'
-                      style={{
-                        border: '1px solid #e9ecef',
-                        borderRadius: '4px',
-                        padding: '6px 8px',
-                        backgroundColor: '#f8f9fa',
-                      }}
-                      contentEditable
-                      suppressContentEditableWarning
-                      onBlur={e =>
-                        updateStep(
-                          index,
-                          'description',
-                          e.currentTarget.textContent || ''
-                        )
-                      }
-                    >
-                      {step.description}
-                    </Text>
-                  </Stack>
-                </Group>
-              </Box>
+                step={step}
+                index={index}
+                workstationOptions={workstationOptions}
+                updateStep={updateStep}
+                removeStep={removeStep}
+              />
             ))}
 
             {steps.length === 0 && (
@@ -356,3 +326,98 @@ export function RoutingEditorModal({
     </Modal>
   );
 }
+
+// Module-scoped StepEditor component to keep stable identity and avoid inline objects
+const StepEditor: React.FC<{
+  step: RoutingStep;
+  index: number;
+  workstationOptions: { value: string; label: string }[];
+  updateStep: (index: number, field: keyof RoutingStep, value: any) => void;
+  removeStep: (index: number) => void;
+}> = React.memo(
+  ({ step, index, workstationOptions, updateStep, removeStep }) => {
+    const handleWorkstationChange = React.useCallback(
+      (value: string | null) => {
+        if (!value) return;
+        updateStep(index, 'workstationId', value);
+      },
+      [index, updateStep]
+    );
+
+    const handleMinutesChange = React.useCallback(
+      (value: string | number) => {
+        const n = Number(value) || 0;
+        updateStep(index, 'estimatedMinutes', n);
+      },
+      [index, updateStep]
+    );
+
+    const handleDescriptionBlur = React.useCallback(
+      (content: string) => {
+        updateStep(index, 'description', content);
+      },
+      [index, updateStep]
+    );
+
+    return (
+      <Box p='md' style={{ border: '1px solid #e9ecef', borderRadius: '8px' }}>
+        <Group gap='sm' align='flex-start'>
+          <IconGripVertical
+            size={16}
+            style={{ color: '#adb5bd', marginTop: '8px' }}
+          />
+
+          <Stack gap='xs' style={{ flex: 1 }}>
+            <Group gap='sm'>
+              <Badge variant='light' size='sm'>
+                Step {step.stepNumber}
+              </Badge>
+              <Select
+                placeholder='Select workstation'
+                data={workstationOptions}
+                value={step.workstationId}
+                onChange={handleWorkstationChange}
+                style={{ flex: 1 }}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={260}
+              />
+              <NumberInput
+                placeholder='Minutes'
+                value={step.estimatedMinutes}
+                onChange={handleMinutesChange}
+                min={1}
+                style={{ width: '100px' }}
+              />
+              <ActionIcon
+                color='red'
+                variant='light'
+                onClick={() => removeStep(index)}
+              >
+                <IconTrash size={14} />
+              </ActionIcon>
+            </Group>
+
+            <Text
+              size='sm'
+              style={{
+                border: '1px solid #e9ecef',
+                borderRadius: '4px',
+                padding: '6px 8px',
+                backgroundColor: '#f8f9fa',
+              }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={e =>
+                handleDescriptionBlur(e.currentTarget.textContent || '')
+              }
+            >
+              {step.description}
+            </Text>
+          </Stack>
+        </Group>
+      </Box>
+    );
+  }
+);
+
+StepEditor.displayName = 'StepEditor';

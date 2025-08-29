@@ -1,11 +1,6 @@
 'use client';
 
-/**
- * NewOrderModal component for creating new customer orders
- * Includes embedded customer creation functionality
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Modal,
   Stack,
@@ -26,8 +21,6 @@ import {
 import {
   IconPlus,
   IconTrash,
-  IconUser,
-  IconChevronDown,
   IconCheck,
   IconAlertCircle,
 } from '@tabler/icons-react';
@@ -35,222 +28,88 @@ import type { Customer } from '../../../types/shared';
 import { QuickBooksStatus } from '../../components/ui/QuickBooksStatus';
 import { PartSelector } from './PartSelector';
 
-// Types
-type ExtendedPartType =
-  | 'FINISHED'
-  | 'RAW_MATERIAL'
-  | 'COMPONENT'
-  | 'SUBASSEMBLY'
-  | 'CONSUMABLE';
-
-// Form interfaces
-interface LineItemForm {
-  partId?: string; // When selecting existing part
+type LineItemForm = {
+  partId?: string;
   partNumber: string;
   partName: string;
-  partType?: ExtendedPartType; // Part type for new parts
-  drawingNumber: string;
-  revisionLevel: string;
-  description?: string; // Detailed description
-  materialSpec?: string; // Material specification
-  unitOfMeasure?: string; // Unit of measure
   quantity: number;
   unitPrice: number;
-  dueDate: string;
-  notes: string;
-  isNewPart?: boolean; // Flag to track if this is a new part being created
-  editMode?: boolean; // Flag to enable editing of selected part details
-}
+  dueDate?: string;
+  notes?: string;
+};
 
-interface CustomerForm {
-  name: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  billingAddress: string;
-  shippingAddress: string;
-}
-
-interface OrderForm {
+type OrderForm = {
   customerId: string;
   poNumber: string;
   dueDate: string;
   priority: 'HOLD' | 'STANDARD' | 'RUSH';
-  notes: string;
+  notes?: string;
   lineItems: LineItemForm[];
-}
+};
 
 export interface NewOrderModalProps {
   opened: boolean;
   onClose: () => void;
   onOrderCreated?: () => void;
-  isPageReady?: boolean; // New prop to indicate page readiness
-  onAdvancedPartCreation?: () => void; // Handler for opening advanced part creation modal
+  isPageReady?: boolean;
+  onAdvancedPartCreation?: () => void;
 }
 
-// Priority options (aligned with DES-BOMS spec: Rush / Standard / Hold)
 const priorityOptions = [
   { value: 'HOLD', label: 'Hold Priority' },
   { value: 'STANDARD', label: 'Standard Priority' },
   { value: 'RUSH', label: 'Rush Priority' },
 ];
 
-// Embedded customer creation component
-interface NewCustomerFormProps {
-  onCustomerCreated: (customer: Customer) => void;
+// Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
+const NewCustomerForm: React.FC<{
+  onCustomerCreated: (c: Customer) => void;
   onCancel: () => void;
-}
-
-const NewCustomerForm: React.FC<NewCustomerFormProps> = ({
-  onCustomerCreated,
-  onCancel,
-}) => {
+}> = ({ onCustomerCreated, onCancel }) => {
   const [loading, setLoading] = useState(false);
-  const [customerData, setCustomerData] = useState<CustomerForm>({
-    name: '',
-    contactName: '',
-    email: '',
-    phone: '',
-    billingAddress: '',
-    shippingAddress: '',
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [name, setName] = useState('');
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!customerData.name) {
-      newErrors.name = 'Customer name is required';
-    }
-
-    if (!customerData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerData.email)) {
-      newErrors.email = 'Invalid email format';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleCreateCustomer = async () => {
-    if (!validateForm()) return;
-
+  const handleCreate = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/customers', {
+      const res = await fetch('/api/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: customerData.name,
-          contact: customerData.contactName,
-          email: customerData.email,
-          phone: customerData.phone,
-          billingAddress: customerData.billingAddress,
-          shippingAddress: customerData.shippingAddress,
-        }),
+        body: JSON.stringify({ name }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create customer');
-      }
-
-      const newCustomer = await response.json();
-      alert('Customer created successfully!');
-      onCustomerCreated(newCustomer);
-    } catch (error) {
-      alert(
-        error instanceof Error ? error.message : 'Failed to create customer'
-      );
+      if (!res.ok) throw new Error('Failed to create');
+      const created = await res.json();
+      onCustomerCreated(created);
+    } catch (e) {
+      // log and surface a simple alert
+      // eslint-disable-next-line no-console
+      console.error(e);
+      // eslint-disable-next-line no-alert
+      alert('Failed to create customer');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card withBorder style={{ background: 'rgba(239, 246, 255, 0.5)' }}>
-      <Stack gap='md'>
-        <Group gap='xs'>
-          <IconUser size={20} style={{ color: '#3b82f6' }} />
-          <Text fw={600} size='sm' style={{ color: '#1e40af' }}>
-            Create New Customer
-          </Text>
-        </Group>
-
-        <Group grow>
-          <TextInput
-            label='Customer Name'
-            placeholder='Company or individual name'
-            required
-            value={customerData.name}
-            onChange={e =>
-              setCustomerData({ ...customerData, name: e.target.value })
-            }
-            error={errors.name}
-          />
-          <TextInput
-            label='Contact Person'
-            placeholder='Primary contact name'
-            value={customerData.contactName}
-            onChange={e =>
-              setCustomerData({ ...customerData, contactName: e.target.value })
-            }
-          />
-        </Group>
-
-        <Group grow>
-          <TextInput
-            label='Email'
-            placeholder='contact@company.com'
-            required
-            value={customerData.email}
-            onChange={e =>
-              setCustomerData({ ...customerData, email: e.target.value })
-            }
-            error={errors.email}
-          />
-          <TextInput
-            label='Phone'
-            placeholder='(555) 123-4567'
-            value={customerData.phone}
-            onChange={e =>
-              setCustomerData({ ...customerData, phone: e.target.value })
-            }
-          />
-        </Group>
-
+    <Card withBorder>
+      <Stack>
         <TextInput
-          label='Billing Address'
-          placeholder='Street address, City, State, ZIP'
-          value={customerData.billingAddress}
-          onChange={e =>
-            setCustomerData({ ...customerData, billingAddress: e.target.value })
-          }
+          label='Customer Name'
+          value={name}
+          onChange={e => setName(e.target.value)}
         />
-
-        <TextInput
-          label='Shipping Address'
-          placeholder='If different from billing address'
-          value={customerData.shippingAddress}
-          onChange={e =>
-            setCustomerData({
-              ...customerData,
-              shippingAddress: e.target.value,
-            })
-          }
-        />
-
-        <Group justify='flex-end' gap='sm'>
+        <Group justify='flex-end'>
           <Button variant='subtle' onClick={onCancel}>
             Cancel
           </Button>
-          <Button
-            onClick={handleCreateCustomer}
-            loading={loading}
-            leftSection={<IconCheck size={16} />}
-          >
-            Create Customer
+          <Button onClick={handleCreate} loading={loading}>
+            Create
           </Button>
         </Group>
       </Stack>
@@ -258,17 +117,106 @@ const NewCustomerForm: React.FC<NewCustomerFormProps> = ({
   );
 };
 
-// Main NewOrderModal component
+const LineItemCard: React.FC<{
+  index: number;
+  item: LineItemForm;
+  onRemove: (i: number) => void;
+  onUpdate: (i: number, field: keyof LineItemForm, value: any) => void;
+  onPartSelect: (i: number, part: any) => void;
+  errors?: Record<string, string>;
+  isPageReady?: boolean;
+  onAdvancedPartCreation?: () => void;
+}> = ({
+  index,
+  item,
+  onRemove,
+  onUpdate,
+  onPartSelect,
+  errors,
+  isPageReady,
+  onAdvancedPartCreation,
+}) => {
+  return (
+    <Card key={`lineitem-${index}-${item.partNumber || 'new'}`} withBorder>
+      <Stack gap='md'>
+        <Group justify='space-between' align='center'>
+          <Badge variant='outline' size='sm'>
+            Item {index + 1}
+          </Badge>
+          <ActionIcon
+            color='red'
+            variant='subtle'
+            onClick={() => onRemove(index)}
+          >
+            <IconTrash size={16} />
+          </ActionIcon>
+        </Group>
+
+        <PartSelector
+          value={
+            item.partId
+              ? {
+                  id: item.partId,
+                  partNumber: item.partNumber,
+                  partName: item.partName,
+                  partType: 'FINISHED',
+                }
+              : null
+          }
+          onChange={p => onPartSelect(index, p)}
+          placeholder='Select existing part or create new one'
+          error={errors ? errors[`lineItems.${index}.partNumber`] : undefined}
+          required
+          isPageReady={isPageReady}
+          onAdvancedPartCreation={onAdvancedPartCreation}
+        />
+
+        <Group grow>
+          <NumberInput
+            label='Quantity'
+            min={1}
+            value={item.quantity}
+            onChange={v => onUpdate(index, 'quantity', Number(v) || 1)}
+          />
+          <NumberInput
+            label='Unit Price ($)'
+            min={0}
+            decimalScale={2}
+            fixedDecimalScale
+            value={item.unitPrice}
+            onChange={v => onUpdate(index, 'unitPrice', Number(v) || 0)}
+          />
+        </Group>
+
+        <Group grow align='flex-start'>
+          <TextInput
+            label='Item Due Date'
+            type='date'
+            value={item.dueDate || ''}
+            onChange={e => onUpdate(index, 'dueDate', e.target.value)}
+          />
+          <Textarea
+            label='Item Notes'
+            value={item.notes || ''}
+            onChange={e => onUpdate(index, 'notes', e.target.value)}
+          />
+        </Group>
+      </Stack>
+    </Card>
+  );
+};
+
 export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   opened,
   onClose,
   onOrderCreated,
-  isPageReady = true, // Default to true for backward compatibility
+  isPageReady = true,
   onAdvancedPartCreation,
 }) => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [showNewCustomer, setShowNewCustomer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [orderData, setOrderData] = useState<OrderForm>({
     customerId: '',
@@ -277,441 +225,205 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     priority: 'STANDARD',
     notes: '',
     lineItems: [
-      {
-        partId: '',
-        partNumber: '',
-        partName: '',
-        partType: 'FINISHED' as ExtendedPartType,
-        drawingNumber: '',
-        revisionLevel: '',
-        description: '',
-        materialSpec: '',
-        unitOfMeasure: 'EA',
-        quantity: 1,
-        unitPrice: 0,
-        dueDate: '',
-        notes: '',
-        isNewPart: false,
-        editMode: false,
-      },
+      { partId: '', partNumber: '', partName: '', quantity: 1, unitPrice: 0 },
     ],
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Fetch customers on modal open
   useEffect(() => {
-    if (opened) {
-      fetchCustomers();
-      generatePONumber();
-    }
+    if (!opened) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/customers');
+        if (res.ok) setCustomers(await res.json());
+      } catch (e) {
+        // log and continue
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    })();
   }, [opened]);
 
-  const generatePONumber = async () => {
-    try {
-      const response = await fetch('/api/orders/generate-po');
-      if (response.ok) {
-        const data = await response.json();
-        setOrderData(prev => ({ ...prev, poNumber: data.poNumber }));
-      }
-    } catch (error) {
-      console.error('Error generating PO number:', error);
-    }
-  };
+  const customerOptions = useMemo(
+    () =>
+      customers.map(c => ({
+        value: c.id,
+        label: c.email ? `${c.name} (${c.email})` : c.name,
+      })),
+    [customers]
+  );
 
-  const fetchCustomers = async () => {
-    try {
-      // First, try to sync QuickBooks customers if connected
-      try {
-        const qbStatusResponse = await fetch('/api/quickbooks/status');
-        if (qbStatusResponse.ok) {
-          const qbStatus = await qbStatusResponse.json();
-          if (qbStatus.hasValidTokens) {
-            // Try to sync QuickBooks customers
-            const syncResponse = await fetch('/api/quickbooks/sync-customers', {
-              method: 'POST',
-            });
-            if (syncResponse.ok) {
-              console.log('QuickBooks customers synced successfully');
-            } else {
-              console.warn(
-                'QuickBooks customer sync failed, using local customers only'
-              );
-            }
-          }
-        }
-      } catch (qbError) {
-        console.warn('QuickBooks sync check failed:', qbError);
-        // Continue with local customers even if QB sync fails
-      }
+  const memoPriorityOptions = useMemo(() => priorityOptions, []);
 
-      // Fetch all customers (local + synced QB customers)
-      const response = await fetch('/api/customers');
-      if (response.ok) {
-        const customersData = await response.json();
-        setCustomers(customersData);
-      }
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
-
-  const handleCustomerCreated = (newCustomer: Customer) => {
-    setCustomers(prev => [...prev, newCustomer]);
-    setOrderData({ ...orderData, customerId: newCustomer.id });
-    setShowNewCustomer(false);
-  };
-
-  const addLineItem = () => {
-    setOrderData({
-      ...orderData,
+  const addLineItem = useCallback(() => {
+    setOrderData(prev => ({
+      ...prev,
       lineItems: [
-        ...orderData.lineItems,
-        {
-          partId: '',
-          partNumber: '',
-          partName: '',
-          drawingNumber: '',
-          revisionLevel: '',
-          quantity: 1,
-          unitPrice: 0,
-          dueDate: '',
-          notes: '',
-          editMode: false,
-        },
+        ...prev.lineItems,
+        { partId: '', partNumber: '', partName: '', quantity: 1, unitPrice: 0 },
       ],
+    }));
+  }, []);
+
+  const removeLineItem = useCallback((i: number) => {
+    setOrderData(prev => ({
+      ...prev,
+      lineItems: prev.lineItems.filter((_, idx) => idx !== i),
+    }));
+  }, []);
+
+  const updateLineItem = useCallback(
+    (i: number, field: keyof LineItemForm, v: any) => {
+      setOrderData(prev => {
+        const items = [...prev.lineItems];
+        items[i] = { ...items[i], [field]: v } as LineItemForm;
+        return { ...prev, lineItems: items };
+      });
+    },
+    []
+  );
+
+  const handlePartSelect = useCallback(
+    (i: number, part: any) => {
+      updateLineItem(i, 'partId', part ? part.id : '');
+      updateLineItem(i, 'partNumber', part ? part.partNumber : '');
+      updateLineItem(i, 'partName', part ? part.partName : '');
+    },
+    [updateLineItem]
+  );
+
+  const validate = useCallback(() => {
+    const errs: Record<string, string> = {};
+    if (!orderData.customerId) errs.customerId = 'Customer required';
+    if (!orderData.poNumber) errs.poNumber = 'PO required';
+    if (!orderData.dueDate) errs.dueDate = 'Due date required';
+    orderData.lineItems.forEach((li, idx) => {
+      if (!li.partNumber) errs[`lineItems.${idx}.partNumber`] = 'Part required';
+      if (!li.quantity || li.quantity <= 0)
+        errs[`lineItems.${idx}.quantity`] = 'Quantity must be > 0';
     });
-  };
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  }, [orderData]);
 
-  const removeLineItem = (index: number) => {
-    const newLineItems = orderData.lineItems.filter((_, i) => i !== index);
-    setOrderData({ ...orderData, lineItems: newLineItems });
-  };
-
-  const updateLineItem = (
-    index: number,
-    field: keyof LineItemForm,
-    value: string | number | boolean
-  ) => {
-    const newLineItems = [...orderData.lineItems];
-    newLineItems[index] = { ...newLineItems[index], [field]: value };
-    setOrderData({ ...orderData, lineItems: newLineItems });
-  };
-
-  const handlePartSelect = (index: number, part: any) => {
-    const newLineItems = [...orderData.lineItems];
-    if (part) {
-      newLineItems[index] = {
-        ...newLineItems[index],
-        partId: part.id,
-        partNumber: part.partNumber,
-        partName: part.partName,
-        drawingNumber: part.drawingNumber || '',
-        revisionLevel: part.revisionLevel || '',
-        description: part.description || '',
-        materialSpec: part.materialSpec || '',
-        unitOfMeasure: part.unitOfMeasure || 'EA',
-        unitPrice: part.standardCost || newLineItems[index].unitPrice,
-        // Convert the part type to our extended type
-        partType:
-          part.partType === 'SEMI_FINISHED'
-            ? 'COMPONENT'
-            : (part.partType as ExtendedPartType) || 'FINISHED',
-        editMode: false, // Disable edit mode when part is selected
-      };
-    } else {
-      // Clear part data when no part selected
-      newLineItems[index] = {
-        ...newLineItems[index],
-        partId: '',
-        partNumber: '',
-        partName: '',
-        drawingNumber: '',
-        revisionLevel: '',
-        description: '',
-        materialSpec: '',
-        unitOfMeasure: 'EA',
-        partType: 'FINISHED' as ExtendedPartType,
-        editMode: false, // Reset edit mode when part is cleared
-      };
-    }
-    setOrderData({ ...orderData, lineItems: newLineItems });
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!orderData.customerId) {
-      newErrors.customerId = 'Please select a customer';
-    }
-    if (!orderData.poNumber) {
-      newErrors.poNumber = 'PO Number is required (should be auto-generated)';
-    }
-    if (!orderData.dueDate) {
-      newErrors.dueDate = 'Due date is required - please select a date';
-    }
-
-    orderData.lineItems.forEach((item, index) => {
-      if (!item.partNumber) {
-        newErrors[`lineItems.${index}.partNumber`] =
-          `Line item ${index + 1}: Part selection or part number is required`;
-      }
-      if (!item.partId && !item.partName) {
-        newErrors[`lineItems.${index}.partName`] =
-          `Line item ${index + 1}: Part name is required when creating new part`;
-      }
-      if (!item.quantity || item.quantity <= 0) {
-        newErrors[`lineItems.${index}.quantity`] =
-          `Line item ${index + 1}: Quantity must be greater than 0`;
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-
+  const handleSubmit = useCallback(async () => {
+    if (!validate()) return;
     setSubmitting(true);
     try {
-      const response = await fetch('/api/orders', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerId: orderData.customerId,
-          poNumber: orderData.poNumber,
-          dueDate: orderData.dueDate,
-          priority: orderData.priority,
-          notes: orderData.notes,
-          lineItems: orderData.lineItems.map(item => ({
-            partId: item.partId || undefined, // Include partId if selecting existing part
-            partNumber: item.partNumber,
-            partName: item.partName,
-            drawingNumber: item.drawingNumber,
-            revisionLevel: item.revisionLevel,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            dueDate: item.dueDate,
-            notes: item.notes,
-          })),
-        }),
+        body: JSON.stringify(orderData),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create order');
-      }
-
-      alert('Order created successfully!');
+      if (!res.ok) throw new Error('Failed');
       onOrderCreated?.();
-      handleClose();
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to create order');
+      onClose();
+    } catch (e) {
+      // log the error and surface a simple alert
+      // eslint-disable-next-line no-console
+      console.error(e);
+      // eslint-disable-next-line no-alert
+      alert('Failed to create order');
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const handleClose = () => {
-    setOrderData({
-      customerId: '',
-      poNumber: '', // Will be auto-generated when modal opens again
-      dueDate: '',
-      priority: 'STANDARD',
-      notes: '',
-      lineItems: [
-        {
-          partId: '',
-          partNumber: '',
-          partName: '',
-          drawingNumber: '',
-          revisionLevel: '',
-          quantity: 1,
-          unitPrice: 0,
-          dueDate: '',
-          notes: '',
-        },
-      ],
-    });
-    setShowNewCustomer(false);
-    setErrors({});
-    onClose();
-  };
-
-  const customerOptions = customers.map(customer => ({
-    value: customer.id,
-    label: `${customer.name} (${customer.email})`,
-  }));
+  }, [orderData, onClose, onOrderCreated, validate]);
 
   return (
-    <Modal
-      opened={opened}
-      onClose={handleClose}
-      title='Create New Order'
-      size='xl'
-      styles={{
-        content: { maxHeight: '90vh', overflow: 'hidden' },
-        body: {
-          height: 'calc(90vh - 60px)',
-          overflow: 'auto',
-          padding: '24px',
-        },
-      }}
-    >
-      <Stack gap='lg'>
-        {/* General Error Alert */}
-        {Object.keys(errors).length > 0 && (
-          <Alert
-            color='red'
-            icon={<IconAlertCircle size={16} />}
-            title='Please fix the following errors:'
-          >
-            <Stack gap='xs'>
-              {Object.entries(errors).map(([field, message]) => (
-                <Text key={field} size='sm'>
-                  • {message}
-                </Text>
-              ))}
-            </Stack>
-          </Alert>
-        )}
-
-        {/* Order Information */}
+    <Modal opened={opened} onClose={onClose} title='Create New Order' size='xl'>
+      <Stack>
         <Card withBorder>
-          <Stack gap='md'>
-            <Text fw={600} size='sm' c='dimmed'>
-              Order Information
-            </Text>
-
-            <Group grow>
-              <div>
-                <Group gap='xs' mb='xs' align='flex-start'>
-                  <div style={{ flex: 1 }}>
-                    <Select
-                      label='Customer'
-                      placeholder='Select customer'
-                      data={customerOptions}
-                      searchable
-                      required
-                      value={orderData.customerId}
-                      onChange={value =>
-                        setOrderData({ ...orderData, customerId: value || '' })
-                      }
-                      error={errors.customerId}
-                    />
-                    {/* QuickBooks status with reauth button */}
-                    <Group gap='xs' mt={4}>
-                      <QuickBooksStatus compact={true} showActions={true} />
-                    </Group>
-                  </div>
-                  <div style={{ paddingTop: '25px' }}>
-                    <Button
-                      variant='light'
-                      size='sm'
-                      onClick={() => setShowNewCustomer(!showNewCustomer)}
-                      leftSection={
-                        showNewCustomer ? (
-                          <IconChevronDown size={16} />
-                        ) : (
-                          <IconPlus size={16} />
-                        )
-                      }
-                    >
-                      {showNewCustomer ? 'Cancel' : 'New Customer'}
-                    </Button>
-                  </div>
-                </Group>
-
-                <Collapse in={showNewCustomer}>
-                  <Box mb='md'>
-                    <NewCustomerForm
-                      onCustomerCreated={handleCustomerCreated}
-                      onCancel={() => setShowNewCustomer(false)}
-                    />
-                  </Box>
-                </Collapse>
-              </div>
+          <Stack>
+            <Group>
+              <Select
+                label='Customer'
+                placeholder='Select customer'
+                data={customerOptions}
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={300}
+                searchable
+                value={orderData.customerId}
+                onChange={v =>
+                  setOrderData(prev => ({ ...prev, customerId: v || '' }))
+                }
+                error={errors.customerId}
+              />
+              <Button
+                size='sm'
+                onClick={() => setShowNewCustomer(s => !s)}
+                leftSection={<IconPlus size={14} />}
+              >
+                {showNewCustomer ? 'Cancel' : 'New Customer'}
+              </Button>
             </Group>
 
-            <Group grow>
-              <div>
-                <Group gap='xs' align='end'>
-                  <div style={{ flex: 1 }}>
-                    <TextInput
-                      label='PO Number'
-                      placeholder='Auto-generated PO number'
-                      required
-                      value={orderData.poNumber}
-                      onChange={e =>
-                        setOrderData({ ...orderData, poNumber: e.target.value })
-                      }
-                      error={errors.poNumber}
-                      description='Auto-generated - you can edit if needed'
-                    />
-                  </div>
-                  <Button
-                    variant='light'
-                    size='sm'
-                    onClick={generatePONumber}
-                    title='Generate new PO number'
-                  >
-                    🔄
-                  </Button>
-                </Group>
-              </div>
-              <Select
-                label='Priority'
-                data={priorityOptions}
-                required
-                value={orderData.priority}
-                onChange={value =>
-                  setOrderData({
-                    ...orderData,
-                    priority:
-                      (value as 'HOLD' | 'STANDARD' | 'RUSH') || 'STANDARD',
-                  })
+            <Collapse in={showNewCustomer}>
+              <Box>
+                <NewCustomerForm
+                  onCustomerCreated={c => {
+                    setCustomers(prev => [c, ...prev]);
+                    setOrderData(prev => ({ ...prev, customerId: c.id }));
+                    setShowNewCustomer(false);
+                  }}
+                  onCancel={() => setShowNewCustomer(false)}
+                />
+              </Box>
+            </Collapse>
+
+            <Group>
+              <TextInput
+                label='PO Number'
+                value={orderData.poNumber}
+                onChange={e =>
+                  setOrderData(prev => ({ ...prev, poNumber: e.target.value }))
                 }
               />
-            </Group>
-
-            <Group grow align='flex-start'>
               <TextInput
                 label='Due Date'
                 type='date'
-                required
                 value={orderData.dueDate}
                 onChange={e =>
-                  setOrderData({ ...orderData, dueDate: e.target.value })
-                }
-                error={errors.dueDate}
-              />
-              <Textarea
-                label='Order Notes'
-                placeholder='Additional notes or special instructions'
-                value={orderData.notes}
-                onChange={e =>
-                  setOrderData({ ...orderData, notes: e.target.value })
+                  setOrderData(prev => ({ ...prev, dueDate: e.target.value }))
                 }
               />
+            </Group>
+
+            <Textarea
+              label='Notes'
+              value={orderData.notes}
+              onChange={e =>
+                setOrderData(prev => ({ ...prev, notes: e.target.value }))
+              }
+            />
+
+            <Group>
+              <Select
+                label='Priority'
+                data={memoPriorityOptions}
+                value={orderData.priority}
+                onChange={v =>
+                  setOrderData(prev => ({
+                    ...prev,
+                    priority: (v as OrderForm['priority']) || 'STANDARD',
+                  }))
+                }
+                comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                maxDropdownHeight={200}
+              />
+              <QuickBooksStatus compact showActions />
             </Group>
           </Stack>
         </Card>
 
-        {/* Line Items */}
         <Card withBorder>
-          <Stack gap='md'>
-            <Group justify='space-between' align='center'>
-              <Text fw={600} size='sm' c='dimmed'>
-                Line Items ({orderData.lineItems.length})
-              </Text>
+          <Stack>
+            <Group justify='space-between'>
+              <Text fw={600}>Line Items</Text>
               <Button
-                variant='light'
                 size='sm'
-                leftSection={<IconPlus size={16} />}
                 onClick={addLineItem}
+                leftSection={<IconPlus size={14} />}
               >
-                Add Item
+                Add
               </Button>
             </Group>
 
@@ -721,177 +433,35 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
               </Alert>
             )}
 
-            <Stack gap='md'>
-              {orderData.lineItems.map((item, index) => (
-                <Card
-                  key={`lineitem-${index}-${item.partNumber || 'new'}`}
-                  withBorder
-                  style={{ background: 'rgba(248, 250, 252, 0.5)' }}
-                >
-                  <Stack gap='md'>
-                    <Group justify='space-between' align='center'>
-                      <Badge variant='outline' size='sm'>
-                        Item {index + 1}
-                      </Badge>
-                      {orderData.lineItems.length > 1 && (
-                        <ActionIcon
-                          color='red'
-                          variant='subtle'
-                          onClick={() => removeLineItem(index)}
-                        >
-                          <IconTrash size={16} />
-                        </ActionIcon>
-                      )}
-                    </Group>
-
-                    <PartSelector
-                      value={
-                        item.partId
-                          ? {
-                              id: item.partId,
-                              partNumber: item.partNumber,
-                              partName: item.partName,
-                              partType:
-                                item.partType === 'COMPONENT' ||
-                                item.partType === 'SUBASSEMBLY' ||
-                                item.partType === 'CONSUMABLE'
-                                  ? 'FINISHED'
-                                  : (item.partType as any),
-                              drawingNumber: item.drawingNumber,
-                              revisionLevel: item.revisionLevel,
-                            }
-                          : null
-                      }
-                      onChange={part => handlePartSelect(index, part)}
-                      placeholder='Select existing part or create new one'
-                      error={errors[`lineItems.${index}.partNumber`]}
-                      required
-                      isPageReady={isPageReady}
-                      onAdvancedPartCreation={onAdvancedPartCreation}
-                    />
-
-                    {/* Only show error message if no part is selected */}
-                    {!item.partId &&
-                      errors[`lineItems.${index}.partNumber`] && (
-                        <Text size='sm' c='red'>
-                          {errors[`lineItems.${index}.partNumber`]}
-                        </Text>
-                      )}
-
-                    <Group grow>
-                      <NumberInput
-                        label='Quantity'
-                        placeholder='Number of units'
-                        min={1}
-                        required
-                        value={item.quantity}
-                        onChange={value =>
-                          updateLineItem(index, 'quantity', Number(value) || 1)
-                        }
-                        error={errors[`lineItems.${index}.quantity`]}
-                      />
-                      <NumberInput
-                        label='Unit Price ($)'
-                        placeholder='0.00'
-                        min={0}
-                        decimalScale={2}
-                        fixedDecimalScale
-                        value={item.unitPrice}
-                        onChange={value =>
-                          updateLineItem(index, 'unitPrice', Number(value) || 0)
-                        }
-                      />
-                    </Group>
-
-                    <Group grow align='flex-start'>
-                      <TextInput
-                        label='Item Due Date'
-                        type='date'
-                        placeholder='If different from order due date'
-                        value={item.dueDate}
-                        onChange={e =>
-                          updateLineItem(index, 'dueDate', e.target.value)
-                        }
-                      />
-                      <Textarea
-                        label='Item Notes'
-                        placeholder='Specific notes for this item'
-                        value={item.notes}
-                        onChange={e =>
-                          updateLineItem(index, 'notes', e.target.value)
-                        }
-                      />
-                    </Group>
-                  </Stack>
-                </Card>
+            <Stack>
+              {orderData.lineItems.map((li, idx) => (
+                <LineItemCard
+                  key={`li-${idx}-${li.partNumber || 'new'}`}
+                  index={idx}
+                  item={li}
+                  onRemove={removeLineItem}
+                  onUpdate={updateLineItem}
+                  onPartSelect={handlePartSelect}
+                  errors={errors}
+                  isPageReady={isPageReady}
+                  onAdvancedPartCreation={onAdvancedPartCreation}
+                />
               ))}
             </Stack>
           </Stack>
         </Card>
 
-        {/* Action Buttons */}
-        <Group justify='space-between' align='center'>
-          <div style={{ flex: 1 }}>
-            {/* Form Status Indicator */}
-            {(() => {
-              const hasErrors = Object.keys(errors).length > 0;
-              const missingRequiredFields = [];
-
-              if (!orderData.customerId) missingRequiredFields.push('Customer');
-              if (!orderData.poNumber) missingRequiredFields.push('PO Number');
-              if (!orderData.dueDate) missingRequiredFields.push('Due Date');
-              if (orderData.lineItems.length === 0)
-                missingRequiredFields.push('Line Items');
-
-              const hasLineItemIssues = orderData.lineItems.some(
-                (item, _index) =>
-                  !item.partNumber ||
-                  (!item.partId && !item.partName) ||
-                  !item.quantity ||
-                  item.quantity <= 0
-              );
-
-              if (hasLineItemIssues)
-                missingRequiredFields.push('Complete Line Item Details');
-
-              if (missingRequiredFields.length === 0 && !hasErrors) {
-                return (
-                  <Group gap='xs'>
-                    <IconCheck size={16} color='green' />
-                    <Text size='sm' c='green' fw={500}>
-                      Ready to create order
-                    </Text>
-                  </Group>
-                );
-              } else {
-                return (
-                  <Group gap='xs'>
-                    <IconAlertCircle size={16} color='orange' />
-                    <Text size='sm' c='orange'>
-                      Missing: {missingRequiredFields.join(', ')}
-                    </Text>
-                  </Group>
-                );
-              }
-            })()}
-          </div>
-
-          <Group gap='sm'>
-            <Button variant='subtle' onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              loading={submitting}
-              disabled={
-                orderData.lineItems.length === 0 ||
-                Object.keys(errors).length > 0
-              }
-              leftSection={<IconCheck size={16} />}
-            >
-              Create Order
-            </Button>
-          </Group>
+        <Group justify='flex-end'>
+          <Button variant='subtle' onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            loading={submitting}
+            leftSection={<IconCheck size={16} />}
+          >
+            Create Order
+          </Button>
         </Group>
       </Stack>
     </Modal>

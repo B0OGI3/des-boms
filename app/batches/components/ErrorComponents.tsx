@@ -176,11 +176,16 @@ export const LoadingError: React.FC<{
     }
   }, [autoRetry, retryCount, onRetry]);
 
+  const title =
+    retryCount > 0
+      ? `Loading Failed (Attempt ${retryCount + 1})`
+      : 'Loading Failed';
+
   return (
     <ErrorWithRetry
       error={error}
       onRetry={onRetry}
-      title={`Loading Failed ${retryCount > 0 ? `(Attempt ${retryCount + 1})` : ''}`}
+      title={title}
       type='network'
     />
   );

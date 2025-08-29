@@ -4,7 +4,7 @@
  * Generic Pagination component for data tables
  */
 
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Select, Text } from '@mantine/core';
 import type { UsePaginationReturn } from '../../../hooks/usePagination';
 
@@ -35,7 +35,22 @@ export const Pagination = <T,>({
     canGoPrevious,
   } = pagination;
 
-  const generatePageNumbers = () => {
+  const itemsPerPageSelectOptions = useMemo(
+    () =>
+      itemsPerPageOptions.map(option => ({
+        value: option.toString(),
+        label: option.toString(),
+      })),
+    [itemsPerPageOptions]
+  );
+
+  // Default combobox props used across Select/Autocomplete to stabilize portal/Popper
+  const DEFAULT_COMBOBOX_PROPS = {
+    withinPortal: true,
+    middlewares: { flip: false, shift: false },
+  } as const;
+
+  const generatePageNumbers = useCallback(() => {
     const pages = [];
     const showPages = 5; // Show 5 page numbers at most
 
@@ -104,7 +119,7 @@ export const Pagination = <T,>({
     }
 
     return pages;
-  };
+  }, [currentPage, totalPages, setCurrentPage]);
 
   const getPageButtonStyle = (isActive: boolean) => ({
     padding: '8px 12px',
@@ -129,6 +144,15 @@ export const Pagination = <T,>({
     color: '#64748b',
     fontSize: '0.85rem',
   });
+
+  const handlePrev = useCallback(
+    () => setCurrentPage(currentPage - 1),
+    [currentPage, setCurrentPage]
+  );
+  const handleNext = useCallback(
+    () => setCurrentPage(currentPage + 1),
+    [currentPage, setCurrentPage]
+  );
 
   if (totalItems === 0) return null;
 
@@ -158,10 +182,7 @@ export const Pagination = <T,>({
               value={itemsPerPage.toString()}
               onChange={value => value && setItemsPerPage(Number(value))}
               size='sm'
-              data={itemsPerPageOptions.map(option => ({
-                value: option.toString(),
-                label: option.toString(),
-              }))}
+              data={itemsPerPageSelectOptions}
               withCheckIcon={false}
               rightSection={<div style={{ display: 'none' }} />}
               styles={{
@@ -189,6 +210,8 @@ export const Pagination = <T,>({
                   },
                 },
               }}
+              comboboxProps={DEFAULT_COMBOBOX_PROPS}
+              maxDropdownHeight={200}
             />
           </div>
         )}
@@ -196,7 +219,7 @@ export const Pagination = <T,>({
         <div style={getButtonsStyle()}>
           {/* Previous button */}
           <button
-            onClick={() => setCurrentPage(currentPage - 1)}
+            onClick={handlePrev}
             disabled={!canGoPrevious}
             style={getPageButtonStyle(false)}
           >
@@ -208,7 +231,7 @@ export const Pagination = <T,>({
 
           {/* Next button */}
           <button
-            onClick={() => setCurrentPage(currentPage + 1)}
+            onClick={handleNext}
             disabled={!canGoNext}
             style={getPageButtonStyle(false)}
           >

@@ -7,6 +7,12 @@ import { Autocomplete, Text, Group, ActionIcon, Tooltip } from '@mantine/core';
 import { IconSearch, IconFilter, IconClearAll } from '@tabler/icons-react';
 import { useDebounce } from '../../../hooks/useDebounce';
 
+// Default combobox props used across Autocomplete/Select to stabilize portal/Popper
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
+
 interface EnhancedSearchProps {
   value: string;
   onChange: (value: string) => void;
@@ -84,6 +90,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             leftSection={<IconSearch size={16} style={{ color: '#6b7280' }} />}
             limit={8}
             maxDropdownHeight={400}
+            comboboxProps={DEFAULT_COMBOBOX_PROPS}
             styles={{
               input: {
                 height: '44px',

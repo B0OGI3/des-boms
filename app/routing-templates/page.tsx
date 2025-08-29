@@ -23,7 +23,7 @@ import {
   Switch,
   Alert,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   IconPlus,
   IconSettings,
@@ -104,6 +104,18 @@ export default function RoutingTemplatesPage() {
 
     fetchData();
   }, [initializeTask]);
+
+  // Memoized workstation options for Select components
+  const workstationOptions = useMemo(
+    () => workstations.map(ws => ({ value: ws.id, label: ws.name })),
+    [workstations]
+  );
+
+  // Default combobox props to stabilize portal/Popper behaviour
+  const DEFAULT_COMBOBOX_PROPS = useMemo(
+    () => ({ withinPortal: true, middlewares: { flip: false, shift: false } }),
+    []
+  );
 
   const addStep = () => {
     setTemplateForm({
@@ -391,10 +403,7 @@ export default function RoutingTemplatesPage() {
                       onChange={value =>
                         updateStep(index, 'workstationId', value)
                       }
-                      data={workstations.map(ws => ({
-                        value: ws.id,
-                        label: ws.name,
-                      }))}
+                      data={workstationOptions}
                       styles={{
                         label: { color: '#f1f5f9' },
                         input: {
@@ -403,6 +412,8 @@ export default function RoutingTemplatesPage() {
                           color: '#f1f5f9',
                         },
                       }}
+                      comboboxProps={DEFAULT_COMBOBOX_PROPS}
+                      maxDropdownHeight={260}
                     />
 
                     <NumberInput

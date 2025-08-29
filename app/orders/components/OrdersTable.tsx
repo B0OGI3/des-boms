@@ -165,6 +165,62 @@ const OrderRow: React.FC<OrderRowProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
 
+  // Stable handlers to avoid recreating inline callbacks on each render
+  const toggleExpanded = React.useCallback(() => {
+    setExpanded(prev => !prev);
+  }, []);
+
+  const handleSmartGenerate = React.useCallback(() => {
+    onSmartGenerate?.(order);
+  }, [onSmartGenerate, order]);
+
+  const handleViewBatches = React.useCallback(() => {
+    onViewBatches?.(order);
+  }, [onViewBatches, order]);
+
+  const handleViewOrder = React.useCallback(() => {
+    onViewOrder?.(order);
+  }, [onViewOrder, order]);
+
+  const handleCompleteOrder = React.useCallback(() => {
+    onCompleteOrder?.(order);
+  }, [onCompleteOrder, order]);
+
+  const handleShipOrder = React.useCallback(() => {
+    onShipOrder?.(order);
+  }, [onShipOrder, order]);
+
+  const handleEditOrder = React.useCallback(() => {
+    onEditOrder?.(order);
+  }, [onEditOrder, order]);
+
+  const handleDeleteOrder = React.useCallback(() => {
+    onDeleteOrder?.(order);
+  }, [onDeleteOrder, order]);
+
+  // Per-item action handler factories to avoid inline arrow functions in JSX
+  const makeEditPartHandler = React.useCallback(
+    (
+      item: OrderRowProps['order']['lineItems'] extends Array<infer U> ? U : any
+    ) =>
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onEditPart?.(order, item);
+      },
+    [onEditPart, order]
+  );
+
+  const makeDeletePartHandler = React.useCallback(
+    (
+      item: OrderRowProps['order']['lineItems'] extends Array<infer U> ? U : any
+    ) =>
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onDeletePart?.(order, item);
+      },
+    [onDeletePart, order]
+  );
+
   const isOverdue =
     new Date(order.dueDate) < new Date() && order.status !== 'COMPLETED';
   const completionPercentage =
@@ -187,7 +243,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
           <ActionIcon
             variant='subtle'
             size='sm'
-            onClick={() => setExpanded(!expanded)}
+            onClick={toggleExpanded}
             style={{ color: '#475569' }}
           >
             {expanded ? (
@@ -270,7 +326,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                   <ActionIcon
                     variant='subtle'
                     size='sm'
-                    onClick={() => onSmartGenerate(order)}
+                    onClick={handleSmartGenerate}
                     style={{ color: '#7c3aed' }}
                   >
                     <IconWand size={16} />
@@ -284,7 +340,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 <ActionIcon
                   variant='subtle'
                   size='sm'
-                  onClick={() => onViewBatches(order)}
+                  onClick={handleViewBatches}
                   style={{ color: '#7c3aed' }}
                 >
                   <IconRoute size={16} />
@@ -297,7 +353,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 <ActionIcon
                   variant='subtle'
                   size='sm'
-                  onClick={() => onViewOrder(order)}
+                  onClick={handleViewOrder}
                   style={{ color: '#2563eb' }}
                 >
                   <IconEye size={16} />
@@ -314,7 +370,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                   <ActionIcon
                     variant='subtle'
                     size='sm'
-                    onClick={() => onCompleteOrder(order)}
+                    onClick={handleCompleteOrder}
                     style={{ color: '#16a34a' }}
                   >
                     <IconCheck size={16} />
@@ -328,7 +384,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 <ActionIcon
                   variant='subtle'
                   size='sm'
-                  onClick={() => onShipOrder(order)}
+                  onClick={handleShipOrder}
                   style={{ color: '#0ea5e9' }}
                 >
                   <IconTruck size={16} />
@@ -341,7 +397,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 <ActionIcon
                   variant='subtle'
                   size='sm'
-                  onClick={() => onEditOrder(order)}
+                  onClick={handleEditOrder}
                   style={{ color: '#475569' }}
                 >
                   <IconEdit size={16} />
@@ -353,7 +409,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                 <ActionIcon
                   variant='subtle'
                   size='sm'
-                  onClick={() => onDeleteOrder(order)}
+                  onClick={handleDeleteOrder}
                   style={{ color: '#dc2626' }}
                 >
                   <IconTrash size={16} />
@@ -515,10 +571,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                                       size='sm'
                                       variant='subtle'
                                       color='blue'
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        onEditPart?.(order, item);
-                                      }}
+                                      onClick={makeEditPartHandler(item)}
                                     >
                                       <IconEdit size={14} />
                                     </ActionIcon>
@@ -528,10 +581,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                                       size='sm'
                                       variant='subtle'
                                       color='red'
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        onDeletePart?.(order, item);
-                                      }}
+                                      onClick={makeDeletePartHandler(item)}
                                     >
                                       <IconTrash size={14} />
                                     </ActionIcon>

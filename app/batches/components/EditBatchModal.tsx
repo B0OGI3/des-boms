@@ -14,7 +14,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   NumberInput,
@@ -30,6 +30,12 @@ import {
 } from '@mantine/core';
 import type { Batch, EditBatchInput } from '../types';
 import { getBatchStatusColor } from '../utils/batchHelpers';
+
+// Default combobox props to stabilize portal/Popper behaviour
+const DEFAULT_COMBOBOX_PROPS = {
+  withinPortal: true,
+  middlewares: { flip: false, shift: false },
+} as const;
 
 interface EditBatchModalProps {
   opened: boolean;
@@ -55,14 +61,11 @@ export function EditBatchModal({
     estimatedCompletion: batch?.estimatedCompletion || '',
   });
 
-  const priorityOptions = useMemo(
-    () => [
-      { value: 'RUSH', label: 'Rush' },
-      { value: 'STANDARD', label: 'Standard' },
-      { value: 'HOLD', label: 'Hold' },
-    ],
-    []
-  );
+  const priorityOptions = [
+    { value: 'RUSH', label: 'Rush' },
+    { value: 'STANDARD', label: 'Standard' },
+    { value: 'HOLD', label: 'Hold' },
+  ];
 
   const handlePriorityChange = useCallback((value: string | null) => {
     setFormData(prev => ({ ...prev, priority: value as any }));
@@ -325,6 +328,8 @@ export function EditBatchModal({
             value={formData.priority}
             onChange={handlePriorityChange}
             disabled={!canEdit}
+            comboboxProps={DEFAULT_COMBOBOX_PROPS}
+            maxDropdownHeight={300}
             styles={{
               input: {
                 background: 'rgba(30, 41, 59, 0.6)',
