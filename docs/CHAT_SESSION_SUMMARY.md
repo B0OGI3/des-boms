@@ -102,7 +102,7 @@
 
 ## 📁 Files Created/Modified
 
-### New Files Created:
+### New Files Created
 
 1. `lib/tokenManager.ts` - Core token management service
 2. `lib/tokenScheduler.ts` - Background refresh scheduling
@@ -112,7 +112,7 @@
 6. `refresh-qb-tokens-scheduler.bat` - Windows Task Scheduler script
 7. `QUICKBOOKS_AUTO_REFRESH.md` - Complete documentation
 
-### Modified Files:
+### Modified Files
 
 1. `app/theme/index.ts` - Standardized border properties
 2. `app/orders/components/NewOrderModal.tsx` - Enhanced part editing

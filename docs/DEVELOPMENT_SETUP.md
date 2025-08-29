@@ -17,7 +17,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/DES-BOMS.git
+git clone https://github.com/B0OGI3/des-boms.git
 cd DES-BOMS
 ```
 
@@ -141,7 +141,7 @@ pnpm test             # Run tests (if configured)
 
 ## 📁 Project Structure Overview
 
-```
+```text
 DES-BOMS/
 ├── app/                    # Next.js 14 App Router
 │   ├── api/               # API routes
@@ -163,7 +163,7 @@ DES-BOMS/
    - Create a new app
    - Get your Client ID and Secret
 
-2. **Configure Environment**
+1. **Configure Environment**
 
 ```bash
 QUICKBOOKS_CLIENT_ID="your_client_id"
@@ -176,7 +176,7 @@ QUICKBOOKS_SANDBOX="true"  # Set to false for production
 
 ### Common Issues
 
-**Port Already in Use**
+#### Port Already in Use
 
 ```bash
 # Kill process on port 3000
@@ -186,7 +186,7 @@ npx kill-port 3000
 PORT=3001 pnpm dev
 ```
 
-**Database Connection Issues**
+#### Database Connection Issues
 
 ```bash
 # Check PostgreSQL status
@@ -196,7 +196,7 @@ sudo systemctl status postgresql
 sudo systemctl restart postgresql
 ```
 
-**Prisma Issues**
+#### Prisma Issues
 
 ```bash
 # Reset database (WARNING: This will delete all data)
@@ -206,7 +206,7 @@ pnpm prisma migrate reset
 pnpm prisma generate
 ```
 
-**Node Modules Issues**
+#### Node Modules Issues
 
 ```bash
 # Clear node modules and reinstall
