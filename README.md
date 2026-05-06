@@ -14,7 +14,7 @@ A full-stack batch order management system built for a real manufacturing operat
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Mantine UI
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Mantine UI
 - **Backend**: Next.js API routes, Prisma ORM
 - **Database**: PostgreSQL 16
 - **Auth/Integration**: QuickBooks OAuth 2.0, Intuit SDK

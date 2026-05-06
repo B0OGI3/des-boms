@@ -11,14 +11,6 @@ import axios, { AxiosResponse } from 'axios';
 import { prisma } from './prisma';
 import { getTokenManager } from './tokenManager';
 
-// DEBUG: Log env variables for troubleshooting
-console.log(
-  '[QB DEBUG] QB_SANDBOX:',
-  process.env.QB_SANDBOX,
-  '| QB_CLIENT_ID:',
-  process.env.QB_CLIENT_ID
-);
-
 // QuickBooks configuration
 const QB_CONFIG = {
   clientId: process.env.QB_CLIENT_ID || '',
@@ -223,12 +215,6 @@ export class QuickBooksService {
           Line1: customer.shippingAddress,
         };
       }
-
-      // Log the payload being sent to QuickBooks
-      console.log(
-        '[QB DEBUG] Creating customer in QuickBooks with payload:',
-        JSON.stringify(qbCustomer, null, 2)
-      );
 
       const response = await this.makeQBRequest('POST', 'customer', qbCustomer);
       const result: QBResponse = response.data;
