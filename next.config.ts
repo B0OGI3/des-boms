@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -22,18 +23,18 @@ const nextConfig: NextConfig = {
     // Add path aliases for proper module resolution
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': require('path').resolve(__dirname),
-      '@/app': require('path').resolve(__dirname, 'app'),
-      '@/components': require('path').resolve(__dirname, 'app/components'),
-      '@/ui': require('path').resolve(__dirname, 'app/components/ui'),
-      '@/lib': require('path').resolve(__dirname, 'lib'),
-      '@/types': require('path').resolve(__dirname, 'types'),
-      '@/hooks': require('path').resolve(__dirname, 'hooks'),
-      '@/utils': require('path').resolve(__dirname, 'utils'),
-      '@/prisma': require('path').resolve(__dirname, 'prisma'),
-      '@/batches': require('path').resolve(__dirname, 'app/batches'),
-      '@/orders': require('path').resolve(__dirname, 'app/orders'),
-      '@/api': require('path').resolve(__dirname, 'app/api'),
+      '@': path.resolve(__dirname),
+      '@/app': path.resolve(__dirname, 'app'),
+      '@/components': path.resolve(__dirname, 'app/components'),
+      '@/ui': path.resolve(__dirname, 'app/components/ui'),
+      '@/lib': path.resolve(__dirname, 'lib'),
+      '@/types': path.resolve(__dirname, 'types'),
+      '@/hooks': path.resolve(__dirname, 'hooks'),
+      '@/utils': path.resolve(__dirname, 'utils'),
+      '@/prisma': path.resolve(__dirname, 'prisma'),
+      '@/batches': path.resolve(__dirname, 'app/batches'),
+      '@/orders': path.resolve(__dirname, 'app/orders'),
+      '@/api': path.resolve(__dirname, 'app/api'),
     };
 
     // Handle PDFKit font files properly

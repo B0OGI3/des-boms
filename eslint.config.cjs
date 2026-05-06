@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Adapter: convert legacy .eslintrc.json to flat config using FlatCompat
 const { FlatCompat } = require('@eslint/eslintrc');
 const path = require('path');

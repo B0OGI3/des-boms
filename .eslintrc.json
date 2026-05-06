@@ -44,6 +44,8 @@
     ".next/**",
     "out/**",
     "node_modules/**",
-    "*.config.js"
+    "*.config.js",
+    "scripts/**",
+    "tools/**"
   ]
 }

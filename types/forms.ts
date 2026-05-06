@@ -17,7 +17,7 @@ export interface ValidationRule<T = any> {
   message: string;
 }
 
-export interface FormValidation<T = Record<string, any>> {
+export interface FormValidation {
   [key: string]: ValidationRule<any>[];
 }
 

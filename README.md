@@ -92,14 +92,14 @@ des-boms/
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build for production |
-| `pnpm db:migrate` | Run Prisma migrations |
-| `pnpm db:studio` | Open Prisma Studio |
-| `pnpm lint` | Run ESLint |
-| `pnpm typecheck` | Run TypeScript type checking |
+| Command           | Description                  |
+| ----------------- | ---------------------------- |
+| `pnpm dev`        | Start development server     |
+| `pnpm build`      | Build for production         |
+| `pnpm db:migrate` | Run Prisma migrations        |
+| `pnpm db:studio`  | Open Prisma Studio           |
+| `pnpm lint`       | Run ESLint                   |
+| `pnpm typecheck`  | Run TypeScript type checking |
 
 ## License
 
