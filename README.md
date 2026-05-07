@@ -1,5 +1,7 @@
 # des-boms
 
+![CI](https://github.com/B0OGI3/des-boms/actions/workflows/ci.yml/badge.svg)
+
 Manufacturing batch order management system built as a pnpm + Turborepo monorepo. Tracks purchase orders from receipt through production — managing batches, routing steps, work-order items, QC checks, and material usage on the shop floor.
 
 ## Stack
