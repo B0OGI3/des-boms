@@ -2,22 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../../api/client';
 import type { WorkOrderItemDetail } from '../../api/types';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
 
-const STATUS_COLOR: Record<string, string> = {
-  QUEUED: '#888',
-  IN_PROGRESS: '#2563eb',
-  COMPLETED: '#16a34a',
-  ON_HOLD: '#d97706',
-  REWORK: '#dc2626',
-  SCRAPPED: '#6b7280',
-};
-
-const STEP_COLOR: Record<string, string> = {
-  PENDING: '#ccc',
-  IN_PROGRESS: '#2563eb',
-  COMPLETED: '#16a34a',
-  SKIPPED: '#888',
-  FAILED: '#dc2626',
+const STEP_RING: Record<string, string> = {
+  PENDING: 'border-gray-200 bg-white',
+  IN_PROGRESS: 'border-blue-400 bg-blue-50',
+  COMPLETED: 'border-green-400 bg-green-50',
+  SKIPPED: 'border-gray-200 bg-gray-50',
+  FAILED: 'border-red-400 bg-red-50',
 };
 
 export function WorkOrdersPage() {
@@ -48,79 +41,77 @@ export function WorkOrdersPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['work-orders', batchId] }),
   });
 
-  if (!batchId) return <p>No batch selected.</p>;
-  if (isLoading) return <p>Loading work orders...</p>;
-  if (error) return <p>Error loading work orders.</p>;
+  if (!batchId) return <p className="text-gray-500">No batch selected.</p>;
+  if (isLoading) return <p className="text-gray-500">Loading work orders…</p>;
+  if (error) return <p className="text-red-600">Error loading work orders.</p>;
 
   return (
     <div>
-      <p><Link to={`/batches/${batchId}`}>← Batch</Link></p>
-      <h2>Work Orders</h2>
+      <div className="mb-1">
+        <Link to={`/batches/${batchId}`} className="text-sm text-blue-600 hover:underline">
+          ← Batch
+        </Link>
+      </div>
+
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Work Orders</h1>
+        <span className="text-sm text-gray-400 tabular-nums">auto-refresh 10s</span>
+      </div>
 
       {items.length === 0 ? (
-        <div>
-          <p>No work order items yet.</p>
-          <button
+        <div className="bg-white rounded-xl border border-dashed border-gray-300 p-10 text-center max-w-sm mx-auto">
+          <p className="text-gray-400 mb-4">No work order items yet.</p>
+          <Button
             onClick={() => spawnMutation.mutate()}
             disabled={spawnMutation.isPending}
-            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
           >
-            {spawnMutation.isPending ? 'Creating...' : 'Spawn Work Order Items'}
-          </button>
-          {spawnMutation.isError && <p style={{ color: 'red' }}>Failed to spawn items.</p>}
+            {spawnMutation.isPending ? 'Creating…' : 'Spawn Work Order Items'}
+          </Button>
+          {spawnMutation.isError && <p className="text-sm text-red-600 mt-2">Failed to spawn items.</p>}
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="flex flex-col gap-4">
           {items.map((item) => (
-            <div key={item.id} style={{ background: '#fff', borderRadius: 8, padding: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,.1)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <h3 style={{ margin: 0, fontFamily: 'monospace', fontSize: '0.95rem' }}>{item.serialNumber}</h3>
-                <span style={{ color: STATUS_COLOR[item.status] ?? '#888', fontWeight: 600, fontSize: '0.85rem' }}>
-                  {item.status}
-                </span>
+            <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-mono text-sm font-semibold text-gray-800">{item.serialNumber}</span>
+                <Badge label={item.status} />
               </div>
-
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {item.stepProgress.map((sp) => {
-                  const isActionable =
-                    sp.status === 'PENDING' || sp.status === 'IN_PROGRESS';
-                  return (
-                    <div
-                      key={sp.id}
-                      style={{
-                        border: `2px solid ${STEP_COLOR[sp.status] ?? '#ccc'}`,
-                        borderRadius: 6,
-                        padding: '0.4rem 0.6rem',
-                        fontSize: '0.8rem',
-                        minWidth: 100,
-                      }}
-                    >
-                      <div style={{ fontWeight: 600 }}>{sp.routingStep.workstation.name}</div>
-                      <div style={{ color: '#666', fontSize: '0.75rem' }}>{sp.routingStep.description}</div>
-                      <div style={{ color: STEP_COLOR[sp.status] ?? '#ccc', fontSize: '0.75rem', marginTop: 2 }}>
-                        {sp.status}
+              <div className="flex flex-wrap gap-2">
+                {item.stepProgress
+                  .sort((a, b) => a.routingStep.stepNumber - b.routingStep.stepNumber)
+                  .map((sp) => {
+                    const isPending = sp.status === 'PENDING';
+                    const isActive = sp.status === 'IN_PROGRESS';
+                    return (
+                      <div
+                        key={sp.id}
+                        className={`flex flex-col gap-1 border-2 rounded-lg p-2.5 min-w-[110px] ${STEP_RING[sp.status] ?? STEP_RING.PENDING}`}
+                      >
+                        <div className="text-xs font-semibold text-gray-800 leading-tight">
+                          {sp.routingStep.workstation.name}
+                        </div>
+                        <div className="text-xs text-gray-500 leading-tight truncate">
+                          {sp.routingStep.description}
+                        </div>
+                        <Badge label={sp.status} />
+                        {(isPending || isActive) && (
+                          <Button
+                            size="sm"
+                            variant={isActive ? 'primary' : 'secondary'}
+                            className="mt-1 w-full text-xs"
+                            onClick={() =>
+                              isPending
+                                ? startStep.mutate({ itemId: item.id, stepId: sp.routingStepId })
+                                : completeStep.mutate({ itemId: item.id, stepId: sp.routingStepId })
+                            }
+                          >
+                            {isPending ? 'Start' : 'Complete'}
+                          </Button>
+                        )}
                       </div>
-                      {isActionable && (
-                        <button
-                          onClick={() =>
-                            sp.status === 'PENDING'
-                              ? startStep.mutate({ itemId: item.id, stepId: sp.routingStepId })
-                              : completeStep.mutate({ itemId: item.id, stepId: sp.routingStepId })
-                          }
-                          style={{
-                            marginTop: '0.35rem',
-                            padding: '0.2rem 0.5rem',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            width: '100%',
-                          }}
-                        >
-                          {sp.status === 'PENDING' ? 'Start' : 'Complete'}
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
           ))}

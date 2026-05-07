@@ -7,14 +7,16 @@ import { BatchDetailPage } from './pages/batches/BatchDetailPage';
 import { PartsPage } from './pages/parts/PartsPage';
 import { WorkstationsPage } from './pages/workstations/WorkstationsPage';
 import { CustomersPage } from './pages/customers/CustomersPage';
+import { CustomerDetailPage } from './pages/customers/CustomerDetailPage';
 import { WorkOrdersPage } from './pages/work-orders/WorkOrdersPage';
 
 export function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<Navigate to="/orders" replace />} />
+        <Route index element={<Navigate to="/customers" replace />} />
         <Route path="customers" element={<CustomersPage />} />
+        <Route path="customers/:id" element={<CustomerDetailPage />} />
         <Route path="orders" element={<OrdersPage />} />
         <Route path="orders/:id" element={<OrderDetailPage />} />
         <Route path="batches" element={<BatchesPage />} />

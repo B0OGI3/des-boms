@@ -7,6 +7,8 @@ import type {
   BOMComponent,
   Batch,
   RoutingStep,
+  RoutingTemplate,
+  RoutingTemplateStep,
   Workstation,
   WorkstationCapacity,
   WorkstationOperator,
@@ -61,4 +63,12 @@ export type WorkOrderItemDetail = WorkOrderItem & {
   })[];
   qualityChecks: WorkOrderQualityCheck[];
   materialUsage: (WorkOrderMaterialUsage & { materialPart: Part; routingStep: RoutingStep | null })[];
+};
+
+export type CustomerDetail = Customer & {
+  purchaseOrders: OrderSummary[];
+};
+
+export type RoutingTemplateSummary = RoutingTemplate & {
+  templateSteps: (RoutingTemplateStep & { workstation: Workstation })[];
 };

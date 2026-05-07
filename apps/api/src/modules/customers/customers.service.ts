@@ -29,7 +29,17 @@ export class CustomersService {
       include: {
         purchaseOrders: {
           orderBy: { createdAt: 'desc' },
-          take: 10,
+          include: {
+            customer: true,
+            lineItems: {
+              include: {
+                part: true,
+                bomRevision: { include: { components: { include: { childPart: true } } } },
+                batches: true,
+                fileAttachments: true,
+              },
+            },
+          },
         },
       },
     });
