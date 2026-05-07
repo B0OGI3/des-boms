@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "start": "serve dist -s -l $PORT"
   },
   "dependencies": {
     "@des-boms/shared": "workspace:*",
@@ -16,6 +17,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
+    "serve": "^14.2.6",
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {

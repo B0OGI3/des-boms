@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "pnpm install --frozen-lockfile && pnpm deploy:build"
+
+[deploy]
+startCommand = "pnpm -F @des-boms/shared db:push:prod && pnpm -F @des-boms/api start"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
