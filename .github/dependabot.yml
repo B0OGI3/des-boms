@@ -7,3 +7,5 @@ updates:
     ignore:
       - dependency-name: vite
         versions: ["*"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
