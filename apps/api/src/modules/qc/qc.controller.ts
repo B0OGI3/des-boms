@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { QcService } from './qc.service';
 import { CreateQcRecordDto } from './dto/create-qc-record.dto';
 

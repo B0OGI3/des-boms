@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsEnum, IsOptional } from 'class-validator';
 import { PartType } from '@des-boms/shared';
 
 export class CreatePartDto {

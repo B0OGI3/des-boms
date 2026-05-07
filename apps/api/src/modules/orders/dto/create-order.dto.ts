@@ -1,4 +1,4 @@
-import { IsString, IsDateString, IsEnum, IsOptional, IsArray, ValidateNested, IsInt, IsDecimal } from 'class-validator';
+import { IsString, IsDateString, IsEnum, IsOptional, IsArray, ValidateNested, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OrderPriority } from '@des-boms/shared';
 

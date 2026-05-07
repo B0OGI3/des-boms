@@ -3,7 +3,6 @@ import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { WorkOrdersService } from './work-orders.service';
 import { WorkOrderItemStatus, StepStatus } from '@des-boms/shared';
 
-const txFn = vi.fn();
 const mockPrisma = {
   batch: { findUnique: vi.fn(), update: vi.fn() },
   workOrderItem: { create: vi.fn(), findUnique: vi.fn(), findMany: vi.fn(), update: vi.fn() },
