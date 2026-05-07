@@ -27,9 +27,10 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`API running on http://localhost:${port}/api`);
 
-  // SPA fallback: must be registered after listen() so it sits after
-  // all NestJS routes — serves index.html for any unmatched path
-  app.getHttpAdapter().getInstance().get('*', (_req: any, res: any) => {
+  // SPA fallback: registered after listen() so it sits after all NestJS
+  // routes — serves index.html for any request that wasn't handled above
+  app.getHttpAdapter().getInstance().use((_req: any, res: any, next: any) => {
+    if ((_req.path as string).startsWith('/api')) return next();
     res.sendFile(join(publicPath, 'index.html'));
   });
 }
