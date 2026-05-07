@@ -1,0 +1,25 @@
+{
+  "name": "des-boms",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "db:generate": "pnpm --filter @des-boms/shared db:generate",
+    "db:migrate": "pnpm --filter @des-boms/shared db:migrate",
+    "db:deploy": "pnpm --filter @des-boms/shared db:deploy",
+    "db:seed": "pnpm --filter @des-boms/shared db:seed",
+    "db:studio": "pnpm --filter @des-boms/shared db:studio"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "turbo": "^2.0.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

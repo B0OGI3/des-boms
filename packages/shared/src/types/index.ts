@@ -1,0 +1,41 @@
+// Re-export Prisma types so apps can import from @des-boms/shared
+export type {
+  Customer,
+  PurchaseOrder,
+  OrderLineItem,
+  Part,
+  BOMRevision,
+  BOMComponent,
+  Batch,
+  RoutingStep,
+  RoutingTemplate,
+  RoutingTemplateStep,
+  Workstation,
+  WorkstationCapacity,
+  WorkstationOperator,
+  OperatorSession,
+  QCRecord,
+  WorkOrderItem,
+  WorkOrderStepProgress,
+  WorkOrderQualityCheck,
+  WorkOrderMaterialUsage,
+  StepConfirmation,
+  FileAttachment,
+} from '../../generated/prisma';
+
+// Enums are runtime values — must NOT use `export type`
+export {
+  PrismaClient,
+  PartType,
+  OrderStatus,
+  OrderPriority,
+  BatchStatus,
+  BatchPriority,
+  StepStatus,
+  QCResult,
+  SyncStatus,
+  WorkstationCategory,
+  WorkOrderItemStatus,
+  ConfirmationStatus,
+  OperatorShift,
+} from '../../generated/prisma';

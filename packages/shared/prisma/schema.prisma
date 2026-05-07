@@ -1,0 +1,547 @@
+// DES-BOMS v2 — Clean schema with BOM versioning and consolidated material tracking
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// 1. CUSTOMER & ORDER MANAGEMENT
+// =============================================================================
+
+model Customer {
+  id              String  @id @default(cuid())
+  name            String
+  contactName     String?
+  email           String? @unique
+  phone           String?
+  billingAddress  String?
+  shippingAddress String?
+  notes           String?
+
+  quickbooksId String?
+  syncStatus   SyncStatus @default(PENDING)
+  lastSyncedAt DateTime?
+  syncError    String?
+
+  purchaseOrders PurchaseOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PurchaseOrder {
+  id            String        @id @default(cuid())
+  systemOrderId String        @unique @default(cuid())
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  customerId    String
+  poNumber      String
+  dueDate       DateTime
+  priority      OrderPriority @default(STANDARD)
+  notes         String?
+
+  orderStatus     OrderStatus @default(ACTIVE)
+  completedAt     DateTime?
+  completedBy     String?
+  completionNotes String?
+  shippedAt       DateTime?
+  shippedBy       String?
+  shippingNotes   String?
+
+  lineItems OrderLineItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =============================================================================
+// 2. PARTS MASTER & BOM
+// =============================================================================
+
+model Part {
+  id            String   @id @default(cuid())
+  partNumber    String   @unique
+  partName      String
+  partType      PartType
+  drawingNumber String?
+  revisionLevel String?
+  description   String?
+  materialSpec  String?
+  unitOfMeasure String?
+  standardCost  Decimal?
+  leadTime      Int?
+  active        Boolean  @default(true)
+  notes         String?
+
+  // Recommended routing template (proper relation)
+  recommendedRoutingTemplate   RoutingTemplate? @relation(fields: [recommendedRoutingTemplateId], references: [id])
+  recommendedRoutingTemplateId String?
+
+  // BOM relations
+  bomRevisions BOMRevision[]          // Revisions of this part's BOM
+  usedInBOMs   BOMComponent[] @relation("ChildPart") // Where this part is a component
+
+  orderLineItems         OrderLineItem[]
+  workOrderMaterialUsage WorkOrderMaterialUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// BOM versioning — each revision is a snapshot of how to build a part
+model BOMRevision {
+  id             String    @id @default(cuid())
+  part           Part      @relation(fields: [partId], references: [id])
+  partId         String
+  revisionNumber String    // "A", "B", "1.0", "2.0"
+  description    String?   // What changed in this revision
+  effectiveDate  DateTime
+  obsoleteDate   DateTime?
+  createdBy      String
+  active         Boolean   @default(true)
+
+  components BOMComponent[]
+  lineItems  OrderLineItem[] // Orders that locked to this revision
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([partId, revisionNumber])
+}
+
+// BOM components — what goes into a revision of a part
+model BOMComponent {
+  id            String      @id @default(cuid())
+  bomRevision   BOMRevision @relation(fields: [bomRevisionId], references: [id])
+  bomRevisionId String
+  childPart     Part        @relation("ChildPart", fields: [childPartId], references: [id])
+  childPartId   String
+  quantity      Decimal
+  unitOfMeasure String?
+  scrapFactor   Decimal?
+  operation     String?     // Step where this component is consumed
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Same child can appear multiple times under different operations
+  @@unique([bomRevisionId, childPartId, operation])
+}
+
+// Order Line Items — lock to the BOM revision active at order creation
+model OrderLineItem {
+  id            String        @id @default(cuid())
+  purchaseOrder PurchaseOrder @relation(fields: [orderId], references: [id])
+  orderId       String
+  part          Part          @relation(fields: [partId], references: [id])
+  partId        String
+  bomRevision   BOMRevision?  @relation(fields: [bomRevisionId], references: [id])
+  bomRevisionId String?       // Locked at order creation — historical accuracy
+  quantity      Int
+  unitPrice     Decimal?
+  dueDate       DateTime?
+  notes         String?
+
+  fileAttachments FileAttachment[]
+  batches         Batch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FileAttachment {
+  id             String        @id @default(cuid())
+  lineItem       OrderLineItem @relation(fields: [lineItemId], references: [id])
+  lineItemId     String
+  fileName       String
+  storedFileName String
+  filePath       String
+  fileType       String
+  mimeType       String
+  fileSize       Int
+  uploadedBy     String
+  description    String?
+
+  createdAt DateTime @default(now())
+}
+
+// =============================================================================
+// 3. BATCH & ROUTING
+// =============================================================================
+
+model Batch {
+  id                  String        @id @default(cuid())
+  batchId             String        @unique
+  lineItem            OrderLineItem @relation(fields: [lineItemId], references: [id])
+  lineItemId          String
+  quantity            Int
+  startDate           DateTime?
+  estimatedCompletion DateTime?
+  actualCompletion    DateTime?
+  priority            BatchPriority @default(STANDARD)
+  status              BatchStatus   @default(QUEUED)
+  notes               String?
+
+  routingSteps    RoutingStep[]
+  qcRecords       QCRecord[]
+  workOrderItems  WorkOrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkOrderItem {
+  id           String              @id @default(cuid())
+  batch        Batch               @relation(fields: [batchId], references: [id])
+  batchId      String
+  serialNumber String              @unique
+  itemNumber   Int
+  status       WorkOrderItemStatus @default(QUEUED)
+  startedAt    DateTime?
+  completedAt  DateTime?
+  currentStepId String?
+  notes        String?
+
+  stepProgress   WorkOrderStepProgress[]
+  qualityChecks  WorkOrderQualityCheck[]
+  materialUsage  WorkOrderMaterialUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([batchId, itemNumber])
+}
+
+model WorkOrderStepProgress {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  routingStep     RoutingStep   @relation(fields: [routingStepId], references: [id])
+  routingStepId   String
+  status          StepStatus    @default(PENDING)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  operatorId      String?
+  actualTime      Int?
+  notes           String?
+  photoUrl        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workOrderItemId, routingStepId])
+}
+
+model WorkOrderQualityCheck {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  routingStep     RoutingStep?  @relation(fields: [routingStepId], references: [id])
+  routingStepId   String?
+  checkType       String
+  result          QCResult
+  checkedBy       String
+  checkedAt       DateTime      @default(now())
+  measurements    Json?         // Dimensional measurements, tolerances, inspection data
+  defects         String?
+  correctedBy     String?
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Single source of truth for material consumption — item-level, aggregate for batch
+model WorkOrderMaterialUsage {
+  id              String        @id @default(cuid())
+  workOrderItem   WorkOrderItem @relation(fields: [workOrderItemId], references: [id])
+  workOrderItemId String
+  materialPart    Part          @relation(fields: [materialPartId], references: [id])
+  materialPartId  String
+  routingStep     RoutingStep?  @relation(fields: [routingStepId], references: [id])
+  routingStepId   String?
+  quantityUsed    Decimal
+  unitCost        Decimal?
+  consumedAt      DateTime      @default(now())
+  operatorId      String?
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workOrderItemId, materialPartId, routingStepId])
+}
+
+model RoutingStep {
+  id            String      @id @default(cuid())
+  batch         Batch       @relation(fields: [batchId], references: [id])
+  batchId       String
+  stepNumber    Int
+  workstation   Workstation @relation(fields: [workstationId], references: [id])
+  workstationId String
+  description   String
+  required      Boolean     @default(true)
+  estimatedTime Int?
+  notes         String?
+  status        StepStatus  @default(PENDING)
+
+  confirmations          StepConfirmation[]
+  workOrderProgress      WorkOrderStepProgress[]
+  workOrderQualityChecks WorkOrderQualityCheck[]
+  workOrderMaterialUsage WorkOrderMaterialUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([batchId, stepNumber])
+}
+
+model RoutingTemplate {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  active      Boolean @default(true)
+
+  templateSteps       RoutingTemplateStep[]
+  recommendedForParts Part[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoutingTemplateStep {
+  id            String          @id @default(cuid())
+  template      RoutingTemplate @relation(fields: [templateId], references: [id])
+  templateId    String
+  stepNumber    Int
+  workstation   Workstation     @relation(fields: [workstationId], references: [id])
+  workstationId String
+  description   String
+  estimatedTime Int?
+  required      Boolean         @default(true)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([templateId, stepNumber])
+}
+
+// =============================================================================
+// 4. WORKSTATIONS & OPERATORS
+// =============================================================================
+
+model Workstation {
+  id           String              @id @default(cuid())
+  name         String              @unique
+  description  String?
+  active       Boolean             @default(true)
+  category     WorkstationCategory @default(MACHINING)
+  location     String?
+  serialNumber String?
+  manufacturer String?
+  model        String?
+
+  routingSteps     RoutingStep[]
+  confirmations    StepConfirmation[]
+  templateSteps    RoutingTemplateStep[]
+  currentOperators WorkstationOperator[]
+  operatorSessions OperatorSession[]
+  capacity         WorkstationCapacity?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkstationCapacity {
+  id                     String      @id @default(cuid())
+  workstation            Workstation @relation(fields: [workstationId], references: [id])
+  workstationId          String      @unique
+  maxConcurrentJobs      Int         @default(1)
+  avgSetupTime           Int         @default(30)
+  efficiency             Decimal     @default(1.0)
+  hoursPerDay            Int         @default(8)
+  maintenanceHours       Int         @default(0)
+  operatingCostPerHour   Decimal?
+  maintenanceCostPerHour Decimal?
+  utilizationTarget      Decimal     @default(0.85)
+  qualityTarget          Decimal     @default(0.98)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkstationOperator {
+  id             String        @id @default(cuid())
+  operatorId     String        @unique
+  operatorName   String
+  email          String?
+  phone          String?
+  certifications String[]
+  shift          OperatorShift @default(DAY)
+  hourlyRate     Decimal?
+  active         Boolean       @default(true)
+
+  currentWorkstation   Workstation? @relation(fields: [currentWorkstationId], references: [id])
+  currentWorkstationId String?
+  loginTime            DateTime?
+  logoutTime           DateTime?
+
+  stepConfirmations StepConfirmation[]
+  operatorSessions  OperatorSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OperatorSession {
+  id            String              @id @default(cuid())
+  operator      WorkstationOperator @relation(fields: [operatorId], references: [operatorId])
+  operatorId    String
+  workstation   Workstation         @relation(fields: [workstationId], references: [id])
+  workstationId String
+  loginTime     DateTime            @default(now())
+  logoutTime    DateTime?
+  shift         OperatorShift
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =============================================================================
+// 5. CONFIRMATIONS & QC
+// =============================================================================
+
+model StepConfirmation {
+  id            String             @id @default(cuid())
+  routingStep   RoutingStep        @relation(fields: [stepId], references: [id])
+  stepId        String
+  workstation   Workstation        @relation(fields: [workstationId], references: [id])
+  workstationId String
+  operatorName  String
+  operatorId    String?
+  startTime     DateTime?
+  endTime       DateTime?
+  notes         String?
+  photoUrl      String?
+  flagged       Boolean            @default(false)
+  status        ConfirmationStatus @default(STARTED)
+
+  operator WorkstationOperator? @relation(fields: [operatorId], references: [operatorId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QCRecord {
+  id             String   @id @default(cuid())
+  batch          Batch    @relation(fields: [batchId], references: [id])
+  batchId        String
+  inspector      String
+  inspectionDate DateTime @default(now())
+  result         QCResult
+  notes          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =============================================================================
+// 6. ENUMS
+// =============================================================================
+
+enum PartType {
+  FINISHED
+  SEMI_FINISHED
+  RAW_MATERIAL
+}
+
+enum OrderPriority {
+  RUSH
+  STANDARD
+  HOLD
+}
+
+enum OrderStatus {
+  ACTIVE
+  COMPLETED
+  SHIPPED
+  CANCELLED
+  ON_HOLD
+}
+
+enum BatchPriority {
+  RUSH
+  STANDARD
+  HOLD
+}
+
+enum BatchStatus {
+  QUEUED
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+  FAILED
+}
+
+enum ConfirmationStatus {
+  STARTED
+  COMPLETED
+  PAUSED
+  FLAGGED
+}
+
+enum SyncStatus {
+  PENDING
+  SYNCED
+  FAILED
+  UPDATING
+}
+
+enum QCResult {
+  PASS
+  FAIL
+  REWORK_REQUIRED
+}
+
+enum OperatorShift {
+  DAY
+  SWING
+  NIGHT
+  FLEXIBLE
+}
+
+enum WorkstationCategory {
+  MACHINING
+  ASSEMBLY
+  WELDING
+  INSPECTION
+  PACKAGING
+  PREP
+  FINISHING
+  OTHER
+}
+
+enum WorkOrderItemStatus {
+  QUEUED
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+  REWORK
+  SCRAPPED
+}
