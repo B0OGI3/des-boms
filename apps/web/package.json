@@ -14,7 +14,7 @@
   "dependencies": {
     "@des-boms/shared": "workspace:*",
     "@tanstack/react-query": "^5.60.0",
-    "react": "^18.3.1",
+    "react": "^19.2.6",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "serve": "^14.2.6",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.4",
-    "@types/react": "^18.3.12",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^5.2.0",
     "tailwindcss": "^4.2.4",
