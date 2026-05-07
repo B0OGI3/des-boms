@@ -3,9 +3,94 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../../api/client';
 import type { BatchSummary, RoutingTemplateSummary } from '../../api/types';
+import type { BatchStatus, BatchPriority } from '@des-boms/shared';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
+
+const BATCH_STATUSES: BatchStatus[] = ['QUEUED', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD', 'CANCELLED'];
+const BATCH_PRIORITIES: BatchPriority[] = ['STANDARD', 'RUSH', 'HOLD'];
+
+function EditBatchModal({
+  open,
+  onClose,
+  batch,
+}: {
+  open: boolean;
+  onClose: () => void;
+  batch: BatchSummary;
+}) {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState({
+    status: batch.status,
+    priority: batch.priority,
+    estimatedCompletion: batch.estimatedCompletion
+      ? String(batch.estimatedCompletion).slice(0, 10)
+      : '',
+  });
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      api.put(`/batches/${batch.id}`, {
+        status: form.status,
+        priority: form.priority,
+        estimatedCompletion: form.estimatedCompletion || undefined,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['batches', batch.id] });
+      queryClient.invalidateQueries({ queryKey: ['batches'] });
+      onClose();
+    },
+  });
+
+  return (
+    <Modal open={open} onClose={onClose} title="Edit Batch">
+      <form
+        onSubmit={(e) => { e.preventDefault(); mutation.mutate(); }}
+        className="flex flex-col gap-4"
+      >
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.status}
+              onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as BatchStatus }))}
+            >
+              {BATCH_STATUSES.map((s) => <option key={s} value={s}>{s.replace('_', ' ')}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.priority}
+              onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value as BatchPriority }))}
+            >
+              {BATCH_PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Est. Completion</label>
+          <input
+            type="date"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={form.estimatedCompletion}
+            onChange={(e) => setForm((f) => ({ ...f, estimatedCompletion: e.target.value }))}
+          />
+        </div>
+        {mutation.isError && <p className="text-sm text-red-600">Failed to save changes.</p>}
+        <div className="flex justify-end gap-2 pt-1">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? 'Saving…' : 'Save Changes'}
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
 
 function ApplyTemplateModal({
   open,
@@ -101,6 +186,7 @@ export function BatchDetailPage() {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const [showTemplate, setShowTemplate] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const { data: batch, isLoading, error } = useQuery<BatchSummary>({
     queryKey: ['batches', id],
@@ -136,6 +222,7 @@ export function BatchDetailPage() {
         <div className="flex gap-2 items-center">
           <Badge label={batch.priority} />
           <Badge label={batch.status} />
+          <Button variant="secondary" size="sm" onClick={() => setShowEdit(true)}>Edit</Button>
         </div>
       </div>
 
@@ -236,6 +323,9 @@ export function BatchDetailPage() {
         onClose={() => setShowTemplate(false)}
         batchId={id!}
       />
+      {showEdit && (
+        <EditBatchModal open={true} onClose={() => setShowEdit(false)} batch={batch} />
+      )}
     </div>
   );
 }

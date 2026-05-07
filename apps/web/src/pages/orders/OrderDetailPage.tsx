@@ -3,9 +3,100 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../../api/client';
 import type { OrderSummary, LineItemWithPart } from '../../api/types';
+import type { OrderStatus, OrderPriority } from '@des-boms/shared';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
+
+const ORDER_STATUSES: OrderStatus[] = ['ACTIVE', 'ON_HOLD', 'COMPLETED', 'SHIPPED', 'CANCELLED'];
+const ORDER_PRIORITIES: OrderPriority[] = ['STANDARD', 'RUSH', 'HOLD'];
+
+function EditOrderModal({
+  open,
+  onClose,
+  order,
+}: {
+  open: boolean;
+  onClose: () => void;
+  order: OrderSummary;
+}) {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState({
+    poNumber: order.poNumber,
+    dueDate: new Date(order.dueDate).toISOString().slice(0, 10),
+    priority: order.priority,
+    orderStatus: order.orderStatus,
+  });
+
+  const mutation = useMutation({
+    mutationFn: () => api.put(`/orders/${order.id}`, form),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', order.id] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      onClose();
+    },
+  });
+
+  return (
+    <Modal open={open} onClose={onClose} title="Edit Order">
+      <form
+        onSubmit={(e) => { e.preventDefault(); mutation.mutate(); }}
+        className="flex flex-col gap-4"
+      >
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">PO Number *</label>
+            <input
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              value={form.poNumber}
+              onChange={(e) => setForm((f) => ({ ...f, poNumber: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date *</label>
+            <input
+              type="date"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              value={form.dueDate}
+              onChange={(e) => setForm((f) => ({ ...f, dueDate: e.target.value }))}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.orderStatus}
+              onChange={(e) => setForm((f) => ({ ...f, orderStatus: e.target.value as OrderStatus }))}
+            >
+              {ORDER_STATUSES.map((s) => <option key={s} value={s}>{s.replace('_', ' ')}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.priority}
+              onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value as OrderPriority }))}
+            >
+              {ORDER_PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+        </div>
+        {mutation.isError && <p className="text-sm text-red-600">Failed to save changes.</p>}
+        <div className="flex justify-end gap-2 pt-1">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? 'Saving…' : 'Save Changes'}
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
 
 function CreateBatchModal({
   open,
@@ -116,6 +207,7 @@ function CreateBatchModal({
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [batchTarget, setBatchTarget] = useState<LineItemWithPart | null>(null);
+  const [showEdit, setShowEdit] = useState(false);
 
   const { data: order, isLoading, error } = useQuery<OrderSummary>({
     queryKey: ['orders', id],
@@ -141,9 +233,10 @@ export function OrderDetailPage() {
             Due {new Date(order.dueDate).toLocaleDateString()}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Badge label={order.priority} />
           <Badge label={order.orderStatus} />
+          <Button variant="secondary" size="sm" onClick={() => setShowEdit(true)}>Edit</Button>
         </div>
       </div>
 
@@ -206,6 +299,9 @@ export function OrderDetailPage() {
           lineItem={batchTarget}
           orderId={id!}
         />
+      )}
+      {showEdit && order && (
+        <EditOrderModal open={true} onClose={() => setShowEdit(false)} order={order} />
       )}
     </div>
   );

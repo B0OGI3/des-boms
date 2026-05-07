@@ -4,6 +4,7 @@ const navItems = [
   { to: '/customers', label: 'Customers', sub: 'Accounts & orders' },
   { to: '/orders', label: 'Orders', sub: 'Purchase orders' },
   { to: '/batches', label: 'Batches', sub: 'Production runs' },
+  { to: '/routing', label: 'Routing', sub: 'Templates & steps' },
   { to: '/parts', label: 'Parts', sub: 'Parts catalog' },
   { to: '/workstations', label: 'Workstations', sub: 'Shop floor' },
 ];

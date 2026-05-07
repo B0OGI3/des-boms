@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../../api/client';
 import type { CustomerDetail, PartSummary } from '../../api/types';
+import type { Customer } from '@des-boms/shared';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
@@ -168,9 +169,96 @@ function NewOrderModal({
   );
 }
 
+function EditCustomerModal({
+  open,
+  onClose,
+  customer,
+}: {
+  open: boolean;
+  onClose: () => void;
+  customer: Customer;
+}) {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState({
+    name: customer.name,
+    contactName: customer.contactName ?? '',
+    email: customer.email ?? '',
+    phone: customer.phone ?? '',
+  });
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      api.put(`/customers/${customer.id}`, {
+        name: form.name,
+        contactName: form.contactName || undefined,
+        email: form.email || undefined,
+        phone: form.phone || undefined,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers', customer.id] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      onClose();
+    },
+  });
+
+  return (
+    <Modal open={open} onClose={onClose} title="Edit Customer">
+      <form
+        onSubmit={(e) => { e.preventDefault(); mutation.mutate(); }}
+        className="flex flex-col gap-4"
+      >
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Company Name *</label>
+          <input
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+            value={form.name}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+          <input
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={form.contactName}
+            onChange={(e) => setForm((f) => ({ ...f, contactName: e.target.value }))}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.email}
+              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <input
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.phone}
+              onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+            />
+          </div>
+        </div>
+        {mutation.isError && <p className="text-sm text-red-600">Failed to save changes.</p>}
+        <div className="flex justify-end gap-2 pt-1">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? 'Saving…' : 'Save Changes'}
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
 export function CustomerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const { data: customer, isLoading, error } = useQuery<CustomerDetail>({
     queryKey: ['customers', id],
@@ -196,7 +284,10 @@ export function CustomerDetailPage() {
             {customer.phone && <span>{customer.phone}</span>}
           </p>
         </div>
-        <Button onClick={() => setShowModal(true)}>+ New Order</Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => setShowEdit(true)}>Edit</Button>
+          <Button onClick={() => setShowModal(true)}>+ New Order</Button>
+        </div>
       </div>
 
       <h2 className="text-lg font-semibold text-gray-800 mb-3">Purchase Orders</h2>
@@ -232,6 +323,9 @@ export function CustomerDetailPage() {
       )}
 
       <NewOrderModal open={showModal} onClose={() => setShowModal(false)} customerId={id!} />
+      {showEdit && (
+        <EditCustomerModal open={true} onClose={() => setShowEdit(false)} customer={customer} />
+      )}
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { WorkstationsPage } from './pages/workstations/WorkstationsPage';
 import { CustomersPage } from './pages/customers/CustomersPage';
 import { CustomerDetailPage } from './pages/customers/CustomerDetailPage';
 import { WorkOrdersPage } from './pages/work-orders/WorkOrdersPage';
+import { RoutingTemplatesPage } from './pages/routing/RoutingTemplatesPage';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
         <Route path="batches" element={<BatchesPage />} />
         <Route path="batches/:id" element={<BatchDetailPage />} />
         <Route path="batches/:batchId/work-orders" element={<WorkOrdersPage />} />
+        <Route path="routing" element={<RoutingTemplatesPage />} />
         <Route path="parts" element={<PartsPage />} />
         <Route path="workstations" element={<WorkstationsPage />} />
       </Route>
