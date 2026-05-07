@@ -13,7 +13,7 @@
     "db:deploy": "pnpm --filter @des-boms/shared db:deploy",
     "db:seed": "pnpm --filter @des-boms/shared db:seed",
     "db:studio": "pnpm --filter @des-boms/shared db:studio",
-    "deploy:build": "pnpm -F @des-boms/shared build && pnpm -F @des-boms/web build && cp -r apps/web/dist apps/api/public && pnpm -F @des-boms/api build",
+    "deploy:build": "pnpm -F @des-boms/shared build && pnpm -F @des-boms/web build && pnpm -F @des-boms/api build",
     "seed": "pnpm -F @des-boms/shared seed:prod"
   },
   "devDependencies": {
