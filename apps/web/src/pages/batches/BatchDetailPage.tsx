@@ -149,7 +149,8 @@ export function BatchDetailPage() {
           </div>
           {batch.routingSteps.length === 0 ? (
             <div className="bg-white rounded-xl border border-dashed border-gray-300 p-6 text-center">
-              <p className="text-gray-400 text-sm mb-3">No routing steps yet.</p>
+              <p className="text-gray-500 text-sm font-medium mb-1">No routing steps yet</p>
+              <p className="text-gray-400 text-xs mb-3">A routing template defines the workstation steps each item must pass through during production.</p>
               <Button variant="secondary" size="sm" onClick={() => setShowTemplate(true)}>
                 Apply Routing Template
               </Button>
@@ -186,24 +187,29 @@ export function BatchDetailPage() {
                 onClick={() => spawnMutation.mutate()}
                 disabled={spawnMutation.isPending}
               >
-                {spawnMutation.isPending ? 'Spawning…' : 'Spawn Items'}
+                {spawnMutation.isPending ? 'Creating…' : 'Create Work Orders'}
               </Button>
             )}
           </div>
           {batch.workOrderItems.length === 0 ? (
             <div className="bg-white rounded-xl border border-dashed border-gray-300 p-6 text-center">
-              <p className="text-gray-400 text-sm mb-3">No work order items yet.</p>
+              <p className="text-gray-500 text-sm font-medium mb-1">No work orders yet</p>
               {batch.routingSteps.length > 0 ? (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => spawnMutation.mutate()}
-                  disabled={spawnMutation.isPending}
-                >
-                  {spawnMutation.isPending ? 'Spawning…' : 'Spawn Work Order Items'}
-                </Button>
+                <>
+                  <p className="text-gray-400 text-xs mb-3">
+                    This will create one work order item per unit in the batch, each tracking progress through the routing steps.
+                  </p>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => spawnMutation.mutate()}
+                    disabled={spawnMutation.isPending}
+                  >
+                    {spawnMutation.isPending ? 'Creating…' : 'Create Work Orders'}
+                  </Button>
+                </>
               ) : (
-                <p className="text-xs text-gray-400">Apply a routing template first.</p>
+                <p className="text-xs text-gray-400">Apply a routing template first to define the production steps.</p>
               )}
             </div>
           ) : (

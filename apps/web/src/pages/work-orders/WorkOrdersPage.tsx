@@ -65,7 +65,7 @@ export function WorkOrdersPage() {
             onClick={() => spawnMutation.mutate()}
             disabled={spawnMutation.isPending}
           >
-            {spawnMutation.isPending ? 'Creating…' : 'Spawn Work Order Items'}
+            {spawnMutation.isPending ? 'Creating…' : 'Create Work Orders'}
           </Button>
           {spawnMutation.isError && <p className="text-sm text-red-600 mt-2">Failed to spawn items.</p>}
         </div>

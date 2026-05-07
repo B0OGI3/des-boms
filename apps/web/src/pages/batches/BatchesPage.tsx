@@ -16,11 +16,19 @@ export function BatchesPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Batches</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Production Batches</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            To create a batch, open a purchase order and click <span className="font-medium text-gray-700">+ Create Batch</span> on a line item
+          </p>
+        </div>
       </div>
 
       {batches.length === 0 ? (
-        <p className="text-gray-500">No batches found.</p>
+        <div className="bg-white rounded-xl border border-dashed border-gray-300 p-10 text-center max-w-md mx-auto">
+          <p className="text-gray-500 font-medium mb-1">No batches yet</p>
+          <p className="text-gray-400 text-sm">Open a purchase order, then click <span className="font-medium text-gray-600">+ Create Batch</span> next to a line item to begin a production run.</p>
+        </div>
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
