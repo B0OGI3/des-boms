@@ -63,6 +63,11 @@ export class RoutingService {
     );
   }
 
+  async deleteTemplate(id: string) {
+    await this.findTemplate(id);
+    return this.prisma.routingTemplate.update({ where: { id }, data: { active: false } });
+  }
+
   async confirmStep(stepId: string, dto: ConfirmStepDto) {
     return this.prisma.stepConfirmation.create({
       data: {

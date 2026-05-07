@@ -4,6 +4,7 @@ import { api } from '../../api/client';
 import type { RoutingTemplateSummary, WorkstationWithOperators } from '../../api/types';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
 
 type StepDraft = {
   workstationId: string;
@@ -181,6 +182,16 @@ function NewTemplateModal({ open, onClose }: { open: boolean; onClose: () => voi
 
 export function RoutingTemplatesPage() {
   const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState<RoutingTemplateSummary | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.delete(`/routing/templates/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['routing-templates'] });
+      setDeleting(null);
+    },
+  });
 
   const { data: templates = [], isLoading, error } = useQuery<RoutingTemplateSummary[]>({
     queryKey: ['routing-templates'],
@@ -221,9 +232,13 @@ export function RoutingTemplatesPage() {
                     <p className="text-sm text-gray-500 mt-0.5">{t.description}</p>
                   )}
                 </div>
-                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full shrink-0 ml-2">
-                  {t.templateSteps.length} step{t.templateSteps.length !== 1 ? 's' : ''}
-                </span>
+                <div className="flex items-center gap-2 ml-2 shrink-0">
+                  <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {t.templateSteps.length} step{t.templateSteps.length !== 1 ? 's' : ''}
+                  </span>
+                  <Button variant="ghost" size="sm" onClick={() => setDeleting(t)}
+                    className="text-gray-400 hover:text-red-500 !px-1.5">✕</Button>
+                </div>
               </div>
               {t.templateSteps.length > 0 && (
                 <div className="flex flex-wrap items-center gap-1 mt-3">
@@ -247,6 +262,16 @@ export function RoutingTemplatesPage() {
       )}
 
       <NewTemplateModal open={showModal} onClose={() => setShowModal(false)} />
+      {deleting && (
+        <ConfirmModal
+          open={true}
+          onClose={() => setDeleting(null)}
+          onConfirm={() => deleteMutation.mutate(deleting.id)}
+          title="Delete Template"
+          message={`Remove "${deleting.name}"? Batches that have already applied this template will keep their routing steps.`}
+          isPending={deleteMutation.isPending}
+        />
+      )}
     </div>
   );
 }

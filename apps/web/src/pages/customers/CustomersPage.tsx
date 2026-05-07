@@ -5,6 +5,7 @@ import { api } from '../../api/client';
 import type { CustomerWithOrderCount } from '../../api/types';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
 
 function NewCustomerModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const queryClient = useQueryClient();
@@ -78,6 +79,16 @@ function NewCustomerModal({ open, onClose }: { open: boolean; onClose: () => voi
 export function CustomersPage() {
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState<CustomerWithOrderCount | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.delete(`/customers/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      setDeleting(null);
+    },
+  });
 
   const { data: customers = [], isLoading, error } = useQuery<CustomerWithOrderCount[]>({
     queryKey: ['customers'],
@@ -116,7 +127,7 @@ export function CustomersPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                {['Company', 'Contact', 'Email', 'Phone', 'Orders'].map((h) => (
+                {['Company', 'Contact', 'Email', 'Phone', 'Orders', ''].map((h) => (
                   <th key={h} className="text-left px-4 py-3 font-medium text-gray-600">{h}</th>
                 ))}
               </tr>
@@ -133,6 +144,10 @@ export function CustomersPage() {
                   <td className="px-4 py-3 text-gray-700">{c.email ?? '—'}</td>
                   <td className="px-4 py-3 text-gray-700">{c.phone ?? '—'}</td>
                   <td className="px-4 py-3 text-gray-700">{c._count.purchaseOrders}</td>
+                  <td className="px-4 py-3 text-right">
+                    <Button variant="ghost" size="sm" onClick={() => setDeleting(c)}
+                      className="text-gray-400 hover:text-red-500">✕</Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -141,6 +156,16 @@ export function CustomersPage() {
       )}
 
       <NewCustomerModal open={showModal} onClose={() => setShowModal(false)} />
+      {deleting && (
+        <ConfirmModal
+          open={true}
+          onClose={() => setDeleting(null)}
+          onConfirm={() => deleteMutation.mutate(deleting.id)}
+          title="Delete Customer"
+          message={`Remove "${deleting.name}"? This will also delete all their orders and batches. This cannot be undone.`}
+          isPending={deleteMutation.isPending}
+        />
+      )}
     </div>
   );
 }

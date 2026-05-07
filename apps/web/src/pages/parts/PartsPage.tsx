@@ -4,6 +4,7 @@ import { api } from '../../api/client';
 import type { Part } from '@des-boms/shared';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
 
 const PART_TYPES = ['FINISHED', 'SEMI_FINISHED', 'RAW_MATERIAL'] as const;
 
@@ -135,6 +136,16 @@ function PartModal({
 export function PartsPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [editing, setEditing] = useState<Part | null>(null);
+  const [deleting, setDeleting] = useState<Part | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.delete(`/parts/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['parts'] });
+      setDeleting(null);
+    },
+  });
 
   const { data: parts = [], isLoading, error } = useQuery<Part[]>({
     queryKey: ['parts'],
@@ -187,7 +198,11 @@ export function PartsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="secondary" size="sm" onClick={() => setEditing(p)}>Edit</Button>
+                    <div className="flex gap-1.5 justify-end">
+                      <Button variant="secondary" size="sm" onClick={() => setEditing(p)}>Edit</Button>
+                      <Button variant="ghost" size="sm" onClick={() => setDeleting(p)}
+                        className="text-gray-400 hover:text-red-500">✕</Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -197,6 +212,16 @@ export function PartsPage() {
       )}
 
       <PartModal open={showCreate} onClose={() => setShowCreate(false)} />
+      {deleting && (
+        <ConfirmModal
+          open={true}
+          onClose={() => setDeleting(null)}
+          onConfirm={() => deleteMutation.mutate(deleting.id)}
+          title="Delete Part"
+          message={`Remove "${deleting.partNumber} — ${deleting.partName}" from the catalog? This cannot be undone.`}
+          isPending={deleteMutation.isPending}
+        />
+      )}
       {editing && (
         <PartModal
           open={true}
