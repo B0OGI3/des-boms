@@ -104,11 +104,17 @@ function NewOrderModal({
             <Button type="button" variant="ghost" size="sm" onClick={addLineItem}>+ Add Part</Button>
           </div>
           {lineItems.length > 0 && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
+              <div className="grid grid-cols-[1fr_72px_88px_24px] gap-2 px-1">
+                <span className="text-xs text-gray-400 font-medium">Part</span>
+                <span className="text-xs text-gray-400 font-medium">Qty</span>
+                <span className="text-xs text-gray-400 font-medium">Unit Price</span>
+                <span />
+              </div>
               {lineItems.map((li, i) => (
-                <div key={i} className="flex gap-2 items-center">
+                <div key={i} className="grid grid-cols-[1fr_72px_88px_24px] gap-2 items-center">
                   <select
-                    className="flex-1 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={li.partId}
                     onChange={(e) => updateLineItem(i, { partId: e.target.value })}
                     required
@@ -121,25 +127,26 @@ function NewOrderModal({
                   <input
                     type="number"
                     min={1}
-                    placeholder="Qty"
-                    className="w-16 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={li.quantity}
                     onChange={(e) => updateLineItem(i, { quantity: parseInt(e.target.value) || 1 })}
                     required
                   />
-                  <input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    placeholder="Unit $"
-                    className="w-20 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={li.unitPrice}
-                    onChange={(e) => updateLineItem(i, { unitPrice: parseFloat(e.target.value) || 0 })}
-                  />
+                  <div className="relative">
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">$</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      className="w-full border border-gray-300 rounded-md pl-5 pr-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={li.unitPrice}
+                      onChange={(e) => updateLineItem(i, { unitPrice: parseFloat(e.target.value) || 0 })}
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={() => removeLineItem(i)}
-                    className="text-gray-400 hover:text-red-500 text-lg leading-none"
+                    className="flex items-center justify-center w-6 h-6 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-base leading-none"
                   >
                     ×
                   </button>
